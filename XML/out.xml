@@ -1,0 +1,52 @@
+<?xml version='1.1' encoding='utf-8'?>
+<rcp:selected xmlns:rcp="http://www.brics.dk/ixwt/recipes">
+<rcp:recipe id="r103">
+    <rcp:title>Linguine Pescadoro</rcp:title>
+    <rcp:date>Fri, 28 May 04</rcp:date>
+    <rcp:ingredient name="linguini pasta" amount="16" unit="ounce"/>
+    <rcp:ingredient name="sauce">
+      <rcp:ingredient name="olive oil" amount="2" unit="tablespoon"/>
+      <rcp:ingredient name="minced cloves of garlic" amount="2"/>
+      <rcp:ingredient name="Italian seasoning" amount="0.5" unit="teaspoon"/>
+      <rcp:ingredient name="dried thyme" amount="0.25" unit="teaspoon"/>
+      <rcp:ingredient name="crushed red pepper flakes" amount="0.25" unit="teaspoon"/>
+      <rcp:ingredient name="crushed tomatoes" amount="1" unit="can"/>
+      <rcp:ingredient name="black olives, drained" amount="6" unit="ounce"/>
+      <rcp:ingredient name="whole baby clams" amount="10" unit="ounce"/>
+      <rcp:ingredient name="minced clams, with juice" amount="6.5" unit="ounce"/>
+      <rcp:ingredient name="small salad shrimp" amount="0.25" unit="pound"/>
+      <rcp:ingredient name="scallops" amount="0.25" unit="pound"/>
+      <rcp:ingredient name="lemon zest" amount="2.5" unit="teaspoon"/>
+      <rcp:ingredient name="salt" amount="*"/>
+      <rcp:ingredient name="ground black pepper" amount="*"/>
+      <rcp:preparation>
+        <rcp:step>
+          In a heavy saucepan over medium heat saute garlic in olive oil
+          until garlic softens.
+        </rcp:step> 
+        <rcp:step>
+          Add Italian seasoning, thyme, crushed red pepper flakes,
+          crushed tomatoes, black olives, and the juice from both cans of clams.
+          Simmer for 15 minutes.
+        </rcp:step> 
+        <rcp:step>
+          Mix in canned clams, shrimp, scallops, lemon zest,
+          and salt and pepper to taste.
+        </rcp:step> 
+        <rcp:step>
+          Simmer for an additional 15 minutes or until
+          shrimp and clams are cooked.
+        </rcp:step> 
+      </rcp:preparation>
+    </rcp:ingredient>
+    <rcp:preparation>
+      <rcp:step>
+        In a large pot of boiling salted water cook linguini until al dente. Drain.
+      </rcp:step>
+      <rcp:step>
+        Toss cooked and drained linguine pasta over seafood sauce. Serve warm.
+      </rcp:step>
+    </rcp:preparation>
+    <rcp:nutrition calories="532" fat="12%" carbohydrates="59%" protein="29%"/>
+  </rcp:recipe>
+</rcp:selected>
