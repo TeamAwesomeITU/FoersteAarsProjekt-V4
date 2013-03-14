@@ -64,7 +64,7 @@ public class StaxWriter {
 		  int n = 0;
 		  while((line = reader.readLine()) != null) {
 			  createNodesForKDVunload(line, streamWriter, values);
-			  if(n>0)
+			  /*if(n>0)
 			  if(n%8000 == 0) {
 				  streamWriter.writeEndElement();
 				  streamWriter.writeEndDocument();
@@ -78,7 +78,7 @@ public class StaxWriter {
 				  streamWriter.writeStartElement(collectionName);
 				  streamWriter.writeDTD("\n");
 			  }
-			  n++;
+			  n++;*/
 		  }
 	  }
 	  if(inputTextFile.equals("kdv_node_unload.txt")) {
@@ -111,8 +111,9 @@ public class StaxWriter {
   
   private void createNodesForKDVunload(String line, XMLStreamWriter streamWriter, String[] values) throws XMLStreamException {
 	  Scanner scan = new Scanner(line); 
-	  scan.useDelimiter("(?<=[']|\\d|\\*)[,](?=[']|\\d|\\*)");    	      
-	  int[] intArray = {3,4,15,16,19,20,21,22,30,31};
+	  scan.useDelimiter("(?<=[']|\\d|\\*)[,](?=[']|\\d|\\*)");    	
+	  //1    2   7   8  19     -   0 1 6 18
+	  int[] intArray = {2,3,4,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33};
 	  int x = 0;
 	  streamWriter.writeDTD("\t");
 	  streamWriter.writeStartElement(nodeName);

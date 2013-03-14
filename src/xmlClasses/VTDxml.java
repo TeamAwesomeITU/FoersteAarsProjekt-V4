@@ -95,6 +95,7 @@ public class VTDxml {
 			 
 			 //close XML file tags
 			 fos.write("\n</rcp:selected>".getBytes());
+			 fis.close();
 			 fos.close();
 			 b=null;
 		}
