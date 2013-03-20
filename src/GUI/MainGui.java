@@ -6,6 +6,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import sun.awt.RequestFocusController;
+
 import InputHandler.AdressParser;
 import InputHandler.exceptions.MalformedAdressException;
 
@@ -14,9 +16,11 @@ public class MainGui {
 
 	private AdressParser adressParser;
 	private JFrame frame;
+	private JTextField searchQuery;
 	private Container contentPane;
 	private static MainGui instance;
 	
+	//Three static final fields to easily change the color of our program
 	public static final Color DARK_COLOR = new Color(8, 108, 8);
 	
 	public static final Color BACKGROUND_COLOR = new Color(149, 255, 149);
@@ -30,6 +34,10 @@ public class MainGui {
 		MainGui.getInstance();
 	}
 	
+	/**
+	 * Uses a singleton API to get the instance of the program
+	 * @return
+	 */
 	public static MainGui getInstance(){
 		if(instance != null)
 			return instance;
@@ -43,6 +51,9 @@ public class MainGui {
 		startupScreen();
 	}
 
+	/**
+	 * Builds the frame and sets it up
+	 */
 	public void startupScreen(){
 		frame = new JFrame("Team Awesome Maps");
 		frame.setUndecorated(true);
@@ -52,12 +63,15 @@ public class MainGui {
 		frame.setLocationRelativeTo(null);
 		
 		makeMenu();
-		fillContentPane();
+		fillContentPane();		
 		
 		frame.pack();
+		searchQuery.requestFocusInWindow();
 		frame.setVisible(true);
 	}
-	
+	/**
+	 * Makes the menu and adds shortcuts to it.
+	 */
 	public void makeMenu(){
 		final int SHORT_CUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 		
@@ -81,7 +95,9 @@ public class MainGui {
 		menuBar.add(fileMenu);
 		menuBar.add(helpMenu);		
 	}
-	
+	/**
+	 * Fills the contentpane, and calls the makeButton method to make the buttons.
+	 */
 	public void fillContentPane(){
 		contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
@@ -94,6 +110,10 @@ public class MainGui {
 		contentPane.add(makeButtons(), BorderLayout.CENTER);
 	}
 	
+	/**
+	 * makes the buttons
+	 * @return a ColoredJPanel to be inserted into the contentpane
+	 */
 	public ColoredJPanel makeButtons(){
 		ColoredJPanel buttonPanel = new ColoredJPanel();
 		buttonPanel.setLayout(new GridLayout(0, 1, 3, 1));
@@ -104,16 +124,15 @@ public class MainGui {
 		mapButton.setContentAreaFilled(false);
 		mapButton.setToolTipText("Press the globe to browse the map");
 		mapButton.addActionListener(new MapActionListener());
-
-		JTextField searchQuery = new JTextField();
+		
+		searchQuery = new JTextField();
 		searchQuery.setPreferredSize(new Dimension(320, 20));
 		
-
 		ColoredJButton findAddressButton = new ColoredJButton("Find Address");
-		findAddressButton.addActionListener(new FindAddressActionListener(searchQuery));
+		findAddressButton.addActionListener(new FindAddressActionListener());
 		
 		ColoredJButton clearButton = new ColoredJButton("Clear");
-		clearButton.addActionListener(new ClearActionListener(searchQuery));
+		clearButton.addActionListener(new ClearActionListener());
 		
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(mapButton);
@@ -131,12 +150,7 @@ public class MainGui {
 	}
 	
 	class FindAddressActionListener implements ActionListener{
-
-		private JTextField searchQuery;
 		
-		public FindAddressActionListener(JTextField searchQuery){
-			this.searchQuery = searchQuery;
-		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(searchQuery.getText().trim().length() != 0){
@@ -180,15 +194,13 @@ public class MainGui {
 	}
 	
 	class ClearActionListener implements ActionListener{
-		private JTextField searchField;
-			
-		public ClearActionListener(JTextField searchField){
-			this.searchField = searchField;
-		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			searchField.setText("");
+			searchQuery.setText("");
+			searchQuery.requestFocusInWindow();
 		}	
 	}
+	
+	
 }
