@@ -40,16 +40,16 @@ public class CoordinateConverter {
 		return coord;
 	}
 	
-	public double DrawToKrakCoordX(double x)
+	public double DrawToKrakCoordX(int x)
 	{
-		double coord = NormalizedToUTMCoord(x, area.getSmallestX(), area.getLargestX(), canvasWidth);
+		int coord = NormalizedToUTMCoord(x, area.getSmallestX(), area.getLargestX(), canvasWidth);
 		return coord;
 	}
 	
 	/*
 	 * Input: The coordinate in Java-coordinate pixels
 	 */
-	public double DrawToKrakCoordY(double y)
+	public double DrawToKrakCoordY(int y)
 	{
 		double coord = reflectCoordY(y);
 		coord = NormalizedToUTMCoord(coord, area.getSmallestY(), area.getLargestY(), canvasHeight);
@@ -61,9 +61,9 @@ public class CoordinateConverter {
 		return ((coord-axisMinimum)*screenSizeAxis)/(axisMaximum-axisMinimum);		
 	}
 	
-	private double NormalizedToUTMCoord(double coord, double axisMinimum, double axisMaximum, int screenSizeAxis)
+	private int NormalizedToUTMCoord(double coord, double axisMinimum, double axisMaximum, int screenSizeAxis)
 	{
-		return ((coord*axisMaximum-axisMinimum)/(axisMaximum)+axisMinimum);
+		return (int) ((coord*axisMaximum-axisMinimum)/(axisMaximum)+axisMinimum);
 	}
 	
 	private double reflectCoordY(double coord)
