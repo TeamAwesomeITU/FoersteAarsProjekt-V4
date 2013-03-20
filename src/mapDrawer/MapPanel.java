@@ -9,7 +9,10 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,18 +23,52 @@ public class MapPanel extends JPanel {
 	private Dimension preferredSize = setPreferredSize();
 	private Rectangle2D[] rects = new Rectangle2D[50];
 	private RectZoomer rectZoomer;
-
+	private AreaToDraw area;
+	private Line2D[] linesOfEdges; 
+	private JFrame jf;
+	
 	public static void main(String[] args) {        
 	    JFrame jf = createJFrame();
 	}    
 
-	public MapPanel() {
+	public MapPanel(JFrame jf) {
+		this.jf = jf;
 		rectZoomer = new RectZoomer(this);
-	    // generate rectangles with pseudo-random coords
 	    for (int i=0; i<rects.length; i++) {
 	        rects[i] = new Rectangle2D.Double(
 	                Math.random()*.8, Math.random()*.8, 
 	                Math.random()*.2, Math.random()*.2);
+	    }
+	    area = new AreaToDraw();
+	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
+	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
+	    linesOfEdges = new Line2D[edgeSet.size()];
+	    //System.out.println(linesOfEdges.length);
+	    //System.out.println(preferredSize.getWidth() + " " + preferredSize.getHeight());
+	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
+	    
+	    int numberOfEdges = 0;
+	    while(edgeSetIterator.hasNext() == true) {
+	    	Edge edge = edgeSetIterator.next();
+	    	//System.out.println(edge.getRoadName());
+	    	int fromNode = edge.getFromNode();
+	    	int toNode = edge.getToNode();
+	    	Double[] fromNodeCoords = FindRelevantNodes.getNodeCoordinatesMap().get(fromNode);
+	    	Double[] toNodeCoords = FindRelevantNodes.getNodeCoordinatesMap().get(toNode);
+	    	
+	    	double drawFromCoordX = coordConverter.KrakToDrawCoordX(fromNodeCoords[0]);
+	    	double drawFromCoordY = coordConverter.KrakToDrawCoordY(fromNodeCoords[1]);
+	    	
+	    	double drawToCoordX = coordConverter.KrakToDrawCoordX(toNodeCoords[0]);
+	    	double drawToCoordY = coordConverter.KrakToDrawCoordY(toNodeCoords[1]);
+	    	
+	    	System.out.println("startX: " + drawFromCoordX);
+	    	System.out.println("startY: " + drawFromCoordY);
+	    	System.out.println("endX: " + drawToCoordX);
+	    	System.out.println("endY: " + drawToCoordY);
+	    	
+	    	
+	    	linesOfEdges[numberOfEdges++] = new Line2D.Double(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY);
 	    }
 	    // mouse listener to detect scrollwheel events
         addMouseListener(rectZoomer);
@@ -42,11 +79,18 @@ public class MapPanel extends JPanel {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
 		JFrame jf = new JFrame("test");
 	    jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    jf.setSize(400, 400);
+	    jf.setSize(screenSize);
 	    jf.setExtendedState(Frame.MAXIMIZED_BOTH);
-	    jf.add(new JScrollPane(new MapPanel()));
+	    jf.add(new JScrollPane(new MapPanel(jf)));
+	    
 	    jf.setVisible(true);
 	    return jf;
+	}
+	
+	private void drawLinesFromEdges(double[] linesOfEdges) {
+		for (int i=0; i<linesOfEdges.length; i++) {
+	       
+		}
 	}
 
 	private void updatePreferredSize(int n, Point p) {
@@ -78,16 +122,13 @@ public class MapPanel extends JPanel {
 	/**
 	 * Updates the size of the rectangles to match the zoom level.
 	 */
-	private Rectangle2D r = new Rectangle2D.Float();
+	private Line2D line = new Line2D.Float();
 	public void paint(Graphics g) {
 	    super.paint(g);
 	    g.setColor(Color.black);
-	    int w = getWidth();
-	    int h = getHeight();
-	    for (Rectangle2D rect : rects) {
-	        r.setRect(rect.getX() * w, rect.getY() * h, 
-	                rect.getWidth() * w, rect.getHeight() * h);
-	        ((Graphics2D)g).draw(r);
+	    for (Line2D edgeLine : linesOfEdges) {
+	        line.setLine(edgeLine.getX1(), edgeLine.getY1(), edgeLine.getX2(), edgeLine.getY2());      
+	        ((Graphics2D)g).draw(line); 								  									  //Tegner en linje med koordinaterne (x1,y1,x2,y2)
 	    }
 	    Graphics2D g2 = (Graphics2D) g;
 	    if (rectZoomer.getRect() == null) {
