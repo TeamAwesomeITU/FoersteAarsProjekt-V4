@@ -3,12 +3,16 @@ package GUI;
 import java.awt.*;
 
 import java.awt.event.*;
-import java.util.Random;
 
 import javax.swing.*;
 
+import InputHandler.AdressParser;
+import InputHandler.exceptions.MalformedAdressException;
+
 
 public class MainGui {
+
+	private AdressParser adressParser;
 	private JFrame frame;
 	private Container contentPane;
 	private static MainGui instance;
@@ -18,16 +22,13 @@ public class MainGui {
 	public static final Color BACKGROUND_COLOR = new Color(149, 255, 149);
 	
 	public static final Color VERY_LIGHT_COLOR = new Color(200, 255, 200);
-
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		MainGui.getInstance();
-
 	}
-
 	
 	public static MainGui getInstance(){
 		if(instance != null)
@@ -88,8 +89,7 @@ public class MainGui {
 		ColoredJPanel footer = new ColoredJPanel();
 		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.0");
 		footer.add(footerText);
-		
-
+	
 		contentPane.add(footer, BorderLayout.SOUTH);
 		contentPane.add(makeButtons(), BorderLayout.CENTER);
 	}
@@ -104,20 +104,21 @@ public class MainGui {
 		mapButton.setContentAreaFilled(false);
 		mapButton.setToolTipText("Press the globe to browse the map");
 		mapButton.addActionListener(new MapActionListener());
-		
-		ColoredJButton findAddressButton = new ColoredJButton("Find Address");
+
 		JTextField searchQuery = new JTextField();
 		searchQuery.setPreferredSize(new Dimension(320, 20));
+		
+
+		ColoredJButton findAddressButton = new ColoredJButton("Find Address");
+		findAddressButton.addActionListener(new FindAddressActionListener(searchQuery));
 		
 		ColoredJButton clearButton = new ColoredJButton("Clear");
 		clearButton.addActionListener(new ClearActionListener(searchQuery));
 		
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(mapButton);
-		//flow.add(findAddressButton);
 		
 		ColoredJPanel searchPanel = new ColoredJPanel();
-		//searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
 		
 		searchPanel.add(searchQuery);
 		searchPanel.add(findAddressButton);
@@ -127,6 +128,31 @@ public class MainGui {
 		buttonPanel.add(searchPanel);
 		
 		return buttonPanel;
+	}
+	
+	class FindAddressActionListener implements ActionListener{
+
+		private JTextField searchQuery;
+		
+		public FindAddressActionListener(JTextField searchQuery){
+			this.searchQuery = searchQuery;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(searchQuery.getText().trim().length() != 0){
+				adressParser = new AdressParser();
+				try {
+					adressParser.parseAdress(searchQuery.getText());
+				} catch (MalformedAdressException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(frame, "You have to enter an address");
+			}
+		}
+		
 	}
 	
 	class QuitActionListener implements ActionListener{
@@ -163,8 +189,6 @@ public class MainGui {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			searchField.setText("");
-		}
-		
+		}	
 	}
-
 }
