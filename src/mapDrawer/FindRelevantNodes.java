@@ -3,18 +3,24 @@ package mapDrawer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
 import com.ximpleware.AutoPilot;
 
+import com.ximpleware.NavException;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
+import com.ximpleware.XPathEvalException;
+import com.ximpleware.XPathParseException;
 /*
  * Locates the Edges that lies within the AreaToDraw
  */
 public class FindRelevantNodes {
+
+	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
 
 	public static HashSet<Edge> findNodesToDraw(AreaToDraw area)
 	{
@@ -68,8 +74,11 @@ public class FindRelevantNodes {
 	{
 		long startTime = System.currentTimeMillis();
 		HashSet<Edge> edgeSet = new HashSet<Edge>();
-		try {			
+		try {	
+
+			//WHAT FOR 
 			area.getPercentageOfEntireMap();
+			//WHAT FOR
 
 			File fi = new File("XML/kdv_unload_omskaaretEdition.xml");
 			FileInputStream fis = new FileInputStream(fi);
@@ -119,9 +128,56 @@ public class FindRelevantNodes {
 		return edgeSet;
 	}
 
+	private static HashMap<Integer, Double[]> makeNodeCoordinatesMap()
+	{
+		HashMap<Integer, Double[]> map = new HashMap<Integer, Double[]>();
+
+		try {
+			long startTime = System.currentTimeMillis();
+			VTDGen vg =new VTDGen();
+			AutoPilot ap = new AutoPilot(); 
+			ap.selectXPath("/nodeCollection/node");
+			if (vg.parseFile("XML/kdv_node_unload.xml", false))
+			{
+				VTDNav vn = vg.getNav();
+				ap.bind(vn);
+				while((ap.evalXPath())!=-1)
+				{ 
+					vn.toElement(VTDNav.FIRST_CHILD, "KDV");
+					Integer kdv = Integer.parseInt(vn.toString(vn.getText()));
+					
+					Double[] coords = new Double[2];
+							
+					vn.toElement(VTDNav.NEXT_SIBLING, "X-COORD"); 
+					coords[0] = Double.parseDouble((vn.toString(vn.getText())));
+					
+					vn.toElement(VTDNav.NEXT_SIBLING, "Y-COORD"); 
+					coords[1] = Double.parseDouble((vn.toString(vn.getText())));
+					
+					map.put(kdv, coords);
+					vn.toElement(VTDNav.PARENT); // move the cursor back
+				} 
+				ap.resetXPath();
+			}
+			long endTime = System.currentTimeMillis();
+			System.out.println("nodeMap tager " + (endTime - startTime) + " milliseconds");
+		} catch (NavException | XPathEvalException | XPathParseException e) {
+			e.printStackTrace();
+		}
+
+		return map;
+
+	}
+
+	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()
+	{
+		return nodeCoordinatesMap;
+	}
+
 	public static void main(String[] args)
 	{		
-		HashSet<Edge> set = findNodesToDraw(new AreaToDraw());		
+		HashSet<Edge> set = findNodesToDraw(new AreaToDraw());	
+		
 		/*
 		Iterator<Edge> iterator = set.iterator();
 		Edge edge = null;

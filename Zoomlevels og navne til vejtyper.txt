@@ -1,0 +1,39 @@
+1 Motovej
+31 motorvej afkrøsel
+41 motorvejstunnel
+21 proj motorvej
+
+2 motortrafik
+32
+42
+22
+
+3 primær ruter >6m
+33
+23
+
+4 sekundær ruter >6m
+34
+24
+
+5 Vej
+25
+
+6 Anden vej
+26
+
+8 Stier
+10 Markvej
+11 Gågader
+
+Lvl 1, 100%: 1, 31, 2, 32, 41, 41, 21, 22.
+Lvl 2, : 3, 33, 23
+Lvl 3: 
+Lvl 4: 4, 34, 24
+Lvl 5: 5, 25
+Lvl 6: 6, 26
+Lvl 7: resten
+Lvl 8:
+Lvl 9:
+Lvl 10:
+Lvl 11:
