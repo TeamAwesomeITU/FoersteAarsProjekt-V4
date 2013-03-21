@@ -1,5 +1,7 @@
 package mapDrawer;
 
+import mapDrawer.exceptions.AreaNegativeSizeException;
+
 /*
  * The area of the map to draw
  */
@@ -23,12 +25,17 @@ public class AreaToDraw {
 	//The y-coordinate of the most northern coordinate
 	private final double largestY;
 	
-	public AreaToDraw(double smallestX, double largestX, double smallestY, double largestY)
+	public AreaToDraw(double smallestX, double largestX, double smallestY, double largestY) throws AreaNegativeSizeException
 	{
-		this.smallestX = smallestX;
-		this.largestX = largestX;	
-		this.smallestY = smallestY;
-		this.largestY = largestY;
+		if(smallestX > largestX || smallestY > largestY || smallestX < 0 || smallestY < 0)
+			throw new AreaNegativeSizeException("Area size was invalid");
+		
+		else {
+			this.smallestX = smallestX;
+			this.largestX = largestX;	
+			this.smallestY = smallestY;
+			this.largestY = largestY;
+		}
 	}
 	
 	
