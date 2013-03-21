@@ -20,7 +20,7 @@ public class MainGui {
 	//Three static final fields to easily change the color of our program
 	public static final Color DARK_COLOR = new Color(8, 108, 8);
 
-	public static final Color BACKGROUND_COLOR = new Color(149, 255, 149);
+	public static final Color BACKGROUND_COLOR = new Color(140, 255, 140);
 
 	public static final Color VERY_LIGHT_COLOR = new Color(200, 255, 200);
 
@@ -133,6 +133,7 @@ public class MainGui {
 		mapButton.setContentAreaFilled(false);
 		mapButton.setToolTipText("Press the globe to browse the map");
 		mapButton.addActionListener(new MapActionListener());
+		//mapButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 		searchQuery = new JTextField();
 		searchQuery.setPreferredSize(new Dimension(320, 20));
@@ -159,6 +160,12 @@ public class MainGui {
 		return buttonPanel;
 	}
 	
+	private void openMap() {
+		frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));	
+		MapWindow mapWindow = new MapWindow(searchQuery.getText());
+		frame.setCursor(Cursor.getDefaultCursor());
+	}
+	
 	public void searchForAnAddress(){
 		if(searchQuery.getText().trim().length() != 0){
 			adressParser = new AdressParser();
@@ -168,6 +175,7 @@ public class MainGui {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			openMap();
 		}
 		else {
 			JOptionPane.showMessageDialog(frame, "You have to enter an address");
@@ -185,14 +193,10 @@ public class MainGui {
 
 		@Override
 		public void keyReleased(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-
 		}
 	}
 
@@ -201,9 +205,6 @@ public class MainGui {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			searchForAnAddress();
-			frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			MapWindow mapWindow = new MapWindow(searchQuery.getText());
-			frame.setCursor(Cursor.getDefaultCursor());
 		}
 	}
 	
@@ -211,9 +212,7 @@ public class MainGui {
 	class MapActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			MapWindow mapWindow = MapWindow.getInstance();
-			frame.setCursor(Cursor.getDefaultCursor());
+			openMap();
 		}
 	}
 	

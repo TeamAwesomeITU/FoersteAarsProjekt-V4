@@ -20,7 +20,7 @@ public class MapWindow {
 	private JFrame frame;
 	private Container contentPane;
 	private static MapWindow instance;
-	private JTextField toSearchQuery;
+	private JTextField toSearchQuery, fromSearchQuery;
 	
 	public static void main(String[] args) {
 		MapWindow.getInstance();	
@@ -55,6 +55,7 @@ public class MapWindow {
 		fillContentPane();
 		
 		frame.pack();
+		fromSearchQuery.requestFocusInWindow();
 		frame.setVisible(true);
 	}
 	
@@ -65,7 +66,7 @@ public class MapWindow {
 		
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(Color.BLUE);
-		JTextField fromSearchQuery = new JTextField();
+		fromSearchQuery = new JTextField();
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
 		
 		JLabel toHeader = new JLabel("To");
@@ -74,8 +75,16 @@ public class MapWindow {
 		toSearchQuery.addKeyListener(new EnterKeyListener());
 		
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
-		findRouteButton.addActionListener((new FindRouteActionListener(fromSearchQuery, toSearchQuery)));
-		 
+		findRouteButton.addActionListener((new FindRouteActionListener()));
+		
+		ColoredJButton reverseButton = new ColoredJButton(); 
+		reverseButton.setIcon(new ImageIcon("resources/reverse.png"));
+		reverseButton.setBorder(BorderFactory.createEmptyBorder());
+		reverseButton.setContentAreaFilled(false);
+		reverseButton.setToolTipText("Click to reverse from and to");
+		reverseButton.addActionListener(new ReverseActionListener());
+		
+		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
 		toolBar.add(fromSearchQuery);
 		toolBar.add(toHeader);
@@ -99,57 +108,61 @@ public class MapWindow {
 		contentPane.add(new ColoredJPanel(), BorderLayout.EAST);
 	}
 	
+	public void findRoute(){
+		if(fromSearchQuery.getText().trim().length() != 0 && 
+				toSearchQuery.getText().trim().length() != 0){
+			AdressParser adressParser = new AdressParser();
+			try {
+				adressParser.parseAdress(fromSearchQuery.getText());
+				String[] fromArray = adressParser.getAdressArray();
+				adressParser.parseAdress(toSearchQuery.getText());
+				String[] toArray = adressParser.getAdressArray();
+				
+				JOptionPane.showMessageDialog(frame, "From: " + fromArray[0] 
+												+ "\nTo: " + toArray[0]);
+			} catch (MalformedAdressException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else {
+			JOptionPane.showMessageDialog(frame, "You have to enter an address");
+		}
+	}
+	
+	class ReverseActionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String tempFrom = fromSearchQuery.getText();
+			fromSearchQuery.setText(toSearchQuery.getText());
+			toSearchQuery.setText(tempFrom);			
+		}
+	}
+	
 	class EnterKeyListener implements KeyListener{
 
 		@Override
 		public void keyPressed(KeyEvent arg0) {
 			if(arg0.getKeyCode() == 10){
+				findRoute();
 			}
 		}
 
 		@Override
 		public void keyReleased(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-
 		}
 	}
 	
 	class FindRouteActionListener implements ActionListener{
 
-		private JTextField from, to;
-		
-		public FindRouteActionListener(JTextField from, JTextField to){
-			this.from = from;
-			this.to = to;
-		}
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(from.getText().trim().length() != 0 && 
-					to.getText().trim().length() != 0){
-				AdressParser adressParser = new AdressParser();
-				try {
-					adressParser.parseAdress(from.getText());
-					String[] fromArray = adressParser.getAdressArray();
-					adressParser.parseAdress(to.getText());
-					String[] toArray = adressParser.getAdressArray();
-					
-					JOptionPane.showMessageDialog(frame, "From: " + fromArray[0] 
-													+ "\nTo: " + toArray[0]);
-				} catch (MalformedAdressException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			else {
-				JOptionPane.showMessageDialog(frame, "You have to enter an address");
-			}
-			
+			findRoute();			
 		}
 		
 	}
