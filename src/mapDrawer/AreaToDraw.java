@@ -65,6 +65,9 @@ public class AreaToDraw {
 	public double getLargestY()
 	{ return largestY; }
 	
+	public double getWidthHeightRelation()
+	{ return getWidth()/getHeight(); }
+		
 	/*
 	 * Calculates how much of the entire map which consists of the AreaToDraw
 	 * @return How much of the entire map which consists of the AreaToDraw in percent
@@ -91,6 +94,5 @@ public class AreaToDraw {
 	
 	public static double getHeightOfEntireMap()
 	{ return entireMapLargestY-entireMapSmallestY; }	
-	
 }
 

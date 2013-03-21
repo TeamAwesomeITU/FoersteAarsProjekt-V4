@@ -26,6 +26,7 @@ public class CoordinateConverter {
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;		
 		this.area = area;
+			
 	}
 	
 	public double KrakToDrawCoordX(double x)
@@ -42,7 +43,7 @@ public class CoordinateConverter {
 	
 	public double DrawToKrakCoordX(int x)
 	{
-		int coord = NormalizedToUTMCoord(x, area.getSmallestX(), area.getLargestX(), canvasWidth);
+		double coord = NormalizedToUTMCoord(x, area.getSmallestX(), area.getLargestX(), canvasWidth);
 		return coord;
 	}
 	
@@ -51,7 +52,8 @@ public class CoordinateConverter {
 	 */
 	public double DrawToKrakCoordY(int y)
 	{		
-		return NormalizedToUTMCoord(y, area.getSmallestY(), area.getLargestY(), canvasHeight);
+		double coord = reflectCoordY(y);
+		return NormalizedToUTMCoord(coord, area.getSmallestY(), area.getLargestY(), canvasHeight);
 	}
 	
 	private double UTMToNormalizedCoord(double coord, double axisMinimum, double axisMaximum, double screenSizeAxis)
@@ -59,14 +61,19 @@ public class CoordinateConverter {
 		return ((coord-axisMinimum)*screenSizeAxis)/(axisMaximum-axisMinimum);		
 	}
 	
-	private int NormalizedToUTMCoord(double coord, double axisMinimum, double axisMaximum, double screenSizeAxis)
+	private double NormalizedToUTMCoord(double coord, double axisMinimum, double axisMaximum, double screenSizeAxis)
 	{
-		return (int) (((coord*(axisMaximum-axisMinimum))/screenSizeAxis)+axisMinimum);
+		return (((coord*(axisMaximum-axisMinimum))/screenSizeAxis)+axisMinimum);
 	}
 	
 	private double reflectCoordY(double coord)
 	{
 		return canvasHeight - coord;
+	}
+	
+	private double getWidthHeightRelation()
+	{
+		return canvasWidth/canvasHeight;
 	}
 
 }

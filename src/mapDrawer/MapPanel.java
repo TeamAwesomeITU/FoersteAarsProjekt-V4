@@ -25,7 +25,7 @@ public class MapPanel extends JPanel {
 	
 	
 	public static void main(String[] args) {        
-	    JFrame jf = createJFrame();
+	    createJFrame();
 	} 
 	
 	private static JFrame createJFrame() {
@@ -55,6 +55,7 @@ public class MapPanel extends JPanel {
 	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
 	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 	    linesOfEdges = new EdgeLine[edgeSet.size()];
+	    setPanelDimensions();
 	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
 	    
 	    int numberOfEdges = 0;
@@ -71,6 +72,12 @@ public class MapPanel extends JPanel {
 	    	
 	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
+	}
+	
+	private void setPanelDimensions() {
+		double whRelation = area.getWidthHeightRelation();
+		double width = preferredSize.getHeight()*(whRelation);
+		preferredSize.setSize(width, preferredSize.getHeight());
 	}
 	
 	private static Dimension setPreferredSize() {
@@ -98,8 +105,6 @@ public class MapPanel extends JPanel {
 	    setLocation(getLocation().x-offX,getLocation().y-offY);
 	    getParent().doLayout();
 	}
-	
-
 	
 	/**
 	 * Updates the size of the rectangles to match the zoom level.
@@ -142,5 +147,9 @@ public class MapPanel extends JPanel {
 	
 	public void setLinesForMap() {
 		makeLinesForMap();
+	}
+	
+	public JFrame getParentFrame() {
+		return jf;
 	}
 }

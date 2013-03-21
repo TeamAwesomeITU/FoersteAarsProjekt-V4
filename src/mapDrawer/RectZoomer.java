@@ -42,12 +42,12 @@ public class RectZoomer extends MouseAdapter {
     	AreaToDraw area = mp.getArea();
     	CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getPreferredSize().getWidth(), (int)mp.getPreferredSize().getHeight(), area);
     	System.out.println("start X: " + startX + " start Y: " + startY);
-    	System.out.println("end X: "+endX+ " end Y: " +endY);
+    	System.out.println("end X: "+ endX + " end Y: " +endY);
     	double startXCoord = coordConverter.DrawToKrakCoordX(startX);
-    	double startYCoord = coordConverter.DrawToKrakCoordY(startY);
+    	double startYCoord = coordConverter.DrawToKrakCoordY(endY);
     	double endXCoord = coordConverter.DrawToKrakCoordX(endX);
-    	double endYCoord = coordConverter.DrawToKrakCoordY(endY);
-    	System.out.println("startX: " +startXCoord+ " endX: "+endXCoord+ " startY: " +startYCoord+ " endY: " +endYCoord);
+    	double endYCoord = coordConverter.DrawToKrakCoordY(startY);
+    	System.out.println("startX: " + startXCoord + " endX: "+ endXCoord + " startY: " + startYCoord + " endY: " + endYCoord );
     	try {
 			area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord);
 			mp.setArea(area);
@@ -55,7 +55,7 @@ public class RectZoomer extends MouseAdapter {
 			mp.repaint();
 		} 
     	catch (AreaNegativeSizeException e1) {
-			// TODO Auto-generated catch block
+			mp.getParentFrame().dispose();
 			e1.printStackTrace();
 		}
     	
