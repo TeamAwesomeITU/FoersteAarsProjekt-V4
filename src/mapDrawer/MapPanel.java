@@ -1,5 +1,6 @@
 package mapDrawer;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -10,19 +11,18 @@ import java.awt.Toolkit;
 import java.awt.geom.Line2D;
 import java.util.HashSet;
 import java.util.Iterator;
-
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
 
 public class MapPanel extends JPanel {
 
-	private Dimension preferredSize = setPreferredSize();
+	private Dimension preferredSize = setNewPreferredSize();
 	private RectZoomer rectZoomer;
 	private AreaToDraw area;
 	private EdgeLine[] linesOfEdges; 
 	private JFrame jf;
-	
 	
 	public static void main(String[] args) {        
 	    createJFrame();
@@ -30,12 +30,16 @@ public class MapPanel extends JPanel {
 	
 	private static JFrame createJFrame() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
-		JFrame jf = new JFrame("test");
+		JFrame jf = new JFrame();
 	    jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    jf.setSize(screenSize);
 	    jf.setExtendedState(Frame.MAXIMIZED_BOTH);
-	    jf.add(new JScrollPane(new MapPanel(jf)));
-	    
+	    MapPanel mp = new MapPanel(jf);
+        jf.getContentPane().setLayout(new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS)); 
+        mp.setAlignmentY(0);
+        mp.setBorderForPanel(mp);
+		jf.add(mp, 0);
+		jf.pack();
 	    jf.setVisible(true);
 	    return jf;
 	}
@@ -44,6 +48,9 @@ public class MapPanel extends JPanel {
 		this.jf = jf;
 		rectZoomer = new RectZoomer(this);
 	    makeLinesForMap();
+	    //jf.getContentPane().setLayout(new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS)); 
+        //setAlignmentY(0);
+        setBorderForPanel(this);
 	    // mouse listener to detect scrollwheel events
         addMouseListener(rectZoomer);
         addMouseMotionListener(rectZoomer);
@@ -55,7 +62,7 @@ public class MapPanel extends JPanel {
 	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
 	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 	    linesOfEdges = new EdgeLine[edgeSet.size()];
-	    setPanelDimensions();
+	    setPanelDimensions(preferredSize);
 	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
 	    
 	    int numberOfEdges = 0;
@@ -73,41 +80,10 @@ public class MapPanel extends JPanel {
 	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
 	}
-	
-	private void setPanelDimensions() {
-		double whRelation = area.getWidthHeightRelation();
-		double width = preferredSize.getHeight()*(whRelation);
-		preferredSize.setSize(width, preferredSize.getHeight());
-	}
-	
-	private static Dimension setPreferredSize() {
-		Dimension tmpSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double w = tmpSize.getWidth() * 0.90;
-		double h = tmpSize.getHeight() * 0.90;
-		tmpSize.setSize(w, h);
-		return tmpSize;
-	}
-	
-	public Dimension getPreferredSize() {
-	    return preferredSize;
-	}
-	
-	private void updatePreferredSize(int n, Point p) {
-	    double d = (double) n * 1.08;
-	    d = (n > 0) ? 1 / d : -d;
-	
-	    int w = (int) (getWidth() * d);
-	    int h = (int) (getHeight() * d);
-	    preferredSize.setSize(w, h);
-	    
-	    int offX = (int)(p.x * d) - p.x;
-	    int offY = (int)(p.y * d) - p.y;
-	    setLocation(getLocation().x-offX,getLocation().y-offY);
-	    getParent().doLayout();
-	}
-	
+
 	/**
-	 * Updates the size of the rectangles to match the zoom level.
+	 * Draws all the lines for the map. Also, draws the rectangle used by the user
+	 * to see where you are about to zoom.
 	 */
 	private Line2D line = new Line2D.Float();
 	public void paint(Graphics g) {
@@ -125,7 +101,7 @@ public class MapPanel extends JPanel {
 	        	g.setColor(Color.green);
 	        else 
 	        	g.setColor(Color.black);
-	        ((Graphics2D)g).draw(line); 								  									  //Tegner en linje med koordinaterne (x1,y1,x2,y2)
+	        ((Graphics2D)g).draw(line); 								  									 
 	    }
 	    Graphics2D g2 = (Graphics2D) g;
 	    if (rectZoomer.getRect() == null) {
@@ -151,5 +127,48 @@ public class MapPanel extends JPanel {
 	
 	public JFrame getParentFrame() {
 		return jf;
+	}
+	
+	private void setBorderForPanel(MapPanel mp) {
+		Dimension d = setNewPreferredSize();
+		d = mp.setPanelDimensions(d);
+        d.setSize(d.getWidth()*1.02, d.getHeight()*1.02);
+        mp.setMaximumSize(d);
+        mp.setBorder(new LineBorder(Color.black));
+		
+	}
+	private Dimension setPanelDimensions(Dimension d) {
+		double whRelation = area.getWidthHeightRelation();
+		System.out.println(whRelation);
+		double width = preferredSize.getHeight()*(whRelation);
+		d.setSize(width, preferredSize.getHeight());
+		return d;
+	}
+	
+	private static Dimension setNewPreferredSize() {
+		Dimension tmpSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double w = tmpSize.getWidth() * 0.90;
+		double h = tmpSize.getHeight() * 0.90;
+		tmpSize.setSize(w, h);
+		//Dimension tmpSize = new Dimension(100, 450);
+		return tmpSize;
+	}
+	
+	public Dimension getPreferredSize() {
+	    return preferredSize;
+	}
+	
+	private void updatePreferredSize(int n, Point p) {
+	    double d = (double) n * 1.08;
+	    d = (n > 0) ? 1 / d : -d;
+	
+	    int w = (int) (getWidth() * d);
+	    int h = (int) (getHeight() * d);
+	    preferredSize.setSize(w, h);
+	    
+	    int offX = (int)(p.x * d) - p.x;
+	    int offY = (int)(p.y * d) - p.y;
+	    setLocation(getLocation().x-offX,getLocation().y-offY);
+	    getParent().doLayout();
 	}
 }
