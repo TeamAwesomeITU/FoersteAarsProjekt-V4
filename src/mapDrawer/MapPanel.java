@@ -7,10 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -25,24 +22,36 @@ public class MapPanel extends JPanel {
 	private AreaToDraw area;
 	private EdgeLine[] linesOfEdges; 
 	private JFrame jf;
-	private HashSet<Edge> edgeSet;
 	
 	
 	public static void main(String[] args) {        
 	    JFrame jf = createJFrame();
-	}    
+	} 
+	
+	private static JFrame createJFrame() {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
+		JFrame jf = new JFrame("test");
+	    jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    jf.setSize(screenSize);
+	    jf.setExtendedState(Frame.MAXIMIZED_BOTH);
+	    jf.add(new JScrollPane(new MapPanel(jf)));
+	    
+	    jf.setVisible(true);
+	    return jf;
+	}
 
 	public MapPanel(JFrame jf) {
 		this.jf = jf;
 		rectZoomer = new RectZoomer(this);
-	    initiateEdgeSet();
+	    makeLinesForMap();
 	    // mouse listener to detect scrollwheel events
         addMouseListener(rectZoomer);
         addMouseMotionListener(rectZoomer);
 	}
 	
-	private void initiateEdgeSet() {
-		area = new AreaToDraw();
+	private void makeLinesForMap() {
+		if(area == null)
+			area = new AreaToDraw();
 	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
 	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 	    linesOfEdges = new EdgeLine[edgeSet.size()];
@@ -63,25 +72,19 @@ public class MapPanel extends JPanel {
 	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
 	}
-
-	private static JFrame createJFrame() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
-		JFrame jf = new JFrame("test");
-	    jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    jf.setSize(screenSize);
-	    jf.setExtendedState(Frame.MAXIMIZED_BOTH);
-	    jf.add(new JScrollPane(new MapPanel(jf)));
-	    
-	    jf.setVisible(true);
-	    return jf;
+	
+	private static Dimension setPreferredSize() {
+		Dimension tmpSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double w = tmpSize.getWidth() * 0.90;
+		double h = tmpSize.getHeight() * 0.90;
+		tmpSize.setSize(w, h);
+		return tmpSize;
 	}
 	
-	private void drawLinesFromEdges(double[] linesOfEdges) {
-		for (int i=0; i<linesOfEdges.length; i++) {
-	       
-		}
+	public Dimension getPreferredSize() {
+	    return preferredSize;
 	}
-
+	
 	private void updatePreferredSize(int n, Point p) {
 	    double d = (double) n * 1.08;
 	    d = (n > 0) ? 1 / d : -d;
@@ -96,17 +99,7 @@ public class MapPanel extends JPanel {
 	    getParent().doLayout();
 	}
 	
-	public Dimension getPreferredSize() {
-	    return preferredSize;
-	}
-	
-	private static Dimension setPreferredSize() {
-		Dimension tmpSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double w = tmpSize.getWidth() * 0.90;
-		double h = tmpSize.getHeight() * 0.90;
-		tmpSize.setSize(w, h);
-		return tmpSize;
-	}
+
 	
 	/**
 	 * Updates the size of the rectangles to match the zoom level.
@@ -137,5 +130,17 @@ public class MapPanel extends JPanel {
 	         g2.setColor(Color.red);
 	         g2.draw(rectZoomer.getRect());
 	      } 
+	}
+	
+	public void setArea(AreaToDraw area) {
+		this.area = area;
+	}
+	
+	public AreaToDraw getArea() {
+		return area;
+	}
+	
+	public void setLinesForMap() {
+		makeLinesForMap();
 	}
 }

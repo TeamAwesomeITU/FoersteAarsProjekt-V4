@@ -6,10 +6,10 @@ package mapDrawer;
 public class CoordinateConverter {	
 	
 	//The width of the window to draw in
-	private int canvasWidth;
+	private double canvasWidth;
 	
 	//The height of the window to draw in
-	private int canvasHeight;
+	private double canvasHeight;
 	
 	//The Area to draw in
 	private AreaToDraw area;
@@ -21,7 +21,7 @@ public class CoordinateConverter {
 	 * @param canvasHeight The height of the drawing area in pixels
 	 * @param area The part of the map to draw
 	 */
-	public CoordinateConverter(int canvasWidth, int canvasHeight, AreaToDraw area)
+	public CoordinateConverter(double canvasWidth, double canvasHeight, AreaToDraw area)
 	{
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;		
@@ -50,20 +50,18 @@ public class CoordinateConverter {
 	 * Input: The coordinate in Java-coordinate pixels
 	 */
 	public double DrawToKrakCoordY(int y)
-	{
-		double coord = reflectCoordY(y);
-		coord = NormalizedToUTMCoord(coord, area.getSmallestY(), area.getLargestY(), canvasHeight);
-		return coord;
+	{		
+		return NormalizedToUTMCoord(y, area.getSmallestY(), area.getLargestY(), canvasHeight);
 	}
 	
-	private double UTMToNormalizedCoord(double coord, double axisMinimum, double axisMaximum, int screenSizeAxis)
+	private double UTMToNormalizedCoord(double coord, double axisMinimum, double axisMaximum, double screenSizeAxis)
 	{
 		return ((coord-axisMinimum)*screenSizeAxis)/(axisMaximum-axisMinimum);		
 	}
 	
-	private int NormalizedToUTMCoord(double coord, double axisMinimum, double axisMaximum, int screenSizeAxis)
+	private int NormalizedToUTMCoord(double coord, double axisMinimum, double axisMaximum, double screenSizeAxis)
 	{
-		return (int) ((coord*axisMaximum-axisMinimum)/(axisMaximum)+axisMinimum);
+		return (int) (((coord*(axisMaximum-axisMinimum))/screenSizeAxis)+axisMinimum);
 	}
 	
 	private double reflectCoordY(double coord)
