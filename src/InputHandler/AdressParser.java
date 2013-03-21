@@ -51,6 +51,7 @@ public class AdressParser {
 	 */
 	public String[] parseAdress(String s) throws MalformedAdressException {
 		//Is the input valid?			
+		s = s.toLowerCase();
 		Matcher validInput = match(pInput, s);
 		if (validInput.find() || s.trim().isEmpty() || s == null){								/* 1 */
 			throw new MalformedAdressException("MALFORMED ADRESS");
@@ -61,7 +62,7 @@ public class AdressParser {
 			System.out.println(s);
 		}
 
-		else {
+		else {			
 			a = s;
 			findRoadName(s);
 			//Only checks for roadnumber, roadletter and floornumber, if a valid adress is found
