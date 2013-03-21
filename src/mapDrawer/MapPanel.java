@@ -137,6 +137,10 @@ public class MapPanel extends JPanel {
         mp.setBorder(new LineBorder(Color.black));
 		
 	}
+	/*
+	 * Takes a Dimension and makes it's width and height match the relation between area's width and height.
+	 * Is also used to adjust the size of the map to a size that matches this relation.
+	 */
 	private Dimension setPanelDimensions(Dimension d) {
 		double whRelation = area.getWidthHeightRelation();
 		System.out.println(whRelation);
@@ -145,6 +149,10 @@ public class MapPanel extends JPanel {
 		return d;
 	}
 	
+	//TODO Make it get proper width and height.
+	/*
+	 * Is used for setting the initial size of the map.
+	 */
 	private static Dimension setNewPreferredSize() {
 		Dimension tmpSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double w = tmpSize.getWidth() * 0.90;
@@ -158,7 +166,7 @@ public class MapPanel extends JPanel {
 	    return preferredSize;
 	}
 	
-	private void updatePreferredSize(int n, Point p) {
+	/*private void updatePreferredSize(int n, Point p) {
 	    double d = (double) n * 1.08;
 	    d = (n > 0) ? 1 / d : -d;
 	
@@ -170,5 +178,5 @@ public class MapPanel extends JPanel {
 	    int offY = (int)(p.y * d) - p.y;
 	    setLocation(getLocation().x-offX,getLocation().y-offY);
 	    getParent().doLayout();
-	}
+	}*/
 }
