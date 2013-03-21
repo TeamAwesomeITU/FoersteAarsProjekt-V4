@@ -21,11 +21,12 @@ import javax.swing.JScrollPane;
 public class MapPanel extends JPanel {
 
 	private Dimension preferredSize = setPreferredSize();
-	private Rectangle2D[] rects = new Rectangle2D[50];
 	private RectZoomer rectZoomer;
 	private AreaToDraw area;
-	private Line2D[] linesOfEdges; 
+	private EdgeLine[] linesOfEdges; 
 	private JFrame jf;
+	private HashSet<Edge> edgeSet;
+	
 	
 	public static void main(String[] args) {        
 	    JFrame jf = createJFrame();
@@ -34,45 +35,33 @@ public class MapPanel extends JPanel {
 	public MapPanel(JFrame jf) {
 		this.jf = jf;
 		rectZoomer = new RectZoomer(this);
-	    for (int i=0; i<rects.length; i++) {
-	        rects[i] = new Rectangle2D.Double(
-	                Math.random()*.8, Math.random()*.8, 
-	                Math.random()*.2, Math.random()*.2);
-	    }
-	    area = new AreaToDraw();
+	    initiateEdgeSet();
+	    // mouse listener to detect scrollwheel events
+        addMouseListener(rectZoomer);
+        addMouseMotionListener(rectZoomer);
+	}
+	
+	private void initiateEdgeSet() {
+		area = new AreaToDraw();
 	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
 	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
-	    linesOfEdges = new Line2D[edgeSet.size()];
-	    //System.out.println(linesOfEdges.length);
-	    //System.out.println(preferredSize.getWidth() + " " + preferredSize.getHeight());
+	    linesOfEdges = new EdgeLine[edgeSet.size()];
 	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
 	    
 	    int numberOfEdges = 0;
 	    while(edgeSetIterator.hasNext() == true) {
 	    	Edge edge = edgeSetIterator.next();
-	    	//System.out.println(edge.getRoadName());
 	    	int fromNode = edge.getFromNode();
 	    	int toNode = edge.getToNode();
 	    	Double[] fromNodeCoords = FindRelevantNodes.getNodeCoordinatesMap().get(fromNode);
 	    	Double[] toNodeCoords = FindRelevantNodes.getNodeCoordinatesMap().get(toNode);
-	    	
 	    	double drawFromCoordX = coordConverter.KrakToDrawCoordX(fromNodeCoords[0]);
 	    	double drawFromCoordY = coordConverter.KrakToDrawCoordY(fromNodeCoords[1]);
-	    	
 	    	double drawToCoordX = coordConverter.KrakToDrawCoordX(toNodeCoords[0]);
 	    	double drawToCoordY = coordConverter.KrakToDrawCoordY(toNodeCoords[1]);
 	    	
-	    	System.out.println("startX: " + drawFromCoordX);
-	    	System.out.println("startY: " + drawFromCoordY);
-	    	System.out.println("endX: " + drawToCoordX);
-	    	System.out.println("endY: " + drawToCoordY);
-	    	
-	    	
-	    	linesOfEdges[numberOfEdges++] = new Line2D.Double(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY);
+	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
-	    // mouse listener to detect scrollwheel events
-        addMouseListener(rectZoomer);
-        addMouseMotionListener(rectZoomer);
 	}
 
 	private static JFrame createJFrame() {
@@ -125,9 +114,19 @@ public class MapPanel extends JPanel {
 	private Line2D line = new Line2D.Float();
 	public void paint(Graphics g) {
 	    super.paint(g);
-	    g.setColor(Color.black);
-	    for (Line2D edgeLine : linesOfEdges) {
-	        line.setLine(edgeLine.getX1(), edgeLine.getY1(), edgeLine.getX2(), edgeLine.getY2());      
+	    for (EdgeLine edgeLine : linesOfEdges) {
+	        line.setLine(edgeLine.getStartX(), edgeLine.getStartY(), edgeLine.getEndX(), edgeLine.getEndY());
+	        int roadType = edgeLine.getRoadType();
+	        
+	        if(roadType == 1 || roadType == 21 || roadType == 31 || roadType == 41 
+	            || roadType == 2 || roadType == 22 || roadType == 32 || roadType == 42) 
+	        	g.setColor(Color.red);
+	        else if(roadType == 3 || roadType == 23 || roadType == 33 || roadType == 4 || roadType == 24 || roadType == 34) 
+	        	g.setColor(Color.blue);
+	        else if(roadType == 8 || roadType == 10 || roadType == 11)
+	        	g.setColor(Color.green);
+	        else 
+	        	g.setColor(Color.black);
 	        ((Graphics2D)g).draw(line); 								  									  //Tegner en linje med koordinaterne (x1,y1,x2,y2)
 	    }
 	    Graphics2D g2 = (Graphics2D) g;

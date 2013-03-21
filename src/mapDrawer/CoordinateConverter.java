@@ -68,7 +68,7 @@ public class CoordinateConverter {
 	
 	private double reflectCoordY(double coord)
 	{
-		return area.getHeight() - coord;
+		return canvasHeight - coord;
 	}
 
 }
