@@ -9,7 +9,6 @@ import javax.swing.*;
 import InputHandler.AdressParser;
 import InputHandler.exceptions.MalformedAdressException;
 
-
 public class MainGui {
 
 	private AdressParser adressParser;
@@ -53,14 +52,14 @@ public class MainGui {
 	 * Builds the frame and sets it up
 	 */
 	public void startupScreen(){
-		frame = new JFrame("Team Awesome Maps");
+		frame = new JFrame();
 		frame.setUndecorated(true);
 		Dimension frameSize = new Dimension(400, 400);
 		frame.setBounds(0,0,frameSize.width, frameSize.height);
 		frame.setPreferredSize(frameSize);
 		frame.setLocationRelativeTo(null);
 
-		makeMenu();
+		makeMenu(frame, BACKGROUND_COLOR);
 		fillContentPane();		
 
 		frame.pack();
@@ -70,23 +69,32 @@ public class MainGui {
 	/**
 	 * Makes the menu and adds shortcuts to it.
 	 */
-	public void makeMenu(){
+	public static void makeMenu(final JFrame frameForMenu, Color colorForMenu){
 		final int SHORT_CUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
 		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
-		menuBar.setBackground(BACKGROUND_COLOR);
+		frameForMenu.setJMenuBar(menuBar);
+		menuBar.setBackground(colorForMenu);
 		menuBar.setBorder(BorderFactory.createEtchedBorder());
 
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem quitItem = new JMenuItem("Quit");
-		quitItem.addActionListener(new QuitActionListener());
+		quitItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				frameForMenu.dispose();			
+			}
+		});
 		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, SHORT_CUT_MASK));
 		fileMenu.add(quitItem);
 
 		JMenu helpMenu = new JMenu("Help");
 		JMenuItem aboutItem = new JMenuItem("About");
-		aboutItem.addActionListener(new AboutActionListener());
+		aboutItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(frameForMenu, "Welcome to T-A-M maps. Please enter an address" +
+						" to get on your way, or simply click the globe to browse the map");		
+			}
+		});
 		aboutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, SHORT_CUT_MASK));
 		helpMenu.add(aboutItem);
 
@@ -100,12 +108,15 @@ public class MainGui {
 		contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
 
-		ColoredJPanel footer = new ColoredJPanel();
-		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.0");
-		footer.add(footerText);
-
-		contentPane.add(footer, BorderLayout.SOUTH);
+		contentPane.add(makeFooter(), BorderLayout.SOUTH);
 		contentPane.add(makeButtons(), BorderLayout.CENTER);
+	}
+	
+	public static ColoredJPanel makeFooter(){
+		ColoredJPanel footer = new ColoredJPanel();
+		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4");
+		footer.add(footerText);
+		return footer;
 	}
 
 	/**
@@ -193,27 +204,10 @@ public class MainGui {
 		}
 	}
 	
-	class QuitActionListener implements ActionListener{
-	
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			frame.dispose();			
-		}		
-	}
-	
-	class AboutActionListener implements ActionListener{
-	
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			JOptionPane.showMessageDialog(frame, "Welcome to T-A-M maps. Please enter an address" +
-					" to get on your way, or simply click the globe to browse the map");		
-		}
-	}
-	
 	class MapActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			JOptionPane.showMessageDialog(frame, "it worked");		
+			
 		}
 	}
 	
