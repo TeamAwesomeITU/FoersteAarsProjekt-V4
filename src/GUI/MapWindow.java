@@ -20,6 +20,7 @@ public class MapWindow {
 	private JFrame frame;
 	private Container contentPane;
 	private static MapWindow instance;
+	private JTextField toSearchQuery;
 	
 	public static void main(String[] args) {
 		MapWindow.getInstance();	
@@ -27,6 +28,11 @@ public class MapWindow {
 	
 	private MapWindow(){
 		createMapScreen();
+	}
+	
+	public MapWindow(String searchQuery){
+		createMapScreen();
+		toSearchQuery.setText(searchQuery);
 	}
 	
 	public static MapWindow getInstance(){
@@ -64,12 +70,11 @@ public class MapWindow {
 		
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(Color.BLUE);
-		JTextField toSearchQuery = new JTextField();
+		toSearchQuery = new JTextField();
 		toSearchQuery.addKeyListener(new EnterKeyListener());
 		
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener(fromSearchQuery, toSearchQuery)));
-		
 		 
 		toolBar.add(fromHeader);
 		toolBar.add(fromSearchQuery);
@@ -91,10 +96,7 @@ public class MapWindow {
 		contentPane.add(MainGui.makeFooter(), BorderLayout.SOUTH);
 		contentPane.add(makeToolBar(), BorderLayout.WEST);
 		contentPane.add(new MapPanel(frame), BorderLayout.CENTER);
-	}
-	
-	public void findRoute(){
-		
+		contentPane.add(new ColoredJPanel(), BorderLayout.EAST);
 	}
 	
 	class EnterKeyListener implements KeyListener{

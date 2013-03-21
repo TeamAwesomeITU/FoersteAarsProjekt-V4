@@ -201,14 +201,19 @@ public class MainGui {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			searchForAnAddress();
+			frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			MapWindow mapWindow = new MapWindow(searchQuery.getText());
+			frame.setCursor(Cursor.getDefaultCursor());
 		}
 	}
+	
 	
 	class MapActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			MapWindow mapWindow = MapWindow.getInstance();
-			
+			frame.setCursor(Cursor.getDefaultCursor());
 		}
 	}
 	
