@@ -207,6 +207,7 @@ public class MainGui {
 	class MapActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			MapWindow mapWindow = MapWindow.getInstance();
 			
 		}
 	}
