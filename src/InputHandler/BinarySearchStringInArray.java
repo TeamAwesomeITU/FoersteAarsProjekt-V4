@@ -24,7 +24,7 @@ public class BinarySearchStringInArray
 			totalInput = "";
 
 			for (int j = splitInput.length-wantedLength; j < splitInput.length; j++) {
-				totalInput += splitInput[j] + " ";
+				totalInput += splitInput[j].toLowerCase() + " ";
 			}
 			totalInput = totalInput.trim();
 			System.out.println("Searching for: " + totalInput);
