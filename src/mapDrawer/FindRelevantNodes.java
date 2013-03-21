@@ -14,13 +14,18 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
-/*
+ /*
  * Locates the Edges that lies within the AreaToDraw
  */
 public class FindRelevantNodes {
 
+	//A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
 
+	/*
+	 * 
+	 * @return HashSet<Edge> A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
+	 */
 	public static HashSet<Edge> findNodesToDraw(AreaToDraw area)
 	{
 		//Doesn't use a HashSet of Integer, since XPath uses Strings as "input"
