@@ -8,8 +8,15 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.geom.Line2D;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+
+import java_cup.internal_error;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -72,6 +79,56 @@ public class MapPanel extends JPanel {
 	    	
 	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
+	    
+	    String file = "resources/denmark_coastline_fullres_shore.xyz_converted.txt";
+
+	    ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
+	    
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+		    String line1 = reader.readLine();
+		    String line2 = reader.readLine();
+			
+			while(line1 != null && line2 != null)
+			{
+				String[] coordFrom = line1.split("\\s+");
+				String[] coordTo = line2.split("\\s+");
+				double coordFromX = coordConverter.KrakToDrawCoordX(Double.parseDouble(coordFrom[0]));
+				double coordFromY = coordConverter.KrakToDrawCoordY(Double.parseDouble(coordFrom[1]));
+				double coordToX = coordConverter.KrakToDrawCoordX(Double.parseDouble(coordTo[0]));
+				double coordToY = coordConverter.KrakToDrawCoordY(Double.parseDouble(coordTo[1]));
+
+				double deltaX = Double.parseDouble(coordFrom[0])-Double.parseDouble(coordTo[0]);
+				double deltaY = Double.parseDouble(coordFrom[1])-Double.parseDouble(coordTo[1]);
+				double distanceBetweenPoints = Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
+				
+				System.out.println("Afstand mellem points: " + distanceBetweenPoints);
+				if(distanceBetweenPoints < 7000)
+					list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 1));
+				
+				line2 = line1;
+				line1 = reader.readLine();
+				
+			}
+			
+			EdgeLine[] newLinesOfEdges = new EdgeLine[linesOfEdges.length + list.size()];
+			for(int i = 0; i < newLinesOfEdges.length; i++)
+			{
+				if(i < linesOfEdges.length)
+						newLinesOfEdges[i] = linesOfEdges[i];
+				else
+						newLinesOfEdges[i] = list.get(i-linesOfEdges.length);
+			}
+			
+			linesOfEdges = newLinesOfEdges;
+			
+			reader.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	private void setPanelDimensions() {
