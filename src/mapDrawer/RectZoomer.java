@@ -4,12 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.JPanel;
-
 import mapDrawer.exceptions.AreaNegativeSizeException;
-
-import sun.awt.RepaintArea;
 
 public class RectZoomer extends MouseAdapter {
 	private boolean drawing = false;
@@ -41,13 +36,12 @@ public class RectZoomer extends MouseAdapter {
     	//Zoom in on shizz.
     	AreaToDraw area = mp.getArea();
     	CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getPreferredSize().getWidth(), (int)mp.getPreferredSize().getHeight(), area);
-    	System.out.println("start X: " + startX + " start Y: " + startY);
-    	System.out.println("end X: "+ endX + " end Y: " +endY);
+    	if(startX < 0) startX = 0; if(startY < 0) startY = 0;
+    	if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
     	double startXCoord = coordConverter.DrawToKrakCoordX(startX);
     	double startYCoord = coordConverter.DrawToKrakCoordY(endY);
     	double endXCoord = coordConverter.DrawToKrakCoordX(endX);
     	double endYCoord = coordConverter.DrawToKrakCoordY(startY);
-    	System.out.println("startX: " + startXCoord + " endX: "+ endXCoord + " startY: " + startYCoord + " endY: " + endYCoord );
     	try {
 			area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord);
 			mp.setArea(area);
