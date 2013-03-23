@@ -46,12 +46,12 @@ public class MapWindow {
 	
 	public void createMapScreen(){
 		frame = new JFrame("Team Awesome Maps");
-		frame.setUndecorated(true);
+		frame.setUndecorated(MainGui.undecoratedBoolean);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setBounds(0,0,screenSize.width, screenSize.height);
 		frame.setPreferredSize(screenSize);
 		
-		MainGui.makeMenu(frame, MainGui.BACKGROUND_COLOR);
+		MainGui.makeMenu(frame, MainGui.BACKGROUND_COLOR,MainGui.undecoratedBoolean, 2);
 		fillContentPane();
 		
 		frame.pack();

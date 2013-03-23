@@ -23,6 +23,8 @@ public class MainGui {
 	public static final Color BACKGROUND_COLOR = new Color(140, 255, 140);
 
 	public static final Color VERY_LIGHT_COLOR = new Color(200, 255, 200);
+	
+	public static boolean undecoratedBoolean = true;
 
 	/**
 	 * @param args
@@ -53,13 +55,13 @@ public class MainGui {
 	 */
 	public void startupScreen(){
 		frame = new JFrame();
-		frame.setUndecorated(true);
+		frame.setUndecorated(undecoratedBoolean);
 		Dimension frameSize = new Dimension(400, 400);
 		frame.setBounds(0,0,frameSize.width, frameSize.height);
 		frame.setPreferredSize(frameSize);
 		frame.setLocationRelativeTo(null);
 
-		makeMenu(frame, BACKGROUND_COLOR);
+		makeMenu(frame, BACKGROUND_COLOR, undecoratedBoolean, 1);
 		fillContentPane();		
 
 		frame.pack();
@@ -69,7 +71,7 @@ public class MainGui {
 	/**
 	 * Makes the menu and adds shortcuts to it.
 	 */
-	public static void makeMenu(final JFrame frameForMenu, Color colorForMenu){
+	public static void makeMenu(final JFrame frameForMenu, final Color colorForMenu, final boolean undecorated, final int windowID){
 		final int SHORT_CUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
 		JMenuBar menuBar = new JMenuBar();
@@ -85,6 +87,55 @@ public class MainGui {
 			}
 		});
 		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, SHORT_CUT_MASK));
+		
+		JMenuItem settingsItem = new JMenuItem("Settings");
+		settingsItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				final JFrame settingsFrame = new JFrame("Settings");
+				settingsFrame.setLocationRelativeTo(null);	
+				
+				Container container = settingsFrame.getContentPane();
+				container.setLayout(new BorderLayout());
+				
+				ColoredJPanel settingsPanel = new ColoredJPanel();
+				final JCheckBox undecorated = new JCheckBox("Undecorated");
+				undecorated.setSelected(undecoratedBoolean);
+				undecorated.setBackground(colorForMenu);
+			
+				undecorated.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						if(e.getStateChange() == ItemEvent.DESELECTED){
+							undecoratedBoolean = false;
+							frameForMenu.dispose();
+							frameForMenu.setUndecorated(undecoratedBoolean);
+							if(windowID == 1)
+								instance = new MainGui();
+							if(windowID == 2)
+								new MapWindow("");
+							settingsFrame.dispose();
+						}
+						
+						if(e.getStateChange() == ItemEvent.SELECTED){
+							undecoratedBoolean = true;
+							frameForMenu.dispose();
+							frameForMenu.setUndecorated(undecoratedBoolean);							
+							if(windowID == 1)
+								instance = new MainGui();
+							if(windowID == 2)
+								new MapWindow("");
+							settingsFrame.dispose();
+						}
+				}});
+				
+				container.add(settingsPanel, BorderLayout.CENTER);
+				
+				settingsPanel.add(undecorated);
+				settingsFrame.pack();
+				settingsFrame.setVisible(true);
+			}
+		});
+		settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, SHORT_CUT_MASK));
+		fileMenu.add(settingsItem);
 		fileMenu.add(quitItem);
 
 		JMenu helpMenu = new JMenu("Help");
@@ -133,7 +184,7 @@ public class MainGui {
 		mapButton.setContentAreaFilled(false);
 		mapButton.setToolTipText("Press the globe to browse the map");
 		mapButton.addActionListener(new MapActionListener());
-		//mapButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		mapButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 		searchQuery = new JTextField();
 		searchQuery.setPreferredSize(new Dimension(320, 20));
@@ -164,6 +215,7 @@ public class MainGui {
 		frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));	
 		MapWindow mapWindow = new MapWindow(searchQuery.getText());
 		frame.setCursor(Cursor.getDefaultCursor());
+		frame.dispose();
 	}
 	
 	public void searchForAnAddress(){
