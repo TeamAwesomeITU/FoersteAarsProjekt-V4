@@ -98,9 +98,8 @@ public class MainGui {
 				container.setLayout(new BorderLayout());
 				
 				ColoredJPanel settingsPanel = new ColoredJPanel();
-				final JCheckBox undecorated = new JCheckBox("Undecorated");
+				final ColoredJCheckBox undecorated = new ColoredJCheckBox("Undecorated");
 				undecorated.setSelected(undecoratedBoolean);
-				undecorated.setBackground(colorForMenu);
 			
 				undecorated.addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent e) {
@@ -184,7 +183,6 @@ public class MainGui {
 		mapButton.setContentAreaFilled(false);
 		mapButton.setToolTipText("Press the globe to browse the map");
 		mapButton.addActionListener(new MapActionListener());
-		mapButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 		searchQuery = new JTextField();
 		searchQuery.setPreferredSize(new Dimension(320, 20));
@@ -224,7 +222,6 @@ public class MainGui {
 			try {
 				adressParser.parseAdress(searchQuery.getText());
 			} catch (MalformedAdressException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			openMap();
