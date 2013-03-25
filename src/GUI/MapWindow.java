@@ -106,6 +106,7 @@ public class MapWindow {
 		return flow;
 	}
 	
+	@SuppressWarnings("static-access")
 	private void createMapOfDenmark(double width, double height) {
 		ColoredJPanel mapPanel = new ColoredJPanel();
 		boxLayout = new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS);
@@ -118,6 +119,7 @@ public class MapWindow {
 		contentPane.add(centerColoredJPanel, borderLayout.CENTER);
 	}
 	
+	@SuppressWarnings("static-access")
 	public void fillContentPane(){
 		contentPane = frame.getContentPane();
 		borderLayout = new BorderLayout();
