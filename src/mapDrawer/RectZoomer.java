@@ -53,12 +53,6 @@ public class RectZoomer extends MouseAdapter {
 			mp.getParentFrame().dispose();
 			e1.printStackTrace();
 		}
-    	
-    	/*double newScale = scale*scale;
-       drawing = false;
-       BufferedImage zoomImage = image.getSubimage(startZoomX, startZoomY, width, height);
-       image = zoomImage;
-       repaint();*/
     }
     
     public Rectangle getRect() {
