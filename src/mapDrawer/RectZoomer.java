@@ -43,6 +43,7 @@ public class RectZoomer extends MouseAdapter {
     	double endXCoord = coordConverter.DrawToKrakCoordX(endX);
     	double endYCoord = coordConverter.DrawToKrakCoordY(startY);
     	try {
+    		rect = null;
 			area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord);
 			mp.setArea(area);
 			mp.setLinesForMap();
@@ -52,12 +53,6 @@ public class RectZoomer extends MouseAdapter {
 			mp.getParentFrame().dispose();
 			e1.printStackTrace();
 		}
-    	
-    	/*double newScale = scale*scale;
-       drawing = false;
-       BufferedImage zoomImage = image.getSubimage(startZoomX, startZoomY, width, height);
-       image = zoomImage;
-       repaint();*/
     }
     
     public Rectangle getRect() {

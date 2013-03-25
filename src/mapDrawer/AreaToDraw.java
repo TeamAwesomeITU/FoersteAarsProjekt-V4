@@ -19,6 +19,7 @@ public class AreaToDraw {
 	//The x-coordinate of the most eastern coordinate
 	private final double largestX;
 	
+	
 	//The y-coordinate of the most southern coordinate
 	private final double smallestY;	
 	

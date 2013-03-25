@@ -6,10 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.naming.directory.SearchControls;
 import javax.swing.*;
 
-import GUI.MainGui.EnterKeyListener;
 import InputHandler.AdressParser;
 import InputHandler.exceptions.MalformedAdressException;
 
@@ -21,6 +19,10 @@ public class MapWindow {
 	private Container contentPane;
 	private static MapWindow instance;
 	private JTextField toSearchQuery, fromSearchQuery;
+	private BorderLayout borderLayout;
+	private BoxLayout boxLayout;
+	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
+						  eastColoredJPanel = new ColoredJPanel(), southColoredJPanel = MainGui.makeFooter();
 	
 	public static void main(String[] args) {
 		MapWindow.getInstance();	
@@ -56,6 +58,11 @@ public class MapWindow {
 		
 		frame.pack();
 		fromSearchQuery.requestFocusInWindow();
+		frame.setVisible(true);
+		double widthOfFrame = frame.getWidth()*0.7 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth());
+		double heightOfFrame = frame.getHeight()*0.8 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
+		frame.setVisible(false);
+		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		frame.setVisible(true);
 	}
 	
@@ -98,14 +105,26 @@ public class MapWindow {
 		return flow;
 	}
 	
+	private void createMapOfDenmark(double width, double height) {
+		ColoredJPanel mapPanel = new ColoredJPanel();
+		boxLayout = new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS);
+		mapPanel.setLayout(boxLayout);
+		MapPanel mp = new MapPanel(frame, (int)Math.round(width*0.9), (int)Math.round(height*0.9));
+		mp.setMinimumSize(new Dimension((int)width, (int)height));
+		mp.setMaximumSize(new Dimension((int)width, (int)height));
+		mapPanel.add(mp);		
+		centerColoredJPanel = mapPanel;
+		contentPane.add(centerColoredJPanel, borderLayout.CENTER);
+	}
+	
 	public void fillContentPane(){
 		contentPane = frame.getContentPane();
-		contentPane.setLayout(new BorderLayout());
-
-		contentPane.add(MainGui.makeFooter(), BorderLayout.SOUTH);
-		contentPane.add(makeToolBar(), BorderLayout.WEST);
-		contentPane.add(new MapPanel(frame), BorderLayout.CENTER);
-		contentPane.add(new ColoredJPanel(), BorderLayout.EAST);
+		borderLayout = new BorderLayout();
+		contentPane.setLayout(borderLayout);
+		
+		contentPane.add(southColoredJPanel, borderLayout.SOUTH);
+		contentPane.add(westColoredJPanel, borderLayout.WEST);
+		contentPane.add(eastColoredJPanel, borderLayout.EAST);
 	}
 	
 	public void findRoute(){
