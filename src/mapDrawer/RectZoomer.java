@@ -4,8 +4,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import java_cup.internal_error;
 import mapDrawer.exceptions.AreaNegativeSizeException;
 
 public class RectZoomer extends MouseAdapter {
