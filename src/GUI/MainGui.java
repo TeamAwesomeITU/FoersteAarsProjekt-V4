@@ -3,6 +3,9 @@ package GUI;
 import java.awt.*;
 
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import javax.swing.*;
 
@@ -24,7 +27,7 @@ public class MainGui {
 
 	public static final Color VERY_LIGHT_COLOR = new Color(200, 255, 200);
 	
-	public static boolean undecoratedBoolean = true;
+	public static boolean undecoratedBoolean;
 
 	/**
 	 * @param args
@@ -48,6 +51,22 @@ public class MainGui {
 
 	private MainGui(){
 		startupScreen();
+		readSettingsFile();
+	}
+	
+	public static void readSettingsFile(){
+		File file = new File("resources/SettingsFile.txt");
+		try {
+			Scanner settingsFileScanner = new Scanner(file);
+			while(settingsFileScanner.hasNext()){
+				if(settingsFileScanner.next().equals("undecorated")){
+					undecoratedBoolean = settingsFileScanner.nextBoolean();
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -211,7 +230,7 @@ public class MainGui {
 	
 	private void openMap() {
 		frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));	
-		MapWindow mapWindow = new MapWindow(searchQuery.getText());
+		new MapWindow(searchQuery.getText());
 		frame.setCursor(Cursor.getDefaultCursor());
 		frame.dispose();
 	}
