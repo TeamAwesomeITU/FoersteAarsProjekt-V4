@@ -181,15 +181,5 @@ public class FindRelevantNodes {
 	public static void main(String[] args)
 	{		
 		HashSet<Edge> set = findNodesToDraw(new AreaToDraw());	
-		
-		/*
-		Iterator<Edge> iterator = set.iterator();
-		Edge edge = null;
-
-		while (iterator.hasNext()) {
-			edge = iterator.next();
-			System.out.println(edge.getRoadName());			
-		}
-		 */
 	}
 }
