@@ -5,12 +5,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+
+import java_cup.internal_error;
 
 import javax.swing.*;
 
 import InputHandler.AdressParser;
 import InputHandler.exceptions.MalformedAdressException;
 
+import mapDrawer.AreaToDraw;
+import mapDrawer.CoordinateConverter;
 import mapDrawer.MapPanel;
 
 public class MapWindow {
@@ -19,7 +26,6 @@ public class MapWindow {
 	private Container contentPane;
 	private static MapWindow instance;
 	private JTextField toSearchQuery, fromSearchQuery;
-	private BoxLayout boxLayout;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = new ColoredJPanel(), southColoredJPanel = MainGui.makeFooter();
 	
@@ -106,14 +112,15 @@ public class MapWindow {
 	}
 	
 	private void createMapOfDenmark(double width, double height) {
-		ColoredJPanel mapPanel = new ColoredJPanel();
-		boxLayout = new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS);
-		mapPanel.setLayout(boxLayout);
-		MapPanel mp = new MapPanel(frame, (int)Math.round(width*0.98), (int)Math.round(height*0.98));
-		mp.setMinimumSize(new Dimension((int)width, (int)height));
-		mp.setMaximumSize(new Dimension((int)width, (int)height));
-		mapPanel.add(mp);		
-		centerColoredJPanel = mapPanel;
+		centerColoredJPanel = new ColoredJPanel();
+		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
+		
+		MapPanel mapPanel = new MapPanel(frame, (int)Math.round(width*0.98), (int)Math.round(height*0.98));
+		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
+		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
+		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
+		
+		centerColoredJPanel.add(mapPanel);		
 		contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
 	}
 	
@@ -155,6 +162,35 @@ public class MapWindow {
 			JOptionPane.showMessageDialog(frame, "You have to enter an address");
 		}
 	}
+	
+	class CoordinatesMouseMotionListener implements MouseMotionListener{
+		
+		private MapPanel mapPanel;
+		
+		public CoordinatesMouseMotionListener(MapPanel mapPanel){
+			this.mapPanel = mapPanel;
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			AreaToDraw mapAreaToDraw = new AreaToDraw();
+			CoordinateConverter coordConverter = new CoordinateConverter((int)Math.round(widthForMap()*0.98), (int)Math.round(heightForMap()*0.98), mapAreaToDraw);
+			double xCord = coordConverter.KrakToDrawCoordX(e.getX());
+			double yCord = coordConverter.KrakToDrawCoordY(e.getY());
+			
+			mapPanel.setToolTipText("x-cord: " + xCord + " y-cord: " + yCord);
+			
+			
+		}
+		
+	}
+	
 	
 	class ReverseActionListener implements ActionListener{
 
