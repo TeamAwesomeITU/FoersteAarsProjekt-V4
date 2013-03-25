@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import javax.swing.*;
@@ -27,7 +28,7 @@ public class MainGui {
 
 	public static final Color VERY_LIGHT_COLOR = new Color(200, 255, 200);
 	
-	public static boolean undecoratedBoolean;
+	public static boolean undecoratedBoolean = false;
 
 	/**
 	 * @param args
@@ -51,22 +52,17 @@ public class MainGui {
 
 	private MainGui(){
 		startupScreen();
-		readSettingsFile();
 	}
 	
-	public static void readSettingsFile(){
+	public static void readSettingsFile() throws InputMismatchException, FileNotFoundException{
 		File file = new File("resources/SettingsFile.txt");
-		try {
-			Scanner settingsFileScanner = new Scanner(file);
-			while(settingsFileScanner.hasNext()){
-				if(settingsFileScanner.next().equals("undecorated")){
-					undecoratedBoolean = settingsFileScanner.nextBoolean();
-				}
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		Scanner settingsFileScanner = new Scanner(file);
+		Boolean tempBoolean = false;
+		while(settingsFileScanner.hasNext()){
+			Boolean.parseBoolean(settingsFileScanner.next());
+			undecoratedBoolean = tempBoolean;
 		}
-
+		settingsFileScanner.close();
 	}
 
 	/**
@@ -197,7 +193,7 @@ public class MainGui {
 		buttonPanel.setLayout(new GridLayout(0, 1, 3, 1));
 
 		JButton mapButton = new JButton();
-		mapButton.setIcon(new ImageIcon("resources/globe.png"));
+		mapButton.setIcon(new ImageIcon("resources/Logo.png"));
 		mapButton.setBorder(BorderFactory.createEmptyBorder());
 		mapButton.setContentAreaFilled(false);
 		mapButton.setToolTipText("Press the globe to browse the map");
