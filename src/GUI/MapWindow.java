@@ -19,7 +19,6 @@ public class MapWindow {
 	private Container contentPane;
 	private static MapWindow instance;
 	private JTextField toSearchQuery, fromSearchQuery;
-	private BorderLayout borderLayout;
 	private BoxLayout boxLayout;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = new ColoredJPanel(), southColoredJPanel = MainGui.makeFooter();
@@ -115,17 +114,16 @@ public class MapWindow {
 		mp.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.add(mp);		
 		centerColoredJPanel = mapPanel;
-		contentPane.add(centerColoredJPanel, borderLayout.CENTER);
+		contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
 	}
 	
 	public void fillContentPane(){
 		contentPane = frame.getContentPane();
-		borderLayout = new BorderLayout();
-		contentPane.setLayout(borderLayout);
+		contentPane.setLayout(new BorderLayout());
 		
-		contentPane.add(southColoredJPanel, borderLayout.SOUTH);
-		contentPane.add(westColoredJPanel, borderLayout.WEST);
-		contentPane.add(eastColoredJPanel, borderLayout.EAST);
+		contentPane.add(southColoredJPanel, BorderLayout.SOUTH);
+		contentPane.add(westColoredJPanel, BorderLayout.WEST);
+		contentPane.add(eastColoredJPanel, BorderLayout.EAST);
 	}
 	
 	public void findRoute(){
