@@ -34,17 +34,20 @@ public class MapPanel extends JPanel {
 	    jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    jf.setSize(screenSize);
 	    jf.setExtendedState(Frame.MAXIMIZED_BOTH);
-	    MapPanel mp = new MapPanel(jf);
-        jf.getContentPane().setLayout(new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS)); 
+	    BoxLayout boxL = new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS);
+        jf.getContentPane().setLayout(boxL); 
+        MapPanel mp = new MapPanel(jf, boxL);
         mp.setAlignmentY(0);
         mp.setBorderForPanel(mp);
 		jf.add(mp, 0);
 		jf.pack();
 	    jf.setVisible(true);
+	    System.out.println("Height: "+ mp.getHeight());
+	    System.out.println("Width: " + mp.getWidth());
 	    return jf;
 	}
 
-	public MapPanel(JFrame jf) {
+	public MapPanel(JFrame jf, BoxLayout boxl) {
 		this.jf = jf;
 		rectZoomer = new RectZoomer(this);
 	    makeLinesForMap();
@@ -143,7 +146,6 @@ public class MapPanel extends JPanel {
 	 */
 	private Dimension setPanelDimensions(Dimension d) {
 		double whRelation = area.getWidthHeightRelation();
-		System.out.println(whRelation);
 		double width = preferredSize.getHeight()*(whRelation);
 		d.setSize(width, preferredSize.getHeight());
 		return d;

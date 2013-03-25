@@ -103,8 +103,9 @@ public class MapWindow {
 		contentPane.setLayout(new BorderLayout());
 
 		ColoredJPanel mapPanel = new ColoredJPanel();
-		mapPanel.setLayout(new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS));
-		mapPanel.add(new MapPanel(frame));
+		BoxLayout boxL = new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS);
+		mapPanel.setLayout(boxL);
+		mapPanel.add(new MapPanel(frame, boxL));
 		
 		contentPane.add(mapPanel, BorderLayout.CENTER);
 		contentPane.add(MainGui.makeFooter(), BorderLayout.SOUTH);
