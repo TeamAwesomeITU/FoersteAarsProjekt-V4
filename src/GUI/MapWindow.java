@@ -63,6 +63,7 @@ public class MapWindow {
 		double heightOfFrame = frame.getHeight()*0.8 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
 		frame.setVisible(false);
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
 	
