@@ -20,6 +20,11 @@ public class MapWindow {
 	private JFrame frame;
 	private Container contentPane;
 	private static MapWindow instance;
+	private JTextField toSearchQuery, fromSearchQuery;
+	private BorderLayout borderLayout;
+	private BoxLayout boxLayout;
+	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
+						  eastColoredJPanel = new ColoredJPanel(), southColoredJPanel = MainGui.makeFooter();
 	
 	public static void main(String[] args) {
 		MapWindow.getInstance();	
@@ -27,6 +32,11 @@ public class MapWindow {
 	
 	private MapWindow(){
 		createMapScreen();
+	}
+	
+	public MapWindow(String searchQuery){
+		createMapScreen();
+		toSearchQuery.setText(searchQuery);
 	}
 	
 	public static MapWindow getInstance(){
@@ -40,15 +50,21 @@ public class MapWindow {
 	
 	public void createMapScreen(){
 		frame = new JFrame("Team Awesome Maps");
-		frame.setUndecorated(true);
+		frame.setUndecorated(MainGui.undecoratedBoolean);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setBounds(0,0,screenSize.width, screenSize.height);
 		frame.setPreferredSize(screenSize);
 		
-		MainGui.makeMenu(frame, MainGui.BACKGROUND_COLOR);
+		MainGui.makeMenu(frame, MainGui.BACKGROUND_COLOR, MainGui.undecoratedBoolean, 2);
 		fillContentPane();
 		
 		frame.pack();
+		fromSearchQuery.requestFocusInWindow();
+		frame.setVisible(true);
+		int heightOfFrame = frame.getHeight() - southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight();
+		int widthOfFrame = frame.getWidth() - eastColoredJPanel.getWidth() + westColoredJPanel.getHeight();
+		frame.setVisible(false);
+		createMapOfDenmark(heightOfFrame, widthOfFrame);
 		frame.setVisible(true);
 	}
 	
@@ -59,18 +75,25 @@ public class MapWindow {
 		
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(Color.BLUE);
-		JTextField fromSearchQuery = new JTextField();
+		fromSearchQuery = new JTextField();
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
 		
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(Color.BLUE);
-		JTextField toSearchQuery = new JTextField();
+		toSearchQuery = new JTextField();
 		toSearchQuery.addKeyListener(new EnterKeyListener());
 		
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
-		findRouteButton.addActionListener((new FindRouteActionListener(fromSearchQuery, toSearchQuery)));
+		findRouteButton.addActionListener((new FindRouteActionListener()));
 		
-		 
+		ColoredJButton reverseButton = new ColoredJButton(); 
+		reverseButton.setIcon(new ImageIcon("resources/reverse.png"));
+		reverseButton.setBorder(BorderFactory.createEmptyBorder());
+		reverseButton.setContentAreaFilled(false);
+		reverseButton.setToolTipText("Click to reverse from and to");
+		reverseButton.addActionListener(new ReverseActionListener());
+		
+		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
 		toolBar.add(fromSearchQuery);
 		toolBar.add(toHeader);
@@ -84,17 +107,55 @@ public class MapWindow {
 		return flow;
 	}
 	
+	private void createMapOfDenmark(int height, int width) {
+		ColoredJPanel mapPanel = new ColoredJPanel();
+		boxLayout = new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS);
+		mapPanel.setLayout(boxLayout);
+		mapPanel.add(new MapPanel(frame, height, width));
+		centerColoredJPanel = mapPanel;
+		contentPane.add(centerColoredJPanel, borderLayout.CENTER);
+	}
+	
 	public void fillContentPane(){
 		contentPane = frame.getContentPane();
-		contentPane.setLayout(new BorderLayout());
-
-		contentPane.add(MainGui.makeFooter(), BorderLayout.SOUTH);
-		contentPane.add(makeToolBar(), BorderLayout.WEST);
-		contentPane.add(new MapPanel(frame), BorderLayout.CENTER);
+		borderLayout = new BorderLayout();
+		contentPane.setLayout(borderLayout);
+		
+		contentPane.add(southColoredJPanel, borderLayout.SOUTH);
+		contentPane.add(westColoredJPanel, borderLayout.WEST);
+		contentPane.add(eastColoredJPanel, borderLayout.EAST);
 	}
 	
 	public void findRoute(){
-		
+		if(fromSearchQuery.getText().trim().length() != 0 && 
+				toSearchQuery.getText().trim().length() != 0){
+			AdressParser adressParser = new AdressParser();
+			try {
+				adressParser.parseAdress(fromSearchQuery.getText());
+				String[] fromArray = adressParser.getAdressArray();
+				adressParser.parseAdress(toSearchQuery.getText());
+				String[] toArray = adressParser.getAdressArray();
+				
+				JOptionPane.showMessageDialog(frame, "From: " + fromArray[0] 
+												+ "\nTo: " + toArray[0]);
+			} catch (MalformedAdressException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else {
+			JOptionPane.showMessageDialog(frame, "You have to enter an address");
+		}
+	}
+	
+	class ReverseActionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String tempFrom = fromSearchQuery.getText();
+			fromSearchQuery.setText(toSearchQuery.getText());
+			toSearchQuery.setText(tempFrom);			
+		}
 	}
 	
 	class EnterKeyListener implements KeyListener{
@@ -102,52 +163,24 @@ public class MapWindow {
 		@Override
 		public void keyPressed(KeyEvent arg0) {
 			if(arg0.getKeyCode() == 10){
+				findRoute();
 			}
 		}
 
 		@Override
 		public void keyReleased(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-
 		}
 	}
 	
 	class FindRouteActionListener implements ActionListener{
 
-		private JTextField from, to;
-		
-		public FindRouteActionListener(JTextField from, JTextField to){
-			this.from = from;
-			this.to = to;
-		}
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(from.getText().trim().length() != 0 && 
-					to.getText().trim().length() != 0){
-				AdressParser adressParser = new AdressParser();
-				try {
-					adressParser.parseAdress(from.getText());
-					String[] fromArray = adressParser.getAdressArray();
-					adressParser.parseAdress(to.getText());
-					String[] toArray = adressParser.getAdressArray();
-					
-					JOptionPane.showMessageDialog(frame, "From: " + fromArray[0] 
-													+ "\nTo: " + toArray[0]);
-				} catch (MalformedAdressException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-			else {
-				JOptionPane.showMessageDialog(frame, "You have to enter an address");
-			}
-			
+			findRoute();			
 		}
 		
 	}
