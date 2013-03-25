@@ -16,7 +16,7 @@ public class RunConverter {
 	{
 		 try {
 		    	//String file = "resources/denmark_coastline_fullres_shore.xyz";
-			 	String file = "resources/online_extractor_coastline.txt";
+			 	String file = "resources/osm_view.txt";
 				BufferedReader reader = new BufferedReader(new FileReader(file));
 				
 				String line = "";
