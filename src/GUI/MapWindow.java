@@ -58,8 +58,8 @@ public class MapWindow {
 		frame.pack();
 		fromSearchQuery.requestFocusInWindow();
 		frame.setVisible(true);
-		double widthOfFrame = frame.getWidth()*0.7 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth());
-		double heightOfFrame = frame.getHeight()*0.8 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
+		double widthOfFrame = widthForMap();
+		double heightOfFrame = heightForMap();
 		frame.setVisible(false);
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -115,6 +115,14 @@ public class MapWindow {
 		mapPanel.add(mp);		
 		centerColoredJPanel = mapPanel;
 		contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
+	}
+	
+	private double widthForMap() {
+		return frame.getWidth()*0.7 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth());
+	}
+	
+	private double heightForMap() {
+		return frame.getHeight()*0.8 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
 	}
 	
 	public void fillContentPane(){
