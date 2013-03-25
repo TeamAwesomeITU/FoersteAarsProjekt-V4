@@ -18,12 +18,12 @@ import javax.swing.border.LineBorder;
 
 public class MapPanel extends JPanel {
 
-	private Dimension preferredSize = setNewPreferredSize();
+	private Dimension preferredSize;
 	private RectZoomer rectZoomer;
 	private AreaToDraw area;
 	private EdgeLine[] linesOfEdges; 
 	private JFrame jf;
-	private double height;
+	private double height, width;
 	
 	public static void main(String[] args) {        
 	    createJFrame();
@@ -37,7 +37,7 @@ public class MapPanel extends JPanel {
 	    jf.setExtendedState(Frame.MAXIMIZED_BOTH);
 	    BoxLayout boxL = new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS);
         jf.getContentPane().setLayout(boxL); 
-        MapPanel mp = new MapPanel(jf, 767, 1300);
+        MapPanel mp = new MapPanel(jf, 600, 800);
         mp.setAlignmentY(0);
 		jf.add(mp, 0);
 		System.out.println("Height: "+ mp.getHeight());
@@ -47,9 +47,12 @@ public class MapPanel extends JPanel {
 	    return jf;
 	}
 
-	public MapPanel(JFrame jf, int height, int width) {
+	public MapPanel(JFrame jf, int height, double width) {
 		this.jf = jf;
-		this.height = height*0.90;
+		this.height = height;
+		this.width = width;
+		System.out.println("height: " + height + " width: " + width);
+		preferredSize = setNewPreferredSize(width, height);
 		rectZoomer = new RectZoomer(this);
 	    makeLinesForMap();
         setBorderForPanel(this);
@@ -63,7 +66,7 @@ public class MapPanel extends JPanel {
 	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
 	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 	    linesOfEdges = new EdgeLine[edgeSet.size()];
-	    setPanelDimensions();
+	    setPanelDimensions(new Dimension());
 	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
 	    
 	    int numberOfEdges = 0;
@@ -128,8 +131,8 @@ public class MapPanel extends JPanel {
 	}
 	
 	private void setBorderForPanel(MapPanel mp) {
-		Dimension d = setNewPreferredSize();
-		d = mp.setPanelDimensions();
+		Dimension d = setNewPreferredSize((int)mp.getMapWidth(), (int)getMapHeight());
+		d = mp.setPanelDimensions(new Dimension());
         d.setSize(d.getWidth()*1.02, d.getHeight()*1.02);
         mp.setMaximumSize(d);
         mp.setBorder(new LineBorder(Color.black));
@@ -139,11 +142,33 @@ public class MapPanel extends JPanel {
 	 * Takes a Dimension and makes it's width and height match the relation between area's width and height.
 	 * Is also used to adjust the size of the map to a size that matches this relation.
 	 */
-	private Dimension setPanelDimensions() {
-		Dimension d = new Dimension();
-		double whRelation = area.getWidthHeightRelation();
-		double width = height*(whRelation);
-		d.setSize(width, height);
+	private Dimension setPanelDimensions(Dimension d) {
+		if(height < width) {
+			double whRelation = area.getWidthHeightRelation();
+			double newWidth = height*(whRelation);
+			if(newWidth > width) {
+				height = height*0.9;
+				width = width*0.9;
+				setPanelDimensions(d);
+			}
+			else {
+				d.setSize(newWidth, height);
+				return d;
+			}
+		}
+		
+		else {
+			double newHeight = (width*area.getHeight())/area.getWidth();
+			if(newHeight > height) {
+				height = height*0.9;
+				width = width*0.9;
+				setPanelDimensions(d);
+			}
+			else {
+				d.setSize(width, newHeight);
+				return d;
+			}
+		}
 		return d;
 	}
 	
@@ -155,15 +180,18 @@ public class MapPanel extends JPanel {
 	/*
 	 * Is used for setting the initial size of the map.
 	 */
-	private static Dimension setNewPreferredSize() {
-		Dimension tmpSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double w = tmpSize.getWidth() * 0.90;
-		double h = tmpSize.getHeight() * 0.90;
-		tmpSize.setSize(w, h);
+	private static Dimension setNewPreferredSize(int w, int h) {
+		Dimension tmpSize = new Dimension(w, h);
 		return tmpSize;
 	}
 	
 	public Dimension getPreferredSize() {
 	    return preferredSize;
+	}
+	public double getMapWidth() {
+		return width;
+	}
+	public double getMapHeight() {
+		return height;
 	}
 }
