@@ -74,7 +74,7 @@ public class TxtToStringArray {
 
 		while((line = reader.readLine()) != null)
 		{
-			arr[currentLine] = line;
+			arr[currentLine] = line.toLowerCase();
 			currentLine++;
 		}
 

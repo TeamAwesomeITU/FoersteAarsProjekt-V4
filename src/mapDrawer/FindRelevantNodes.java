@@ -1,19 +1,28 @@
 package mapDrawer;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+
 import com.ximpleware.AutoPilot;
+
+import com.ximpleware.NavException;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
+import com.ximpleware.XPathEvalException;
+import com.ximpleware.XPathParseException;
 /*
  * Locates the Edges that lies within the AreaToDraw
  */
 public class FindRelevantNodes {
 
-	private static final VTDNav vnEdge = indexEdgeLoad();
-	private static final VTDNav vnNode = indexNodeLoad();
+	//A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
+	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
 
+	/*
+	 * 
+	 * @return HashSet<Edge> A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
+	 */
 	public static HashSet<Edge> findNodesToDraw(AreaToDraw area)
 	{
 		//Doesn't use a HashSet of Integer, since XPath uses Strings as "input"
@@ -24,132 +33,128 @@ public class FindRelevantNodes {
 	private static HashSet<Integer> findNodes(AreaToDraw area)
 	{
 		HashSet<Integer> nodeSet = new HashSet<Integer>();
+		long startTime = System.currentTimeMillis();
 		try {
-			long startTime = System.currentTimeMillis();
-			VTDNav vn = vnNode;			
-			AutoPilot ap = new AutoPilot(vn);
-			ap.selectXPath("//nodeCollection/node");
+			VTDGen vgNode = new VTDGen();
+			if(vgNode.parseFile("XML/kdv_node_unload.xml", false)) {
+				VTDNav vnNode = vgNode.getNav();
+				AutoPilot apNode = new AutoPilot(vnNode);
 
-			double Xmax = area.getLargestX(); double Xmin = area.getSmallestX();
-			double Ymax = area.getLargestY(); double Ymin = area.getSmallestY();
-			double YCOORD = 0.0; double XCOORD = 0.0; int count =0;
+				double Xmax = area.getLargestX(); double Xmin = area.getSmallestX();
+				double Ymax = area.getLargestY(); double Ymin = area.getSmallestY();
+				double YCOORD = 0.0; double XCOORD = 0.0;
+				apNode.selectXPath("//nodeCollection/node");
 
-			while (ap.evalXPath() != -1) {
-				vn.toElement(VTDNav.FIRST_CHILD, "Y-COORD"); 
-				YCOORD = vn.parseDouble(vn.getText());
-				if(YCOORD < Ymax && YCOORD > Ymin) {
-					vn.toElement(VTDNav.PREV_SIBLING, "X-COORD"); 
-					XCOORD = vn.parseDouble(vn.getText());
-					if(XCOORD < Xmax && XCOORD > Xmin) {					
-						vn.toElement(VTDNav.PREV_SIBLING, "KDV");				
-						nodeSet.add(vn.parseInt(vn.getText()));
-						count++;
+				int count = 0;
+				while (apNode.evalXPath() != -1) {
+					vnNode.toElement(VTDNav.FIRST_CHILD, "Y-COORD"); 
+					YCOORD = vnNode.parseDouble(vnNode.getText());
+					if(YCOORD < Ymax && YCOORD > Ymin) {
+						vnNode.toElement(VTDNav.PREV_SIBLING, "X-COORD"); 
+						XCOORD = vnNode.parseDouble(vnNode.getText());
+						if(XCOORD < Xmax && XCOORD > Xmin) {					
+							vnNode.toElement(VTDNav.PREV_SIBLING, "KDV");				
+							nodeSet.add(vnNode.parseInt(vnNode.getText()));
+							count++;
+						}
 					}
+					vnNode.toElement(VTDNav.PARENT);
 				}
-				vn.toElement(VTDNav.PARENT);
+				System.out.println("Total# of element "+count);
+				System.out.println("Size of nodeSet " + nodeSet.size());
 			}
-			System.out.println("Number of nodes sent to edges "+ count);
-			long endTime = System.currentTimeMillis();
-			System.out.println("Confirm Node tager " + (endTime - startTime) + " milliseconds");
-
 		} catch (VTDException e){
 			e.printStackTrace();
 		}
-		System.out.println("___________________________________________");
+		long endTime = System.currentTimeMillis();
+		System.out.println("nodeSet tager " + (endTime - startTime) + " milliseconds");
 		return nodeSet;
-
 	}
 
-	private static HashSet<Edge> findEdges(AreaToDraw area, HashSet<Integer> nodeSet)
-	{
+	private static HashSet<Edge> findEdges(AreaToDraw area, HashSet<Integer> nodeSet)	{
 		long startTime = System.currentTimeMillis();
 		HashSet<Edge> edgeSet = new HashSet<Edge>();
-		try {			
-			if(nodeSet.isEmpty()){
-				System.out.println("No nodes within the given coordinates");
-			}
-			else {							
-				VTDNav vn = vnEdge;
-				System.out.println("DONE LOADING");
-				AutoPilot ap = new AutoPilot(vn); 
-				int type = 2;
-				ap.selectXPath("//roadSegmentCollection/roadSegment[TYP <= "+type+"]");							
-				String FNODE = ""; String TNODE = ""; 
+		try {	
+			VTDGen vgEdge = new VTDGen();
+			if(vgEdge.parseFile("XML/kdv_unload_new.xml", false)) {
+
+				VTDNav vnEdge = vgEdge.getNav();
+				AutoPilot apEdge = new AutoPilot(vnEdge);
+				int type=48;
+				apEdge.selectXPath("//roadSegmentCollection/roadSegment[TYP <= "+type+"]");							
+				int FNODE = 0; int TNODE = 0; 
 				int TYP = 0;   String ROAD = ""; 
 				int POST = 0;
-				int count1 = 0;
-				while((ap.evalXPath())!=-1)
+				int count = 0;
+				while((apEdge.evalXPath())!=-1)
 				{
-					vn.toElement(VTDNav.FIRST_CHILD, "FNODE");
-					FNODE = vn.toString(vn.getText());
-					vn.toElement(VTDNav.NEXT_SIBLING, "TNODE");
-					TNODE = vn.toString(vn.getText());
-					count1++;
+					vnEdge.toElement(VTDNav.FIRST_CHILD, "FNODE");
+					FNODE = vnEdge.parseInt(vnEdge.getText());
+					vnEdge.toElement(VTDNav.NEXT_SIBLING, "TNODE");
+					TNODE = vnEdge.parseInt(vnEdge.getText());
 					if(nodeSet.contains(FNODE)||nodeSet.contains(TNODE)) {
-						vn.toElement(VTDNav.NEXT_SIBLING, "TYP");
-						TYP = vn.parseInt(vn.getText());
-						vn.toElement(VTDNav.NEXT_SIBLING, "VEJNAVN");
-						ROAD = vn.toString(vn.getText());
-						vn.toElement(VTDNav.NEXT_SIBLING, "H_POSTNR");
-						POST = vn.parseInt(vn.getText());
-						edgeSet.add(new Edge(Integer.parseInt(FNODE),Integer.parseInt(TNODE),TYP,ROAD,POST));				
+						vnEdge.toElement(VTDNav.NEXT_SIBLING, "TYP");
+						TYP = vnEdge.parseInt(vnEdge.getText());
+						vnEdge.toElement(VTDNav.NEXT_SIBLING, "VEJNAVN");
+						ROAD = vnEdge.toString(vnEdge.getText());
+						vnEdge.toElement(VTDNav.NEXT_SIBLING, "H_POSTNR");
+						POST = vnEdge.parseInt(vnEdge.getText());
+						edgeSet.add(new Edge(FNODE,TNODE,TYP,ROAD,POST));
 					}
-					vn.toElement(VTDNav.PARENT); 
+					vnEdge.toElement(VTDNav.PARENT); 
 				} 
-				ap.resetXPath();
-				System.out.println("Number of FNODES and TNODES Checked "+count1);				
+				apEdge.resetXPath();
+				System.out.println("Number of FNODES and TNODES Checked "+count);
 			}
 		}
 		catch (VTDException e){
 			e.printStackTrace();
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("Confirm Edge takes " + (endTime - startTime) + " milliseconds");
-		System.out.println("Edges sent " + edgeSet.size());
-		System.out.println("Done with edges");
-		System.out.println("___________________________________________");
+		System.out.println("EdgeHalløj tager " + (endTime - startTime) + " milliseconds");
+		System.out.println("Done");
 		return edgeSet;
-	} 
-
-	public static void main(String[] args)
-	{		
-		long startTime = System.currentTimeMillis();
-		findNodesToDraw(new AreaToDraw());		
-		long endTime = System.currentTimeMillis();
-		System.out.println("Total " + (endTime - startTime) + " milliseconds");
-		System.out.println("___________________________________________");
-	}
-	
-	private static VTDNav indexEdgeLoad(){
-		long startTime = System.currentTimeMillis();
-		VTDNav vn = null;
-
-		try{
-			VTDGen vg = new VTDGen();
-			vn = vg.loadIndex("XML/edge_unload.vxl");
-		} catch(IOException | VTDException e) {
-			e.printStackTrace();
-
-		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("Load Edge Index: " + (endTime - startTime) + " milliseconds");
-		return vn;
 	}
 
-	private static VTDNav indexNodeLoad() {
-		long startTime = System.currentTimeMillis();
-		VTDNav vn = null;
+	private static HashMap<Integer, Double[]> makeNodeCoordinatesMap()
+	{
+		HashMap<Integer, Double[]> map = new HashMap<Integer, Double[]>();
 
-		try{
-			VTDGen vg = new VTDGen();
-			vn = vg.loadIndex("XML/Node_unload.vxl");
-		} catch(IOException | VTDException e) {
+		try {
+			long startTime = System.currentTimeMillis();
+			VTDGen vg =new VTDGen();
+			AutoPilot ap = new AutoPilot(); 
+			ap.selectXPath("/nodeCollection/node");
+			if (vg.parseFile("XML/kdv_node_unload.xml", false))
+			{
+				VTDNav vn = vg.getNav();
+				ap.bind(vn);
+				while((ap.evalXPath())!=-1)
+				{ 
+					vn.toElement(VTDNav.FIRST_CHILD, "KDV");
+					Integer kdv = vn.parseInt(vn.getText());
+
+					Double[] coords = new Double[2];
+
+					vn.toElement(VTDNav.NEXT_SIBLING, "X-COORD"); 
+					coords[0] = vn.parseDouble(vn.getText());
+
+					vn.toElement(VTDNav.NEXT_SIBLING, "Y-COORD"); 
+					coords[1] = vn.parseDouble(vn.getText());
+					map.put(kdv, coords);
+					vn.toElement(VTDNav.PARENT); // move the cursor back
+				} 
+				ap.resetXPath();
+			}
+			long endTime = System.currentTimeMillis();
+			System.out.println("nodeMap tager " + (endTime - startTime) + " milliseconds");
+		} catch (NavException | XPathEvalException | XPathParseException e) {
 			e.printStackTrace();
-
 		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("Load Node Index " + (endTime - startTime) + " milliseconds");
-		return vn;
-	}	
+		return map;
+	}
 
+	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()	{
+		return nodeCoordinatesMap;
+	}
 }

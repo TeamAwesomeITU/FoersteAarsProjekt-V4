@@ -7,4 +7,6 @@ public class ColoredJPanel extends JPanel {
 		super();
 		super.setBackground(MainGui.BACKGROUND_COLOR);
 	}
+	
+
 }
