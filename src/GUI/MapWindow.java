@@ -6,10 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.naming.directory.SearchControls;
 import javax.swing.*;
 
-import GUI.MainGui.EnterKeyListener;
 import InputHandler.AdressParser;
 import InputHandler.exceptions.MalformedAdressException;
 
@@ -62,7 +60,7 @@ public class MapWindow {
 		fromSearchQuery.requestFocusInWindow();
 		frame.setVisible(true);
 		int heightOfFrame = frame.getHeight() - southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight();
-		int widthOfFrame = frame.getWidth() - eastColoredJPanel.getWidth() + westColoredJPanel.getHeight();
+		int widthOfFrame = frame.getWidth() - eastColoredJPanel.getWidth() + westColoredJPanel.getWidth();
 		frame.setVisible(false);
 		createMapOfDenmark(heightOfFrame, widthOfFrame);
 		frame.setVisible(true);
@@ -111,7 +109,7 @@ public class MapWindow {
 		ColoredJPanel mapPanel = new ColoredJPanel();
 		boxLayout = new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS);
 		mapPanel.setLayout(boxLayout);
-		mapPanel.add(new MapPanel(frame, height, width));
+		mapPanel.add(new MapPanel(frame, height, width));		
 		centerColoredJPanel = mapPanel;
 		contentPane.add(centerColoredJPanel, borderLayout.CENTER);
 	}
