@@ -60,25 +60,8 @@ public class StaxWriter {
 	  }
 	  scanValues.close();
 	  if(inputTextFile.equals("kdv_unload.txt")) 	{
-		  int fileNumber = 1;
-		  int n = 0;
 		  while((line = reader.readLine()) != null) {
 			  createNodesForKDVunload(line, streamWriter, values);
-			  /*if(n>0)
-			  if(n%8000 == 0) {
-				  streamWriter.writeEndElement();
-				  streamWriter.writeEndDocument();
-				  streamWriter.close();
-				  XMLOutputFactory opF = XMLOutputFactory.newInstance();
-				  streamWriter = opF.createXMLStreamWriter(new FileOutputStream(configFile + fileNumber + ".xml"), "UTF-8");
-				  fileNumber++;
-				  streamWriter.writeStartDocument("UTF-8", "1.0");
-				    
-				  streamWriter.writeDTD("\n");
-				  streamWriter.writeStartElement(collectionName);
-				  streamWriter.writeDTD("\n");
-			  }
-			  n++;*/
 		  }
 	  }
 	  if(inputTextFile.equals("kdv_node_unload.txt")) {
