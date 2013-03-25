@@ -42,9 +42,11 @@ public class MapPanel extends JPanel {
 	    jf.setExtendedState(Frame.MAXIMIZED_BOTH);
 	    BoxLayout boxL = new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS);
         jf.getContentPane().setLayout(boxL); 
-        MapPanel mp = new MapPanel(jf, 600, 800);
+        MapPanel mp = new MapPanel(jf, Math.round(screenSize.getWidth()*0.90), Math.round(screenSize.getHeight()*0.90));
         mp.setAlignmentY(0);
 		jf.add(mp, 0);
+		mp.setMinimumSize(screenSize);
+		mp.setMaximumSize(screenSize);
 		System.out.println("Height: "+ mp.getHeight());
 		System.out.println("Width: " + mp.getWidth());
 		jf.pack();
