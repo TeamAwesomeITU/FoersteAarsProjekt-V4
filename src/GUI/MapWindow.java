@@ -51,7 +51,7 @@ public class MapWindow {
 		frame.setBounds(0,0,screenSize.width, screenSize.height);
 		frame.setPreferredSize(screenSize);
 		
-		MainGui.makeMenu(frame, MainGui.BACKGROUND_COLOR,MainGui.undecoratedBoolean, 2);
+		MainGui.makeMenu(frame, MainGui.BACKGROUND_COLOR, MainGui.undecoratedBoolean, 2);
 		fillContentPane();
 		
 		frame.pack();
