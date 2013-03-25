@@ -3,8 +3,6 @@ package preRunConversion;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -13,13 +11,12 @@ import java.util.Map;
 
 import mapDrawer.AreaToDraw;
 
-import InputHandler.UnicodeUtil;
-
 
 /*
  * Originally downloaded from: http://www.ibm.com/developerworks/java/library/j-coordconvert/
  * 
- * Has been modified to extrapolate to zone 32 - everything will be extrapolated to zone 32!!!!
+ * Has been modified to extrapolate latLon2UTM-conversions to to zone 32!!!!
+ * Eclipse has done a cleanup in this class.
  */
 public class LonLatToUTMCoordinateConversion
 {
@@ -105,9 +102,9 @@ public class LonLatToUTMCoordinateConversion
 
       setVariables(latitude, longitude);
 
-      String longZone = getLongZone(longitude);
+      getLongZone(longitude);
       LatZones latZones = new LatZones();
-      String latZone = latZones.getLatZone(latitude);
+      latZones.getLatZone(latitude);
 
       double _easting = getEasting();
       double _northing = getNorthing(latitude);
@@ -200,12 +197,6 @@ public class LonLatToUTMCoordinateConversion
     // polar radius
     double polarRadius = 6356752.314;
 
-    // flattening
-    double flattening = 0.00335281066474748;// (equatorialRadius-polarRadius)/equatorialRadius;
-
-    // inverse flattening 1/flattening
-    double inverseFlattening = 298.257223563;// 1/flattening;
-
     // Mean radius
     double rm = POW(equatorialRadius * polarRadius, 1 / 2.0);
 
@@ -216,9 +207,6 @@ public class LonLatToUTMCoordinateConversion
     double e = Math.sqrt(1 - POW(polarRadius / equatorialRadius, 2));
 
     double e1sq = e * e / (1 - e * e);
-
-    double n = (equatorialRadius - polarRadius)
-        / (equatorialRadius + polarRadius);
 
     // r curv 1
     double rho = 6368573.744;
@@ -524,8 +512,6 @@ public class LonLatToUTMCoordinateConversion
 
     double _a3;
 
-    double b = 6356752.314;
-
     double a = 6378137;
 
     double e = 0.081819191;
@@ -538,9 +524,9 @@ public class LonLatToUTMCoordinateConversion
 
   private class Digraphs
   {
-    private Map digraph1 = new Hashtable();
+    private Map<Integer, String> digraph1 = new Hashtable<Integer, String>();
 
-    private Map digraph2 = new Hashtable();
+    private Map<Integer, String> digraph2 = new Hashtable<Integer, String>();
 
     private String[] digraph1Array = { "A", "B", "C", "D", "E", "F", "G", "H",
         "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
@@ -786,6 +772,7 @@ public class LonLatToUTMCoordinateConversion
 			String[] coord = conv.latLon2UTM(Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[0])).split("\\s+");
 			double lineX = Double.parseDouble(coord[0]);
 			double lineY = Double.parseDouble(coord[1]);;
+			
 			//Might fuck up, if lines are picked out in a wrong manner
 			if(lineX > AreaToDraw.getSmallestXOfEntireMap() && lineX < AreaToDraw.getLargestXOfEntireMap() && 
 					lineY > AreaToDraw.getSmallestYOfEntireMap() && lineY < AreaToDraw.getLargestYOfEntireMap())
