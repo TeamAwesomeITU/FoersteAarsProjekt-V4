@@ -70,10 +70,5 @@ public class CoordinateConverter {
 	{
 		return canvasHeight - coord;
 	}
-	
-	private double getWidthHeightRelation()
-	{
-		return canvasWidth/canvasHeight;
-	}
 
 }

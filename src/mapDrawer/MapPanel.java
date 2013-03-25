@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+@SuppressWarnings("serial")
 public class MapPanel extends JPanel {
 
 	private Dimension preferredSize;
@@ -27,10 +28,12 @@ public class MapPanel extends JPanel {
 	private JFrame jf;
 	private double height, width;
 	
+	@Deprecated
 	public static void main(String[] args) {        
 	    createJFrame();
 	} 
 	
+	@Deprecated
 	private static JFrame createJFrame() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
 		JFrame jf = new JFrame();
@@ -39,9 +42,11 @@ public class MapPanel extends JPanel {
 	    jf.setExtendedState(Frame.MAXIMIZED_BOTH);
 	    BoxLayout boxL = new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS);
         jf.getContentPane().setLayout(boxL); 
-        MapPanel mp = new MapPanel(jf, 600, 800);
+        MapPanel mp = new MapPanel(jf, Math.round(screenSize.getWidth()*0.90), Math.round(screenSize.getHeight()*0.90));
         mp.setAlignmentY(0);
 		jf.add(mp, 0);
+		mp.setMinimumSize(screenSize);
+		mp.setMaximumSize(screenSize);
 		System.out.println("Height: "+ mp.getHeight());
 		System.out.println("Width: " + mp.getWidth());
 		jf.pack();

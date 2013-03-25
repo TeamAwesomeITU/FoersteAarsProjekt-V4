@@ -43,53 +43,37 @@ public class StaxWriter {
 	  File file = new File(inputTextFile);
 	  BufferedReader reader = new BufferedReader(new FileReader(file));
 	  String line = new String();
+	  
+	  if((line = reader.readLine()) != null) {
+		  Scanner scanValues = new Scanner(line);
+		  scanValues.useDelimiter(delimiter);
+		  int k = 0;
+		  String[] values = new String[34];
 		
-	  line = reader.readLine();
-	  Scanner scanValues = new Scanner(line);
-	  scanValues.useDelimiter(delimiter);
-	  int k = 0;
-	  String[] values = new String[34];
-	
-	  while(scanValues.hasNext()) {
-		 String tmp = scanValues.next();
-		 if(tmp.contains("#")) {
-			 tmp = tmp.substring(0, tmp.length()-1);
-		 }
-		  values[k] = tmp;
-		  k++;
-	  }
-	  scanValues.close();
-	  if(inputTextFile.equals("kdv_unload.txt")) 	{
-		  int fileNumber = 1;
-		  int n = 0;
-		  while((line = reader.readLine()) != null) {
-			  createNodesForKDVunload(line, streamWriter, values);
-			  /*if(n>0)
-			  if(n%8000 == 0) {
-				  streamWriter.writeEndElement();
-				  streamWriter.writeEndDocument();
-				  streamWriter.close();
-				  XMLOutputFactory opF = XMLOutputFactory.newInstance();
-				  streamWriter = opF.createXMLStreamWriter(new FileOutputStream(configFile + fileNumber + ".xml"), "UTF-8");
-				  fileNumber++;
-				  streamWriter.writeStartDocument("UTF-8", "1.0");
-				    
-				  streamWriter.writeDTD("\n");
-				  streamWriter.writeStartElement(collectionName);
-				  streamWriter.writeDTD("\n");
+		  while(scanValues.hasNext()) {
+			 String tmp = scanValues.next();
+			 if(tmp.contains("#")) {
+				 tmp = tmp.substring(0, tmp.length()-1);
+			 }
+			  values[k] = tmp;
+			  k++;
+		  }
+		  scanValues.close();
+		  if(inputTextFile.equals("kdv_unload.txt")) 	{
+			  while((line = reader.readLine()) != null) {
+				  createNodesForKDVunload(line, streamWriter, values);
 			  }
-			  n++;*/
 		  }
-	  }
-	  if(inputTextFile.equals("kdv_node_unload.txt")) {
-		  while((line = reader.readLine()) != null) {
-			  createNodesForKDVnodeunload(line, streamWriter, values);	  
+		  if(inputTextFile.equals("kdv_node_unload.txt")) {
+			  while((line = reader.readLine()) != null) {
+				  createNodesForKDVnodeunload(line, streamWriter, values);	  
+			  }
+			    streamWriter.writeEndElement();
+			    streamWriter.writeEndDocument();
+			    streamWriter.close();
 		  }
-		    streamWriter.writeEndElement();
-		    streamWriter.writeEndDocument();
-		    streamWriter.close();
+		  reader.close();
 	  }
-	  reader.close();
   }
   
   private void createNode(XMLStreamWriter streamWriter, String name,

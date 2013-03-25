@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.JCheckBox;
 
+@SuppressWarnings("serial")
 public class ColoredJCheckBox extends JCheckBox {
 	
 	ColoredJCheckBox(String text){

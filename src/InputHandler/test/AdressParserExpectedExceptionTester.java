@@ -136,26 +136,6 @@ public class AdressParserExpectedExceptionTester {
 		}
 	}
 	
-	@Test
-	//Reason: contains null
-	public void nullTest() {
-		String test = null;	
-		AdressParserAllTests.setupTest(test, expectedResultFail);
-
-		String[] testResult = new String[]{null};
-		try {
-			asserterException(test, expectedResultFail);
-			testResult[0] = failed;			
-			fail(failed);
-		} catch (MalformedAdressException e) {
-			testResult[0] = e.getMessage();	
-		}	
-		finally {
-			AdressParserAllTests.testResults.add(testResult);
-			assertArrayEquals(expectedResultFail, testResult);
-		}
-	}
-	
 	public void asserterException(String input, String[] expectedTestArray) throws MalformedAdressException
 	{
 		AdressParser adressParser = new AdressParser();

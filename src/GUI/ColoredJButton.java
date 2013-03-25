@@ -8,6 +8,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 
+@SuppressWarnings("serial")
 public class ColoredJButton extends JButton {
 	
 	public ColoredJButton(){
