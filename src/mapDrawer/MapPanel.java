@@ -40,10 +40,10 @@ public class MapPanel extends JPanel {
         mp.setAlignmentY(0);
         mp.setBorderForPanel(mp);
 		jf.add(mp, 0);
+		System.out.println("Height: "+ mp.getHeight());
+		System.out.println("Width: " + mp.getWidth());
 		jf.pack();
 	    jf.setVisible(true);
-	    System.out.println("Height: "+ mp.getHeight());
-	    System.out.println("Width: " + mp.getWidth());
 	    return jf;
 	}
 

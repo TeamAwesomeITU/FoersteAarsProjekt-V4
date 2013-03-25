@@ -43,6 +43,7 @@ public class RectZoomer extends MouseAdapter {
     	double endXCoord = coordConverter.DrawToKrakCoordX(endX);
     	double endYCoord = coordConverter.DrawToKrakCoordY(startY);
     	try {
+    		rect = null;
 			area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord);
 			mp.setArea(area);
 			mp.setLinesForMap();
