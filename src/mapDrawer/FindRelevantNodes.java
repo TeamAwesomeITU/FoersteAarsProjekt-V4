@@ -80,8 +80,7 @@ public class FindRelevantNodes {
 
 				VTDNav vnEdge = vgEdge.getNav();
 				AutoPilot apEdge = new AutoPilot(vnEdge);
-				int type=48;
-				apEdge.selectXPath("//roadSegmentCollection/roadSegment[TYP <= "+type+"]");							
+				apEdge.selectXPath("//roadSegmentCollection/roadSegment" + ZoomLevel.getlevel(area.getPercentageOfEntireMap()));							
 				int FNODE = 0; int TNODE = 0; 
 				int TYP = 0;   String ROAD = ""; 
 				int POST = 0;

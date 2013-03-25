@@ -11,50 +11,44 @@ public enum ZoomLevel {
 
 		@Override
 		protected String XPath() {
-			return "lolONE";
-		}} ,
+			return "[TYP <= 2 and TYP = 31 and TYP = 32 and TYP = 41 and TYP = 42 and TYP = 21 and TYP = 22]";
+		}} ,  //1, 31, 2, 32, 41, 42, 21, 22
 		
 	TWO(75.0) {
 
 		@Override
 		protected String XPath() {
-			return "lolTWO";
-		}} ,
+			return "[TYP <= 2 and TYP = 31 and TYP = 32 and TYP = 41 and TYP = 42 and TYP = 21 and TYP = 22 and TYP = 3 and TYP = 33 and TYP = 23]";
+		}} ,   //3, 33, 23
 		
-	THREE(56.25) {
+		
+	THREE(42.1875) {
 
 		@Override
 		protected String XPath() {
-			return "lolTHREE";
-		}} ,
+			return "[TYP = 4 and TYP = 34 and TYP = 24 and TYP <= 2 and TYP = 31 and TYP = 32 and TYP = 41 and TYP = 42 and TYP = 21 and TYP = 22 and TYP = 3 and TYP = 33 and TYP = 23]";
+		}} ,//4, 34, 24
 		
-	FOUR(42.1875) {
+	FOUR(31.640624) {
 
 		@Override
 		protected String XPath() {
-			return "lolFOUR";
-		}} ,
+			return "[TYP = 5 and TYP = 25 and TYP = 4 and TYP = 34 and TYP = 24 and TYP <= 2 and TYP = 31 and TYP = 32 and TYP = 41 and TYP = 42 and TYP = 21 and TYP = 22 and TYP = 3 and TYP = 33 and TYP = 23]";
+		}} ,//5, 25
 		
-	FIVE(31.640624) {
+	FIVE(23.73) {
 
 		@Override
 		protected String XPath() {
-			return "lolFIVE";
-		}} ,
+			return "[TYP = 6 and TYP = 26 and TYP = 5 and TYP = 25 and TYP = 4 and TYP = 34 and TYP = 24 and TYP <= 2 and TYP = 31 and TYP = 32 and TYP = 41 and TYP = 42 and TYP = 21 and TYP = 22 and TYP = 3 and TYP = 33 and TYP = 23]";
+		}} , //6,26
 		
-	SIX(23.73) {
+	SIX(17.79) {
 
 		@Override
 		protected String XPath() {
-			return "lolSIX";
-		}} ,
-		
-	SEVEN(17.79) {
-
-		@Override
-		protected String XPath() {
-			return "LOLSEVEN and BELOW";
-		}}	;	
+			return "[TYP]<48";
+		}}	;//everything	
 	
 	private double percentageOfEntireMap;
 	
