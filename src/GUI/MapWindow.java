@@ -109,7 +109,7 @@ public class MapWindow {
 		ColoredJPanel mapPanel = new ColoredJPanel();
 		boxLayout = new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS);
 		mapPanel.setLayout(boxLayout);
-		MapPanel mp = new MapPanel(frame, (int)Math.round(width*0.9), (int)Math.round(height*0.9));
+		MapPanel mp = new MapPanel(frame, (int)Math.round(width*0.98), (int)Math.round(height*0.98));
 		mp.setMinimumSize(new Dimension((int)width, (int)height));
 		mp.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.add(mp);		
