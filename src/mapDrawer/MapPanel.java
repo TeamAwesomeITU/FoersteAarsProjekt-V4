@@ -7,10 +7,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.geom.Line2D;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.BoxLayout;
@@ -20,12 +16,12 @@ import javax.swing.border.LineBorder;
 
 public class MapPanel extends JPanel {
 
-	private Dimension preferredSize = setNewPreferredSize();
+	private Dimension preferredSize;
 	private RectZoomer rectZoomer;
 	private AreaToDraw area;
 	private EdgeLine[] linesOfEdges; 
 	private JFrame jf;
-	private double height;
+	private double height, width;
 	
 	public static void main(String[] args) {        
 	    createJFrame();
@@ -39,7 +35,7 @@ public class MapPanel extends JPanel {
 	    jf.setExtendedState(Frame.MAXIMIZED_BOTH);
 	    BoxLayout boxL = new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS);
         jf.getContentPane().setLayout(boxL); 
-        MapPanel mp = new MapPanel(jf, 767, 1300);
+        MapPanel mp = new MapPanel(jf, 600, 800);
         mp.setAlignmentY(0);
 		jf.add(mp, 0);
 		System.out.println("Height: "+ mp.getHeight());
@@ -49,9 +45,12 @@ public class MapPanel extends JPanel {
 	    return jf;
 	}
 
-	public MapPanel(JFrame jf, int height, int width) {
+	public MapPanel(JFrame jf, double width, double height) {
 		this.jf = jf;
-		this.height = height*0.90;
+		this.height = height;
+		this.width = width;
+		System.out.println("height: " + height + " width: " + width);
+		preferredSize = setNewPreferredSize((int)width, (int)height);
 		rectZoomer = new RectZoomer(this);
 	    makeLinesForMap();
         setBorderForPanel(this);
@@ -65,7 +64,7 @@ public class MapPanel extends JPanel {
 	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
 	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 	    linesOfEdges = new EdgeLine[edgeSet.size()];
-	    setPanelDimensions();
+	    setPanelDimensions(new Dimension());
 	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
 	    
 	    int numberOfEdges = 0;
@@ -82,56 +81,6 @@ public class MapPanel extends JPanel {
 	    	
 	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
-	    
-	    String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
-
-	    ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
-	    
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-		    String line1 = reader.readLine();
-		    String line2 = reader.readLine();
-			
-			while(line1 != null && line2 != null)
-			{
-				String[] coordFrom = line1.split("\\s+");
-				String[] coordTo = line2.split("\\s+");
-				double coordFromX = coordConverter.KrakToDrawCoordX(Double.parseDouble(coordFrom[0]));
-				double coordFromY = coordConverter.KrakToDrawCoordY(Double.parseDouble(coordFrom[1]));
-				double coordToX = coordConverter.KrakToDrawCoordX(Double.parseDouble(coordTo[0]));
-				double coordToY = coordConverter.KrakToDrawCoordY(Double.parseDouble(coordTo[1]));
-
-				double deltaX = Double.parseDouble(coordFrom[0])-Double.parseDouble(coordTo[0]);
-				double deltaY = Double.parseDouble(coordFrom[1])-Double.parseDouble(coordTo[1]);
-				double distanceBetweenPoints = Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
-				
-				//If the points are not unreasonably far away from each other, then make a new line
-				if(distanceBetweenPoints < 7000)
-					list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 1));
-				
-				line2 = line1;
-				line1 = reader.readLine();
-				
-			}
-			
-			EdgeLine[] newLinesOfEdges = new EdgeLine[linesOfEdges.length + list.size()];
-			for(int i = 0; i < newLinesOfEdges.length; i++)
-			{
-				if(i < linesOfEdges.length)
-						newLinesOfEdges[i] = linesOfEdges[i];
-				else
-						newLinesOfEdges[i] = list.get(i-linesOfEdges.length);
-			}
-			
-			linesOfEdges = newLinesOfEdges;
-			
-			reader.close();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
 	}
 
 	/**
@@ -180,8 +129,8 @@ public class MapPanel extends JPanel {
 	}
 	
 	private void setBorderForPanel(MapPanel mp) {
-		Dimension d = setNewPreferredSize();
-		d = mp.setPanelDimensions();
+		Dimension d = setNewPreferredSize((int)mp.getMapWidth(), (int)getMapHeight());
+		d = mp.setPanelDimensions(new Dimension());
         d.setSize(d.getWidth()*1.02, d.getHeight()*1.02);
         mp.setMaximumSize(d);
         mp.setBorder(new LineBorder(Color.black));
@@ -191,11 +140,31 @@ public class MapPanel extends JPanel {
 	 * Takes a Dimension and makes it's width and height match the relation between area's width and height.
 	 * Is also used to adjust the size of the map to a size that matches this relation.
 	 */
-	private Dimension setPanelDimensions() {
-		Dimension d = new Dimension();
-		double whRelation = area.getWidthHeightRelation();
-		double width = height*(whRelation);
-		d.setSize(width, height);
+	private Dimension setPanelDimensions(Dimension d) {
+		if(height < width) {
+			double whRelation = area.getWidthHeightRelation();
+			double newWidth = height*(whRelation);
+			if(newWidth > width) {
+				height = height*0.9;
+				setPanelDimensions(d);
+			}
+			else {
+				d.setSize(newWidth, height);
+				return d;
+			}
+		}
+		
+		else {
+			double newHeight = (width*area.getHeight())/area.getWidth();
+			if(newHeight > height) {
+				width = width*0.9;
+				setPanelDimensions(d);
+			}
+			else {
+				d.setSize(width, newHeight);
+				return d;
+			}
+		}
 		return d;
 	}
 	
@@ -207,16 +176,18 @@ public class MapPanel extends JPanel {
 	/*
 	 * Is used for setting the initial size of the map.
 	 */
-	private static Dimension setNewPreferredSize() {
-		Dimension tmpSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double w = tmpSize.getWidth() * 0.90;
-		double h = tmpSize.getHeight() * 0.90;
-		tmpSize.setSize(w, h);
+	private static Dimension setNewPreferredSize(int w, int h) {
+		Dimension tmpSize = new Dimension(w, h);
 		return tmpSize;
 	}
 	
 	public Dimension getPreferredSize() {
 	    return preferredSize;
 	}
+	public double getMapWidth() {
+		return width;
+	}
+	public double getMapHeight() {
+		return height;
+	}
 }
-

@@ -10,8 +10,8 @@ public class VTDfjol {
 public static void main(String[] args) throws VTDException {
 		
 		try {
-			parseNode();
-			//parseEdge();
+			//parseNode();
+			parseEdge();
 		} catch (NavException | XPathParseException
 				| XPathEvalException | ParseException | IOException e) {
 			
@@ -38,20 +38,20 @@ public static void main(String[] args) throws VTDException {
 	AutoPilot apEdge = new AutoPilot(vnEdge);
 	
 	apEdge.declareXPathNameSpace("", "");
-	apEdge.selectXPath("//roadSegmentCollection/roadSegment[TYP<2 and FNODE=490165]/*"); 
+	apEdge.selectXPath("//roadSegmentCollection/roadSegment[TYP = 48 ]/FNODE"); 
 	
 	
 	
 	int result = -1;
 	int count = 0;
 	while ((result=apEdge.evalXPath())!=-1) {
-		System.out.println(""+result+"");
-		System.out.println("Element name ==> "+vnEdge.toString(result));
+		//System.out.println(""+result+"");
+		//System.out.println("Element name ==> "+vnEdge.toString(result));
 		int t = vnEdge.getText();
 		// String temp = vn.toNormalizedString(t); 
 		 if(t!=-1 && vnEdge.toNormalizedString(t) != "1")			  
-			System.out.println("Text ==>"+vnEdge.toNormalizedString(t));
-		System.out.println("\n====================================");
+			//System.out.println("Text ==>"+vnEdge.toNormalizedString(t));
+		//System.out.println("\n====================================");
 		count++;
 	}
 	System.out.println("Total# of element"+count);
