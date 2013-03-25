@@ -47,12 +47,12 @@ public class MapPanel extends JPanel {
 	    return jf;
 	}
 
-	public MapPanel(JFrame jf, int height, double width) {
+	public MapPanel(JFrame jf, double width, double height) {
 		this.jf = jf;
 		this.height = height;
 		this.width = width;
 		System.out.println("height: " + height + " width: " + width);
-		preferredSize = setNewPreferredSize(width, height);
+		preferredSize = setNewPreferredSize((int)width, (int)height);
 		rectZoomer = new RectZoomer(this);
 	    makeLinesForMap();
         setBorderForPanel(this);
@@ -148,7 +148,6 @@ public class MapPanel extends JPanel {
 			double newWidth = height*(whRelation);
 			if(newWidth > width) {
 				height = height*0.9;
-				width = width*0.9;
 				setPanelDimensions(d);
 			}
 			else {
@@ -160,7 +159,6 @@ public class MapPanel extends JPanel {
 		else {
 			double newHeight = (width*area.getHeight())/area.getWidth();
 			if(newHeight > height) {
-				height = height*0.9;
 				width = width*0.9;
 				setPanelDimensions(d);
 			}
