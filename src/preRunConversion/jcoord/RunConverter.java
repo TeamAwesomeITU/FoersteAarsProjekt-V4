@@ -8,7 +8,6 @@ import java.io.Writer;
 import java.util.ArrayList;
 
 import mapDrawer.AreaToDraw;
-import preRunConversion.LonLatToUTMCoordinateConversion;
 
 public class RunConverter {
 	
