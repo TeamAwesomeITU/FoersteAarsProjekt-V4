@@ -43,36 +43,37 @@ public class StaxWriter {
 	  File file = new File(inputTextFile);
 	  BufferedReader reader = new BufferedReader(new FileReader(file));
 	  String line = new String();
+	  
+	  if((line = reader.readLine()) != null) {
+		  Scanner scanValues = new Scanner(line);
+		  scanValues.useDelimiter(delimiter);
+		  int k = 0;
+		  String[] values = new String[34];
 		
-	  line = reader.readLine();
-	  Scanner scanValues = new Scanner(line);
-	  scanValues.useDelimiter(delimiter);
-	  int k = 0;
-	  String[] values = new String[34];
-	
-	  while(scanValues.hasNext()) {
-		 String tmp = scanValues.next();
-		 if(tmp.contains("#")) {
-			 tmp = tmp.substring(0, tmp.length()-1);
-		 }
-		  values[k] = tmp;
-		  k++;
-	  }
-	  scanValues.close();
-	  if(inputTextFile.equals("kdv_unload.txt")) 	{
-		  while((line = reader.readLine()) != null) {
-			  createNodesForKDVunload(line, streamWriter, values);
+		  while(scanValues.hasNext()) {
+			 String tmp = scanValues.next();
+			 if(tmp.contains("#")) {
+				 tmp = tmp.substring(0, tmp.length()-1);
+			 }
+			  values[k] = tmp;
+			  k++;
 		  }
-	  }
-	  if(inputTextFile.equals("kdv_node_unload.txt")) {
-		  while((line = reader.readLine()) != null) {
-			  createNodesForKDVnodeunload(line, streamWriter, values);	  
+		  scanValues.close();
+		  if(inputTextFile.equals("kdv_unload.txt")) 	{
+			  while((line = reader.readLine()) != null) {
+				  createNodesForKDVunload(line, streamWriter, values);
+			  }
 		  }
-		    streamWriter.writeEndElement();
-		    streamWriter.writeEndDocument();
-		    streamWriter.close();
+		  if(inputTextFile.equals("kdv_node_unload.txt")) {
+			  while((line = reader.readLine()) != null) {
+				  createNodesForKDVnodeunload(line, streamWriter, values);	  
+			  }
+			    streamWriter.writeEndElement();
+			    streamWriter.writeEndDocument();
+			    streamWriter.close();
+		  }
+		  reader.close();
 	  }
-	  reader.close();
   }
   
   private void createNode(XMLStreamWriter streamWriter, String name,
