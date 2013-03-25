@@ -231,6 +231,8 @@ public class MainGui {
 			JOptionPane.showMessageDialog(frame, "You have to enter an address");
 		}
 	}
+	
+	//---------------------------------Listeners from here-----------------------------//
 
 	class EnterKeyListener implements KeyListener{
 

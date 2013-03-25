@@ -163,6 +163,8 @@ public class MapWindow {
 		}
 	}
 	
+	//---------------------------------Listeners from here-----------------------------//
+	
 	class CoordinatesMouseMotionListener implements MouseMotionListener{
 		
 		private MapPanel mapPanel;
@@ -173,7 +175,6 @@ public class MapWindow {
 
 		@Override
 		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
 
@@ -185,12 +186,9 @@ public class MapWindow {
 			double yCord = coordConverter.KrakToDrawCoordY(e.getY());
 			
 			mapPanel.setToolTipText("x-cord: " + xCord + " y-cord: " + yCord);
-			
-			
 		}
 		
 	}
-	
 	
 	class ReverseActionListener implements ActionListener{
 
