@@ -27,10 +27,12 @@ public class MapPanel extends JPanel {
 	private JFrame jf;
 	private double height, width;
 	
+	@Deprecated
 	public static void main(String[] args) {        
 	    createJFrame();
 	} 
 	
+	@Deprecated
 	private static JFrame createJFrame() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
 		JFrame jf = new JFrame();
