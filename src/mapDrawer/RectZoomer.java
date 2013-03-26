@@ -13,15 +13,17 @@ public class RectZoomer extends MouseAdapter {
 	private int startX, startY, endX, endY;
 	private Rectangle rect = null;
 	private MapPanel mp = null;
-
+	
 	public RectZoomer(MapPanel mp) {
 		this.mp = mp;
-	}
+		}
+	
     public void mousePressed(MouseEvent e) {
-       mousePress = e.getPoint();
+    			mousePress = e.getPoint();
     }
 
     public void mouseDragged(MouseEvent e) {
+    	if(e.getButton() == MouseEvent.BUTTON1) {
        drawing = true;
        startX = Math.min(mousePress.x, e.getPoint().x);
        startY = Math.min(mousePress.y, e.getPoint().y);
@@ -33,10 +35,14 @@ public class RectZoomer extends MouseAdapter {
        endX += startX+rectWidth;
        endY += startY+rectHeight;
        mp.repaint();
-    }
+    }}
 
     public void mouseReleased(MouseEvent e) {
     	//Zoom in on shizz.
+    	if(e.getButton() == MouseEvent.BUTTON3) { 	
+    		zoomOut();
+    		}
+    	else if(e.getButton() == MouseEvent.BUTTON1) {
     	AreaToDraw area = mp.getArea();
     	CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getPreferredSize().getWidth(), (int)mp.getPreferredSize().getHeight(), area);
     	if(startX < 0) startX = 0; if(startY < 0) startY = 0;
@@ -56,7 +62,7 @@ public class RectZoomer extends MouseAdapter {
 			mp.getParentFrame().dispose();
 			e1.printStackTrace();
 		}
-    }
+    }}
     
     public Rectangle getRect() {
     	return rect;
@@ -64,4 +70,13 @@ public class RectZoomer extends MouseAdapter {
     public boolean isDrawing() {
     	return drawing;
     }
+    
+	public void zoomOut()
+	{
+		AreaToDraw area = mp.getArea();
+		area = new AreaToDraw();
+		mp.setArea(area);
+		mp.setLinesForMap();
+		mp.repaint();
+	}
 }

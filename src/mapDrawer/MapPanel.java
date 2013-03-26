@@ -263,4 +263,7 @@ public class MapPanel extends JPanel {
 	public double getMapHeight() {
 		return height;
 	}
+	
+	
+
 }
