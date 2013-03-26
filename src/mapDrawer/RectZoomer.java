@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import mapDrawer.exceptions.AreaNegativeSizeException;
 
 public class RectZoomer extends MouseAdapter {
@@ -26,10 +27,9 @@ public class RectZoomer extends MouseAdapter {
        startY = Math.min(mousePress.y, e.getPoint().y);
        endX = Math.abs(mousePress.x - e.getPoint().x);
        endY = Math.abs(mousePress.y - e.getPoint().y);
-       rect = new Rectangle(startX, startY, endX, endY);
-       int rectWidth = (int) Math.round((mp.getWidth()/10))+endX;
-       int rectHeight = (int) Math.round((mp.getHeight()/10))+endY;
-       rect.setBounds(startX, startY, rectWidth, rectHeight);
+       int rectWidth = Math.abs(endX-startX);
+       int rectHeight = Math.abs((rectWidth*mp.getHeight())/mp.getWidth());
+       rect = new Rectangle(startX, startY, rectWidth,rectHeight);
        endX += startX+rectWidth;
        endY += startY+rectHeight;
        mp.repaint();
