@@ -25,7 +25,8 @@ public class RectZoomer extends MouseAdapter {
     }
 
     public void mouseDragged(MouseEvent e) {
-    	if(SwingUtilities.isRightMouseButton(e)) {
+
+    	if(SwingUtilities.isLeftMouseButton(e)) {
        drawing = true;
        startX = Math.min(mousePress.x, e.getPoint().x);
        startY = Math.min(mousePress.y, e.getPoint().y);
