@@ -77,10 +77,10 @@ public class FindRelevantNodes {
 		try {	
 			VTDGen vgEdge = new VTDGen();
 			if(vgEdge.parseFile("XML/kdv_unload_new.xml", false)) {
-
+				System.out.println(ZoomLevel.getlevel(area.getPercentageOfEntireMap()));
 				VTDNav vnEdge = vgEdge.getNav();
 				AutoPilot apEdge = new AutoPilot(vnEdge);
-				apEdge.selectXPath("//roadSegmentCollection/roadSegment" + ZoomLevel.getlevel(area.getPercentageOfEntireMap()));							
+				apEdge.selectXPath("//roadSegmentCollection/roadSegment"); 
 				int FNODE = 0; int TNODE = 0; 
 				int TYP = 0;   String ROAD = ""; 
 				int POST = 0;
@@ -94,11 +94,13 @@ public class FindRelevantNodes {
 					if(nodeSet.contains(FNODE)||nodeSet.contains(TNODE)) {
 						vnEdge.toElement(VTDNav.NEXT_SIBLING, "TYP");
 						TYP = vnEdge.parseInt(vnEdge.getText());
+						if(ZoomLevel.getlevel(area.getPercentageOfEntireMap()).contains(TYP)) {
 						vnEdge.toElement(VTDNav.NEXT_SIBLING, "VEJNAVN");
 						ROAD = vnEdge.toString(vnEdge.getText());
 						vnEdge.toElement(VTDNav.NEXT_SIBLING, "H_POSTNR");
 						POST = vnEdge.parseInt(vnEdge.getText());
 						edgeSet.add(new Edge(FNODE,TNODE,TYP,ROAD,POST));
+						}
 					}
 					vnEdge.toElement(VTDNav.PARENT); 
 				} 

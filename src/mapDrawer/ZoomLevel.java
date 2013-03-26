@@ -1,5 +1,8 @@
 package mapDrawer;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 /*
  * Holds seven different levels of zoom, which indicate which type of roads to draw. 
  * The roadtypes are determined from the percentage of the entire map, which the specified area fills.
@@ -7,52 +10,46 @@ package mapDrawer;
  */
 public enum ZoomLevel {
 	
+	
+	
 	ONE(100.0) {
 
 		@Override
-		protected String XPath() {
-			return "[TYP <= 2 and TYP = 31 and TYP = 32 and TYP = 41 and TYP = 42 and TYP = 21 and TYP = 22]";
-		}} ,  //1, 31, 2, 32, 41, 42, 21, 22
+		protected HashSet<Integer> XPath() {
+			Integer[] MaxZoom = new Integer[]{1,2,3,4,21,22,34,24,31,32,33,41,42};
+			return new HashSet<Integer>(Arrays.asList(MaxZoom));
+		}} ,
 		
-	TWO(75.0) {
+	TWO(65.0) {
 
 		@Override
-		protected String XPath() {
-			return "[TYP <= 2 and TYP = 31 and TYP = 32 and TYP = 41 and TYP = 42 and TYP = 21 and TYP = 22 and TYP = 3 and TYP = 33 and TYP = 23]";
-		}} ,   //3, 33, 23
+		protected HashSet<Integer> XPath() {
+			Integer[] MaxMediumZoom = new Integer[]{1,2,3,4,5,25,35,24,21,22,34,31,32,33,41,42};
+			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
+
+				}} ,
 		
 		
-	THREE(42.1875) {
+	THREE(20) {
 
 		@Override
-		protected String XPath() {
-			return "[TYP = 4 and TYP = 34 and TYP = 24 and TYP <= 2 and TYP = 31 and TYP = 32 and TYP = 41 and TYP = 42 and TYP = 21 and TYP = 22 and TYP = 3 and TYP = 33 and TYP = 23]";
-		}} ,//4, 34, 24
-		
-	FOUR(31.640624) {
+		protected HashSet<Integer> XPath() {
+			Integer[] MaxMediumZoom = new Integer[]{1,2,3,5,25,35,21,22,34,31,32,33,41,42};
+			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
+
+				}} ,		
+	FOUR(2) {
 
 		@Override
-		protected String XPath() {
-			return "[TYP = 5 and TYP = 25 and TYP = 4 and TYP = 34 and TYP = 24 and TYP <= 2 and TYP = 31 and TYP = 32 and TYP = 41 and TYP = 42 and TYP = 21 and TYP = 22 and TYP = 3 and TYP = 33 and TYP = 23]";
-		}} ,//5, 25
-		
-	FIVE(23.73) {
+		protected HashSet<Integer> XPath() {
+			Integer[] MaxMediumZoom = new Integer[]{1,2,3,21,22,34,31,32,33,41,42,5,25,35,6,26,8,11,28};
+			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
 
-		@Override
-		protected String XPath() {
-			return "[TYP = 6 and TYP = 26 and TYP = 5 and TYP = 25 and TYP = 4 and TYP = 34 and TYP = 24 and TYP <= 2 and TYP = 31 and TYP = 32 and TYP = 41 and TYP = 42 and TYP = 21 and TYP = 22 and TYP = 3 and TYP = 33 and TYP = 23]";
-		}} , //6,26
-		
-	SIX(17.79) {
-
-		@Override
-		protected String XPath() {
-			return "[TYP]<48";
-		}}	;//everything	
+				}};		
 	
 	private double percentageOfEntireMap;
 	
-	protected abstract String XPath();
+	protected abstract HashSet<Integer> XPath();
 	
 	
 	
@@ -65,7 +62,7 @@ public enum ZoomLevel {
 	 * 
 	 * @return The XPath String to use to search the XML-file for the wanted road types.
 	 */
-	public static String getlevel(double percentageOfEntireMap)
+	public static HashSet<Integer> getlevel(double percentageOfEntireMap)
 	{
 		ZoomLevel foundLevel = ONE;
 		
@@ -78,7 +75,7 @@ public enum ZoomLevel {
 		return foundLevel.getXPathString();
 	}
 	
-	private String getXPathString()
+	private HashSet<Integer> getXPathString()
 	{
 		return this.XPath();
 	}	
