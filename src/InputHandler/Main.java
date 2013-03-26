@@ -5,6 +5,6 @@ public class Main {
 		//File file = new File("kdv_node_unload.txt");
 
 		AdressParser ap = new AdressParser();
-		ap.parseAdress("jagtvej 109G 1.th 2200 København N"); // HEJ JESPER
+		ap.parseAdress("jagtvej 109G 1. th 2200 København N"); // HEJ JESPER
 		}
 }

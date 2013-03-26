@@ -92,7 +92,7 @@ public class MapPanel extends JPanel {
 	    }
 	    
 	    //String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
-	    String file = ("resources/osm_view.txt_convertedJCOORD.txt");
+	    String file = ("resources/osm_modified.txt_convertedJCOORD.txt");
 	    
 	    ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
 
@@ -115,15 +115,11 @@ public class MapPanel extends JPanel {
 				double distanceBetweenPoints = Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
 
 				//If the points are not unreasonably far away from each other, then make a new line
-				if(distanceBetweenPoints < 7000)
-				{
-					System.out.println("< 7000");
+				if(distanceBetweenPoints < 1000)
 					list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 1));
-				}
 
 				line2 = line1;
 				line1 = reader.readLine();
-
 			}
 
 			EdgeLine[] newLinesOfEdges = new EdgeLine[linesOfEdges.length + list.size()];
