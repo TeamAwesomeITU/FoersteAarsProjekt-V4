@@ -27,8 +27,11 @@ public class RectZoomer extends MouseAdapter {
        endX = Math.abs(mousePress.x - e.getPoint().x);
        endY = Math.abs(mousePress.y - e.getPoint().y);
        rect = new Rectangle(startX, startY, endX, endY);
-       endX += startX;
-       endY += startY;
+       int rectWidth = (int) Math.round((mp.getWidth()/10))+endX;
+       int rectHeight = (int) Math.round((mp.getHeight()/10))+endY;
+       rect.setBounds(startX, startY, rectWidth, rectHeight);
+       endX += startX+rectWidth;
+       endY += startY+rectHeight;
        mp.repaint();
     }
 
