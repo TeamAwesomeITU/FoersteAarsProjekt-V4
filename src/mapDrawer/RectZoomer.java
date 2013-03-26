@@ -18,10 +18,13 @@ public class RectZoomer extends MouseAdapter {
 		this.mp = mp;
 	}
     public void mousePressed(MouseEvent e) {
+    	if(e.getButton() == MouseEvent.BUTTON1)
        mousePress = e.getPoint();
     }
 
     public void mouseDragged(MouseEvent e) {
+    	if(e.getButton() != MouseEvent.BUTTON1) { return; }
+    	else {
        drawing = true;
        startX = Math.min(mousePress.x, e.getPoint().x);
        startY = Math.min(mousePress.y, e.getPoint().y);
@@ -33,10 +36,12 @@ public class RectZoomer extends MouseAdapter {
        endX += startX+rectWidth;
        endY += startY+rectHeight;
        mp.repaint();
-    }
+    }}
 
     public void mouseReleased(MouseEvent e) {
     	//Zoom in on shizz.
+    	if(e.getButton() != MouseEvent.BUTTON1) { return; }
+    	else {
     	AreaToDraw area = mp.getArea();
     	CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getPreferredSize().getWidth(), (int)mp.getPreferredSize().getHeight(), area);
     	if(startX < 0) startX = 0; if(startY < 0) startY = 0;
@@ -56,7 +61,7 @@ public class RectZoomer extends MouseAdapter {
 			mp.getParentFrame().dispose();
 			e1.printStackTrace();
 		}
-    }
+    }}
     
     public Rectangle getRect() {
     	return rect;
