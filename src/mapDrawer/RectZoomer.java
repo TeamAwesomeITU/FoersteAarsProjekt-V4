@@ -5,6 +5,8 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.SwingUtilities;
+
 import mapDrawer.exceptions.AreaNegativeSizeException;
 
 public class RectZoomer extends MouseAdapter {
@@ -23,7 +25,7 @@ public class RectZoomer extends MouseAdapter {
     }
 
     public void mouseDragged(MouseEvent e) {
-    	if(e.getButton() == MouseEvent.BUTTON1) {
+    	if(SwingUtilities.isRightMouseButton(e)) {
        drawing = true;
        startX = Math.min(mousePress.x, e.getPoint().x);
        startY = Math.min(mousePress.y, e.getPoint().y);
@@ -39,10 +41,10 @@ public class RectZoomer extends MouseAdapter {
 
     public void mouseReleased(MouseEvent e) {
     	//Zoom in on shizz.
-    	if(e.getButton() == MouseEvent.BUTTON3) { 	
+    	if(SwingUtilities.isRightMouseButton(e)) { 	
     		zoomOut();
     		}
-    	else if(e.getButton() == MouseEvent.BUTTON1) {
+    	else if(SwingUtilities.isLeftMouseButton(e)) {
     	AreaToDraw area = mp.getArea();
     	CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getPreferredSize().getWidth(), (int)mp.getPreferredSize().getHeight(), area);
     	if(startX < 0) startX = 0; if(startY < 0) startY = 0;
