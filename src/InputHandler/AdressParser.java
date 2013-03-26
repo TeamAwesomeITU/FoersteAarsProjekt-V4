@@ -190,7 +190,7 @@ public class AdressParser {
 				replaceAll(pPost, "").
 				replaceAll(pBuilding, "").
 				replaceAll(pFloor, "").
-				replaceAll("sal|etage|plan|\\,|\\.|\\bi\\b", "").trim();
+				replaceAll("sal|etage|plan|th|tv|\\,|\\.|\\bi\\b", "").trim();
 
 		if(!cityString.isEmpty()) {													/* 14 */
 			adressArray[5] = cityString;
