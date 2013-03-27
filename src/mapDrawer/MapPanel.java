@@ -208,6 +208,14 @@ public class MapPanel extends JPanel {
 		return jf;
 	}
 	
+	public void setWidth(double width) {
+		this.width = width;
+	}
+	
+	public void setHeight(double height) {
+		this.height = height;
+	}
+	
 	private void setBorderForPanel(MapPanel mp) {
 		Dimension d = setNewPreferredSize((int)mp.getMapWidth(), (int)getMapHeight());
 		d = mp.setPanelDimensions(new Dimension());
@@ -252,6 +260,7 @@ public class MapPanel extends JPanel {
 	}
 	
 	public void setLinesForMap() {
+		preferredSize = setNewPreferredSize((int)width, (int)height);
 		makeLinesForMap();
 	}
 	
