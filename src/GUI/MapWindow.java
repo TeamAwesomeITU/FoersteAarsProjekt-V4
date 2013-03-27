@@ -70,7 +70,7 @@ public class MapWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		MapComponentAdapter mcp = new MapComponentAdapter(this);
-		frame.addComponentListener(mcp);
+		frame.addComponentListener(mcp); 
 		frame.setVisible(true);
 	}
 	
