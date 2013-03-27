@@ -61,7 +61,6 @@ public class MapPanel extends JPanel {
 	 * @param width - The width of the panel.
 	 * @param height - The heigth of the panel
 	 */
-
 	public MapPanel(JFrame jf, double width, double height) {
 		this.jf = jf;
 		this.height = height;
@@ -264,8 +263,7 @@ public class MapPanel extends JPanel {
 		preferredSize = setNewPreferredSize((int)width, (int)height);
 		makeLinesForMap();
 	}
-	
-	//TODO Make it get proper width and height.
+
 	/*
 	 * Is used for setting the initial size of the map.
 	 */
@@ -273,7 +271,7 @@ public class MapPanel extends JPanel {
 		Dimension tmpSize = new Dimension(w, h);
 		return tmpSize;
 	}
-	
+
 	public Dimension getPreferredSize() {
 	    return preferredSize;
 	}
@@ -283,7 +281,4 @@ public class MapPanel extends JPanel {
 	public double getMapHeight() {
 		return height;
 	}
-	
-	
-
 }

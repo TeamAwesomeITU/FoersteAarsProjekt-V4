@@ -17,13 +17,14 @@ public class MapComponentAdapter extends ComponentAdapter {
 	private boolean isResizing = false;
 	private JFrame jf;
 	private MapPanel mp;
-	private int counter = 0;
+	private MapWindow mw;
 
 	public MapComponentAdapter(MapWindow mw) {
 		Component[] centerArray = mw.getCenterColoredJPanel().getComponents(); Component component = centerArray[0];
 		if(component instanceof MapPanel)
 			mp = (MapPanel)component;
 		jf = mw.getJFrame();
+		this.mw = mw;
 		recalculateTimer.setRepeats(false);
 	}
 	
@@ -48,9 +49,11 @@ public class MapComponentAdapter extends ComponentAdapter {
 		public void actionPerformed(ActionEvent e) {
 			//if(counter != 0) {
 				if(isResizing == true) {
-					System.out.println("RESIZE!");
-					mp.setWidth(jf.getWidth()); mp.setHeight(jf.getHeight());
-					mp.setArea(new AreaToDraw());
+					double newWidth = mw.getWidthForMap()*0.98;
+					mp.setWidth(Math.round(newWidth)); 
+					double newHeight = (newWidth*mp.getArea().getHeight())/mp.getArea().getWidth();
+					mp.setHeight(Math.round(newHeight));
+					//mp.setNewPreferredSize(mp.getMapWidth(), mp.getMapHeight());
 					mp.setLinesForMap();
 					mp.repaint();
 					//jf.setSize((int)(jf.getWidth()*0.9), (int)(jf.getHeight()*0.9));
