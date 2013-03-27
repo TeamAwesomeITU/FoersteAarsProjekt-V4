@@ -53,6 +53,14 @@ public class MapPanel extends JPanel {
 	    jf.setVisible(true);
 	    return jf;
 	}
+	
+	/**
+	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
+	 *  
+	 * @param jf - This is the JFrame which the MapPanel works with.
+	 * @param width - The width of the panel.
+	 * @param height - The heigth of the panel
+	 */
 
 	public MapPanel(JFrame jf, double width, double height) {
 		this.jf = jf;
@@ -66,6 +74,11 @@ public class MapPanel extends JPanel {
         addMouseListener(rectZoomer);
         addMouseMotionListener(rectZoomer);
 	}
+	/**
+	 * Draws the lines for the map. 
+	 * Saves all the edges and converts the coordinates and saves them in an array.
+	 *  
+	 */
 	
 	private void makeLinesForMap() {
 		if(area == null)
@@ -91,8 +104,9 @@ public class MapPanel extends JPanel {
 	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
 	    
-	    String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
-
+	    //String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
+	    String file = ("resources/osm_modified.txt_convertedJCOORD.txt");
+	    
 	    ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
 
 		try {
@@ -114,12 +128,11 @@ public class MapPanel extends JPanel {
 				double distanceBetweenPoints = Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
 
 				//If the points are not unreasonably far away from each other, then make a new line
-				if(distanceBetweenPoints < 7000)
+				if(distanceBetweenPoints < 1000)
 					list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 1));
 
 				line2 = line1;
 				line1 = reader.readLine();
-
 			}
 
 			EdgeLine[] newLinesOfEdges = new EdgeLine[linesOfEdges.length + list.size()];
@@ -135,9 +148,12 @@ public class MapPanel extends JPanel {
 
 			reader.close();
 			
+			
 		} catch (IOException e) {
 			e.printStackTrace();
+			
 		}
+		
 	}
 
 	/**
@@ -196,7 +212,10 @@ public class MapPanel extends JPanel {
 	/*
 	 * Takes a Dimension and makes it's width and height match the relation between area's width and height.
 	 * Is also used to adjust the size of the map to a size that matches this relation.
+	 * 
+	 * @param d - Takes a dimension for the panel. 
 	 */
+	
 	private Dimension setPanelDimensions(Dimension d) {
 		if(height < width) {
 			double whRelation = area.getWidthHeightRelation();
@@ -247,4 +266,7 @@ public class MapPanel extends JPanel {
 	public double getMapHeight() {
 		return height;
 	}
+	
+	
+
 }

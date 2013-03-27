@@ -32,7 +32,6 @@ public class BinarySearchStringInArray
 			resultFoundAt = Arrays.binarySearch(arr, totalInput);
 			System.out.println("Results should be at: " + resultFoundAt);
 
-			//Works because fuck you, it works
 			if(resultFoundAt == -1)
 			{
 				System.out.println("resultFoundAt: -1");
@@ -49,7 +48,7 @@ public class BinarySearchStringInArray
 			else
 			{
 				System.out.println("resultFoundAt: > 0");
-				possibleResult = arr[Math.abs((resultFoundAt))];
+				possibleResult = arr[resultFoundAt];
 			}
 
 			System.out.println("Might be: " + possibleResult);

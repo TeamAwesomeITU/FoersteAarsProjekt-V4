@@ -15,7 +15,7 @@ public class RunConverter {
 	{
 		 try {
 		    	//String file = "resources/denmark_coastline_fullres_shore.xyz";
-			 	String file = "resources/online_extractor_coastline.txt";
+			 	String file = "resources/osm_modified.txt";
 				BufferedReader reader = new BufferedReader(new FileReader(file));
 				
 				String line = "";
@@ -31,7 +31,7 @@ public class RunConverter {
 					
 					
 					if(UTMCoords.getEasting() > AreaToDraw.getSmallestXOfEntireMap() && UTMCoords.getEasting() < AreaToDraw.getLargestXOfEntireMap() && 
-							UTMCoords.getNorthing() > AreaToDraw.getSmallestYOfEntireMap() && UTMCoords.getNorthing() < AreaToDraw.getLargestYOfEntireMap())
+					 		UTMCoords.getNorthing() > AreaToDraw.getSmallestYOfEntireMap() && UTMCoords.getNorthing() < AreaToDraw.getLargestYOfEntireMap())
 						list.add(UTMCoords.getEasting() + " " + UTMCoords.getNorthing()); //arr[lineNumber++] = lineX + " " + lineY;
 				}
 				

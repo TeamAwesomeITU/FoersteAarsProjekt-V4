@@ -6,10 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import java_cup.internal_error;
 
 import javax.swing.*;
 
@@ -18,6 +16,7 @@ import InputHandler.exceptions.MalformedAdressException;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.CoordinateConverter;
+import mapDrawer.MapComponentAdapter;
 import mapDrawer.MapPanel;
 
 public class MapWindow {
@@ -69,6 +68,9 @@ public class MapWindow {
 		frame.setVisible(false);
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		MapComponentAdapter mcp = new MapComponentAdapter(frame);
+		frame.addComponentListener(mcp);
 		frame.setVisible(true);
 	}
 	
@@ -124,12 +126,13 @@ public class MapWindow {
 		contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
 	}
 	
-	private double widthForMap() {
-		return frame.getWidth()*0.7 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth());
+	private double heightForMap() {
+		return frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
 	}
 	
-	private double heightForMap() {
-		return frame.getHeight()*0.8 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
+	private double widthForMap() {
+		AreaToDraw areaToDraw = new AreaToDraw();
+		return  heightForMap()*areaToDraw.getWidthHeightRelation();//(frame.getWidth()*0.95 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth()));
 	}
 	
 	public void fillContentPane(){
