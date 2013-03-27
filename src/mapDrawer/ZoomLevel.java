@@ -34,16 +34,16 @@ public enum ZoomLevel {
 
 		@Override
 		protected HashSet<Integer> XPath() {
-			Integer[] MaxMediumZoom = new Integer[]{1,2,3,5,25,35,21,22,34,31,32,33,41,42};
-			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
+			Integer[] MinMediumZoom = new Integer[]{1,2,3,5,25,35,21,22,34,31,32,33,41,42};
+			return new HashSet<Integer>(Arrays.asList(MinMediumZoom));
 
 				}} ,		
 	FOUR(2) {
 
 		@Override
 		protected HashSet<Integer> XPath() {
-			Integer[] MaxMediumZoom = new Integer[]{1,2,3,21,22,34,31,32,33,41,42,5,25,35,6,26,8,11,28};
-			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
+			Integer[] MinZoom = new Integer[]{1,2,3,21,22,34,31,32,33,41,42,5,25,35,6,26,8,11,28};
+			return new HashSet<Integer>(Arrays.asList(MinZoom));
 
 				}};		
 	
