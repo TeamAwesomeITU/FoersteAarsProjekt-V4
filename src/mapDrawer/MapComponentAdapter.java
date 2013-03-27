@@ -49,7 +49,6 @@ public class MapComponentAdapter extends ComponentAdapter {
 		public void actionPerformed(ActionEvent e) {
 			//if(counter != 0) {
 				if(isResizing == true) {
-					System.out.println("RESIZE!");
 					double newWidth = mw.getWidthForMap()*0.98;
 					mp.setWidth(Math.round(newWidth)); 
 					double newHeight = (newWidth*mp.getArea().getHeight())/mp.getArea().getWidth();

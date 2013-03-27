@@ -7,7 +7,9 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.SwingUtilities;
 
+import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.AreaNegativeSizeException;
+import mapDrawer.exceptions.InvalidAreaProportionsException;
 
 public class RectZoomer extends MouseAdapter {
 	private boolean drawing = false;
@@ -15,9 +17,11 @@ public class RectZoomer extends MouseAdapter {
 	private int startX, startY, endX, endY;
 	private Rectangle rect = null;
 	private MapPanel mp = null;
+	private ResizingArrayStack<AreaToDraw> ras; 
 	
 	public RectZoomer(MapPanel mp) {
 		this.mp = mp;
+		ras = new ResizingArrayStack<AreaToDraw>();
 		}
 	
     public void mousePressed(MouseEvent e) {
@@ -47,6 +51,7 @@ public class RectZoomer extends MouseAdapter {
     		}
     	else if(SwingUtilities.isLeftMouseButton(e)) {
     	AreaToDraw area = mp.getArea();
+    	ras.push(area);
     	CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getPreferredSize().getWidth(), (int)mp.getPreferredSize().getHeight(), area);
     	if(startX < 0) startX = 0; if(startY < 0) startY = 0;
     	if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
@@ -61,7 +66,7 @@ public class RectZoomer extends MouseAdapter {
 			mp.setLinesForMap();
 			mp.repaint();
 		} 
-    	catch (AreaNegativeSizeException e1) {
+    	catch (AreaNegativeSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
 			mp.getParentFrame().dispose();
 			e1.printStackTrace();
 		}
@@ -76,8 +81,7 @@ public class RectZoomer extends MouseAdapter {
     
 	public void zoomOut()
 	{
-		AreaToDraw area = mp.getArea();
-		area = new AreaToDraw();
+		AreaToDraw area = ras.pop();
 		mp.setArea(area);
 		mp.setLinesForMap();
 		mp.repaint();
