@@ -5,12 +5,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+
 
 import javax.swing.*;
 
 import InputHandler.AdressParser;
 import InputHandler.exceptions.MalformedAdressException;
 
+import mapDrawer.AreaToDraw;
+import mapDrawer.CoordinateConverter;
+import mapDrawer.MapComponentAdapter;
 import mapDrawer.MapPanel;
 
 public class MapWindow {
@@ -19,7 +25,6 @@ public class MapWindow {
 	private Container contentPane;
 	private static MapWindow instance;
 	private JTextField toSearchQuery, fromSearchQuery;
-	private BoxLayout boxLayout;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = new ColoredJPanel(), southColoredJPanel = MainGui.makeFooter();
 	
@@ -63,6 +68,9 @@ public class MapWindow {
 		frame.setVisible(false);
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		MapComponentAdapter mcp = new MapComponentAdapter(frame);
+		frame.addComponentListener(mcp);
 		frame.setVisible(true);
 	}
 	
@@ -106,23 +114,25 @@ public class MapWindow {
 	}
 	
 	private void createMapOfDenmark(double width, double height) {
-		ColoredJPanel mapPanel = new ColoredJPanel();
-		boxLayout = new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS);
-		mapPanel.setLayout(boxLayout);
-		MapPanel mp = new MapPanel(frame, (int)Math.round(width*0.98), (int)Math.round(height*0.98));
-		mp.setMinimumSize(new Dimension((int)width, (int)height));
-		mp.setMaximumSize(new Dimension((int)width, (int)height));
-		mapPanel.add(mp);		
-		centerColoredJPanel = mapPanel;
+		centerColoredJPanel = new ColoredJPanel();
+		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
+		
+		MapPanel mapPanel = new MapPanel(frame, (int)Math.round(width*0.98), (int)Math.round(height*0.98));
+		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
+		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
+		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
+		
+		centerColoredJPanel.add(mapPanel);		
 		contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
 	}
 	
-	private double widthForMap() {
-		return frame.getWidth()*0.7 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth());
+	private double heightForMap() {
+		return frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
 	}
 	
-	private double heightForMap() {
-		return frame.getHeight()*0.8 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
+	private double widthForMap() {
+		AreaToDraw areaToDraw = new AreaToDraw();
+		return  heightForMap()*areaToDraw.getWidthHeightRelation();//(frame.getWidth()*0.95 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth()));
 	}
 	
 	public void fillContentPane(){
@@ -154,6 +164,33 @@ public class MapWindow {
 		else {
 			JOptionPane.showMessageDialog(frame, "You have to enter an address");
 		}
+	}
+	
+	//---------------------------------Listeners from here-----------------------------//
+	
+	class CoordinatesMouseMotionListener implements MouseMotionListener{
+		
+		private MapPanel mapPanel;
+		
+		public CoordinatesMouseMotionListener(MapPanel mapPanel){
+			this.mapPanel = mapPanel;
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			AreaToDraw mapAreaToDraw = new AreaToDraw();
+			CoordinateConverter coordConverter = new CoordinateConverter((int)Math.round(widthForMap()*0.98), (int)Math.round(heightForMap()*0.98), mapAreaToDraw);
+			double xCord = coordConverter.KrakToDrawCoordX(e.getX());
+			double yCord = coordConverter.KrakToDrawCoordY(e.getY());
+			
+			mapPanel.setToolTipText("x-cord: " + xCord + " y-cord: " + yCord);
+		}
+		
 	}
 	
 	class ReverseActionListener implements ActionListener{

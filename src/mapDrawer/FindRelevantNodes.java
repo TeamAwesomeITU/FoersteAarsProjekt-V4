@@ -3,18 +3,15 @@ package mapDrawer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.concurrent.CountDownLatch;
-
-import java_cup.internal_error;
 
 import com.ximpleware.AutoPilot;
-
 import com.ximpleware.NavException;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
+
 /*
  * Locates the Edges that lies within the AreaToDraw
  */

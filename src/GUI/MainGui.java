@@ -3,10 +3,6 @@ package GUI;
 import java.awt.*;
 
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 import javax.swing.*;
 
@@ -52,17 +48,6 @@ public class MainGui {
 
 	private MainGui(){
 		startupScreen();
-	}
-	
-	public static void readSettingsFile() throws InputMismatchException, FileNotFoundException{
-		File file = new File("resources/SettingsFile.txt");
-		Scanner settingsFileScanner = new Scanner(file);
-		Boolean tempBoolean = false;
-		while(settingsFileScanner.hasNext()){
-			Boolean.parseBoolean(settingsFileScanner.next());
-			undecoratedBoolean = tempBoolean;
-		}
-		settingsFileScanner.close();
 	}
 
 	/**
@@ -246,6 +231,8 @@ public class MainGui {
 			JOptionPane.showMessageDialog(frame, "You have to enter an address");
 		}
 	}
+	
+	//---------------------------------Listeners from here-----------------------------//
 
 	class EnterKeyListener implements KeyListener{
 
