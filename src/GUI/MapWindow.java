@@ -69,7 +69,7 @@ public class MapWindow {
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		MapComponentAdapter mcp = new MapComponentAdapter(frame);
+		MapComponentAdapter mcp = new MapComponentAdapter(this);
 		frame.addComponentListener(mcp);
 		frame.setVisible(true);
 	}
@@ -164,6 +164,14 @@ public class MapWindow {
 		else {
 			JOptionPane.showMessageDialog(frame, "You have to enter an address");
 		}
+	}
+	
+	public ColoredJPanel getCenterColoredJPanel() {
+		return centerColoredJPanel;
+	}
+	
+	public JFrame getJFrame() {
+		return frame;
 	}
 	
 	//---------------------------------Listeners from here-----------------------------//
