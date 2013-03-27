@@ -20,9 +20,9 @@ public class MapComponentAdapter extends ComponentAdapter {
 	private int counter = 0;
 
 	public MapComponentAdapter(MapWindow mw) {
-		Component[] centerArray = mw.getCenterColoredJPanel().getComponents();
-		if(centerArray[0].getClass() == MapPanel)
-		mp = centerArray[0];
+		Component[] centerArray = mw.getCenterColoredJPanel().getComponents(); Component component = centerArray[0];
+		if(component instanceof MapPanel)
+			mp = (MapPanel)component;
 		jf = mw.getJFrame();
 		recalculateTimer.setRepeats(false);
 	}
@@ -48,8 +48,7 @@ public class MapComponentAdapter extends ComponentAdapter {
 		public void actionPerformed(ActionEvent e) {
 			if(counter != 0) {
 				if(isResizing == true) {
-					
-					System.out.println(centerArray[0]);
+					System.out.println(mp);
 					jf.setSize((int)(jf.getWidth()*0.9), (int)(jf.getHeight()*0.9));
 					isResizing = false;
 					counter = 0;
