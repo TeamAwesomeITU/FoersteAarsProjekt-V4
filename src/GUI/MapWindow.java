@@ -68,8 +68,8 @@ public class MapWindow {
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		//MapComponentAdapter mcp = new MapComponentAdapter(this);
-		//frame.addComponentListener(mcp);
+		MapComponentAdapter mcp = new MapComponentAdapter(this);
+		frame.addComponentListener(mcp);
 		frame.setVisible(true);
 	}
 	
