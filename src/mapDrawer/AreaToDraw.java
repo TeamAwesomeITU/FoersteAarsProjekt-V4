@@ -74,6 +74,7 @@ public class AreaToDraw {
 	 */
 	public double getPercentageOfEntireMap()
 	{
+		System.out.println((getWidth()*getHeight())/((getWidthOfEntireMap())*(getHeightOfEntireMap()))*100);
 		return (getWidth()*getHeight())/((getWidthOfEntireMap())*(getHeightOfEntireMap()))*100;
 	}
 

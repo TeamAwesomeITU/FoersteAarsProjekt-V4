@@ -19,7 +19,6 @@ public class FindRelevantNodes {
 
 	//A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
-
 	private static final HashSet<Edge> allEdgesSet = makeEdgeSet();
 
 	/*
@@ -46,8 +45,8 @@ public class FindRelevantNodes {
 
 				VTDNav vnEdge = vgEdge.getNav();
 				AutoPilot apEdge = new AutoPilot(vnEdge);
-				int type = 48;
-				apEdge.selectXPath("//roadSegmentCollection/roadSegment[TYP <= "+type+"]");							
+				apEdge.enableCaching(false);
+				apEdge.selectXPath("//roadSegmentCollection/roadSegment");							
 				int FNODE = 0; int TNODE = 0; 
 				int TYP = 0;   String ROAD = ""; 
 				int POST = 0;
@@ -69,7 +68,6 @@ public class FindRelevantNodes {
 
 					vnEdge.toElement(VTDNav.PARENT); 
 				} 
-				apEdge.resetXPath();
 			}
 		}
 		catch (VTDException e){
@@ -92,12 +90,17 @@ public class FindRelevantNodes {
 		HashSet<Edge> foundEdgesSet = new HashSet<Edge>();
 		
 		System.out.println("Size of nodeset parsed to findEdges(): " + nodeIDSet.size());
-		
+		HashSet<Integer> zoomLevel = ZoomLevel.getlevel(area.getPercentageOfEntireMap());
+		 
 		while(iterator.hasNext())
 		{
-			Edge edge = iterator.next();			
+			Edge edge = iterator.next();
+			
+			//If the road type of the Edge should be drawn at the current ZoomLevel
+			if(zoomLevel.contains(edge.getRoadType())) { 
 			if(nodeIDSet.contains(edge.getFromNode()) || nodeIDSet.contains(edge.getToNode()))
 				foundEdgesSet.add(edge);
+			}
 		}			
 		
 		System.out.println("Number of relevant Edges found: " + foundEdgesSet.size());
@@ -108,12 +111,12 @@ public class FindRelevantNodes {
 	private static HashMap<Integer, Double[]> makeNodeCoordinatesMap()
 	{
 		HashMap<Integer, Double[]> map = new HashMap<Integer, Double[]>();
-
 		try {
 			long startTime = System.currentTimeMillis();
 			VTDGen vg =new VTDGen();
 			AutoPilot ap = new AutoPilot(); 
 			ap.selectXPath("/nodeCollection/node");
+			ap.enableCaching(false);
 			if (vg.parseFile("XML/kdv_node_unload.xml", false))
 			{
 				VTDNav vn = vg.getNav();
@@ -142,7 +145,6 @@ public class FindRelevantNodes {
 		}
 		return map;
 	}
-
 	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()	{
 		return nodeCoordinatesMap;
 	}

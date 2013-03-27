@@ -60,6 +60,7 @@ public class TxtToStringArray {
 
 	public static String[] convertTxtToArray(File file) throws IOException
 	{
+		long startTime = System.currentTimeMillis();
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		LineNumberReader lineNumReader = new LineNumberReader(reader);
 		lineNumReader.skip(Long.MAX_VALUE);
@@ -77,6 +78,8 @@ public class TxtToStringArray {
 			arr[currentLine] = line.toLowerCase();
 			currentLine++;
 		}
+		long endTime = System.currentTimeMillis();
+		System.out.println("Parsing txt to array: Addressparser = " + (endTime - startTime) + " milliseconds");
 
 		reader.close();
 		return arr;
