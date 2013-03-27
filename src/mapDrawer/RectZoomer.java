@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
 
 import javax.swing.SwingUtilities;
 
@@ -14,7 +15,7 @@ import mapDrawer.exceptions.InvalidAreaProportionsException;
 public class RectZoomer extends MouseAdapter {
 	private boolean drawing = false;
 	private Point mousePress = null; 
-	private int startX, startY, endX, endY;
+	private double startX, startY, endX, endY;
 	private Rectangle rect = null;
 	private MapPanel mp = null;
 	private ResizingArrayStack<AreaToDraw> ras; 
@@ -36,9 +37,9 @@ public class RectZoomer extends MouseAdapter {
        startY = Math.min(mousePress.y, e.getPoint().y);
        endX = Math.abs(mousePress.x - e.getPoint().x);
        endY = Math.abs(mousePress.y - e.getPoint().y);
-       int rectWidth = Math.abs(endX);
-       int rectHeight = Math.abs((rectWidth*mp.getHeight())/mp.getWidth());
-       rect = new Rectangle(startX, startY, rectWidth,rectHeight);
+       double rectWidth = Math.abs(endX);
+       double rectHeight = Math.abs((rectWidth*mp.getHeight())/mp.getWidth());
+       rect = new Rectangle((int) startX, (int) startY, (int) rectWidth, (int) rectHeight);
        endX = startX+rectWidth;
        endY = startY+rectHeight;
        mp.repaint();
@@ -55,12 +56,18 @@ public class RectZoomer extends MouseAdapter {
     	CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getPreferredSize().getWidth(), (int)mp.getPreferredSize().getHeight(), area);
     	if(startX < 0) startX = 0; if(startY < 0) startY = 0;
     	if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
-    	double startXCoord = coordConverter.DrawToKrakCoordX(startX);
-    	double startYCoord = coordConverter.DrawToKrakCoordY(endY);
-    	double endXCoord = coordConverter.DrawToKrakCoordX(endX);
-    	double endYCoord = coordConverter.DrawToKrakCoordY(startY);
+    	double startXCoord = coordConverter.DrawToKrakCoordX((int) startX);
+    	double startYCoord = coordConverter.DrawToKrakCoordY((int) endY);
+    	double endXCoord = coordConverter.DrawToKrakCoordX((int) endX);
+    	double endYCoord = coordConverter.DrawToKrakCoordY((int) startY);
     	try {
-    		rect = null;
+    		rect = null;    		
+    		double newAreaProportions = Math.round((((endX-startX)/(endY-startY))*100.0))/100.0;
+    		double proportionsOfDenmarkMap = Math.round(((AreaToDraw.getWidthOfEntireMap()/AreaToDraw.getHeightOfEntireMap())*100.0))/100.0;
+    		System.out.println("newAreaProportions: " + newAreaProportions + ", proportionsOfDenmarkMap: " + proportionsOfDenmarkMap);
+    		if(newAreaProportions != proportionsOfDenmarkMap)
+    			throw new InvalidAreaProportionsException("Area proportions do not equal those of the entire map of Denmark");
+    		
 			area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord);
 			mp.setArea(area);
 			mp.setLinesForMap();
