@@ -144,6 +144,7 @@ public class QuadTree {
 		long startTime = System.currentTimeMillis();
 		try {
 			VTDGen vgNode = new VTDGen();
+			
 			if(vgNode.parseFile("XML/kdv_node_unload.xml", false)) {
 				VTDNav vnNode = vgNode.getNav();
 				AutoPilot apNode = new AutoPilot(vnNode);

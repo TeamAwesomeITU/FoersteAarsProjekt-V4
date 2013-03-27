@@ -50,6 +50,7 @@ public class FindRelevantNodes {
 				int FNODE = 0; int TNODE = 0; 
 				int TYP = 0;   String ROAD = ""; 
 				int POST = 0;
+
 				while((apEdge.evalXPath())!=-1)
 				{
 					vnEdge.toElement(VTDNav.FIRST_CHILD, "FNODE");
@@ -62,7 +63,7 @@ public class FindRelevantNodes {
 					ROAD = vnEdge.toString(vnEdge.getText());
 					vnEdge.toElement(VTDNav.NEXT_SIBLING, "H_POSTNR");
 					POST = vnEdge.parseInt(vnEdge.getText());
-					
+
 					edgeSet.add(new Edge(FNODE,TNODE,TYP,ROAD,POST));
 					count++;
 
@@ -88,23 +89,23 @@ public class FindRelevantNodes {
 	{
 		Iterator<Edge> iterator = allEdgesSet.iterator();
 		HashSet<Edge> foundEdgesSet = new HashSet<Edge>();
-		
+
 		System.out.println("Size of nodeset parsed to findEdges(): " + nodeIDSet.size());
 		HashSet<Integer> zoomLevel = ZoomLevel.getlevel(area.getPercentageOfEntireMap());
-		 
+
 		while(iterator.hasNext())
 		{
 			Edge edge = iterator.next();
-			
+
 			//If the road type of the Edge should be drawn at the current ZoomLevel
 			if(zoomLevel.contains(edge.getRoadType())) { 
-			if(nodeIDSet.contains(edge.getFromNode()) || nodeIDSet.contains(edge.getToNode()))
-				foundEdgesSet.add(edge);
+				if(nodeIDSet.contains(edge.getFromNode()) || nodeIDSet.contains(edge.getToNode()))
+					foundEdgesSet.add(edge);
 			}
 		}			
-		
+
 		System.out.println("Number of relevant Edges found: " + foundEdgesSet.size());
-		
+
 		return foundEdgesSet;
 	}
 
@@ -114,15 +115,12 @@ public class FindRelevantNodes {
 		try {
 			long startTime = System.currentTimeMillis();
 			VTDGen vg =new VTDGen();
-			AutoPilot ap = new AutoPilot(); 
-			ap.selectXPath("/nodeCollection/node");
-			ap.enableCaching(false);
-			if (vg.parseFile("XML/kdv_node_unload.xml", false))
-			{
+			if (vg.parseFile("XML/kdv_node_unload.xml", false))		{
 				VTDNav vn = vg.getNav();
-				ap.bind(vn);
-				while((ap.evalXPath())!=-1)
-				{ 
+				AutoPilot ap = new AutoPilot(vn); 
+				ap.selectXPath("/nodeCollection/node");
+				ap.enableCaching(false);
+				while((ap.evalXPath())!=-1)				{ 
 					vn.toElement(VTDNav.FIRST_CHILD, "KDV");
 					Integer kdv = vn.parseInt(vn.getText());
 
@@ -136,7 +134,6 @@ public class FindRelevantNodes {
 					map.put(kdv, coords);
 					vn.toElement(VTDNav.PARENT); // move the cursor back
 				} 
-				ap.resetXPath();
 			}
 			long endTime = System.currentTimeMillis();
 			System.out.println("nodeMap creation tager " + (endTime - startTime) + " milliseconds");
