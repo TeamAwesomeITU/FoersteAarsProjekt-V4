@@ -3,10 +3,14 @@ package GUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import java_cup.internal_error;
 
 import javax.swing.*;
 
@@ -26,6 +30,8 @@ public class MapWindow {
 	private JTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeCoordinateJPanel(), southColoredJPanel = MainGui.makeFooter();
+	private JLabel X_CORD, Y_CORD;
+	private boolean coordinateSwitch = true;
 	
 	public static void main(String[] args) {
 		MapWindow.getInstance();	
@@ -68,15 +74,14 @@ public class MapWindow {
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		//MapComponentAdapter mcp = new MapComponentAdapter(this);
-		//frame.addComponentListener(mcp);
+		MapComponentAdapter mcp = new MapComponentAdapter(this);
+		frame.addComponentListener(mcp);
 		frame.setVisible(true);
 	}
 	
 	public ColoredJPanel makeToolBar(){
 		ColoredJPanel toolBar = new ColoredJPanel();
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
-		toolBar.setBackground(MainGui.BACKGROUND_COLOR);
 		
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(Color.BLUE);
@@ -106,7 +111,6 @@ public class MapWindow {
 		toolBar.add(findRouteButton);
 		
 		ColoredJPanel flow = new ColoredJPanel();
-		flow.setBackground(MainGui.BACKGROUND_COLOR);
 		flow.add(toolBar);
 		
 		return flow;
@@ -114,11 +118,38 @@ public class MapWindow {
 	
 	public ColoredJPanel makeCoordinateJPanel(){
 		ColoredJPanel coordPanel = new ColoredJPanel();
-		coordPanel.setLayout(new GridLayout(2, 1));
-		JTextField xCordTextField = new JTextField();
-		JTextField yCordTextField = new JTextField();
-		 
-		return coordPanel;
+		coordPanel.setLayout(new GridLayout(2, 2, 5, 3));
+		
+		JLabel xCordJLabel = new JLabel("X-CORD");
+		xCordJLabel.setForeground(Color.BLUE);
+		JLabel yCordJLabel = new JLabel("Y-CORD");
+		yCordJLabel.setForeground(Color.BLUE);
+		
+		X_CORD = new JLabel();
+		Y_CORD = new JLabel();
+		
+		ColoredJCheckBox coordinatesOnOrOffCheckBox = new ColoredJCheckBox("Coordinates");
+		coordinatesOnOrOffCheckBox.setSelected(true);
+		coordinatesOnOrOffCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.DESELECTED)
+					coordinateSwitch = false;
+				if(e.getStateChange() == ItemEvent.SELECTED)
+					coordinateSwitch = true;
+			}
+		});
+		
+		coordPanel.add(xCordJLabel);
+		coordPanel.add(yCordJLabel);
+		coordPanel.add(X_CORD);
+		coordPanel.add(Y_CORD);
+
+		
+		ColoredJPanel flow = new ColoredJPanel();
+		flow.add(coordPanel);
+		flow.add(coordinatesOnOrOffCheckBox);
+		
+		return flow;
 	}
 	
 	private void createMapOfDenmark(double width, double height) {
@@ -166,9 +197,17 @@ public class MapWindow {
 			AdressParser adressParser = new AdressParser();
 			try {
 				adressParser.parseAdress(fromSearchQuery.getText());
-				String[] fromArray = adressParser.getAdressArray();
+				String[] fromArray = new String[6];
+				for(int i = 0; adressParser.getAdressArray().length > i; i++){
+					fromArray[i] = adressParser.getAdressArray()[i];
+				}
+				
 				adressParser.parseAdress(toSearchQuery.getText());
+
 				String[] toArray = adressParser.getAdressArray();
+				for(int i = 0; adressParser.getAdressArray().length > i; i++){
+					toArray[i] = adressParser.getAdressArray()[i];
+				}
 				
 				JOptionPane.showMessageDialog(frame, "From: " + fromArray[0] 
 												+ "\nTo: " + toArray[0]);
@@ -204,14 +243,22 @@ public class MapWindow {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			mapAreaToDraw = mapPanel.getArea();
-			coordConverter = new CoordinateConverter((int)Math.round(widthForMap()*0.98), (int)Math.round(heightForMap()*0.98), mapAreaToDraw);
-			double xCord = coordConverter.DrawToKrakCoordX(e.getX());
-			double yCord = coordConverter.DrawToKrakCoordY(e.getY());
-			
-			mapPanel.setToolTipText("x-cord: " + xCord + " y-cord: " + yCord);
+			if (coordinateSwitch) {
+				mapAreaToDraw = mapPanel.getArea();
+				coordConverter = new CoordinateConverter((int)Math.round(widthForMap()*0.98), (int)Math.round(heightForMap()*0.98), mapAreaToDraw);
+				double xCord = coordConverter.DrawToKrakCoordX(e.getX());
+				double yCord = coordConverter.DrawToKrakCoordY(e.getY());
+
+				String xString = String.format("%.2f", xCord);
+				String yString = String.format("%.2f", yCord);
+
+				X_CORD.setText(xString);
+				Y_CORD.setText(yString);
+			} else {
+				X_CORD.setText("");
+				Y_CORD.setText("");
+			}
 		}
-		
 	}
 	
 	class ReverseActionListener implements ActionListener{
