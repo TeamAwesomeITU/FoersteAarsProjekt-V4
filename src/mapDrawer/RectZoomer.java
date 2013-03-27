@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.AreaNegativeSizeException;
+import mapDrawer.exceptions.InvalidAreaProportionsException;
 
 public class RectZoomer extends MouseAdapter {
 	private boolean drawing = false;
@@ -65,7 +66,7 @@ public class RectZoomer extends MouseAdapter {
 			mp.setLinesForMap();
 			mp.repaint();
 		} 
-    	catch (AreaNegativeSizeException | AreaIsNotWithinDenmarkException e1) {
+    	catch (AreaNegativeSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
 			mp.getParentFrame().dispose();
 			e1.printStackTrace();
 		}

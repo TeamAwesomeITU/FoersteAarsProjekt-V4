@@ -9,6 +9,7 @@ import com.ximpleware.VTDNav;
 
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.AreaNegativeSizeException;
+import mapDrawer.exceptions.InvalidAreaProportionsException;
 
 public class QuadTree {
 
@@ -54,7 +55,7 @@ public class QuadTree {
 		if (northWestNode == null)
 			try {
 				subdivide();
-			} catch (AreaNegativeSizeException | AreaIsNotWithinDenmarkException e) {
+			} catch (AreaNegativeSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 				e.printStackTrace();
 			} 
 
@@ -67,7 +68,7 @@ public class QuadTree {
 		return false;
 	}
 
-	private void subdivide() throws AreaNegativeSizeException, AreaIsNotWithinDenmarkException {
+	private void subdivide() throws AreaNegativeSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException {
 	
 		double midPointX = area.getWidth()/2 + area.getSmallestX();
 		double midPointY = area.getHeight()/2 + area.getSmallestY();
@@ -189,7 +190,7 @@ public class QuadTree {
 		return qTree.searchForNodeIDs(area);
 	}
 
-	public static void main(String[] args) throws AreaNegativeSizeException, AreaIsNotWithinDenmarkException
+	public static void main(String[] args) throws AreaNegativeSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException
 	{	
 		AreaToDraw area = new AreaToDraw();
 		
