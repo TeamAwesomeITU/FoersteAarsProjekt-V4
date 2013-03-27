@@ -255,8 +255,7 @@ public class MapPanel extends JPanel {
 		preferredSize = setNewPreferredSize((int)width, (int)height);
 		makeLinesForMap();
 	}
-	
-	//TODO Make it get proper width and height.
+
 	/*
 	 * Is used for setting the initial size of the map.
 	 */
@@ -264,10 +263,7 @@ public class MapPanel extends JPanel {
 		Dimension tmpSize = new Dimension(w, h);
 		return tmpSize;
 	}
-	
-	public void setNewPreferredSize(double w, double h) {
-		preferredSize = new Dimension((int)w, (int)h);
-	}
+
 	public Dimension getPreferredSize() {
 	    return preferredSize;
 	}
@@ -277,7 +273,4 @@ public class MapPanel extends JPanel {
 	public double getMapHeight() {
 		return height;
 	}
-	
-	
-
 }

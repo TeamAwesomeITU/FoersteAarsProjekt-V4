@@ -175,7 +175,20 @@ public class MapWindow {
 	
 	private double widthForMap() {
 		AreaToDraw areaToDraw = new AreaToDraw();
-		return  heightForMap()*areaToDraw.getWidthHeightRelation();//(frame.getWidth()*0.95 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth()));
+		double width = heightForMap()*areaToDraw.getWidthHeightRelation();
+		if(width <= Math.round(frame.getWidth()*0.9 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+			return  width;
+		else 
+			return widthForMap(heightForMap()*0.9);
+	}
+	
+	private double widthForMap(double height) {
+		AreaToDraw areaToDraw = new AreaToDraw();
+		double width = Math.round(height*areaToDraw.getWidthHeightRelation());
+		if(width <Math.round(frame.getWidth()*0.9 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+			return width;
+		else 
+			return widthForMap(height*0.9);
 	}
 	
 	public double getWidthForMap() {

@@ -50,11 +50,11 @@ public class MapComponentAdapter extends ComponentAdapter {
 			//if(counter != 0) {
 				if(isResizing == true) {
 					System.out.println("RESIZE!");
-					double test = mw.getWidthForMap()*0.98;
-					System.out.println(test);
-					/*mp.setWidth(Math.round(mw.getWidthForMap()*0.98)); 
-					mp.setHeight(Math.round(mw.getHeightForMap()*0.98));
-					mp.setNewPreferredSize(mp.getMapWidth(), mp.getMapHeight());*/
+					double newWidth = mw.getWidthForMap()*0.98;
+					mp.setWidth(Math.round(newWidth)); 
+					double newHeight = (newWidth*mp.getArea().getHeight())/mp.getArea().getWidth();
+					mp.setHeight(Math.round(newHeight));
+					//mp.setNewPreferredSize(mp.getMapWidth(), mp.getMapHeight());
 					mp.setLinesForMap();
 					mp.repaint();
 					//jf.setSize((int)(jf.getWidth()*0.9), (int)(jf.getHeight()*0.9));
