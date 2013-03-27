@@ -5,9 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-
 
 import javax.swing.*;
 
@@ -26,7 +25,7 @@ public class MapWindow {
 	private static MapWindow instance;
 	private JTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
-						  eastColoredJPanel = new ColoredJPanel(), southColoredJPanel = MainGui.makeFooter();
+						  eastColoredJPanel = makeCoordinateJPanel(), southColoredJPanel = MainGui.makeFooter();
 	
 	public static void main(String[] args) {
 		MapWindow.getInstance();	
@@ -69,8 +68,8 @@ public class MapWindow {
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
-		MapComponentAdapter mcp = new MapComponentAdapter(this);
-		frame.addComponentListener(mcp);
+		//MapComponentAdapter mcp = new MapComponentAdapter(this);
+		//frame.addComponentListener(mcp);
 		frame.setVisible(true);
 	}
 	
@@ -113,6 +112,15 @@ public class MapWindow {
 		return flow;
 	}
 	
+	public ColoredJPanel makeCoordinateJPanel(){
+		ColoredJPanel coordPanel = new ColoredJPanel();
+		coordPanel.setLayout(new GridLayout(2, 1));
+		JTextField xCordTextField = new JTextField();
+		JTextField yCordTextField = new JTextField();
+		 
+		return coordPanel;
+	}
+	
 	private void createMapOfDenmark(double width, double height) {
 		centerColoredJPanel = new ColoredJPanel();
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
@@ -130,9 +138,17 @@ public class MapWindow {
 		return frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
 	}
 	
+	public double getHeightForMap(){
+		return heightForMap();
+	}
+	
 	private double widthForMap() {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		return  heightForMap()*areaToDraw.getWidthHeightRelation();//(frame.getWidth()*0.95 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth()));
+	}
+	
+	public double getWidthForMap() {
+		return widthForMap();
 	}
 	
 	public void fillContentPane(){
@@ -176,25 +192,22 @@ public class MapWindow {
 	
 	//---------------------------------Listeners from here-----------------------------//
 	
-	class CoordinatesMouseMotionListener implements MouseMotionListener{
+	class CoordinatesMouseMotionListener extends MouseAdapter{
 		
 		private MapPanel mapPanel;
+		private AreaToDraw mapAreaToDraw;
+		private CoordinateConverter coordConverter;
 		
 		public CoordinatesMouseMotionListener(MapPanel mapPanel){
 			this.mapPanel = mapPanel;
 		}
 
 		@Override
-		public void mouseDragged(MouseEvent e) {
-			
-		}
-
-		@Override
 		public void mouseMoved(MouseEvent e) {
-			AreaToDraw mapAreaToDraw = new AreaToDraw();
-			CoordinateConverter coordConverter = new CoordinateConverter((int)Math.round(widthForMap()*0.98), (int)Math.round(heightForMap()*0.98), mapAreaToDraw);
-			double xCord = coordConverter.KrakToDrawCoordX(e.getX());
-			double yCord = coordConverter.KrakToDrawCoordY(e.getY());
+			mapAreaToDraw = mapPanel.getArea();
+			coordConverter = new CoordinateConverter((int)Math.round(widthForMap()*0.98), (int)Math.round(heightForMap()*0.98), mapAreaToDraw);
+			double xCord = coordConverter.DrawToKrakCoordX(e.getX());
+			double yCord = coordConverter.DrawToKrakCoordY(e.getY());
 			
 			mapPanel.setToolTipText("x-cord: " + xCord + " y-cord: " + yCord);
 		}
