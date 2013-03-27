@@ -136,7 +136,7 @@ public class FindRelevantNodes {
 				ap.resetXPath();
 			}
 			long endTime = System.currentTimeMillis();
-			System.out.println("nodeMap tager " + (endTime - startTime) + " milliseconds");
+			System.out.println("nodeMap creation tager " + (endTime - startTime) + " milliseconds");
 		} catch (NavException | XPathEvalException | XPathParseException e) {
 			e.printStackTrace();
 		}
