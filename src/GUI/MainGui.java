@@ -7,7 +7,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class MainGui {
-	
+
 	private static MainGui instance;
 
 	//Three static final fields to easily change the color of our program
@@ -16,9 +16,9 @@ public class MainGui {
 	public static final Color BACKGROUND_COLOR = new Color(140, 255, 140);
 
 	public static final Color VERY_LIGHT_COLOR = new Color(200, 255, 200);
-	
+
 	public static boolean undecoratedBoolean = false;
-	
+
 	public static boolean coordinatesBoolean = true;
 
 	/**
@@ -64,20 +64,20 @@ public class MainGui {
 			}
 		});
 		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, SHORT_CUT_MASK));
-		
+
 		JMenuItem settingsItem = new JMenuItem("Settings");
 		settingsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				final JFrame settingsFrame = new JFrame("Settings");
 				settingsFrame.setLocationRelativeTo(null);	
-				
+
 				Container container = settingsFrame.getContentPane();
 				container.setLayout(new BorderLayout());
-				
+
 				ColoredJPanel settingsPanel = new ColoredJPanel();
 				final ColoredJCheckBox undecorated = new ColoredJCheckBox("Undecorated");
 				undecorated.setSelected(undecoratedBoolean);
-			
+
 				undecorated.addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent e) {
 						if(e.getStateChange() == ItemEvent.DESELECTED){
@@ -90,7 +90,7 @@ public class MainGui {
 								new MapWindow();
 							settingsFrame.dispose();
 						}
-						
+
 						if(e.getStateChange() == ItemEvent.SELECTED){
 							undecoratedBoolean = true;
 							frameForMenu.dispose();
@@ -101,8 +101,8 @@ public class MainGui {
 								new MapWindow();
 							settingsFrame.dispose();
 						}
-				}});
-				
+					}});
+
 				final ColoredJCheckBox coordinates = new ColoredJCheckBox("Coordinates");
 				coordinates.setSelected(coordinatesBoolean);
 				coordinates.addItemListener(new ItemListener() {
@@ -113,9 +113,9 @@ public class MainGui {
 							coordinatesBoolean = true;
 					}
 				});
-				
+
 				container.add(settingsPanel, BorderLayout.CENTER);
-				
+
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);
 				settingsFrame.pack();
@@ -141,7 +141,7 @@ public class MainGui {
 		menuBar.add(helpMenu);		
 	}
 
-	
+
 	public static ColoredJPanel makeFooter(){
 		ColoredJPanel footer = new ColoredJPanel();
 		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4");
