@@ -239,8 +239,8 @@ public class MapWindow {
 			if (MainGui.coordinatesBoolean) {
 				mapAreaToDraw = mapPanel.getArea();
 				coordConverter = new CoordinateConverter((int)Math.round(widthForMap()*0.98), (int)Math.round(heightForMap()*0.98), mapAreaToDraw);
-				double xCord = coordConverter.DrawToKrakCoordX(e.getX());
-				double yCord = coordConverter.DrawToKrakCoordY(e.getY());
+				double xCord = coordConverter.pixelToUTMCoordX(e.getX());
+				double yCord = coordConverter.pixelToUTMCoordY(e.getY());
 
 				String xString = String.format("%.2f", xCord);
 				String yString = String.format("%.2f", yCord);

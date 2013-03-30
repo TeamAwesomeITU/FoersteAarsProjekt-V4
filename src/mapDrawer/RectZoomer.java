@@ -56,10 +56,10 @@ public class RectZoomer extends MouseAdapter {
     	CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getPreferredSize().getWidth(), (int)mp.getPreferredSize().getHeight(), area);
     	if(startX < 0) startX = 0; if(startY < 0) startY = 0;
     	if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
-    	double startXCoord = coordConverter.DrawToKrakCoordX((int) startX);
-    	double startYCoord = coordConverter.DrawToKrakCoordY((int) endY);
-    	double endXCoord = coordConverter.DrawToKrakCoordX((int) endX);
-    	double endYCoord = coordConverter.DrawToKrakCoordY((int) startY);
+    	double startXCoord = coordConverter.pixelToUTMCoordX((int) startX);
+    	double startYCoord = coordConverter.pixelToUTMCoordY((int) endY);
+    	double endXCoord = coordConverter.pixelToUTMCoordX((int) endX);
+    	double endYCoord = coordConverter.pixelToUTMCoordY((int) startY);
     	try {
     		rect = null;    		
     		double newAreaProportions = Math.round((((endX-startX)/(endY-startY))*100.0))/100.0;

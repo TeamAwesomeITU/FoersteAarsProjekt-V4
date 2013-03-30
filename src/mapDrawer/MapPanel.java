@@ -95,10 +95,10 @@ public class MapPanel extends JPanel {
 	    	int toNode = edge.getToNode();
 	    	Double[] fromNodeCoords = FindRelevantNodes.getNodeCoordinatesMap().get(fromNode);
 	    	Double[] toNodeCoords = FindRelevantNodes.getNodeCoordinatesMap().get(toNode);
-	    	double drawFromCoordX = coordConverter.KrakToDrawCoordX(fromNodeCoords[0]);
-	    	double drawFromCoordY = coordConverter.KrakToDrawCoordY(fromNodeCoords[1]);
-	    	double drawToCoordX = coordConverter.KrakToDrawCoordX(toNodeCoords[0]);
-	    	double drawToCoordY = coordConverter.KrakToDrawCoordY(toNodeCoords[1]);
+	    	double drawFromCoordX = coordConverter.UTMToPixelCoordX(fromNodeCoords[0]);
+	    	double drawFromCoordY = coordConverter.UTMToPixelCoordY(fromNodeCoords[1]);
+	    	double drawToCoordX = coordConverter.UTMToPixelCoordX(toNodeCoords[0]);
+	    	double drawToCoordY = coordConverter.UTMToPixelCoordY(toNodeCoords[1]);
 	    	
 	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
@@ -117,17 +117,17 @@ public class MapPanel extends JPanel {
 			{
 				String[] coordFrom = line1.split("\\s+");
 				String[] coordTo = line2.split("\\s+");
-				double coordFromX = coordConverter.KrakToDrawCoordX(Double.parseDouble(coordFrom[0]));
-				double coordFromY = coordConverter.KrakToDrawCoordY(Double.parseDouble(coordFrom[1]));
-				double coordToX = coordConverter.KrakToDrawCoordX(Double.parseDouble(coordTo[0]));
-				double coordToY = coordConverter.KrakToDrawCoordY(Double.parseDouble(coordTo[1]));
+				double coordFromX = coordConverter.UTMToPixelCoordX(Double.parseDouble(coordFrom[0]));
+				double coordFromY = coordConverter.UTMToPixelCoordY(Double.parseDouble(coordFrom[1]));
+				double coordToX = coordConverter.UTMToPixelCoordX(Double.parseDouble(coordTo[0]));
+				double coordToY = coordConverter.UTMToPixelCoordY(Double.parseDouble(coordTo[1]));
 
 				double deltaX = Double.parseDouble(coordFrom[0])-Double.parseDouble(coordTo[0]);
 				double deltaY = Double.parseDouble(coordFrom[1])-Double.parseDouble(coordTo[1]);
 				double distanceBetweenPoints = Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
 
 				//If the points are not unreasonably far away from each other, then make a new line
-				if(distanceBetweenPoints < 1000)
+				if(distanceBetweenPoints < 7000)
 					list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 1));
 
 				line2 = line1;

@@ -29,19 +29,19 @@ public class CoordinateConverter {
 			
 	}
 	
-	public double KrakToDrawCoordX(double x)
+	public double UTMToPixelCoordX(double x)
 	{
 		return UTMToNormalizedCoord(x, area.getSmallestX(), area.getLargestX(), canvasWidth);
 	}
 	
-	public double KrakToDrawCoordY(double y)
+	public double UTMToPixelCoordY(double y)
 	{
 		double coord = UTMToNormalizedCoord(y, area.getSmallestY(), area.getLargestY(), canvasHeight);
 		coord = reflectCoordY(coord);
 		return coord;
 	}
 	
-	public double DrawToKrakCoordX(int x)
+	public double pixelToUTMCoordX(int x)
 	{
 		double coord = NormalizedToUTMCoord(x, area.getSmallestX(), area.getLargestX(), canvasWidth);
 		return coord;
@@ -50,7 +50,7 @@ public class CoordinateConverter {
 	/*
 	 * Input: The coordinate in Java-coordinate pixels
 	 */
-	public double DrawToKrakCoordY(int y)
+	public double pixelToUTMCoordY(int y)
 	{		
 		double coord = reflectCoordY(y);
 		return NormalizedToUTMCoord(coord, area.getSmallestY(), area.getLargestY(), canvasHeight);
