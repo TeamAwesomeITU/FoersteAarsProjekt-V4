@@ -10,8 +10,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import java_cup.internal_error;
-
 import javax.swing.*;
 
 import InputHandler.AdressParser;
@@ -24,20 +22,19 @@ import mapDrawer.MapPanel;
 
 public class MapWindow {
 	
+	private static final int WINDOW_ID = 2;
 	private JFrame frame;
 	private Container contentPane;
-	private static MapWindow instance;
 	private JTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeCoordinateJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private JLabel X_CORD, Y_CORD;
-	private boolean coordinateSwitch = true;
 	
 	public static void main(String[] args) {
-		MapWindow.getInstance();	
+		new MapWindow();
 	}
 	
-	private MapWindow(){
+	public MapWindow(){
 		createMapScreen();
 	}
 	
@@ -46,13 +43,8 @@ public class MapWindow {
 		toSearchQuery.setText(searchQuery);
 	}
 	
-	public static MapWindow getInstance(){
-		if(instance != null)
-			return instance;
-		else{
-			instance = new MapWindow();
-			return instance;
-		}
+	public static final int getWindowId(){
+		return WINDOW_ID;
 	}
 	
 	public void createMapScreen(){
@@ -62,7 +54,7 @@ public class MapWindow {
 		frame.setBounds(0,0,screenSize.width, screenSize.height);
 		frame.setPreferredSize(screenSize);
 		
-		MainGui.makeMenu(frame, MainGui.BACKGROUND_COLOR, MainGui.undecoratedBoolean, 2);
+		MainGui.makeMenu(frame, MainGui.BACKGROUND_COLOR, WINDOW_ID);
 		fillContentPane();
 		
 		frame.pack();
@@ -128,17 +120,6 @@ public class MapWindow {
 		X_CORD = new JLabel();
 		Y_CORD = new JLabel();
 		
-		ColoredJCheckBox coordinatesOnOrOffCheckBox = new ColoredJCheckBox("Coordinates");
-		coordinatesOnOrOffCheckBox.setSelected(true);
-		coordinatesOnOrOffCheckBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				if(e.getStateChange() == ItemEvent.DESELECTED)
-					coordinateSwitch = false;
-				if(e.getStateChange() == ItemEvent.SELECTED)
-					coordinateSwitch = true;
-			}
-		});
-		
 		coordPanel.add(xCordJLabel);
 		coordPanel.add(yCordJLabel);
 		coordPanel.add(X_CORD);
@@ -147,7 +128,6 @@ public class MapWindow {
 		
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(coordPanel);
-		flow.add(coordinatesOnOrOffCheckBox);
 		
 		return flow;
 	}
@@ -256,11 +236,11 @@ public class MapWindow {
 
 		@Override
 		public void mouseMoved(MouseEvent e) {
-			if (coordinateSwitch) {
+			if (MainGui.coordinatesBoolean) {
 				mapAreaToDraw = mapPanel.getArea();
 				coordConverter = new CoordinateConverter((int)Math.round(widthForMap()*0.98), (int)Math.round(heightForMap()*0.98), mapAreaToDraw);
-				double xCord = coordConverter.DrawToKrakCoordX(e.getX());
-				double yCord = coordConverter.DrawToKrakCoordY(e.getY());
+				double xCord = coordConverter.pixelToUTMCoordX(e.getX());
+				double yCord = coordConverter.pixelToUTMCoordY(e.getY());
 
 				String xString = String.format("%.2f", xCord);
 				String yString = String.format("%.2f", yCord);
