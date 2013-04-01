@@ -1,6 +1,5 @@
 package mapDrawer;
 
-import java.awt.Dimension;
 import java.awt.geom.GeneralPath;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,18 +7,24 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.AreaNegativeSizeException;
 
+/*
+ * Creates polygons to draw the coastline of Denmark
+ */
 public class CoastLineMaker {
 
+	//A HashSet of all of the coastline-polygons in Denmark
 	private static HashSet<Polygon> polygonSet = createPolygonSet("resources/coasts_polygon.txt_convertedJCOORD.txt");
 
 	/*
-	 * If a relevant polygon's area is found to intersect the area to be drawn, the ENTIRE polygon will be drawn
+	 * Generates an array of GeneralPaths which represents the coastline of Denmark within the specified AreaToDraw.
+	 * 
+	 * @param 	canvasWidth The width of the drawing area
+	 * @param 	canvasHeight The height of the drawing area
+	 * @param	area The area to draw
+	 * @return	An array of the GeneralPaths that lies within the specified AreaToDraw
 	 */
 	public static GeneralPath[] getCoastLineToDraw(double canvasWidth, double canvasHeight, AreaToDraw area)
 	{
@@ -27,6 +32,11 @@ public class CoastLineMaker {
 		return createGeneralPaths(canvasWidth, canvasHeight, area, relevantPolygonSet);
 	}	
 
+	/*
+	 * Locates the Polygons that intersects with the specified AreaToDraw
+	 * @param	area The area to search for polygons to draw
+	 * @return 	A HashSet of the found Polygons
+	 */
 	private static HashSet<Polygon> findWhichPolygonsToDraw(AreaToDraw area)
 	{
 		HashSet<Polygon> relevantPolygonSet = new HashSet<Polygon>();
@@ -40,13 +50,21 @@ public class CoastLineMaker {
 		return relevantPolygonSet;
 	}	
 
+	/*
+	 * Creates GenerealPaths from the found Polygons
+	 * @param 	canvasWidth The width of the drawing area
+	 * @param 	canvasHeight The height of the drawing area
+	 * @param	area The area to draw
+	 * @param	relevantPolygonSet A HashSet of the Polygons to make GeneralPaths from
+	 * @return	A GeneralPath[] of the found Polygons
+	 */
 	private static GeneralPath[] createGeneralPaths(double canvasWidth, double canvasHeight, AreaToDraw area, HashSet<Polygon> relevantPolygonSet)
 	{
 		GeneralPath[] polygonsArray = new GeneralPath[relevantPolygonSet.size()];
 		CoordinateConverter coordConverter = new CoordinateConverter(canvasWidth, canvasHeight, area);
 
 		int indexToInsertPolygon = 0;
-		
+
 		for(Polygon polygon : relevantPolygonSet)
 		{
 			GeneralPath path = new GeneralPath();
@@ -59,18 +77,24 @@ public class CoastLineMaker {
 				path.moveTo(xCoord, yCoord);
 			}
 			
+			path.closePath();
 			polygonsArray[indexToInsertPolygon++] = path;
 		}
-		
+
 		return polygonsArray;
 	}
 
 
+	/*
+	 * Creates a HashSet of Polygons from the specified .txt-file
+	 * @param 	filenameAndLocation The .txt-file from which to create the HashSet of Polygons from
+	 * @return	A HashSet of every Polygon found in the specified .txt-file
+	 */
 	private static HashSet<Polygon> createPolygonSet(String filenameAndLocation)
 	{
 		HashSet<Polygon> setOfPolygons = new HashSet<Polygon>();
 		LinkedList<double[]> singlePolygonCoords = new LinkedList<double[]>();
-		
+
 
 		try {
 			long startTime = System.currentTimeMillis();
@@ -102,7 +126,7 @@ public class CoastLineMaker {
 					if(xCoord > AreaToDraw.getSmallestXOfEntireMap() && xCoord < AreaToDraw.getLargestXOfEntireMap() &&
 							yCoord > AreaToDraw.getSmallestYOfEntireMap() && yCoord < AreaToDraw.getLargestYOfEntireMap())					
 						singlePolygonCoords.add(new double[]{xCoord, yCoord});				
-					
+
 				}
 			}
 
@@ -110,7 +134,7 @@ public class CoastLineMaker {
 
 			long endTime = System.currentTimeMillis();
 			System.out.println("At create polygonSet tager " + (endTime - startTime) + " milliseconds");
-			
+
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
@@ -125,7 +149,7 @@ public class CoastLineMaker {
 
 		//The "box" that marks the boundaries of the Polygon
 		private AreaToDraw area;
-		
+
 		private LinkedList<double[]> nodeList;
 
 		private Polygon(LinkedList<double[]> nodeList)
@@ -170,16 +194,17 @@ public class CoastLineMaker {
 	public static void main(String[] args)
 	{
 		System.out.println("polygonSetSize: " + polygonSet.size());
-		System.out.println("something before something: " + polygonSet.iterator().next().getCoordsList().size());
-		
+
 		long startTime = System.currentTimeMillis();
 		getCoastLineToDraw(200, 200, new AreaToDraw())[0].getBounds();
 		long endTime = System.currentTimeMillis();
-		System.out.println("At retrieve polygoner til tegning af hele Danmark tager " + (endTime - startTime) + " milliseconds");
-		
+		System.out.println("Retrieving polygons to draw for the entire map of Denmark takes " + (endTime - startTime) + " milliseconds");
+
 		long startTime1 = System.currentTimeMillis();
 		getCoastLineToDraw(200, 200, new AreaToDraw())[0].getBounds();
 		long endTime1 = System.currentTimeMillis();
-		System.out.println("At retrieve polygoner til tegning af hele Danmark tager " + (endTime1 - startTime1) + " milliseconds");		
+		System.out.println("Retrieving polygons to draw for the entire map of Denmark takes " + (endTime1 - startTime1) + " milliseconds");		
+		
+		
 	}
 }

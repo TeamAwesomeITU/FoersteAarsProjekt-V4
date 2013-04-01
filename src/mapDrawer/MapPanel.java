@@ -6,6 +6,7 @@ import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -27,12 +28,12 @@ public class MapPanel extends JPanel {
 	private EdgeLine[] linesOfEdges; 
 	private JFrame jf;
 	private double height, width;
-	
+
 	@Deprecated
 	public static void main(String[] args) {        
 	    createJFrame();
 	} 
-	
+
 	@Deprecated
 	private static JFrame createJFrame() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
@@ -53,7 +54,7 @@ public class MapPanel extends JPanel {
 	    jf.setVisible(true);
 	    return jf;
 	}
-	
+
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
 	 *  
@@ -78,7 +79,7 @@ public class MapPanel extends JPanel {
 	 * Saves all the edges and converts the coordinates and saves them in an array.
 	 *  
 	 */
-	
+
 	private void makeLinesForMap() {
 		if(area == null)
 			area = new AreaToDraw();
@@ -87,7 +88,7 @@ public class MapPanel extends JPanel {
 	    linesOfEdges = new EdgeLine[edgeSet.size()];
 	    setPanelDimensions(new Dimension());
 	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
-	    
+
 	    int numberOfEdges = 0;
 	    while(edgeSetIterator.hasNext() == true) {
 	    	Edge edge = edgeSetIterator.next();
@@ -99,13 +100,13 @@ public class MapPanel extends JPanel {
 	    	double drawFromCoordY = coordConverter.UTMToPixelCoordY(fromNodeCoords[1]);
 	    	double drawToCoordX = coordConverter.UTMToPixelCoordX(toNodeCoords[0]);
 	    	double drawToCoordY = coordConverter.UTMToPixelCoordY(toNodeCoords[1]);
-	    	
+
 	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
-	    
+
 	    String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
 	    //String file = ("resources/osm_modified.txt_convertedJCOORD.txt");
-	    
+
 	    ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
 
 		try {
@@ -146,26 +147,26 @@ public class MapPanel extends JPanel {
 			linesOfEdges = newLinesOfEdges;
 
 			reader.close();
-			
-			
+
+
 		} catch (IOException e) {
 			e.printStackTrace();
-			
+
 		}
-		
+
 	}
 
 	/**
 	 * Draws all the lines for the map. Also, draws the rectangle used by the user
 	 * to see where you are about to zoom.
 	 */
-	private Line2D line = new Line2D.Float();
+	private Line2D line = new Line2D.Double();
 	public void paint(Graphics g) {
 	    super.paint(g);
 	    for (EdgeLine edgeLine : linesOfEdges) {
 	        line.setLine(edgeLine.getStartX(), edgeLine.getStartY(), edgeLine.getEndX(), edgeLine.getEndY());
 	        int roadType = edgeLine.getRoadType();
-	        
+
 	        if(roadType == 1 || roadType == 21 || roadType == 31 || roadType == 41 
 	            || roadType == 2 || roadType == 22 || roadType == 32 || roadType == 42) 
 	        	g.setColor(Color.red);
@@ -177,6 +178,7 @@ public class MapPanel extends JPanel {
 	        	g.setColor(Color.black);
 	        ((Graphics2D)g).draw(line); 								  									 
 	    }
+	    	    
 	    Graphics2D g2 = (Graphics2D) g;
 	    if (rectZoomer.getRect() == null) {
 	         return; 
@@ -186,35 +188,35 @@ public class MapPanel extends JPanel {
 	         g2.draw(rectZoomer.getRect());
 	      } 
 	}
-	
+
 	public void setArea(AreaToDraw area) {
 		this.area = area;
 	}
-	
+
 	public AreaToDraw getArea() {
 		return area;
 	}
-	
-	
+
+
 	public JFrame getParentFrame() {
 		return jf;
 	}
-	
+
 	public void setWidth(double width) {
 		this.width = width;
 	}
-	
+
 	public void setHeight(double height) {
 		this.height = height;
 	}
-	
+
 	private void setBorderForPanel(MapPanel mp) {
 		Dimension d = setNewPreferredSize((int)mp.getMapWidth(), (int)getMapHeight());
 		d = mp.setPanelDimensions(new Dimension());
         d.setSize(d.getWidth()*1.02, d.getHeight()*1.02);
         mp.setMaximumSize(d);
         mp.setBorder(new LineBorder(Color.black));
-		
+
 	}
 	/*
 	 * Takes a Dimension and makes it's width and height match the relation between area's width and height.
@@ -222,7 +224,7 @@ public class MapPanel extends JPanel {
 	 * 
 	 * @param d - Takes a dimension for the panel. 
 	 */
-	
+
 	private Dimension setPanelDimensions(Dimension d) {
 		if(height < width) {
 			double whRelation = area.getWidthHeightRelation();
@@ -236,7 +238,7 @@ public class MapPanel extends JPanel {
 				return d;
 			}
 		}
-		
+
 		else {
 			double newHeight = (width*area.getHeight())/area.getWidth();
 			if(newHeight > height) {
@@ -250,7 +252,7 @@ public class MapPanel extends JPanel {
 		}
 		return d;
 	}
-	
+
 	public void setLinesForMap() {
 		preferredSize = setNewPreferredSize((int)width, (int)height);
 		makeLinesForMap();
