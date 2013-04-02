@@ -163,6 +163,7 @@ public class MapPanel extends JPanel {
 	         return; 
 	      } 
 	      else if (rectZoomer.isDrawing() == true) {
+	    	 g2.setStroke(new BasicStroke(1));
 	         g2.setColor(Color.red);
 	         g2.draw(rectZoomer.getRect());
 	      } 
