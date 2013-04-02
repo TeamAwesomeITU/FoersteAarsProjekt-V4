@@ -1,5 +1,6 @@
 package mapDrawer;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -28,7 +29,6 @@ public class MapPanel extends JPanel {
 	private EdgeLine[] linesOfEdges; 
 	private JFrame jf;
 	private double height, width;
-
 	@Deprecated
 	public static void main(String[] args) {        
 	    createJFrame();
@@ -166,16 +166,8 @@ public class MapPanel extends JPanel {
 	    for (EdgeLine edgeLine : linesOfEdges) {
 	        line.setLine(edgeLine.getStartX(), edgeLine.getStartY(), edgeLine.getEndX(), edgeLine.getEndY());
 	        int roadType = edgeLine.getRoadType();
-
-	        if(roadType == 1 || roadType == 21 || roadType == 31 || roadType == 41 
-	            || roadType == 2 || roadType == 22 || roadType == 32 || roadType == 42) 
-	        	g.setColor(Color.red);
-	        else if(roadType == 3 || roadType == 23 || roadType == 33 || roadType == 4 || roadType == 24 || roadType == 34) 
-	        	g.setColor(Color.blue);
-	        else if(roadType == 8 || roadType == 10 || roadType == 11)
-	        	g.setColor(Color.green);
-	        else 
-	        	g.setColor(Color.black);
+	        g.setColor(RoadType.getColor(roadType));
+	        ((Graphics2D)g).setStroke(new BasicStroke(RoadType.getStroke(roadType)));
 	        ((Graphics2D)g).draw(line); 								  									 
 	    }
 	    	    

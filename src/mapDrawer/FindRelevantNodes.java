@@ -63,7 +63,7 @@ public class FindRelevantNodes {
 					ROAD = vnEdge.toString(vnEdge.getText());
 					vnEdge.toElement(VTDNav.NEXT_SIBLING, "H_POSTNR");
 					POST = vnEdge.parseInt(vnEdge.getText());
-					
+
 					edgeSet.add(new Edge(FNODE,TNODE,TYP,ROAD,POST));
 					count++;
 
@@ -90,18 +90,20 @@ public class FindRelevantNodes {
 	{
 		Iterator<Edge> iterator = allEdgesSet.iterator();
 		HashSet<Edge> foundEdgesSet = new HashSet<Edge>();
-		
+		HashSet<Integer> zoomLevel = ZoomLevel.getlevel(area.getPercentageOfEntireMap());
+
 		System.out.println("Size of nodeset parsed to findEdges(): " + nodeIDSet.size());
-		
+
 		while(iterator.hasNext())
 		{
-			Edge edge = iterator.next();			
-			if(nodeIDSet.contains(edge.getFromNode()) || nodeIDSet.contains(edge.getToNode()))
-				foundEdgesSet.add(edge);
+			Edge edge = iterator.next();	
+			if(zoomLevel.contains(edge.getRoadType()))
+				if(nodeIDSet.contains(edge.getFromNode()) || nodeIDSet.contains(edge.getToNode()))
+					foundEdgesSet.add(edge);
 		}			
-		
+
 		System.out.println("Number of relevant Edges found: " + foundEdgesSet.size());
-		
+
 		return foundEdgesSet;
 	}
 
