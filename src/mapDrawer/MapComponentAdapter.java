@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import GUI.ColoredJPanel;
 import GUI.MapWindow;
 
 
@@ -53,6 +54,8 @@ public class MapComponentAdapter extends ComponentAdapter {
 					mp.setWidth(Math.round(newWidth)); 
 					double newHeight = (newWidth*mp.getArea().getHeight())/mp.getArea().getWidth();
 					mp.setHeight(Math.round(newHeight));
+					ColoredJPanel cjp = mp.getParentColoredJPanel();
+					cjp.setSize((int)newWidth, (int)newHeight);
 					//mp.setNewPreferredSize(mp.getMapWidth(), mp.getMapHeight());
 					mp.setLinesForMap();
 					mp.repaint();
