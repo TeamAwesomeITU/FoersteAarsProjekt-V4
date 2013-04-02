@@ -5,7 +5,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-
+/**
+ * This is our main gui class. It holds methods that is common for all
+ * old and future windows.
+ */
 public class MainGui {
 
 	private static MainGui instance;
@@ -30,7 +33,7 @@ public class MainGui {
 
 	/**
 	 * Uses a singleton API to get the instance of the program
-	 * @return
+	 * @return the instance of the program
 	 */
 	public static MainGui getInstance(){
 		if(instance != null)
@@ -46,7 +49,7 @@ public class MainGui {
 	}
 
 	/**
-	 * Makes the menu and adds shortcuts to it.
+	 * Makes the menu and adds shortcuts to it. This is the standard menu for all future windows.
 	 */
 	public static void makeMenu(final JFrame frameForMenu, final Color colorForMenu, final int windowID){
 		final int SHORT_CUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -141,7 +144,10 @@ public class MainGui {
 		menuBar.add(helpMenu);		
 	}
 
-
+	/**
+	 * Makes the footer for all future windows
+	 * @return the footer in the form of a ColoredJpanel
+	 */
 	public static ColoredJPanel makeFooter(){
 		ColoredJPanel footer = new ColoredJPanel();
 		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4");
