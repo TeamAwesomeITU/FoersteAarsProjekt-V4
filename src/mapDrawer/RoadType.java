@@ -104,14 +104,14 @@ public enum RoadType {
 
 	public static Color getColor(int roadType)
 	{
-		RoadType rt = values()[getCategory(roadType)];
+		RoadType rt = values()[getCategory(roadType)-1];
 		return rt.color();
 
 	}
 
 	public static float getStroke(int roadType)
 	{
-		RoadType rt = values()[getCategory(roadType)];
+		RoadType rt = values()[getCategory(roadType)-1];
 		return rt.stroke();
 	}
 
@@ -149,5 +149,10 @@ public enum RoadType {
 		//Coastline or mistakes
 		default: return 6;
 		}
+	}
+	
+	public static void main(String[] args)
+	{
+		System.out.println(RoadType.getStroke(1));
 	}
 }
