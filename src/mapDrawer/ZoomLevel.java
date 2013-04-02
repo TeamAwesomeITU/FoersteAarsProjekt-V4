@@ -14,16 +14,14 @@ public enum ZoomLevel {
 
 		@Override
 		protected HashSet<Integer> relevantRoadTypes() {
-			Integer[] MaxZoom = new Integer[]{1,2,3,4,21,22,34,24,31,32,33,41,42};
-			return new HashSet<Integer>(Arrays.asList(MaxZoom));
+			return new HashSet<Integer>(RoadType.getRoadTypesRelevantToZoomLevel(1));
 		}} ,
 		
 	TWO(65.0) {
 
 		@Override
 		protected HashSet<Integer> relevantRoadTypes() {
-			Integer[] MaxMediumZoom = new Integer[]{1,2,3,4,5,25,35,24,21,22,34,31,32,33,41,42};
-			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
+			return new HashSet<Integer>(RoadType.getRoadTypesRelevantToZoomLevel(2));
 
 				}} ,
 		
@@ -32,16 +30,14 @@ public enum ZoomLevel {
 
 		@Override
 		protected HashSet<Integer> relevantRoadTypes() {
-			Integer[] MaxMediumZoom = new Integer[]{1,2,3,5,25,35,21,22,34,31,32,33,41,42};
-			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
+			return new HashSet<Integer>(RoadType.getRoadTypesRelevantToZoomLevel(3));
 
 				}} ,		
 	FOUR(2.0) {
 
 		@Override
 		protected HashSet<Integer> relevantRoadTypes() {
-			Integer[] MaxMediumZoom = new Integer[]{1,2,3,21,22,34,31,32,33,41,42,5,25,35,6,26,8,11,28};
-			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
+			return new HashSet<Integer>(RoadType.getRoadTypesRelevantToZoomLevel(4));
 
 				}};		
 	
@@ -60,14 +56,17 @@ public enum ZoomLevel {
 	 * 
 	 * @return The getRelevantRoadTypes String to use to search the XML-file for the wanted road types.
 	 */
-	public static HashSet<Integer> getlevel(double percentageOfEntireMap)
+	public static HashSet<Integer> getlevel(double areasPercentageOfEntireMap)
 	{
 		ZoomLevel foundLevel = ONE;
 		
 		for(ZoomLevel zoom : values())
 		{
-			if(zoom.percentageOfEntireMap >= percentageOfEntireMap)
+			if(zoom.percentageOfEntireMap >= areasPercentageOfEntireMap)
+			{
 				foundLevel = zoom;			
+				System.out.println("changed zoomlevel to: " + zoom);
+			}
 		}
 		
 		return foundLevel.getRelevantRoadTypes();
