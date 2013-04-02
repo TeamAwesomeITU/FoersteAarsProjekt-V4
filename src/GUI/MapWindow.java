@@ -137,12 +137,13 @@ public class MapWindow {
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
 		
 		MapPanel mapPanel = new MapPanel(frame, centerColoredJPanel, (int)Math.round(width*0.98), (int)Math.round(height*0.98));
+		//mapPanel.setLayout(new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS));
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		
 		centerColoredJPanel.add(mapPanel);		
-		contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
+		contentPane.add(mapPanel, BorderLayout.CENTER);
 	}
 	
 	private double heightForMap() {
