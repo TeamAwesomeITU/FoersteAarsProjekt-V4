@@ -32,7 +32,7 @@ public class AdressParser {
 		File file = new File("road_names.txt");
 
 		try {
-			roadNamesArray = TxtToStringArray.convertTxtToArray(file);
+			roadNamesArray = TxtToFromStringArray.convertTxtToArray(file);
 			//Sorts the array - which means the adresses has another order, than they do in the .txt-file!
 			Arrays.sort(roadNamesArray);
 

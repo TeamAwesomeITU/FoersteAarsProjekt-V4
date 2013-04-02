@@ -12,9 +12,17 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+/*
+ * Converts a .txt-file to a String[] or vice versa
+ */
+public class TxtToFromStringArray {
 
-public class TxtToStringArray {
-
+	/*
+	 * Converts a .txt-file to a String[] and saves it
+	 * 
+	 * @param file The path to the .txt-file to convert
+	 * @param name The name-to-be of the converted file
+	 */
 	public static void convertAndSaveTxtToArray(File file, String name) throws IOException
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -42,6 +50,12 @@ public class TxtToStringArray {
 		out.close();        
 	}
 
+	/*
+	 * Converts a String[] to a .txt-file and saves it
+	 * 
+	 * @param 	array The String[] to convert
+	 * @param	name The name-to-be of the converted file
+	 */
 	public static void convertAndSaveArrayToTxt(String[] array, String name) throws Exception
 	{
 		FileOutputStream m_fos = new FileOutputStream(name);
@@ -58,6 +72,12 @@ public class TxtToStringArray {
 		out.close();
 	}
 
+	/*
+	 * Converts a String[] to a .txt-file and saves it
+	 * 
+	 * @param 	file The path to the .txt-file to convert
+	 * @return 	A String[] representation of the converted file
+	 */
 	public static String[] convertTxtToArray(File file) throws IOException
 	{
 		long startTime = System.currentTimeMillis();
@@ -85,6 +105,12 @@ public class TxtToStringArray {
 		return arr;
 	}
 
+	/*
+	 * Reads a stored String[] and returns it
+	 * 
+	 * @param 	fileName The path to the stored String[]
+	 * @return 	The read String[]
+	 */
 	public static String[] readArray(String fileName) throws IOException, ClassNotFoundException
 	{
 		ObjectInputStream inStream = new ObjectInputStream(new FileInputStream(fileName));
