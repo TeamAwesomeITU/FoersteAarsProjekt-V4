@@ -1,5 +1,6 @@
 package mapDrawer;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -144,16 +145,24 @@ public class MapPanel extends JPanel {
 	    for (EdgeLine edgeLine : linesOfEdges) {
 	        line.setLine(edgeLine.getStartX(), edgeLine.getStartY(), edgeLine.getEndX(), edgeLine.getEndY());
 	        int roadType = edgeLine.getRoadType();
-
+	        Graphics2D g2 = (Graphics2D)g;
 	        if(roadType == 1 || roadType == 21 || roadType == 31 || roadType == 41 
-	            || roadType == 2 || roadType == 22 || roadType == 32 || roadType == 42) 
-	        	g.setColor(Color.red);
-	        else if(roadType == 3 || roadType == 23 || roadType == 33 || roadType == 4 || roadType == 24 || roadType == 34) 
-	        	g.setColor(Color.blue);
-	        else if(roadType == 8 || roadType == 10 || roadType == 11)
-	        	g.setColor(Color.green);
-	        else 
+	            || roadType == 2 || roadType == 22 || roadType == 32 || roadType == 42) {
+	        	g2.setStroke(new BasicStroke(3));
+	        	g2.setColor(Color.red);
+	        }
+	        else if(roadType == 3 || roadType == 23 || roadType == 33 || roadType == 4 || roadType == 24 || roadType == 34) {
+	        	g2.setStroke(new BasicStroke(1));
+	        	g2.setColor(Color.blue);
+	        }
+	        else if(roadType == 8 || roadType == 10 || roadType == 11) {
+	        	g2.setStroke(new BasicStroke(1));
+	        	g2.setColor(Color.green);
+	        }
+	        else {
+	        	g2.setStroke(new BasicStroke(1));
 	        	g.setColor(Color.black);
+	        }
 	        ((Graphics2D)g).draw(line); 								  									 
 	    }
 	    	    
