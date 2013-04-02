@@ -73,13 +73,14 @@ public class RunConverter {
 
 	public static void main(String[] args) throws NumberFormatException, IOException
 	{
-		String file = "resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz";
+		//String file = "resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz";
 		//String file = "resources/denmark_coastline_fullres_shore.xyz";
 		//String file = "resources/osm_modified.txt";
-		ArrayList<String> list = convertFileWithSpaceAsTheOnlyDelimiter(file);		
-		//String file = "resources/coasts_polygon.txt";
+		//ArrayList<String> list = convertFileWithSpaceAsTheOnlyDelimiter(file);		
 		
-		//ArrayList<String> list = convertFileWithBiggerThanDelimiters(file);
+		//String file = "resources/coasts_polygon.txt";
+		String file = "resources/coasts_polygon.txt";
+		ArrayList<String> list = convertFileWithBiggerThanDelimiters(file);
 
 
 		for(String string : list)
