@@ -63,7 +63,8 @@ public class MapPanel extends JPanel {
 	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
 	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 	    linesOfEdges = new EdgeLine[edgeSet.size()];
-	    setPanelDimensions(new Dimension());
+	    //setPanelDimensions(new Dimension());
+	    System.out.println();
 	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
 
 	    int numberOfEdges = 0;
@@ -190,7 +191,6 @@ public class MapPanel extends JPanel {
 	private void setBorderForPanel(MapPanel mp) {
 		Dimension d = setNewPreferredSize((int)mp.getMapWidth(), (int)getMapHeight());
 		d = mp.setPanelDimensions(new Dimension());
-        d.setSize(d.getWidth()*1.02, d.getHeight()*1.02);
         mp.setMaximumSize(d);
         mp.setBorder(new LineBorder(Color.black));
 
