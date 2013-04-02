@@ -19,6 +19,7 @@ public class FindRelevantNodes {
 
 	//A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
+
 	private static final HashSet<Edge> allEdgesSet = makeEdgeSet();
 
 	/*
@@ -45,12 +46,11 @@ public class FindRelevantNodes {
 
 				VTDNav vnEdge = vgEdge.getNav();
 				AutoPilot apEdge = new AutoPilot(vnEdge);
-				apEdge.enableCaching(false);
-				apEdge.selectXPath("//roadSegmentCollection/roadSegment");							
+				int type = 48;
+				apEdge.selectXPath("//roadSegmentCollection/roadSegment[TYP <= "+type+"]");							
 				int FNODE = 0; int TNODE = 0; 
 				int TYP = 0;   String ROAD = ""; 
 				int POST = 0;
-
 				while((apEdge.evalXPath())!=-1)
 				{
 					vnEdge.toElement(VTDNav.FIRST_CHILD, "FNODE");
@@ -69,6 +69,7 @@ public class FindRelevantNodes {
 
 					vnEdge.toElement(VTDNav.PARENT); 
 				} 
+				apEdge.resetXPath();
 			}
 		}
 		catch (VTDException e){
@@ -89,19 +90,16 @@ public class FindRelevantNodes {
 	{
 		Iterator<Edge> iterator = allEdgesSet.iterator();
 		HashSet<Edge> foundEdgesSet = new HashSet<Edge>();
+		HashSet<Integer> zoomLevel = ZoomLevel.getlevel(area.getPercentageOfEntireMap());
 
 		System.out.println("Size of nodeset parsed to findEdges(): " + nodeIDSet.size());
-		HashSet<Integer> zoomLevel = ZoomLevel.getlevel(area.getPercentageOfEntireMap());
 
 		while(iterator.hasNext())
 		{
-			Edge edge = iterator.next();
-
-			//If the road type of the Edge should be drawn at the current ZoomLevel
-			if(zoomLevel.contains(edge.getRoadType())) { 
+			Edge edge = iterator.next();	
+			if(zoomLevel.contains(edge.getRoadType()))
 				if(nodeIDSet.contains(edge.getFromNode()) || nodeIDSet.contains(edge.getToNode()))
 					foundEdgesSet.add(edge);
-			}
 		}			
 
 		System.out.println("Number of relevant Edges found: " + foundEdgesSet.size());
@@ -112,15 +110,18 @@ public class FindRelevantNodes {
 	private static HashMap<Integer, Double[]> makeNodeCoordinatesMap()
 	{
 		HashMap<Integer, Double[]> map = new HashMap<Integer, Double[]>();
+
 		try {
 			long startTime = System.currentTimeMillis();
 			VTDGen vg =new VTDGen();
-			if (vg.parseFile("XML/kdv_node_unload.xml", false))		{
+			AutoPilot ap = new AutoPilot(); 
+			ap.selectXPath("/nodeCollection/node");
+			if (vg.parseFile("XML/kdv_node_unload.xml", false))
+			{
 				VTDNav vn = vg.getNav();
-				AutoPilot ap = new AutoPilot(vn); 
-				ap.selectXPath("/nodeCollection/node");
-				ap.enableCaching(false);
-				while((ap.evalXPath())!=-1)				{ 
+				ap.bind(vn);
+				while((ap.evalXPath())!=-1)
+				{ 
 					vn.toElement(VTDNav.FIRST_CHILD, "KDV");
 					Integer kdv = vn.parseInt(vn.getText());
 
@@ -134,14 +135,16 @@ public class FindRelevantNodes {
 					map.put(kdv, coords);
 					vn.toElement(VTDNav.PARENT); // move the cursor back
 				} 
+				ap.resetXPath();
 			}
 			long endTime = System.currentTimeMillis();
-			System.out.println("nodeMap creation tager " + (endTime - startTime) + " milliseconds");
+			System.out.println("nodeMap tager " + (endTime - startTime) + " milliseconds");
 		} catch (NavException | XPathEvalException | XPathParseException e) {
 			e.printStackTrace();
 		}
 		return map;
 	}
+
 	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()	{
 		return nodeCoordinatesMap;
 	}

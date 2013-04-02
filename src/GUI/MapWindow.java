@@ -19,7 +19,9 @@ import mapDrawer.AreaToDraw;
 import mapDrawer.CoordinateConverter;
 import mapDrawer.MapComponentAdapter;
 import mapDrawer.MapPanel;
-
+/**
+ * This class holds the window with the map of denmark.
+ */
 public class MapWindow {
 	
 	private static final int WINDOW_ID = 2;
@@ -34,19 +36,32 @@ public class MapWindow {
 		new MapWindow();
 	}
 	
+	/**
+	 * A constructor for making the window with an empty search query
+	 */
 	public MapWindow(){
 		createMapScreen();
 	}
-	
+	/**
+	 * A constructor for making the window with a search query
+	 * @param searchQuery the text for the search query
+	 */
 	public MapWindow(String searchQuery){
 		createMapScreen();
 		toSearchQuery.setText(searchQuery);
 	}
 	
+	/**
+	 * An unique windowID for the window
+	 * @return the window id
+	 */
 	public static final int getWindowId(){
 		return WINDOW_ID;
 	}
 	
+	/**
+	 * Makes the frame and fills it.
+	 */
 	public void createMapScreen(){
 		frame = new JFrame("Team Awesome Maps");
 		frame.setUndecorated(MainGui.undecoratedBoolean);
@@ -70,7 +85,10 @@ public class MapWindow {
 		frame.addComponentListener(mcp);
 		frame.setVisible(true);
 	}
-	
+	/**
+	 * Makes the toolbar for the search input
+	 * @return the toolbar to be inserted later.
+	 */
 	public ColoredJPanel makeToolBar(){
 		ColoredJPanel toolBar = new ColoredJPanel();
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
@@ -107,7 +125,10 @@ public class MapWindow {
 		
 		return flow;
 	}
-	
+	/**
+	 * makes the coordinates panel to display the coordinates
+	 * @return the coordinates panel to be inserted later.
+	 */
 	public ColoredJPanel makeCoordinateJPanel(){
 		ColoredJPanel coordPanel = new ColoredJPanel();
 		coordPanel.setLayout(new GridLayout(2, 2, 5, 3));
@@ -132,11 +153,17 @@ public class MapWindow {
 		return flow;
 	}
 	
+	/**
+	 * Makes the map of denmark. It makes an instance of mappanel
+	 * @param width the width of the map
+	 * @param height the height of the map
+	 */
 	private void createMapOfDenmark(double width, double height) {
 		centerColoredJPanel = new ColoredJPanel();
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
 		
-		MapPanel mapPanel = new MapPanel(frame, centerColoredJPanel, (int)Math.round(width*0.98), (int)Math.round(height*0.98));
+		MapPanel mapPanel = new MapPanel(frame, (int)Math.round(width*0.99), (int)Math.round(height*0.99));
+		mapPanel.setLayout(new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS));
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
@@ -144,15 +171,23 @@ public class MapWindow {
 		centerColoredJPanel.add(mapPanel);		
 		contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
 	}
-	
+	/**
+	 * calculates the height for the map
+	 * @return the calculated height
+	 */
 	private double heightForMap() {
 		return frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
 	}
-	
+	/**
+	 * @return the height of the map
+	 */
 	public double getHeightForMap(){
 		return heightForMap();
 	}
-	
+	/**
+	 * Calculates the width for the map
+	 * @return the calculated width
+	 */
 	private double widthForMap() {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = heightForMap()*areaToDraw.getWidthHeightRelation();
@@ -161,7 +196,11 @@ public class MapWindow {
 		else 
 			return widthForMap(heightForMap()*0.9);
 	}
-	
+	/**
+	 * RECURSSION Ahahahahaha det lige meget
+	 * @param height
+	 * @return
+	 */
 	private double widthForMap(double height) {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = Math.round(height*areaToDraw.getWidthHeightRelation());
@@ -170,11 +209,15 @@ public class MapWindow {
 		else 
 			return widthForMap(height*0.9);
 	}
-	
+	/**
+	 * @return the width for the map
+	 */
 	public double getWidthForMap() {
 		return widthForMap();
 	}
-	
+	/**
+	 * Fills the contentpane with the panels
+	 */
 	public void fillContentPane(){
 		contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
@@ -183,7 +226,9 @@ public class MapWindow {
 		contentPane.add(westColoredJPanel, BorderLayout.WEST);
 		contentPane.add(eastColoredJPanel, BorderLayout.EAST);
 	}
-	
+	/**
+	 * NOT DONE
+	 */
 	public void findRoute(){
 		if(fromSearchQuery.getText().trim().length() != 0 && 
 				toSearchQuery.getText().trim().length() != 0){
@@ -213,17 +258,24 @@ public class MapWindow {
 			JOptionPane.showMessageDialog(frame, "You have to enter an address");
 		}
 	}
-	
+	/**
+	 * @return the center panel witch hold the map
+	 */
 	public ColoredJPanel getCenterColoredJPanel() {
 		return centerColoredJPanel;
 	}
-	
+	/**
+	 * @return the frame
+	 */
 	public JFrame getJFrame() {
 		return frame;
 	}
 	
 	//---------------------------------Listeners from here-----------------------------//
 	
+	/**
+	 * The listener for the coordinates
+	 */
 	class CoordinatesMouseMotionListener extends MouseAdapter{
 		
 		private MapPanel mapPanel;
@@ -234,7 +286,10 @@ public class MapWindow {
 			this.mapPanel = mapPanel;
 		}
 
-		@Override
+		/**
+		 * gets the mouse moved coodinates and converts them
+		 * @Override the mouseMoved method
+		 */
 		public void mouseMoved(MouseEvent e) {
 			if (MainGui.coordinatesBoolean) {
 				mapAreaToDraw = mapPanel.getArea();
@@ -253,7 +308,6 @@ public class MapWindow {
 			}
 		}
 	}
-	
 	class ReverseActionListener implements ActionListener{
 
 		@Override

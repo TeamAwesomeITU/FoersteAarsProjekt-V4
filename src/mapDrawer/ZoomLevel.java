@@ -6,50 +6,48 @@ import java.util.HashSet;
 /*
  * Holds seven different levels of zoom, which indicate which type of roads to draw. 
  * The roadtypes are determined from the percentage of the entire map, which the specified area fills.
- * Returns a String to use in a XPath search through an XML-file.
+ * Returns a String to use in a getRelevantRoadTypes search through an XML-file.
  */
-public enum ZoomLevel {
-	
-	
+public enum ZoomLevel {	
 	
 	ONE(100.0) {
 
 		@Override
-		protected HashSet<Integer> XPath() {
-			Integer[] MaxZoom = new Integer[]{1,2,3,4,21,22,34,24,31,32,33,41,42,80,99};
+		protected HashSet<Integer> relevantRoadTypes() {
+			Integer[] MaxZoom = new Integer[]{1,2,3,4,21,22,34,24,31,32,33,41,42};
 			return new HashSet<Integer>(Arrays.asList(MaxZoom));
 		}} ,
 		
 	TWO(65.0) {
 
 		@Override
-		protected HashSet<Integer> XPath() {	    
-			Integer[] MaxMediumZoom = new Integer[]{1,2,3,4,5,25,35,24,21,22,34,31,32,33,41,42,80,99};
+		protected HashSet<Integer> relevantRoadTypes() {
+			Integer[] MaxMediumZoom = new Integer[]{1,2,3,4,5,25,35,24,21,22,34,31,32,33,41,42};
 			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
 
 				}} ,
 		
 		
-	THREE(20) {
+	THREE(20.0) {
 
 		@Override
-		protected HashSet<Integer> XPath() {
-			Integer[] MinMediumZoom = new Integer[]{1,2,3,4,5,25,11,35,21,22,24,34,31,32,33,41,42,80,99};
-			return new HashSet<Integer>(Arrays.asList(MinMediumZoom));
+		protected HashSet<Integer> relevantRoadTypes() {
+			Integer[] MaxMediumZoom = new Integer[]{1,2,3,5,25,35,21,22,34,31,32,33,41,42};
+			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
 
 				}} ,		
-	FOUR(2) {
+	FOUR(2.0) {
 
 		@Override
-		protected HashSet<Integer> XPath() {
-			Integer[] MinZoom = new Integer[]{1,2,3,4,21,22,34,31,32,33,41,42,5,25,35,6,26,8,10,11,28,80,99};
-			return new HashSet<Integer>(Arrays.asList(MinZoom));
+		protected HashSet<Integer> relevantRoadTypes() {
+			Integer[] MaxMediumZoom = new Integer[]{1,2,3,21,22,34,31,32,33,41,42,5,25,35,6,26,8,11,28};
+			return new HashSet<Integer>(Arrays.asList(MaxMediumZoom));
 
 				}};		
 	
 	private double percentageOfEntireMap;
 	
-	protected abstract HashSet<Integer> XPath();
+	protected abstract HashSet<Integer> relevantRoadTypes();
 	
 	
 	
@@ -60,7 +58,7 @@ public enum ZoomLevel {
 	
 	/*
 	 * 
-	 * @return The XPath String to use to search the XML-file for the wanted road types.
+	 * @return The getRelevantRoadTypes String to use to search the XML-file for the wanted road types.
 	 */
 	public static HashSet<Integer> getlevel(double percentageOfEntireMap)
 	{
@@ -72,11 +70,11 @@ public enum ZoomLevel {
 				foundLevel = zoom;			
 		}
 		
-		return foundLevel.getXPathString();
+		return foundLevel.getRelevantRoadTypes();
 	}
 	
-	private HashSet<Integer> getXPathString()
+	private HashSet<Integer> getRelevantRoadTypes()
 	{
-		return this.XPath();
+		return this.relevantRoadTypes();
 	}	
 }
