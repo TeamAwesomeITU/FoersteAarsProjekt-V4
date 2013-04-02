@@ -1,12 +1,10 @@
 package mapDrawer;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,12 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-
-import GUI.ColoredJPanel;
 
 @SuppressWarnings("serial")
 public class MapPanel extends JPanel {
@@ -30,7 +25,6 @@ public class MapPanel extends JPanel {
 	private EdgeLine[] linesOfEdges; 
 	private JFrame jf;
 	private double height, width;
-	private ColoredJPanel parentColoredJPanel;
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
@@ -39,9 +33,8 @@ public class MapPanel extends JPanel {
 	 * @param width - The width of the panel.
 	 * @param height - The heigth of the panel
 	 */
-	public MapPanel(JFrame jf, ColoredJPanel parentColoredJPanel, double width, double height) {
+	public MapPanel(JFrame jf, double width, double height) {
 		this.jf = jf;
-		this.parentColoredJPanel = parentColoredJPanel;
 		this.height = height;
 		this.width = width;
 		preferredSize = setNewPreferredSize((int)width, (int)height);
@@ -51,19 +44,20 @@ public class MapPanel extends JPanel {
         addMouseListener(rectZoomer);
         addMouseMotionListener(rectZoomer);
 	}
+	
 	/**
 	 * Draws the lines for the map. 
 	 * Saves all the edges and converts the coordinates and saves them in an array.
 	 *  
 	 */
-
 	private void makeLinesForMap() {
 		if(area == null)
 			area = new AreaToDraw();
 	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
 	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 	    linesOfEdges = new EdgeLine[edgeSet.size()];
-	    setPanelDimensions(new Dimension());
+	    //setPanelDimensions(new Dimension());
+	    System.out.println();
 	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
 
 	    int numberOfEdges = 0;
@@ -143,16 +137,24 @@ public class MapPanel extends JPanel {
 	    for (EdgeLine edgeLine : linesOfEdges) {
 	        line.setLine(edgeLine.getStartX(), edgeLine.getStartY(), edgeLine.getEndX(), edgeLine.getEndY());
 	        int roadType = edgeLine.getRoadType();
-
+	        Graphics2D g2 = (Graphics2D)g;
 	        if(roadType == 1 || roadType == 21 || roadType == 31 || roadType == 41 
-	            || roadType == 2 || roadType == 22 || roadType == 32 || roadType == 42) 
-	        	g.setColor(Color.red);
-	        else if(roadType == 3 || roadType == 23 || roadType == 33 || roadType == 4 || roadType == 24 || roadType == 34) 
-	        	g.setColor(Color.blue);
-	        else if(roadType == 8 || roadType == 10 || roadType == 11)
-	        	g.setColor(Color.green);
-	        else 
+	            || roadType == 2 || roadType == 22 || roadType == 32 || roadType == 42) {
+	        	g2.setStroke(new BasicStroke(3));
+	        	g2.setColor(Color.red);
+	        }
+	        else if(roadType == 3 || roadType == 23 || roadType == 33 || roadType == 4 || roadType == 24 || roadType == 34) {
+	        	g2.setStroke(new BasicStroke(1));
+	        	g2.setColor(Color.blue);
+	        }
+	        else if(roadType == 8 || roadType == 10 || roadType == 11) {
+	        	g2.setStroke(new BasicStroke(1));
+	        	g2.setColor(Color.green);
+	        }
+	        else {
+	        	g2.setStroke(new BasicStroke(1));
 	        	g.setColor(Color.black);
+	        }
 	        ((Graphics2D)g).draw(line); 								  									 
 	    }
 	    	    
@@ -161,36 +163,55 @@ public class MapPanel extends JPanel {
 	         return; 
 	      } 
 	      else if (rectZoomer.isDrawing() == true) {
+	    	 g2.setStroke(new BasicStroke(1));
 	         g2.setColor(Color.red);
 	         g2.draw(rectZoomer.getRect());
 	      } 
 	}
-
+	/**
+	 * Sets the area to be used for drawing the map.
+	 */
 	public void setArea(AreaToDraw area) {
 		this.area = area;
 	}
 
+	/**
+	 * Returns the area used for drawing the map.
+	 */
 	public AreaToDraw getArea() {
 		return area;
 	}
 
-
+	/**
+	 * Returns the JFrame which the MapPanel is contained within.
+	 */
 	public JFrame getParentFrame() {
 		return jf;
 	}
 
+	/**
+	 * Sets the width of the MapPanel. Is used when resizing.
+	 * @param width is the width-to-be.
+	 */
 	public void setWidth(double width) {
 		this.width = width;
 	}
 
+	/**
+	 * Sets the height of the MapPanel. Is used when resizing.
+	 * @param height is the height-to-be.
+	 */
 	public void setHeight(double height) {
 		this.height = height;
 	}
 
+	/**
+	 * Creates a border around the MapPanel.
+	 * @param mp is the MapPanel you're drawing a border around.
+	 */
 	private void setBorderForPanel(MapPanel mp) {
 		Dimension d = setNewPreferredSize((int)mp.getMapWidth(), (int)getMapHeight());
 		d = mp.setPanelDimensions(new Dimension());
-        d.setSize(d.getWidth()*1.02, d.getHeight()*1.02);
         mp.setMaximumSize(d);
         mp.setBorder(new LineBorder(Color.black));
 
@@ -230,6 +251,9 @@ public class MapPanel extends JPanel {
 		return d;
 	}
 
+	/**
+	 * Draws the map. Is used when resizing and zooming.
+	 */
 	public void setLinesForMap() {
 		preferredSize = setNewPreferredSize((int)width, (int)height);
 		makeLinesForMap();
@@ -243,17 +267,24 @@ public class MapPanel extends JPanel {
 		return tmpSize;
 	}
 
+	/**
+	 * Returns the dimensions of the MapPanel.
+	 */
 	public Dimension getPreferredSize() {
 	    return preferredSize;
 	}
+	
+	/**
+	 * Returns the width of the map.
+	 */
 	public double getMapWidth() {
 		return width;
 	}
+	
+	/**
+	 * Returns the height of the  map.
+	 */
 	public double getMapHeight() {
 		return height;
-	}
-	
-	public ColoredJPanel getParentColoredJPanel() {
-		return parentColoredJPanel;
 	}
 }
