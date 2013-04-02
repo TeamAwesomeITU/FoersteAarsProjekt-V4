@@ -32,17 +32,21 @@ public class RectZoomer extends MouseAdapter {
     public void mouseDragged(MouseEvent e) {
 
     	if(SwingUtilities.isLeftMouseButton(e)) {
-       drawing = true;
-       startX = Math.min(mousePress.x, e.getPoint().x);
-       startY = Math.min(mousePress.y, e.getPoint().y);
-       endX = Math.abs(mousePress.x - e.getPoint().x);
-       endY = Math.abs(mousePress.y - e.getPoint().y);
-       double rectWidth = Math.abs(endX);
-       double rectHeight = Math.abs((rectWidth*mp.getHeight())/mp.getWidth());
-       rect = new Rectangle((int) startX, (int) startY, (int) rectWidth, (int) rectHeight);
-       endX = startX+rectWidth;
-       endY = startY+rectHeight;
-       mp.repaint();
+	       drawing = true;
+	       startX = Math.min(mousePress.x, e.getPoint().x);
+	       startY = Math.min(mousePress.y, e.getPoint().y);
+	       int tmpX = 0;
+	       if(e.getPoint().x < 0) ;
+	       endX = Math.abs(mousePress.x - e.getPoint().x);
+	       endY = Math.abs(mousePress.y - e.getPoint().y);
+	        if(startY < 0) startY = 0;
+	       if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
+	       double rectWidth = Math.abs(endX);
+	       double rectHeight = Math.abs((rectWidth*mp.getHeight())/mp.getWidth());
+	       rect = new Rectangle((int) startX, (int) startY, (int) rectWidth, (int) rectHeight);
+	       endX = startX+rectWidth;
+	       endY = startY+rectHeight;
+	       mp.repaint();
     }}
 
     public void mouseReleased(MouseEvent e) {
