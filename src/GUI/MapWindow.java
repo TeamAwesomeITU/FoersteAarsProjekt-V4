@@ -136,7 +136,7 @@ public class MapWindow {
 		centerColoredJPanel = new ColoredJPanel();
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
 		
-		MapPanel mapPanel = new MapPanel(frame, (int)Math.round(width*0.98), (int)Math.round(height*0.98));
+		MapPanel mapPanel = new MapPanel(frame, centerColoredJPanel, (int)Math.round(width*0.98), (int)Math.round(height*0.98));
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));

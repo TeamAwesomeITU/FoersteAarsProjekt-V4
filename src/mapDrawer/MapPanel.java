@@ -19,6 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import GUI.ColoredJPanel;
+
 @SuppressWarnings("serial")
 public class MapPanel extends JPanel {
 
@@ -28,32 +30,7 @@ public class MapPanel extends JPanel {
 	private EdgeLine[] linesOfEdges; 
 	private JFrame jf;
 	private double height, width;
-
-	@Deprecated
-	public static void main(String[] args) {        
-	    createJFrame();
-	} 
-
-	@Deprecated
-	private static JFrame createJFrame() {
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
-		JFrame jf = new JFrame();
-	    jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    jf.setSize(screenSize);
-	    jf.setExtendedState(Frame.MAXIMIZED_BOTH);
-	    BoxLayout boxL = new BoxLayout(jf.getContentPane(), BoxLayout.X_AXIS);
-        jf.getContentPane().setLayout(boxL); 
-        MapPanel mp = new MapPanel(jf, Math.round(screenSize.getWidth()*0.90), Math.round(screenSize.getHeight()*0.90));
-        mp.setAlignmentY(0);
-		jf.add(mp, 0);
-		mp.setMinimumSize(screenSize);
-		mp.setMaximumSize(screenSize);
-		System.out.println("Height: "+ mp.getHeight());
-		System.out.println("Width: " + mp.getWidth());
-		jf.pack();
-	    jf.setVisible(true);
-	    return jf;
-	}
+	private ColoredJPanel parentColoredJPanel;
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
@@ -62,12 +39,13 @@ public class MapPanel extends JPanel {
 	 * @param width - The width of the panel.
 	 * @param height - The heigth of the panel
 	 */
-	public MapPanel(JFrame jf, double width, double height) {
+	public MapPanel(JFrame jf, ColoredJPanel parentColoredJPanel, double width, double height) {
 		this.jf = jf;
+		this.parentColoredJPanel = parentColoredJPanel;
 		this.height = height;
 		this.width = width;
-		System.out.println("height: " + height + " width: " + width);
 		preferredSize = setNewPreferredSize((int)width, (int)height);
+		//parentColoredJPanel.setPreferredSize(setNewPreferredSize((int) width, (int) height));
 		rectZoomer = new RectZoomer(this);
 	    makeLinesForMap();
         setBorderForPanel(this);
@@ -274,5 +252,9 @@ public class MapPanel extends JPanel {
 	}
 	public double getMapHeight() {
 		return height;
+	}
+	
+	public ColoredJPanel getParentColoredJPanel() {
+		return parentColoredJPanel;
 	}
 }
