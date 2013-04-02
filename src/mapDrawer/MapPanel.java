@@ -45,7 +45,6 @@ public class MapPanel extends JPanel {
 		this.height = height;
 		this.width = width;
 		preferredSize = setNewPreferredSize((int)width, (int)height);
-		//parentColoredJPanel.setPreferredSize(setNewPreferredSize((int) width, (int) height));
 		rectZoomer = new RectZoomer(this);
 	    makeLinesForMap();
         setBorderForPanel(this);

@@ -48,24 +48,19 @@ public class MapComponentAdapter extends ComponentAdapter {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			//if(counter != 0) {
 				if(isResizing == true) {
 					double newWidth = mw.getWidthForMap()*0.98;
 					mp.setWidth(Math.round(newWidth)); 
 					double newHeight = (newWidth*mp.getArea().getHeight())/mp.getArea().getWidth();
 					mp.setHeight(Math.round(newHeight));
-					ColoredJPanel cjp = mp.getParentColoredJPanel();
-					cjp.setSize((int)newWidth, (int)newHeight);
+					//ColoredJPanel cjp = mp.getParentColoredJPanel();
+					//cjp.setSize((int)newWidth, (int)newHeight);
 					//mp.setNewPreferredSize(mp.getMapWidth(), mp.getMapHeight());
 					mp.setLinesForMap();
 					mp.repaint();
 					//jf.setSize((int)(jf.getWidth()*0.9), (int)(jf.getHeight()*0.9));
 					isResizing = false;
-					//counter = 0;
-				//}
 			}
-			//else
-				//counter = 1;
 		}
 		
 	}

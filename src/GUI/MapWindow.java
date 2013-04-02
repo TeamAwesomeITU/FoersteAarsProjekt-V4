@@ -135,7 +135,6 @@ public class MapWindow {
 	private void createMapOfDenmark(double width, double height) {
 		centerColoredJPanel = new ColoredJPanel();
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
-		
 		MapPanel mapPanel = new MapPanel(frame, centerColoredJPanel, (int)Math.round(width*0.98), (int)Math.round(height*0.98));
 		//mapPanel.setLayout(new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS));
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
