@@ -21,7 +21,7 @@ public class RunConverter {
 
 		while((line = reader.readLine()) != null)
 		{
-			line = line.trim();
+			line = line.trim();			
 			String[] lineParts = line.split("\\s+");
 			LatLng latLngCoords = new LatLng(Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[0]));
 
@@ -30,7 +30,7 @@ public class RunConverter {
 
 			if(UTMCoords.getEasting() > AreaToDraw.getSmallestXOfEntireMap() && UTMCoords.getEasting() < AreaToDraw.getLargestXOfEntireMap() && 
 					UTMCoords.getNorthing() > AreaToDraw.getSmallestYOfEntireMap() && UTMCoords.getNorthing() < AreaToDraw.getLargestYOfEntireMap())
-				list.add(UTMCoords.getEasting() + " " + UTMCoords.getNorthing()); //arr[lineNumber++] = lineX + " " + lineY;
+				list.add(UTMCoords.getEasting() + " " + UTMCoords.getNorthing()); 
 		}
 
 		reader.close();
@@ -73,13 +73,13 @@ public class RunConverter {
 
 	public static void main(String[] args) throws NumberFormatException, IOException
 	{
-
+		String file = "resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz";
 		//String file = "resources/denmark_coastline_fullres_shore.xyz";
 		//String file = "resources/osm_modified.txt";
-		//ArrayList<String> list = convertFileWithSpaceAsTheOnlyDelimiter(file);
-
-		String file = "resources/coasts_polygon.txt";
-		ArrayList<String> list = convertFileWithBiggerThanDelimiters(file);
+		ArrayList<String> list = convertFileWithSpaceAsTheOnlyDelimiter(file);		
+		//String file = "resources/coasts_polygon.txt";
+		
+		//ArrayList<String> list = convertFileWithBiggerThanDelimiters(file);
 
 
 		for(String string : list)

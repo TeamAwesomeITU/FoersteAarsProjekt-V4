@@ -9,10 +9,10 @@ import mapDrawer.exceptions.AreaNegativeSizeException;
 public class AreaToDraw {
 
 	//The corner coordinates of the entire map
-	private final static double entireMapSmallestX = 442254.35659;
-	private final static double entireMapLargestX = 892658.21706;
-	private final static double entireMapSmallestY = 6049914.43018;
-	private final static double entireMapLargestY = 6402050.98297;
+	private final static double entireMapSmallestX = 438000; // 442254.35659;
+	private final static double entireMapLargestX = 905000; // 892658.21706;
+	private final static double entireMapSmallestY = 6047000; // 6049914.43018;
+	private final static double entireMapLargestY = 6408000; // 6402050.98297;
 
 	//The x-coordinate of the most western coordinate
 	private final double smallestX;

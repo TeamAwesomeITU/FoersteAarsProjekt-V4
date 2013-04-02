@@ -75,8 +75,9 @@ public class MapPanel extends JPanel {
 	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
 
-	    String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
+	    //String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
 	    //String file = ("resources/osm_modified.txt_convertedJCOORD.txt");
+	    String file = ("resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz_convertedJCOORD.txt");
 
 	    ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
 
