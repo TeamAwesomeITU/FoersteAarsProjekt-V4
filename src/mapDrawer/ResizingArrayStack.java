@@ -2,8 +2,6 @@ package mapDrawer;
 
 /**
  * Stack that contains the different zooms.
- * 
- * @author Kasper Stig Henningsen
  * @param <Item> Takes an item for the stack.
  */
 public class ResizingArrayStack<Item>

@@ -4,15 +4,15 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DecimalFormat;
-
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.AreaNegativeSizeException;
 import mapDrawer.exceptions.InvalidAreaProportionsException;
 
+/**
+ * The rectangle that is used to zoom. 
+ */
 public class RectZoomer extends MouseAdapter {
 	private boolean drawing = false;
 	private Point mousePress = null; 
@@ -21,15 +21,27 @@ public class RectZoomer extends MouseAdapter {
 	private MapPanel mp = null;
 	private ResizingArrayStack<AreaToDraw> ras; 
 	
+	/**
+	 * Initializes the RectZoomer.
+	 * @param mp The MapPanel for the RectZoomer.
+	 */
 	public RectZoomer(MapPanel mp) {
 		this.mp = mp;
 		ras = new ResizingArrayStack<AreaToDraw>();
 		}
 	
+	/**
+	 * Registers when mouse is pressed.
+	 * @param e The cursors point when the mouse is pressed.
+	 */
     public void mousePressed(MouseEvent e) {
     			mousePress = e.getPoint();
     }
 
+    /**
+     * Registers when the mouse is dragged and draws the rectangle. 
+     * @param e Which mousebutton is used.
+     */
     public void mouseDragged(MouseEvent e) {
 
     	if(SwingUtilities.isLeftMouseButton(e)) {
@@ -48,6 +60,10 @@ public class RectZoomer extends MouseAdapter {
 	       mp.repaint();
     }}
 
+    /**
+     * Registers if the mouse is released and then draws the new area.
+     * @param e When the mouse is released.
+     */
     public void mouseReleased(MouseEvent e) {
     	//Zoom in on shizz.
     	if(SwingUtilities.isRightMouseButton(e)) { 	
@@ -88,13 +104,25 @@ public class RectZoomer extends MouseAdapter {
     	}
     }
     
+    /**
+     * Gets the rectangle.
+     * @return The current rectangle.
+     */
     public Rectangle getRect() {
     	return rect;
     }
+    
+    /**
+     * Whether or not the user is drawing.
+     * @return Is it drawing or not.
+     */
     public boolean isDrawing() {
     	return drawing;
     }
     
+    /**
+     * Zooms out the picture to the last zoom.
+     */
 	public void zoomOut()
 	{
 		AreaToDraw area = ras.pop();
