@@ -3,11 +3,8 @@ package mapDrawer;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
-import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,12 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-
-import GUI.ColoredJPanel;
 
 @SuppressWarnings("serial")
 public class MapPanel extends JPanel {
@@ -31,7 +25,6 @@ public class MapPanel extends JPanel {
 	private EdgeLine[] linesOfEdges; 
 	private JFrame jf;
 	private double height, width;
-	private ColoredJPanel parentColoredJPanel;
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
@@ -40,9 +33,8 @@ public class MapPanel extends JPanel {
 	 * @param width - The width of the panel.
 	 * @param height - The heigth of the panel
 	 */
-	public MapPanel(JFrame jf, ColoredJPanel parentColoredJPanel, double width, double height) {
+	public MapPanel(JFrame jf, double width, double height) {
 		this.jf = jf;
-		this.parentColoredJPanel = parentColoredJPanel;
 		this.height = height;
 		this.width = width;
 		preferredSize = setNewPreferredSize((int)width, (int)height);
@@ -52,12 +44,12 @@ public class MapPanel extends JPanel {
         addMouseListener(rectZoomer);
         addMouseMotionListener(rectZoomer);
 	}
+	
 	/**
 	 * Draws the lines for the map. 
 	 * Saves all the edges and converts the coordinates and saves them in an array.
 	 *  
 	 */
-
 	private void makeLinesForMap() {
 		if(area == null)
 			area = new AreaToDraw();
@@ -175,28 +167,47 @@ public class MapPanel extends JPanel {
 	         g2.draw(rectZoomer.getRect());
 	      } 
 	}
-
+	/**
+	 * Sets the area to be used for drawing the map.
+	 */
 	public void setArea(AreaToDraw area) {
 		this.area = area;
 	}
 
+	/**
+	 * Returns the area used for drawing the map.
+	 */
 	public AreaToDraw getArea() {
 		return area;
 	}
 
-
+	/**
+	 * Returns the JFrame which the MapPanel is contained within.
+	 */
 	public JFrame getParentFrame() {
 		return jf;
 	}
 
+	/**
+	 * Sets the width of the MapPanel. Is used when resizing.
+	 * @param width is the width-to-be.
+	 */
 	public void setWidth(double width) {
 		this.width = width;
 	}
 
+	/**
+	 * Sets the height of the MapPanel. Is used when resizing.
+	 * @param height is the height-to-be.
+	 */
 	public void setHeight(double height) {
 		this.height = height;
 	}
 
+	/**
+	 * Creates a border around the MapPanel.
+	 * @param mp is the MapPanel you're drawing a border around.
+	 */
 	private void setBorderForPanel(MapPanel mp) {
 		Dimension d = setNewPreferredSize((int)mp.getMapWidth(), (int)getMapHeight());
 		d = mp.setPanelDimensions(new Dimension());
@@ -239,6 +250,9 @@ public class MapPanel extends JPanel {
 		return d;
 	}
 
+	/**
+	 * Draws the map. Is used when resizing and zooming.
+	 */
 	public void setLinesForMap() {
 		preferredSize = setNewPreferredSize((int)width, (int)height);
 		makeLinesForMap();
@@ -252,17 +266,24 @@ public class MapPanel extends JPanel {
 		return tmpSize;
 	}
 
+	/**
+	 * Returns the dimensions of the MapPanel.
+	 */
 	public Dimension getPreferredSize() {
 	    return preferredSize;
 	}
+	
+	/**
+	 * Returns the width of the map.
+	 */
 	public double getMapWidth() {
 		return width;
 	}
+	
+	/**
+	 * Returns the height of the  map.
+	 */
 	public double getMapHeight() {
 		return height;
-	}
-	
-	public ColoredJPanel getParentColoredJPanel() {
-		return parentColoredJPanel;
 	}
 }
