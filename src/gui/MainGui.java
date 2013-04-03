@@ -58,11 +58,12 @@ public class MainGui {
 
 		JMenuBar menuBar = new JMenuBar();
 		frameForMenu.setJMenuBar(menuBar);
-		menuBar.setBackground(ColorTheme.BACKGROUND_COLOR);
+		menuBar.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
 		menuBar.setBorder(BorderFactory.createEtchedBorder());
 
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem quitItem = new JMenuItem("Quit");
+		quitItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
 		quitItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				frameForMenu.dispose();			
@@ -71,6 +72,7 @@ public class MainGui {
 		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, SHORT_CUT_MASK));
 
 		JMenuItem settingsItem = new JMenuItem("Settings");
+		settingsItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
 		settingsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				final JFrame settingsFrame = new JFrame("Settings");
@@ -118,9 +120,36 @@ public class MainGui {
 							coordinatesBoolean = true;
 					}
 				});
+				
+				String[] themes = {"Summer", "Winter", "Spring", "Autumn"};
+				
+				JComboBox<String> colorThemesBox = new JComboBox<>(themes);
+				if(ColorTheme.autumnTheme) colorThemesBox.setSelectedIndex(3);
+				else if(ColorTheme.springTheme) colorThemesBox.setSelectedIndex(2);
+				else if(ColorTheme.winterTheme) colorThemesBox.setSelectedIndex(1);
+				else if(ColorTheme.summerTheme) colorThemesBox.setSelectedIndex(0);
+				colorThemesBox.addActionListener(new ActionListener() {
+					@SuppressWarnings({ "rawtypes" })
+					public void actionPerformed(ActionEvent e) {
+						JComboBox cb = (JComboBox)e.getSource();
+						String selectedTheme = (String)cb.getSelectedItem();
+						if(selectedTheme.equals("Summer")) ColorTheme.setSummerTheme();
+						if(selectedTheme.equals("Winter")) ColorTheme.setWinterTheme();
+						if(selectedTheme.equals("Spring")) ColorTheme.setSpringTheme();
+						if(selectedTheme.equals("Autumn")) ColorTheme.setAutumnTheme();
+						frameForMenu.dispose();
+						if(windowID == StartupWindow.getWindowId())
+							new StartupWindow();
+						if(windowID == MapWindow.getWindowId())
+							new MapWindow();
+						settingsFrame.dispose();
+					}
+				});
+				
 
 				container.add(settingsPanel, BorderLayout.CENTER);
-
+				container.add(colorThemesBox, BorderLayout.SOUTH);
+				
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);
 				settingsFrame.pack();
@@ -133,6 +162,7 @@ public class MainGui {
 
 		JMenu helpMenu = new JMenu("Help");
 		JMenuItem aboutItem = new JMenuItem("About");
+		aboutItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);;
 		aboutItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(frameForMenu, "Welcome to T-A-M maps. Please enter an address" +
@@ -152,6 +182,7 @@ public class MainGui {
 	 */
 	public static ColoredJPanel makeFooter(){
 		ColoredJPanel footer = new ColoredJPanel();
+		footer.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
 		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4");
 		footer.add(footerText);
 		return footer;

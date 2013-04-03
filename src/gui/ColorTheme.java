@@ -3,21 +3,21 @@ package gui;
 import java.awt.Color;
 
 public class ColorTheme {
-	public static Color DARK_COLOR = new Color(153, 101, 21);
+	public static Color DARK_COLOR = new Color(210,180,140);
 
-	public static  Color BACKGROUND_COLOR = new Color(212, 175, 55);
+	public static  Color BACKGROUND_COLOR = new Color(240, 230, 140);
 
-	public static  Color BUTTON_CLICKED_COLOR = new Color(230, 190, 138);
+	public static  Color BUTTON_CLICKED_COLOR = new Color(189, 183, 107);
 	
-	public static  Color TEXT_COLOR = new Color(0, 0, 0);
+	public static  Color TEXT_COLOR = new Color(139, 69, 19);
 	
-	public static boolean summerTheme = true;
+	public static boolean summerTheme = false;
 
 	public static boolean winterTheme = false;
 	
 	public static boolean springTheme = false;
 	
-	public static boolean autumnTheme = false;
+	public static boolean autumnTheme = true;
 	
 	
 	public ColorTheme(){
@@ -50,7 +50,7 @@ public class ColorTheme {
 		setTheme();
 	}
 	
-	public static void setautumnTheme(){
+	public static void setAutumnTheme(){
 		autumnTheme = true;
 		
 		summerTheme = false;
@@ -61,32 +61,32 @@ public class ColorTheme {
 	
 	public static void setTheme(){
 		if(summerTheme){
-			Color darkRed = new Color(139, 0, 0);
-			Color tomato = new Color(255, 99, 91);
-			Color lightSalmon = new Color(255, 160, 122);
-			Color maroon = new Color(128, 0, 0);
-			setColors(darkRed, tomato, lightSalmon, maroon);
+			Color orangeRed = new Color(255,69,0);
+			Color orange = new Color(255,208,36);
+			Color darkOrange = new Color(255,140,0);
+			Color white = new Color(255,255,255);
+			setColors(orangeRed, orange, darkOrange, white);
 		}
-		if(winterTheme){
-			Color darkBlue = new Color(0, 0, 139);
+		else if(winterTheme){
+			Color steelBlue = new Color(70,130,180);
 			Color cornflowerBlue = new Color(100, 149, 237);
-			Color lightBlue = new Color(173, 216, 230);
-			Color skyBlue = new Color(135, 206, 235);
-			setColors(darkBlue, cornflowerBlue, lightBlue, skyBlue);
+			Color royalBlue = new Color(65,105,225);
+			Color white = new Color(255, 255, 255);
+			setColors(steelBlue, cornflowerBlue, royalBlue, white);
 		}
-		if(springTheme){
-			Color darkGreen = new Color(0, 100, 0);
-			Color lawnGreen = new Color(124, 252, 0);
+		else if(springTheme){
+			Color forestGreen = new Color(34,139,34);
+			Color chosenGreen = new Color(73, 216, 111);
 			Color lightGreen = new Color(144, 238, 144);
 			Color white = new Color(255, 255, 255);
-			setColors(darkGreen, lawnGreen, lightGreen, white);
+			setColors(forestGreen, chosenGreen, lightGreen, white);
 		}
-		if(autumnTheme){
-			Color goldenBrown = new Color(153, 101, 21);
-			Color metallicGold = new Color(212, 175, 55);
-			Color paleGold = new Color(230, 190, 138);
-			Color black = new Color(0, 0, 0);
-			setColors(goldenBrown, metallicGold, paleGold, black);
+		else if(autumnTheme){
+			Color tan = new Color(210,180,140);
+			Color khaki = new Color(240, 230, 140);
+			Color paleGoldenRod = new Color(189, 183, 107);
+			Color saddleBrown = new Color(139, 69, 19);
+			setColors(tan, khaki, paleGoldenRod, saddleBrown);
 		}
 	}
 	
