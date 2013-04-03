@@ -1,5 +1,5 @@
 eclipse.preferences.version=1
-encoding//src/InputHandler/AdressParser.java=ISO-8859-1
-encoding//src/InputHandler/Main.java=UTF-8
-encoding//src/InputHandler/test/AdressParserExistingAdressTester.java=ISO-8859-1
+encoding//src/inputHandler/AdressParser.java=ISO-8859-1
+encoding//src/inputHandler/Main.java=UTF-8
+encoding//src/inputHandler/test/AdressParserExistingAdressTester.java=ISO-8859-1
 encoding/road_names.txt=ISO-8859-1

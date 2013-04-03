@@ -1,9 +1,10 @@
-package Workshop.test;
+package workshop.test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import Workshop.Date;
+
+import workshop.Date;
 
 
 public class DateTester {

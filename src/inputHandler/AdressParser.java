@@ -1,11 +1,12 @@
-package InputHandler;
+package inputHandler;
+
+import inputHandler.exceptions.MalformedAdressException;
 
 import java.io.*;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import InputHandler.exceptions.MalformedAdressException;
 
 
 public class AdressParser {

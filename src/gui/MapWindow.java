@@ -1,4 +1,7 @@
-package GUI;
+package gui;
+
+import inputHandler.AdressParser;
+import inputHandler.exceptions.MalformedAdressException;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,8 +15,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
-import InputHandler.AdressParser;
-import InputHandler.exceptions.MalformedAdressException;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.CoordinateConverter;
