@@ -75,8 +75,9 @@ public class MapPanel extends JPanel {
 	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 	    }
 
-	    String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
+	    //String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
 	    //String file = ("resources/osm_modified.txt_convertedJCOORD.txt");
+	    String file = ("resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz_convertedJCOORD.txt");
 
 	    ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
 
@@ -100,7 +101,7 @@ public class MapPanel extends JPanel {
 
 				//If the points are not unreasonably far away from each other, then make a new line
 				if(distanceBetweenPoints < 7000)
-					list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 1));
+					list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 6));
 
 				line2 = line1;
 				line1 = reader.readLine();

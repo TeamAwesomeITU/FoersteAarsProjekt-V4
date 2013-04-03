@@ -21,16 +21,16 @@ public class RunConverter {
 
 		while((line = reader.readLine()) != null)
 		{
-			line = line.trim();
+			line = line.trim();			
 			String[] lineParts = line.split("\\s+");
 			LatLng latLngCoords = new LatLng(Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[0]));
 
 			UTMRef UTMCoords = latLngCoords.toUTMRef();
 
-
+			//If the coords are within the wanted map of Denmark
 			if(UTMCoords.getEasting() > AreaToDraw.getSmallestXOfEntireMap() && UTMCoords.getEasting() < AreaToDraw.getLargestXOfEntireMap() && 
 					UTMCoords.getNorthing() > AreaToDraw.getSmallestYOfEntireMap() && UTMCoords.getNorthing() < AreaToDraw.getLargestYOfEntireMap())
-				list.add(UTMCoords.getEasting() + " " + UTMCoords.getNorthing()); //arr[lineNumber++] = lineX + " " + lineY;
+				list.add(UTMCoords.getEasting() + " " + UTMCoords.getNorthing()); 
 		}
 
 		reader.close();
@@ -45,24 +45,36 @@ public class RunConverter {
 		String line = "";
 		ArrayList<String> list = new ArrayList<String>();
 
+		String previousLineAdded = "";
+
 		while((line = reader.readLine()) != null)
 		{
 			line = line.trim();
 			String[] lineParts = line.split("\\s+");
-			
+			System.out.println(line);			
+
+
 			//If there is more than one substring in the line
-			if(lineParts.length > 1)
+			if(!line.contains(">"))
 			{
 				LatLng latLngCoords = new LatLng(Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[0]));
 
 				UTMRef UTMCoords = latLngCoords.toUTMRef();
 
-			if(UTMCoords.getEasting() > AreaToDraw.getSmallestXOfEntireMap() && UTMCoords.getEasting() < AreaToDraw.getLargestXOfEntireMap() && 
-					UTMCoords.getNorthing() > AreaToDraw.getSmallestYOfEntireMap() && UTMCoords.getNorthing() < AreaToDraw.getLargestYOfEntireMap())
-				list.add(UTMCoords.getEasting() + " " + UTMCoords.getNorthing()); //arr[lineNumber++] = lineX + " " + lineY;
+				//If the coords are within the wanted map of Denmark
+				if(UTMCoords.getEasting() > AreaToDraw.getSmallestXOfEntireMap() && UTMCoords.getEasting() < AreaToDraw.getLargestXOfEntireMap() && 
+						UTMCoords.getNorthing() > AreaToDraw.getSmallestYOfEntireMap() && UTMCoords.getNorthing() < AreaToDraw.getLargestYOfEntireMap())
+				{
+					list.add(UTMCoords.getEasting() + " " + UTMCoords.getNorthing()); //arr[lineNumber++] = lineX + " " + lineY;
+					previousLineAdded = line;
+				}
 			}
 			else {
-				list.add(line);
+				if(!previousLineAdded.contains(">"))
+					{
+						list.add(line);
+						previousLineAdded = line;
+					}
 			}
 		}
 
@@ -73,12 +85,13 @@ public class RunConverter {
 
 	public static void main(String[] args) throws NumberFormatException, IOException
 	{
-
+		//String file = "resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz";
 		//String file = "resources/denmark_coastline_fullres_shore.xyz";
 		//String file = "resources/osm_modified.txt";
-		//ArrayList<String> list = convertFileWithSpaceAsTheOnlyDelimiter(file);
+		//ArrayList<String> list = convertFileWithSpaceAsTheOnlyDelimiter(file);		
 
-		String file = "resources/coasts_polygon.txt";
+		//String file = "resources/coasts_polygon.txt";
+		String file = "resources/coast_polygon_orig.dat";
 		ArrayList<String> list = convertFileWithBiggerThanDelimiters(file);
 
 

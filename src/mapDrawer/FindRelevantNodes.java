@@ -46,8 +46,7 @@ public class FindRelevantNodes {
 
 				VTDNav vnEdge = vgEdge.getNav();
 				AutoPilot apEdge = new AutoPilot(vnEdge);
-				int type = 48;
-				apEdge.selectXPath("//roadSegmentCollection/roadSegment[TYP <= "+type+"]");							
+				apEdge.selectXPath("//roadSegmentCollection/roadSegment");							
 				int FNODE = 0; int TNODE = 0; 
 				int TYP = 0;   String ROAD = ""; 
 				int POST = 0;
@@ -90,6 +89,7 @@ public class FindRelevantNodes {
 	{
 		Iterator<Edge> iterator = allEdgesSet.iterator();
 		HashSet<Edge> foundEdgesSet = new HashSet<Edge>();
+		
 		HashSet<Integer> zoomLevel = ZoomLevel.getlevel(area.getPercentageOfEntireMap());
 
 		System.out.println("Size of nodeset parsed to findEdges(): " + nodeIDSet.size());
