@@ -16,7 +16,7 @@ public enum ZoomLevel {
 			return new HashSet<Integer>(RoadType.getRoadTypesRelevantToZoomLevel(1));
 		}} ,
 		
-	TWO(65.0) {
+	TWO(80.0) {
 
 		@Override
 		protected HashSet<Integer> relevantRoadTypes() {
@@ -25,7 +25,7 @@ public enum ZoomLevel {
 				}} ,
 		
 		
-	THREE(20.0) {
+	THREE(40.0) {
 
 		@Override
 		protected HashSet<Integer> relevantRoadTypes() {
