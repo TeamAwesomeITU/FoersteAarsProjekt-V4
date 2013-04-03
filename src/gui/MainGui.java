@@ -6,7 +6,6 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.FindRelevantEdges;
 import mapDrawer.dataSupplying.QuadTree;
 /**
