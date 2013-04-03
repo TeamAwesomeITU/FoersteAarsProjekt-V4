@@ -2,6 +2,7 @@ package inputHandler.test;
 
 import static org.junit.Assert.assertEquals;
 
+
 import inputHandler.AdressParser;
 import inputHandler.exceptions.MalformedAdressException;
 

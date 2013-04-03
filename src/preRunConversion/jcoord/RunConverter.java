@@ -12,6 +12,7 @@ import mapDrawer.AreaToDraw;
 
 public class RunConverter {
 
+	@SuppressWarnings("unused")
 	private static ArrayList<String> convertFileWithSpaceAsTheOnlyDelimiter(String filenameAndLocation) throws NumberFormatException, IOException
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(filenameAndLocation));

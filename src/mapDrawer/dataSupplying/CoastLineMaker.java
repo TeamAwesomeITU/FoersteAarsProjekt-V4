@@ -1,4 +1,4 @@
-package mapDrawer;
+package mapDrawer.dataSupplying;
 
 import java.awt.geom.GeneralPath;
 import java.io.BufferedReader;
@@ -7,8 +7,9 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+import mapDrawer.AreaToDraw;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
-import mapDrawer.exceptions.AreaNegativeSizeException;
+import mapDrawer.exceptions.NegativeAreaSizeException;
 
 /*
  * Creates polygons to draw the coastline of Denmark
@@ -112,6 +113,7 @@ public class CoastLineMaker {
 					//If it is time to make a new polygon
 					if(line.equals(">") && !singlePolygonCoords.isEmpty())
 					{
+						@SuppressWarnings("unchecked")
 						LinkedList<double[]> polygonCoordsToSave = (LinkedList<double[]>) singlePolygonCoords.clone();
 						setOfPolygons.add(new Polygon(polygonCoordsToSave));
 						singlePolygonCoords.clear();
@@ -177,7 +179,7 @@ public class CoastLineMaker {
 
 			try {
 				return new AreaToDraw(xMin, xMax, yMin, yMax);
-			} catch (AreaNegativeSizeException | AreaIsNotWithinDenmarkException e) {
+			} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException e) {
 				e.printStackTrace();		
 				return null;
 			}	

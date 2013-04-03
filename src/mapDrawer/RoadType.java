@@ -18,7 +18,7 @@ public enum RoadType {
 
 		@Override
 		protected Color color() {
-			return Color.red;
+			return Color.red.darker();
 		}
 
 		@Override
@@ -32,7 +32,7 @@ public enum RoadType {
 
 		@Override
 		protected Color color() {
-			return Color.blue;
+			return Color.blue.darker();
 		}
 
 		@Override
@@ -41,20 +41,7 @@ public enum RoadType {
 		}
 	} ,
 
-	SECONDARYWAY(3) {
-
-		@Override
-		protected Color color() {
-			return Color.green;
-		}
-
-		@Override
-		protected float stroke() {			
-			return 1;
-		}
-	} ,
-
-	OTHER(4) {
+	OTHER(3) {
 
 		@Override
 		protected Color color() {
@@ -67,7 +54,33 @@ public enum RoadType {
 		}
 	} ,
 
-	FERRY(5) {
+	PATHS(4) {
+
+		@Override
+		protected Color color() {
+			return Color.black;
+		}
+
+		@Override
+		protected float stroke() {			
+			return 1;
+		}
+	} ,
+	
+	OTHERROADS(5) {
+
+		@Override
+		protected Color color() {
+			return Color.green.darker();
+		}
+
+		@Override
+		protected float stroke() {			
+			return 1;
+		}
+	} ,
+
+	FERRY(6) {
 
 		@Override
 		protected Color color() {
@@ -80,20 +93,18 @@ public enum RoadType {
 		}
 	} ,
 
-	COASTLINE(6) {
+	COASTLINE(7) {
 
 		@Override
 		protected Color color() {
-			return Color.pink;
+			return Color.gray;
 		}
 
 		@Override
 		protected float stroke() {			
-			return 3;
+			return 1;
 		}
 	} ;
-
-
 
 	protected abstract Color color();
 
@@ -101,9 +112,10 @@ public enum RoadType {
 	
 	private static final HashSet<Integer> category1 = makeCategories(new Integer[]{1,2,21,22,31,32,41,42}); 
 	private static final HashSet<Integer> category2 = makeCategories(new Integer[]{3,4,23,24,33,34,43,44}); 
-	private static final HashSet<Integer> category3 = makeCategories(new Integer[]{8,10,11,28}); 
-	private static final HashSet<Integer> category4 = makeCategories(new Integer[]{0,5,6,13,25,26,35,45,46,95,99}); 
-	private static final HashSet<Integer> category5 = makeCategories(new Integer[]{80}); 
+	private static final HashSet<Integer> category3 = makeCategories(new Integer[]{0,5,13,25,35,45,46,95,99}); 
+	private static final HashSet<Integer> category4 = makeCategories(new Integer[]{6,26,46}); 
+	private static final HashSet<Integer> category5 = makeCategories(new Integer[]{8,10,11,28}); 
+	private static final HashSet<Integer> category6 = makeCategories(new Integer[]{80}); 
 	
 
 	private RoadType(int category)
@@ -127,17 +139,18 @@ public enum RoadType {
 		return new HashSet<Integer>(Arrays.asList(categoryArr));
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static HashSet<Integer> getRoadTypesRelevantToZoomLevel(int numberOfWantedCategories)
 	{
 		//WHAT THE FUCK - MIND.EQUALS(BLOWN) == TRUE
 		HashSet<Integer> relevantRoadTypeSet = new HashSet<>();
 		System.out.println("Before everything something: " + relevantRoadTypeSet.size());
-		relevantRoadTypeSet = (HashSet<Integer>) category5.clone();
+		relevantRoadTypeSet = (HashSet<Integer>) category6.clone();
 		System.out.println("Before something: " + relevantRoadTypeSet.size());
 		
 		System.out.print("Draw categories: ");
 		switch (numberOfWantedCategories) {
-		case 4: relevantRoadTypeSet.addAll(category4); System.out.print("4, ");
+		case 4: relevantRoadTypeSet.addAll(category4); relevantRoadTypeSet.addAll(category5); System.out.print("4, ");
 		case 3: relevantRoadTypeSet.addAll(category3); System.out.print("3, ");
 		case 2: relevantRoadTypeSet.addAll(category2); System.out.print("2, ");
 		case 1: relevantRoadTypeSet.addAll(category1); relevantRoadTypeSet.addAll(category2); System.out.println("1");
@@ -155,10 +168,10 @@ public enum RoadType {
 		if(category3.contains(roadType)) return 3;
 		if(category4.contains(roadType)) return 4;
 		if(category5.contains(roadType)) return 5;
-		
+		if(category6.contains(roadType)) return 6;
 		//If coastline or mistake
 		else
-			return 6;
+			return 7;
 	}
 
 	public static void main(String[] args)

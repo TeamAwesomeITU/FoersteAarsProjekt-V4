@@ -1,4 +1,4 @@
-package mapDrawer;
+package mapDrawer.drawing;
 
 public class Edge {
 	

@@ -1,4 +1,4 @@
-package mapDrawer;
+package mapDrawer.drawing;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -6,8 +6,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
+import mapDrawer.AreaToDraw;
+import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
-import mapDrawer.exceptions.AreaNegativeSizeException;
+import mapDrawer.exceptions.NegativeAreaSizeException;
 import mapDrawer.exceptions.InvalidAreaProportionsException;
 
 /**
@@ -53,7 +56,7 @@ public class RectZoomer extends MouseAdapter {
 			if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
 
 			double rectWidth = Math.abs(endX);
-			double rectHeight = Math.abs((rectWidth*mp.getHeight())/mp.getWidth());    
+			double rectHeight = Math.abs((rectWidth*AreaToDraw.getHeightOfEntireMap())/AreaToDraw.getWidthOfEntireMap());    
 
 			startX = Math.min(mousePress.x, e.getPoint().x);
 			
@@ -84,13 +87,14 @@ public class RectZoomer extends MouseAdapter {
 		else if(SwingUtilities.isLeftMouseButton(e)) {
 			AreaToDraw area = mp.getArea();
 			ras.push(area);
-			CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getPreferredSize().getWidth(), (int)mp.getPreferredSize().getHeight(), area);
+			CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getMapWidth(), (int)mp.getMapHeight(), area);
 			if(startX < 0) startX = 0; if(startY < 0) startY = 0;
 			if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
 			double startXCoord = coordConverter.pixelToUTMCoordX((int) startX);
 			double startYCoord = coordConverter.pixelToUTMCoordY((int) endY);
 			double endXCoord = coordConverter.pixelToUTMCoordX((int) endX);
 			double endYCoord = coordConverter.pixelToUTMCoordY((int) startY);
+			System.out.println("startX: " +startXCoord + " startY: " +startYCoord+ " endX: " +endXCoord+ "endY: " +endYCoord);
 			try {
 				rect = null;    		
 				double newAreaProportions = Math.round((((endX-startX)/(endY-startY))*100.0))/100.0;
@@ -106,7 +110,7 @@ public class RectZoomer extends MouseAdapter {
 					mp.repaint();
 				}
 			} 
-			catch (AreaNegativeSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
+			catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
 				JOptionPane.showMessageDialog(mp, "The selected area is not within the map, please try again.");
 				rect = null;
 				mp.repaint();

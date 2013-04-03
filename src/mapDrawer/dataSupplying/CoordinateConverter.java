@@ -1,4 +1,6 @@
-package mapDrawer;
+package mapDrawer.dataSupplying;
+
+import mapDrawer.AreaToDraw;
 
 /*
  * Must be fed width the two corner coordinates of the wanted area to draw????

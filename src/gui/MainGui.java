@@ -14,15 +14,17 @@ public class MainGui {
 	private static MainGui instance;
 
 	//Three static final fields to easily change the color of our program
-	public static final Color DARK_COLOR = new Color(8, 108, 8);
+	public static final Color DARK_COLOR = new Color(207, 181, 59);
 
-	public static final Color BACKGROUND_COLOR = new Color(140, 255, 140);
+	public static final Color BACKGROUND_COLOR = new Color(255, 215, 0);
 
-	public static final Color VERY_LIGHT_COLOR = new Color(200, 255, 200);
+	public static final Color BUTTON_CLICKED_COLOR = new Color(230, 190, 138);
+	
+	public static final Color TEXT_COLOR = new Color(153, 101, 21);
 
 	public static boolean undecoratedBoolean = false;
 
-	public static boolean coordinatesBoolean = true;
+	public static boolean coordinatesBoolean = false;
 
 	/**
 	 * @param args
@@ -51,12 +53,12 @@ public class MainGui {
 	/**
 	 * Makes the menu and adds shortcuts to it. This is the standard menu for all future windows.
 	 */
-	public static void makeMenu(final JFrame frameForMenu, final Color colorForMenu, final int windowID){
+	public static void makeMenu(final JFrame frameForMenu, final int windowID){
 		final int SHORT_CUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
 		JMenuBar menuBar = new JMenuBar();
 		frameForMenu.setJMenuBar(menuBar);
-		menuBar.setBackground(colorForMenu);
+		menuBar.setBackground(BACKGROUND_COLOR);
 		menuBar.setBorder(BorderFactory.createEtchedBorder());
 
 		JMenu fileMenu = new JMenu("File");

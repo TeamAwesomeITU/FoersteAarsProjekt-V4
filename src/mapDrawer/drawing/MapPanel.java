@@ -1,10 +1,12 @@
-package mapDrawer;
+package mapDrawer.drawing;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,10 +18,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import mapDrawer.AreaToDraw;
+import mapDrawer.RoadType;
+import mapDrawer.dataSupplying.CoordinateConverter;
+import mapDrawer.dataSupplying.FindRelevantEdges;
+
 @SuppressWarnings("serial")
 public class MapPanel extends JPanel {
 
-	private Dimension preferredSize;
 	private RectZoomer rectZoomer;
 	private AreaToDraw area;
 	private EdgeLine[] linesOfEdges; 
@@ -37,14 +43,13 @@ public class MapPanel extends JPanel {
 		this.jf = jf;
 		this.height = height;
 		this.width = width;
-		preferredSize = setNewPreferredSize((int)width, (int)height);
 		rectZoomer = new RectZoomer(this);
-	    makeLinesForMap();
-        setBorderForPanel(this);
-        addMouseListener(rectZoomer);
-        addMouseMotionListener(rectZoomer);
+		makeLinesForMap();
+		setBorderForPanel(this);
+		addMouseListener(rectZoomer);
+		addMouseMotionListener(rectZoomer);
 	}
-	
+
 	/**
 	 * Draws the lines for the map. 
 	 * Saves all the edges and converts the coordinates and saves them in an array.
@@ -53,38 +58,36 @@ public class MapPanel extends JPanel {
 	private void makeLinesForMap() {
 		if(area == null)
 			area = new AreaToDraw();
-	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
-	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
-	    linesOfEdges = new EdgeLine[edgeSet.size()];
-	    //setPanelDimensions(new Dimension());
-	    System.out.println();
-	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
+		HashSet<Edge> edgeSet = FindRelevantEdges.findNodesToDraw(area);
+		Iterator<Edge> edgeSetIterator = edgeSet.iterator();
+		linesOfEdges = new EdgeLine[edgeSet.size()];
+		CoordinateConverter coordConverter = new CoordinateConverter((int)width, (int)height, area);
 
-	    int numberOfEdges = 0;
-	    while(edgeSetIterator.hasNext() == true) {
-	    	Edge edge = edgeSetIterator.next();
-	    	int fromNode = edge.getFromNode();
-	    	int toNode = edge.getToNode();
-	    	Double[] fromNodeCoords = FindRelevantNodes.getNodeCoordinatesMap().get(fromNode);
-	    	Double[] toNodeCoords = FindRelevantNodes.getNodeCoordinatesMap().get(toNode);
-	    	double drawFromCoordX = coordConverter.UTMToPixelCoordX(fromNodeCoords[0]);
-	    	double drawFromCoordY = coordConverter.UTMToPixelCoordY(fromNodeCoords[1]);
-	    	double drawToCoordX = coordConverter.UTMToPixelCoordX(toNodeCoords[0]);
-	    	double drawToCoordY = coordConverter.UTMToPixelCoordY(toNodeCoords[1]);
+		int numberOfEdges = 0;
+		while(edgeSetIterator.hasNext() == true) {
+			Edge edge = edgeSetIterator.next();
+			int fromNode = edge.getFromNode();
+			int toNode = edge.getToNode();
+			Double[] fromNodeCoords = FindRelevantEdges.getNodeCoordinatesMap().get(fromNode);
+			Double[] toNodeCoords = FindRelevantEdges.getNodeCoordinatesMap().get(toNode);
+			double drawFromCoordX = coordConverter.UTMToPixelCoordX(fromNodeCoords[0]);
+			double drawFromCoordY = coordConverter.UTMToPixelCoordY(fromNodeCoords[1]);
+			double drawToCoordX = coordConverter.UTMToPixelCoordX(toNodeCoords[0]);
+			double drawToCoordY = coordConverter.UTMToPixelCoordY(toNodeCoords[1]);
 
-	    	linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
-	    }
+			linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
+		}
 
-	    //String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
-	    //String file = ("resources/osm_modified.txt_convertedJCOORD.txt");
-	    String file = ("resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz_convertedJCOORD.txt");
+		//String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
+		//String file = ("resources/osm_modified.txt_convertedJCOORD.txt");
+		String file = ("resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz_convertedJCOORD.txt");
 
-	    ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
+		ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
 
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-		    String line1 = reader.readLine();
-		    String line2 = reader.readLine();
+			String line1 = reader.readLine();
+			String line2 = reader.readLine();
 
 			while(line1 != null && line2 != null)
 			{
@@ -99,9 +102,10 @@ public class MapPanel extends JPanel {
 				double deltaY = Double.parseDouble(coordFrom[1])-Double.parseDouble(coordTo[1]);
 				double distanceBetweenPoints = Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
 
-				//If the points are not unreasonably far away from each other, then make a new line
-				if(distanceBetweenPoints < 7000)
-					list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 6));
+
+				//If the points are not unreasonably far away from each other, and lie within the area, then make a new line
+					if(distanceBetweenPoints < 7000)
+						list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 100));
 
 				line2 = line1;
 				line1 = reader.readLine();
@@ -111,15 +115,14 @@ public class MapPanel extends JPanel {
 			for(int i = 0; i < newLinesOfEdges.length; i++)
 			{
 				if(i < linesOfEdges.length)
-						newLinesOfEdges[i] = linesOfEdges[i];
+					newLinesOfEdges[i] = linesOfEdges[i];
 				else
-						newLinesOfEdges[i] = list.get(i-linesOfEdges.length);
+					newLinesOfEdges[i] = list.get(i-linesOfEdges.length);
 			}
 
 			linesOfEdges = newLinesOfEdges;
 
 			reader.close();
-
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -134,24 +137,28 @@ public class MapPanel extends JPanel {
 	 */
 	private Line2D line = new Line2D.Double();
 	public void paint(Graphics g) {
-	    super.paint(g);
-	    for (EdgeLine edgeLine : linesOfEdges) {
-	        line.setLine(edgeLine.getStartX(), edgeLine.getStartY(), edgeLine.getEndX(), edgeLine.getEndY());
-	        int roadType = edgeLine.getRoadType();
-	        g.setColor(RoadType.getColor(roadType));
-	        ((Graphics2D)g).setStroke(new BasicStroke(RoadType.getStroke(roadType)));
-	        ((Graphics2D)g).draw(line); 								  									 
-	    }
-	    	    
-	    Graphics2D g2 = (Graphics2D) g;
-	    if (rectZoomer.getRect() == null) {
-	         return; 
-	      } 
-	      else if (rectZoomer.isDrawing() == true) {
-	    	 g2.setStroke(new BasicStroke(1));
-	         g2.setColor(Color.red);
-	         g2.draw(rectZoomer.getRect());
-	      } 
+		super.paint(g);
+		for (EdgeLine edgeLine : linesOfEdges) {
+			line.setLine(edgeLine.getStartX(), edgeLine.getStartY(), edgeLine.getEndX(), edgeLine.getEndY());
+			int roadType = edgeLine.getRoadType();
+			g.setColor(RoadType.getColor(roadType));
+			((Graphics2D)g).setRenderingHint(
+					RenderingHints.KEY_ANTIALIASING, 
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			((Graphics2D)g).setStroke(new BasicStroke(RoadType.getStroke(roadType)));
+			((Graphics2D)g).draw(line); 
+			setBounds(new Rectangle((int)width, (int) height));
+		}
+
+		Graphics2D g2 = (Graphics2D) g;
+		if (rectZoomer.getRect() == null) {
+			return; 
+		} 
+		else if (rectZoomer.isDrawing() == true) {
+			g2.setStroke(new BasicStroke(1));
+			g2.setColor(Color.red);
+			g2.draw(rectZoomer.getRect());
+		} 
 	}
 	/**
 	 * Sets the area to be used for drawing the map.
@@ -195,10 +202,10 @@ public class MapPanel extends JPanel {
 	 * @param mp is the MapPanel you're drawing a border around.
 	 */
 	private void setBorderForPanel(MapPanel mp) {
-		Dimension d = setNewPreferredSize((int)mp.getMapWidth(), (int)getMapHeight());
+		Dimension d = new Dimension((int)mp.getMapWidth(), (int)getMapHeight());
 		d = mp.setPanelDimensions(new Dimension());
-        mp.setMaximumSize(d);
-        mp.setBorder(new LineBorder(Color.black));
+		mp.setMaximumSize(d);
+		mp.setBorder(new LineBorder(Color.black));
 
 	}
 	/*
@@ -240,32 +247,16 @@ public class MapPanel extends JPanel {
 	 * Draws the map. Is used when resizing and zooming.
 	 */
 	public void setLinesForMap() {
-		preferredSize = setNewPreferredSize((int)width, (int)height);
 		makeLinesForMap();
 	}
 
-	/*
-	 * Is used for setting the initial size of the map.
-	 */
-	private static Dimension setNewPreferredSize(int w, int h) {
-		Dimension tmpSize = new Dimension(w, h);
-		return tmpSize;
-	}
-
-	/**
-	 * Returns the dimensions of the MapPanel.
-	 */
-	public Dimension getPreferredSize() {
-	    return preferredSize;
-	}
-	
 	/**
 	 * Returns the width of the map.
 	 */
 	public double getMapWidth() {
 		return width;
 	}
-	
+
 	/**
 	 * Returns the height of the  map.
 	 */

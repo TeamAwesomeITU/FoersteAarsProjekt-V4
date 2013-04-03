@@ -6,8 +6,6 @@ import inputHandler.exceptions.MalformedAdressException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -17,9 +15,9 @@ import javax.swing.*;
 
 
 import mapDrawer.AreaToDraw;
-import mapDrawer.CoordinateConverter;
-import mapDrawer.MapComponentAdapter;
-import mapDrawer.MapPanel;
+import mapDrawer.dataSupplying.CoordinateConverter;
+import mapDrawer.drawing.MapComponentAdapter;
+import mapDrawer.drawing.MapPanel;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -70,7 +68,7 @@ public class MapWindow {
 		frame.setBounds(0,0,screenSize.width, screenSize.height);
 		frame.setPreferredSize(screenSize);
 		
-		MainGui.makeMenu(frame, MainGui.BACKGROUND_COLOR, WINDOW_ID);
+		MainGui.makeMenu(frame, WINDOW_ID);
 		fillContentPane();
 		
 		frame.pack();
@@ -95,12 +93,12 @@ public class MapWindow {
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
 		
 		JLabel fromHeader = new JLabel("From");
-		fromHeader.setForeground(Color.BLUE);
+		fromHeader.setForeground(MainGui.TEXT_COLOR);
 		fromSearchQuery = new JTextField();
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
 		
 		JLabel toHeader = new JLabel("To");
-		toHeader.setForeground(Color.BLUE);
+		toHeader.setForeground(MainGui.TEXT_COLOR);
 		toSearchQuery = new JTextField();
 		toSearchQuery.addKeyListener(new EnterKeyListener());
 		
@@ -135,9 +133,9 @@ public class MapWindow {
 		coordPanel.setLayout(new GridLayout(2, 2, 5, 3));
 		
 		JLabel xCordJLabel = new JLabel("X-CORD");
-		xCordJLabel.setForeground(Color.BLUE);
+		xCordJLabel.setForeground(MainGui.TEXT_COLOR);
 		JLabel yCordJLabel = new JLabel("Y-CORD");
-		yCordJLabel.setForeground(Color.BLUE);
+		yCordJLabel.setForeground(MainGui.TEXT_COLOR);
 		
 		X_CORD = new JLabel();
 		Y_CORD = new JLabel();
@@ -163,7 +161,7 @@ public class MapWindow {
 		centerColoredJPanel = new ColoredJPanel();
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
 		
-		MapPanel mapPanel = new MapPanel(frame, (int)Math.round(width*0.99), (int)Math.round(height*0.99));
+		MapPanel mapPanel = new MapPanel(frame, (int)Math.round(width), (int)Math.round(height));
 		mapPanel.setLayout(new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS));
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));

@@ -1,8 +1,12 @@
-package mapDrawer;
+package mapDrawer.dataSupplying;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+
+import mapDrawer.AreaToDraw;
+import mapDrawer.ZoomLevel;
+import mapDrawer.drawing.Edge;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -15,7 +19,7 @@ import com.ximpleware.XPathParseException;
 /*
  * Locates the Edges that lies within the AreaToDraw
  */
-public class FindRelevantNodes {
+public class FindRelevantEdges {
 
 	//A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
