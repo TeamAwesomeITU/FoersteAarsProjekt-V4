@@ -101,7 +101,7 @@ public class MapPanel extends JPanel {
 
 				//If the points are not unreasonably far away from each other, then make a new line
 				if(distanceBetweenPoints < 7000)
-					list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 6));
+					list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 100));
 
 				line2 = line1;
 				line1 = reader.readLine();

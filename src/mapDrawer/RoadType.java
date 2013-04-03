@@ -84,12 +84,12 @@ public enum RoadType {
 
 		@Override
 		protected Color color() {
-			return Color.pink;
+			return Color.gray;
 		}
 
 		@Override
 		protected float stroke() {			
-			return 3;
+			return 1;
 		}
 	} ;
 
