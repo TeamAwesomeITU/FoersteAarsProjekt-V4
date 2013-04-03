@@ -68,7 +68,7 @@ public class MapComponentAdapter extends ComponentAdapter {
 		public void actionPerformed(ActionEvent e) {
 				if(isResizing == true) {
 					double newWidth = mw.getWidthForMap();
-					mp.setWidth(Math.round(newWidth*0.99)); 
+					mp.setWidth(Math.round(newWidth)); 
 					double newHeight = (newWidth*mp.getArea().getHeight())/mp.getArea().getWidth();
 					mp.setHeight(Math.round(newHeight));
 					mp.setLinesForMap();
