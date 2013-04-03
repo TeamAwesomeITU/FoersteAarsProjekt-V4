@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+
+import mapDrawer.AreaToDraw;
+import mapDrawer.dataSupplying.FindRelevantEdges;
+import mapDrawer.dataSupplying.QuadTree;
 /**
  * This is our main gui class. It holds methods that is common for all
  * old and future windows.
@@ -30,6 +34,10 @@ public class MainGui {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		System.out.println("Making QuadTree"); 
+		QuadTree.initializeEntireQuadTree();
+		System.out.println("Making NodeMap"); 
+		FindRelevantEdges.getNodeCoordinatesMap();
 		MainGui.getInstance();
 	}
 
