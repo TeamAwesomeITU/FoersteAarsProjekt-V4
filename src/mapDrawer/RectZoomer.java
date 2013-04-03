@@ -53,7 +53,7 @@ public class RectZoomer extends MouseAdapter {
 			if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
 
 			double rectWidth = Math.abs(endX);
-			double rectHeight = Math.abs((rectWidth*mp.getHeight())/mp.getWidth());    
+			double rectHeight = Math.abs((rectWidth*AreaToDraw.getHeightOfEntireMap())/AreaToDraw.getWidthOfEntireMap());    
 
 			startX = Math.min(mousePress.x, e.getPoint().x);
 			
