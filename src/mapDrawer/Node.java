@@ -5,17 +5,11 @@ public class Node {
 	private double xCoord;
 	private double yCoord;
 
-	//ID of the Edges, that goes to or from the Node
-	private int[] edgesFrom;
-	private int[] edgesTo;
-
-	public Node(int ID, double xCoord, double yCoord, int[] edgesFrom, int[] edgesTo)
+	public Node(int ID, double xCoord, double yCoord)
 	{
 		this.ID = ID;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
-		this.edgesFrom = edgesFrom;
-		this.edgesTo = edgesTo;
 	}	
 
 	public int getID()
@@ -26,10 +20,4 @@ public class Node {
 
 	public double getYCoord()
 	{ return yCoord; }
-
-	public int[] getEdgesFrom()
-	{ return edgesFrom; }
-
-	public int[] getEdgesTo()
-	{ return edgesTo; }		
 }
