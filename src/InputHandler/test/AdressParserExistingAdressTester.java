@@ -1,12 +1,12 @@
-package InputHandler.test;
+package inputHandler.test;
 
 import static org.junit.Assert.*;
+import inputHandler.AdressParser;
+import inputHandler.exceptions.MalformedAdressException;
 
 import org.junit.Test;
 
-import InputHandler.exceptions.MalformedAdressException;
 
-import InputHandler.AdressParser;
 
 public class AdressParserExistingAdressTester {
 	@Test

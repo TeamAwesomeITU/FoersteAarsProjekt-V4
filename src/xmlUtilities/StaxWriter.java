@@ -1,4 +1,4 @@
-package xmlClasses;
+package xmlUtilities;
 import java.io.*;
 import java.util.Scanner;
 

@@ -1,4 +1,7 @@
-package GUI;
+package gui;
+
+import inputHandler.AdressParser;
+import inputHandler.exceptions.MalformedAdressException;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -17,8 +20,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import InputHandler.AdressParser;
-import InputHandler.exceptions.MalformedAdressException;
 
 public class StartupWindow {
 	

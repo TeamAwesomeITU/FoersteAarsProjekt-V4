@@ -53,7 +53,7 @@ public class MapPanel extends JPanel {
 	private void makeLinesForMap() {
 		if(area == null)
 			area = new AreaToDraw();
-	    HashSet<Edge> edgeSet = FindRelevantNodes.findNodesToDraw(area);
+	    HashSet<Edge> edgeSet = FindRelevantEdges.findNodesToDraw(area);
 	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 	    linesOfEdges = new EdgeLine[edgeSet.size()];
 	    //setPanelDimensions(new Dimension());
@@ -65,8 +65,8 @@ public class MapPanel extends JPanel {
 	    	Edge edge = edgeSetIterator.next();
 	    	int fromNode = edge.getFromNode();
 	    	int toNode = edge.getToNode();
-	    	Double[] fromNodeCoords = FindRelevantNodes.getNodeCoordinatesMap().get(fromNode);
-	    	Double[] toNodeCoords = FindRelevantNodes.getNodeCoordinatesMap().get(toNode);
+	    	Double[] fromNodeCoords = FindRelevantEdges.getNodeCoordinatesMap().get(fromNode);
+	    	Double[] toNodeCoords = FindRelevantEdges.getNodeCoordinatesMap().get(toNode);
 	    	double drawFromCoordX = coordConverter.UTMToPixelCoordX(fromNodeCoords[0]);
 	    	double drawFromCoordY = coordConverter.UTMToPixelCoordY(fromNodeCoords[1]);
 	    	double drawToCoordX = coordConverter.UTMToPixelCoordX(toNodeCoords[0]);

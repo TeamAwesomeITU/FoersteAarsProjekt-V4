@@ -1,4 +1,4 @@
-package xmlClasses;
+package xmlUtilities;
 public class TestWrite {
 
   public static void main(String[] args) {

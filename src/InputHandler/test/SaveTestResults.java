@@ -1,4 +1,4 @@
-package InputHandler.test;
+package inputHandler.test;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

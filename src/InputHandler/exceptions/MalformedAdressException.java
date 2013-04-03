@@ -1,4 +1,4 @@
-package InputHandler.exceptions;
+package inputHandler.exceptions;
 
 @SuppressWarnings("serial")
 public class MalformedAdressException extends Exception {

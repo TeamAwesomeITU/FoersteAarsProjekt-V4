@@ -1,6 +1,10 @@
-package InputHandler.test;
+package inputHandler.test;
 
 import static org.junit.Assert.assertEquals;
+
+
+import inputHandler.AdressParser;
+import inputHandler.exceptions.MalformedAdressException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,8 +13,6 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import InputHandler.AdressParser;
-import InputHandler.exceptions.MalformedAdressException;
 
 /*
  * This test tests if AdressParser returns the correct roadname for every single road in road_names.txt.

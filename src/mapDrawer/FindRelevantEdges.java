@@ -15,7 +15,7 @@ import com.ximpleware.XPathParseException;
 /*
  * Locates the Edges that lies within the AreaToDraw
  */
-public class FindRelevantNodes {
+public class FindRelevantEdges {
 
 	//A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
