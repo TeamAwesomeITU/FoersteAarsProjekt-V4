@@ -56,7 +56,6 @@ public class MapPanel extends JPanel {
 	    HashSet<Edge> edgeSet = FindRelevantEdges.findNodesToDraw(area);
 	    Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 	    linesOfEdges = new EdgeLine[edgeSet.size()];
-	    //setPanelDimensions(new Dimension());
 	    System.out.println();
 	    CoordinateConverter coordConverter = new CoordinateConverter((int)preferredSize.getWidth(), (int)preferredSize.getHeight(), area);
 
