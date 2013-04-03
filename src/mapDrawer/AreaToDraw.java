@@ -1,7 +1,7 @@
 package mapDrawer;
 
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
-import mapDrawer.exceptions.AreaNegativeSizeException;
+import mapDrawer.exceptions.NegativeAreaSizeException;
 
 /*
  * The area of the map to draw
@@ -26,10 +26,10 @@ public class AreaToDraw {
 	//The y-coordinate of the most northern coordinate
 	private final double largestY;
 
-	public AreaToDraw(double smallestX, double largestX, double smallestY, double largestY) throws AreaNegativeSizeException, AreaIsNotWithinDenmarkException
+	public AreaToDraw(double smallestX, double largestX, double smallestY, double largestY) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException
 	{
 		if(smallestX > largestX || smallestY > largestY || smallestX < 0 || smallestY < 0)
-			throw new AreaNegativeSizeException("Area size was invalid");
+			throw new NegativeAreaSizeException("Area size was invalid");
 		
 		if(smallestX < entireMapSmallestX || smallestY < entireMapSmallestY || largestX > entireMapLargestX || largestY > entireMapLargestY)
 			throw new AreaIsNotWithinDenmarkException("Some part of the area is not within the map of Denmark");
