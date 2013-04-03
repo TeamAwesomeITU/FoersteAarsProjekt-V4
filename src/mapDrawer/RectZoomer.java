@@ -84,13 +84,14 @@ public class RectZoomer extends MouseAdapter {
 		else if(SwingUtilities.isLeftMouseButton(e)) {
 			AreaToDraw area = mp.getArea();
 			ras.push(area);
-			CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getPreferredSize().getWidth(), (int)mp.getPreferredSize().getHeight(), area);
+			CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getMapWidth(), (int)mp.getMapHeight(), area);
 			if(startX < 0) startX = 0; if(startY < 0) startY = 0;
 			if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
 			double startXCoord = coordConverter.pixelToUTMCoordX((int) startX);
 			double startYCoord = coordConverter.pixelToUTMCoordY((int) endY);
 			double endXCoord = coordConverter.pixelToUTMCoordX((int) endX);
 			double endYCoord = coordConverter.pixelToUTMCoordY((int) startY);
+			System.out.println("startX: " +startXCoord + " startY: " +startYCoord+ " endX: " +endXCoord+ "endY: " +endYCoord);
 			try {
 				rect = null;    		
 				double newAreaProportions = Math.round((((endX-startX)/(endY-startY))*100.0))/100.0;

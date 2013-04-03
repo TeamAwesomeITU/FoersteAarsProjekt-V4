@@ -164,8 +164,7 @@ public class QuadTree {
 					vnNode.toElement(VTDNav.PREV_SIBLING, "KDV");		
 					KDV = vnNode.parseInt(vnNode.getText());
 
-					//SKAL ÆNDRES TIL AT HENTE EDGES UD, NÅR VI FÅR DEN NYE XML-FIL
-					if(quadTree.insert(new Node(KDV, xCoord, yCoord, new int[0], new int[0])))
+					if(quadTree.insert(new Node(KDV, xCoord, yCoord)))
 						count++;
 
 					vnNode.toElement(VTDNav.PARENT);
