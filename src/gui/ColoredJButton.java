@@ -35,12 +35,12 @@ public class ColoredJButton extends JButton {
 	 */
 	private void stylize(){
 		//The color of the button when pressed
-		UIManager.put("Button.select", MainGui.VERY_LIGHT_COLOR);
+		UIManager.put("Button.select", MainGui.BUTTON_CLICKED_COLOR);
 		setFocusPainted(false);
 		setPreferredSize(new Dimension(140, 20));
 		setBackground(MainGui.DARK_COLOR);
 		//Sets the color of the text
-		setForeground(new Color(153, 101, 21));
+		setForeground(MainGui.TEXT_COLOR);
 		
 		setCursor(new Cursor(Cursor.HAND_CURSOR));
 		setBorder(BorderFactory.createEtchedBorder());
