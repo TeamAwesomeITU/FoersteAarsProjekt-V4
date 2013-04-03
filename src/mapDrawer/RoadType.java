@@ -110,7 +110,7 @@ public enum RoadType {
 
 	protected abstract float stroke();
 	
-	private static final HashSet<Integer> category1 = makeCategories(new Integer[]{1,2,22,31,32,41,42}); 
+	private static final HashSet<Integer> category1 = makeCategories(new Integer[]{1,2,21,22,31,32,41,42}); 
 	private static final HashSet<Integer> category2 = makeCategories(new Integer[]{3,4,23,24,33,34,43,44}); 
 	private static final HashSet<Integer> category3 = makeCategories(new Integer[]{0,5,13,25,35,45,46,95,99}); 
 	private static final HashSet<Integer> category4 = makeCategories(new Integer[]{6,26,46}); 
