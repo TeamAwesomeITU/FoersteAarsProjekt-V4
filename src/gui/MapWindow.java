@@ -93,12 +93,12 @@ public class MapWindow {
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
 		
 		JLabel fromHeader = new JLabel("From");
-		fromHeader.setForeground(MainGui.TEXT_COLOR);
+		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
 		fromSearchQuery = new JTextField();
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
 		
 		JLabel toHeader = new JLabel("To");
-		toHeader.setForeground(MainGui.TEXT_COLOR);
+		toHeader.setForeground(ColorTheme.TEXT_COLOR);
 		toSearchQuery = new JTextField();
 		toSearchQuery.addKeyListener(new EnterKeyListener());
 		
@@ -133,9 +133,9 @@ public class MapWindow {
 		coordPanel.setLayout(new GridLayout(2, 2, 5, 3));
 		
 		JLabel xCordJLabel = new JLabel("X-CORD");
-		xCordJLabel.setForeground(MainGui.TEXT_COLOR);
+		xCordJLabel.setForeground(ColorTheme.TEXT_COLOR);
 		JLabel yCordJLabel = new JLabel("Y-CORD");
-		yCordJLabel.setForeground(MainGui.TEXT_COLOR);
+		yCordJLabel.setForeground(ColorTheme.TEXT_COLOR);
 		
 		X_CORD = new JLabel();
 		Y_CORD = new JLabel();

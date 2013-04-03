@@ -14,13 +14,13 @@ public class MainGui {
 	private static MainGui instance;
 
 	//Three static final fields to easily change the color of our program
-	public static final Color DARK_COLOR = new Color(207, 181, 59);
+	//public static final Color DARK_COLOR = new Color(207, 181, 59);
 
-	public static final Color BACKGROUND_COLOR = new Color(255, 215, 0);
+	//public static final Color BACKGROUND_COLOR = new Color(255, 215, 0);
 
-	public static final Color BUTTON_CLICKED_COLOR = new Color(230, 190, 138);
+	//public static final Color BUTTON_CLICKED_COLOR = new Color(230, 190, 138);
 	
-	public static final Color TEXT_COLOR = new Color(153, 101, 21);
+	//public static final Color TEXT_COLOR = new Color(153, 101, 21);
 
 	public static boolean undecoratedBoolean = false;
 
@@ -58,7 +58,7 @@ public class MainGui {
 
 		JMenuBar menuBar = new JMenuBar();
 		frameForMenu.setJMenuBar(menuBar);
-		menuBar.setBackground(BACKGROUND_COLOR);
+		menuBar.setBackground(ColorTheme.BACKGROUND_COLOR);
 		menuBar.setBorder(BorderFactory.createEtchedBorder());
 
 		JMenu fileMenu = new JMenu("File");

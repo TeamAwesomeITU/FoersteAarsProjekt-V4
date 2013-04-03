@@ -13,7 +13,7 @@ public class ColoredJCheckBox extends JCheckBox {
 	 */
 	ColoredJCheckBox(String text){
 		super();
-		super.setBackground(MainGui.BACKGROUND_COLOR);
+		super.setBackground(ColorTheme.BACKGROUND_COLOR);
 		super.setText(text);
 	}
 	/**
@@ -21,7 +21,7 @@ public class ColoredJCheckBox extends JCheckBox {
 	 */
 	public ColoredJCheckBox(){
 		super();
-		super.setBackground(MainGui.BACKGROUND_COLOR);
+		super.setBackground(ColorTheme.BACKGROUND_COLOR);
 	}
 
 }
