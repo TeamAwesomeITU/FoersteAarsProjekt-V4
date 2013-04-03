@@ -1,6 +1,5 @@
 package mapDrawer;
 
-import java.util.Arrays;
 import java.util.HashSet;
 
 /*

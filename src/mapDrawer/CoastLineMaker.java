@@ -112,6 +112,7 @@ public class CoastLineMaker {
 					//If it is time to make a new polygon
 					if(line.equals(">") && !singlePolygonCoords.isEmpty())
 					{
+						@SuppressWarnings("unchecked")
 						LinkedList<double[]> polygonCoordsToSave = (LinkedList<double[]>) singlePolygonCoords.clone();
 						setOfPolygons.add(new Polygon(polygonCoordsToSave));
 						singlePolygonCoords.clear();
