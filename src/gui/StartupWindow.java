@@ -30,7 +30,7 @@ public class StartupWindow {
 	private Container contentPane;
 	
 	public StartupWindow(){
-		startupScreen();
+		createStartupScreen();
 	}
 	
 	
@@ -41,7 +41,7 @@ public class StartupWindow {
 	/**
 	 * Builds the frame and sets it up
 	 */
-	public void startupScreen(){
+	public void createStartupScreen(){
 		frame = new JFrame();
 		frame.setUndecorated(MainGui.undecoratedBoolean);
 		Dimension frameSize = new Dimension(400, 400);
