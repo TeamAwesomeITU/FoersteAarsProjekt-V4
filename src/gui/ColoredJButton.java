@@ -40,7 +40,7 @@ public class ColoredJButton extends JButton {
 		setPreferredSize(new Dimension(140, 20));
 		setBackground(MainGui.DARK_COLOR);
 		//Sets the color of the text
-		setForeground(Color.white);
+		setForeground(new Color(153, 101, 21));
 		
 		setCursor(new Cursor(Cursor.HAND_CURSOR));
 		setBorder(BorderFactory.createEtchedBorder());
