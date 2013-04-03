@@ -1,13 +1,15 @@
-package mapDrawer;
+package mapDrawer.drawing;
 
-public class EdgeCoords {
+public class EdgeLine {
 	double startX, startY, endX, endY;
+	int roadType;
 	
-	public EdgeCoords(double sX, double sY, double eX, double eY) {
+	public EdgeLine(double sX, double sY, double eX, double eY, int roadType) {
 		startX = sX;
 		startY = sY;
 		endX = eX;
 		endY = eY;
+		this.roadType = roadType;
 	}
 	
 	public double getEndX() {
@@ -24,5 +26,8 @@ public class EdgeCoords {
 	
 	public double getStartY() {
 		return startY;
+	}
+	public int getRoadType() {
+		return roadType;
 	}
 }

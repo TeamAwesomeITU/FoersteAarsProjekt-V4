@@ -1,4 +1,4 @@
-package mapDrawer;
+package mapDrawer.drawing;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -6,6 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
+import mapDrawer.AreaToDraw;
+import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 import mapDrawer.exceptions.InvalidAreaProportionsException;

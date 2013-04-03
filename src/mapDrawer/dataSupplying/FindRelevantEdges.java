@@ -1,8 +1,12 @@
-package mapDrawer;
+package mapDrawer.dataSupplying;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+
+import mapDrawer.AreaToDraw;
+import mapDrawer.ZoomLevel;
+import mapDrawer.drawing.Edge;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;

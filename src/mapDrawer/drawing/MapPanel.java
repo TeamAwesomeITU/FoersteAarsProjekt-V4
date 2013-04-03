@@ -1,4 +1,4 @@
-package mapDrawer;
+package mapDrawer.drawing;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -17,6 +17,11 @@ import java.util.Iterator;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
+
+import mapDrawer.AreaToDraw;
+import mapDrawer.RoadType;
+import mapDrawer.dataSupplying.CoordinateConverter;
+import mapDrawer.dataSupplying.FindRelevantEdges;
 
 @SuppressWarnings("serial")
 public class MapPanel extends JPanel {

@@ -1,5 +1,6 @@
 package mapDrawer;
 
+import mapDrawer.dataSupplying.Node;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 

@@ -1,4 +1,6 @@
-package mapDrawer;
+package mapDrawer.drawing;
+
+import mapDrawer.AreaToDraw;
 
 /**
  * Stack that contains the different zooms.
