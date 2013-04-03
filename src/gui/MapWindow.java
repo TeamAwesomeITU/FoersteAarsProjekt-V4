@@ -15,9 +15,9 @@ import javax.swing.*;
 
 
 import mapDrawer.AreaToDraw;
-import mapDrawer.CoordinateConverter;
-import mapDrawer.MapComponentAdapter;
-import mapDrawer.MapPanel;
+import mapDrawer.dataSupplying.CoordinateConverter;
+import mapDrawer.drawing.MapComponentAdapter;
+import mapDrawer.drawing.MapPanel;
 /**
  * This class holds the window with the map of denmark.
  */

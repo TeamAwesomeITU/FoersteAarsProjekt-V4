@@ -1,4 +1,4 @@
-package mapDrawer;
+package mapDrawer.dataSupplying;
 
 import java.awt.geom.GeneralPath;
 import java.io.BufferedReader;
@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedList;
 
+import mapDrawer.AreaToDraw;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 

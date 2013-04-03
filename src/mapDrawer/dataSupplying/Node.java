@@ -1,4 +1,4 @@
-package mapDrawer;
+package mapDrawer.dataSupplying;
 
 public class Node {
 	private int ID;

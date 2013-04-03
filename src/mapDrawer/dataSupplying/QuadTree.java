@@ -1,4 +1,4 @@
-package mapDrawer;
+package mapDrawer.dataSupplying;
 
 import java.util.HashSet;
 
@@ -7,6 +7,7 @@ import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 
+import mapDrawer.AreaToDraw;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 import mapDrawer.exceptions.InvalidAreaProportionsException;
