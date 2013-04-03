@@ -93,8 +93,6 @@ public enum RoadType {
 		}
 	} ;
 
-
-
 	protected abstract Color color();
 
 	protected abstract float stroke();
