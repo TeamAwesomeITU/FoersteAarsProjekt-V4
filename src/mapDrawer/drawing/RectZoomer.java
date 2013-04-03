@@ -80,7 +80,6 @@ public class RectZoomer extends MouseAdapter {
 	 * @param e When the mouse is released.
 	 */
 	public void mouseReleased(MouseEvent e) {
-		//Zoom in on shizz.
 		if(SwingUtilities.isRightMouseButton(e)) { 	
 			zoomOut();
 		}
@@ -114,8 +113,6 @@ public class RectZoomer extends MouseAdapter {
 				JOptionPane.showMessageDialog(mp, "The selected area is not within the map, please try again.");
 				rect = null;
 				mp.repaint();
-				//mp.getParentFrame().dispose();
-				//e1.printStackTrace();
 			}
 		}
 	}
