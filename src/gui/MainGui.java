@@ -14,11 +14,11 @@ public class MainGui {
 	private static MainGui instance;
 
 	//Three static final fields to easily change the color of our program
-	public static final Color DARK_COLOR = new Color(8, 108, 8);
+	public static final Color DARK_COLOR = new Color(207, 181, 59);
 
-	public static final Color BACKGROUND_COLOR = new Color(140, 255, 140);
+	public static final Color BACKGROUND_COLOR = new Color(255, 215, 0);
 
-	public static final Color VERY_LIGHT_COLOR = new Color(200, 255, 200);
+	public static final Color VERY_LIGHT_COLOR = new Color(230, 190, 138);
 
 	public static boolean undecoratedBoolean = false;
 
