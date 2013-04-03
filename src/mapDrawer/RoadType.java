@@ -84,12 +84,12 @@ public enum RoadType {
 
 		@Override
 		protected Color color() {
-			return Color.pink;
+			return Color.gray;
 		}
 
 		@Override
 		protected float stroke() {			
-			return 3;
+			return 1;
 		}
 	} ;
 
@@ -127,6 +127,7 @@ public enum RoadType {
 		return new HashSet<Integer>(Arrays.asList(categoryArr));
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static HashSet<Integer> getRoadTypesRelevantToZoomLevel(int numberOfWantedCategories)
 	{
 		//WHAT THE FUCK - MIND.EQUALS(BLOWN) == TRUE

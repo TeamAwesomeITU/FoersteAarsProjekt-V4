@@ -1,5 +1,6 @@
 package mapDrawer.exceptions;
 
+@SuppressWarnings("serial")
 public class InvalidAreaProportionsException extends Exception {
 	public InvalidAreaProportionsException(String message) {
 		super(message);
