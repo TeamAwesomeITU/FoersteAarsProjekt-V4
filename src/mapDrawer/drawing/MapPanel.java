@@ -52,8 +52,7 @@ public class MapPanel extends JPanel {
 
 	/**
 	 * Draws the lines for the map. 
-	 * Saves all the edges and converts the coordinates and saves them in an array.
-	 *  
+	 * Saves all the edges and converts the coordinates and saves them in an array. 
 	 */
 	private void makeLinesForMap() {
 		if(area == null)
@@ -78,8 +77,6 @@ public class MapPanel extends JPanel {
 			linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 		}
 
-		//String file = "resources/denmark_coastline_fullres_shore.xyz_convertedJCOORD.txt";
-		//String file = ("resources/osm_modified.txt_convertedJCOORD.txt");
 		String file = ("resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz_convertedJCOORD.txt");
 
 		ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
@@ -134,6 +131,7 @@ public class MapPanel extends JPanel {
 	/**
 	 * Draws all the lines for the map. Also, draws the rectangle used by the user
 	 * to see where you are about to zoom.
+	 * @param g The graphics object which is used.
 	 */
 	private Line2D line = new Line2D.Double();
 	public void paint(Graphics g) {
@@ -162,6 +160,7 @@ public class MapPanel extends JPanel {
 	}
 	/**
 	 * Sets the area to be used for drawing the map.
+	 * @param Area The area which is to be set.
 	 */
 	public void setArea(AreaToDraw area) {
 		this.area = area;
@@ -208,7 +207,7 @@ public class MapPanel extends JPanel {
 		mp.setBorder(new LineBorder(Color.black));
 
 	}
-	/*
+	/**
 	 * Takes a Dimension and makes it's width and height match the relation between area's width and height.
 	 * Is also used to adjust the size of the map to a size that matches this relation.
 	 * 
