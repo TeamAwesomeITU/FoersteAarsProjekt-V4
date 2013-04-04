@@ -45,16 +45,21 @@ public enum ZoomLevel {
 	protected abstract HashSet<Integer> relevantRoadTypes();
 	
 	
-	
+	/**
+	 * This mutator method changes the value of percentageofEntireMap each time it changes.
+	 * @param percentageOfEntireMap A double representing what percentage of the map that is 
+	 * currently shown. 
+	 */
 	private ZoomLevel(double percentageOfEntireMap)
 	{
 		this.percentageOfEntireMap = percentageOfEntireMap;
 	}
 	
-	/*
-	 * 
-	 * @return The getRelevantRoadTypes String to use to search the XML-file for the wanted road types.
-	 */
+/**
+ * 
+ * @param areasPercentageOfEntireMap
+ * @return
+ */
 	public static HashSet<Integer> getlevel(double areasPercentageOfEntireMap)
 	{
 		ZoomLevel foundLevel = ONE;
