@@ -9,7 +9,12 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 
-
+/**
+ * This class is responsible to handle all the input from the user. 
+ * When an address is entered into the gui, it is parsed through
+ * this class. It is checked in the textfield containing all the
+ * road names. If it finds a match it returns it as an array of strings.
+ */
 public class AdressParser {
 
 	private	String[] adressArray = new String[6];
@@ -29,6 +34,10 @@ public class AdressParser {
 
 	private BinarySearchStringInArray binSearch;
 
+	/**
+	 * This is the constructor for the class. It makes a binary search of the road_names.txt
+	 * and then sorts it.
+	 */
 	public AdressParser()	{
 		binSearch = new BinarySearchStringInArray();
 		File file = new File("road_names.txt");

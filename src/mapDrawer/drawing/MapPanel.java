@@ -24,6 +24,10 @@ import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.dataSupplying.FindRelevantEdges;
 
 @SuppressWarnings("serial")
+/**
+ * MapPanel is an extension of JPanel. It draws the map of Denmark on itself.
+ *
+ */
 public class MapPanel extends JPanel {
 
 	private RectZoomer rectZoomer;
