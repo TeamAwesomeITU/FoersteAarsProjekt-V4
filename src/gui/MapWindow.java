@@ -153,7 +153,7 @@ public class MapWindow {
 	}
 	
 	/**
-	 * Makes the map of denmark. It makes an instance of mappanel
+	 * Makes the map of denmark. It makes an instance of MapPanel
 	 * @param width the width of the map
 	 * @param height the height of the map
 	 */
@@ -184,7 +184,8 @@ public class MapWindow {
 		return heightForMap();
 	}
 	/**
-	 * Calculates the width for the map
+	 * Calculates the width for the map by making sure the relation between width and height of the map is the same as that of
+	 * the "real" map of Denmark.
 	 * @return the calculated width
 	 */
 	private double widthForMap() {
@@ -196,7 +197,8 @@ public class MapWindow {
 			return widthForMap(heightForMap()*0.9);
 	}
 	/**
-	 * RECURSSION Ahahahahaha det lige meget
+	 * is the recursive method called by the widthForMap without input parameters. If the new width is too big,
+	 * the method is called where the height is 10% smaller.
 	 * @param height
 	 * @return
 	 */

@@ -17,7 +17,7 @@ import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 
 /*
- * Locates the Edges that lies within the AreaToDraw
+ * Locates the Edges that has a least one point that lies within the AreaToDraw
  */
 public class FindRelevantEdges {
 
@@ -29,10 +29,9 @@ public class FindRelevantEdges {
 	This is made at startup so the program can access it at will. */
 	private static final HashSet<Edge> allEdgesSet = makeEdgeSet();
 
-	/**
-	 * This method is mainly used to retrieve nodes from the area you are currently viewing from the Quadtree. 
-	 * Then findEdges is called with a set of these nodes as well as the area you are viewing.
-	 * @return HashSet<Edge> A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
+	/*
+	 * Finds all Edges, which are connected to a node in the specified AreaToDraw
+	 * @return A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
 	 */
 	public static HashSet<Edge> findEdgesToDraw(AreaToDraw area)
 	{
@@ -47,8 +46,8 @@ public class FindRelevantEdges {
 	 * This method parses the XML-file kdv_unload containing edge information. It uses an autoPilot when moving
 	 * the cursor from "node" to "node" and then manually navigates through the child-elements in the while-loop
 	 * After manual navigation it returns to its parent and the autoPilot moves to the next "node". It is only called
-	 * once at startup. See fields: allEdgesSet. 
-	 * @return A HashSet containing all edges as edge-objects. 
+	 * once at startup. See field: allEdgesSet. 
+	 * @return A HashSet containing all Edges as Edge-objects. 
 	 */
 	private static HashSet<Edge> makeEdgeSet()
 	{
@@ -95,21 +94,19 @@ public class FindRelevantEdges {
 		return edgeSet;
 	}
 	/**
-	 * This method calls the QuadTree class and retrieves the currently viewed area's nodes. 
-	 * @param area Current area the user are viewing on the map.
-	 * @return A HashSet of nodes. 
+	 * This method retrieves the currently viewed area's nodes. 
+	 * @param area The current area the user are viewing on the map.
+	 * @return A HashSet of all of the found Nodes ID's. 
 	 */
 	private static HashSet<Integer> findNodes(AreaToDraw area)
 	{
 		return QuadTree.searchAreaForNodeIDs(area);
 	}
 	/**
-	 * This method retrieves a HashSet from zoomlevel containing roadTypes. If roadTypes match it checks whether 
-	 * nodes are either from-nodes or to-nodes in our allEdgesSet. If either are true it adds them to 
-	 * foundEdgesSet. This is not even the final form. 
+	 * This method finds the Edges, that is found inside the input area and belongs to a Node in the nodeIDSet.
 	 * @param area Current area the user are viewing on the map.
 	 * @param nodeIDSet A HashSets of nodes. Supplied by findNodes which gets it from the QuadTree. 
-	 * @return A HashSet of edges. Final amount of edges needed to be drawn. These are sent to drawing. 
+	 * @return A HashSet of the Edges, that is found inside the input area and belongs to a Node in the nodeIDSet.
 	 */
 	private static HashSet<Edge> findEdges(AreaToDraw area, HashSet<Integer> nodeIDSet)
 	{
@@ -175,9 +172,10 @@ public class FindRelevantEdges {
 		}
 		return map;
 	}
-	/**
-	 * Accessor-method 
-	 * @return Returns the map containing node-id's and and x-/y- coordinates. 
+
+	/*
+	 * Gets a HashMap of all of the entire map's Nodes and their coordinates - the Node ID is the key, the values are its coordinates
+	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are x-/y- coordinates
 	 */
 	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()	{
 		return nodeCoordinatesMap;

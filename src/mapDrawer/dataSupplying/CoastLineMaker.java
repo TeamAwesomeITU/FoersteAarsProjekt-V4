@@ -145,13 +145,14 @@ public class CoastLineMaker {
 	}
 
 	/*
-	 * Helper class
+	 * Helper class - represents a Polygon.
 	 */
 	private static class Polygon {
 
 		//The "box" that marks the boundaries of the Polygon
 		private AreaToDraw area;
 
+		//The list of Nodes, which represents the outline of the Polygon
 		private LinkedList<double[]> nodeList;
 
 		private Polygon(LinkedList<double[]> nodeList)
