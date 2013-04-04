@@ -3,7 +3,7 @@ package mapDrawer.dataSupplying;
 import mapDrawer.AreaToDraw;
 
 /*
- * Must be fed width the two corner coordinates of the wanted area to draw????
+ * This class can convert coordinates to/from UTM and Java pixels.
  */
 public class CoordinateConverter {	
 	
@@ -43,6 +43,11 @@ public class CoordinateConverter {
 		return coord;
 	}
 	
+	/*
+	 * Converts an X-coordinate from Java-coordinate pixels to UTM
+	 * @param x The coordinate in Java-coordinate pixels
+	 * @return The converted coordinate in UTM
+	 */
 	public double pixelToUTMCoordX(int x)
 	{
 		double coord = NormalizedToUTMCoord(x, area.getSmallestX(), area.getLargestX(), canvasWidth);
@@ -50,7 +55,9 @@ public class CoordinateConverter {
 	}
 	
 	/*
-	 * Input: The coordinate in Java-coordinate pixels
+	 * Converts a Y-coordinate from Java-coordinate pixels to UTM
+	 * @param y The coordinate in Java-coordinate pixels
+	 * @return The converted coordinate in UTM
 	 */
 	public double pixelToUTMCoordY(int y)
 	{		

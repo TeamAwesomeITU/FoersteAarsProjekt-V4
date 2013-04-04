@@ -20,7 +20,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-
+/**
+ * This class makes the first window the user sees. It is
+ * a simple search window.
+ */
 public class StartupWindow {
 	
 	private static final int WINDOW_ID = 1;
@@ -114,7 +117,9 @@ public class StartupWindow {
 
 		return buttonPanel;
 	}
-	
+	/**
+	 * Opens the mapWinodw.
+	 */
 	private void openMap() {
 		frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));	
 		new MapWindow(searchQuery.getText());
