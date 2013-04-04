@@ -30,7 +30,7 @@ public class FindRelevantEdges {
 	 * 
 	 * @return HashSet<Edge> A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
 	 */
-	public static HashSet<Edge> findNodesToDraw(AreaToDraw area)
+	public static HashSet<Edge> findEdgesToDraw(AreaToDraw area)
 	{
 		long startTime = System.currentTimeMillis();
 		HashSet<Integer> nodeSet = findNodes(area);

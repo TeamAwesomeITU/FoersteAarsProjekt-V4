@@ -2,6 +2,8 @@ package mapDrawer.dataSupplying;
 
 import java.util.HashSet;
 
+import org.omg.CORBA.INITIALIZE;
+
 import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
@@ -188,6 +190,14 @@ public class QuadTree {
 	public static HashSet<Integer> searchAreaForNodeIDs(AreaToDraw area)
 	{
 		return qTree.searchForNodeIDs(area);
+	}
+	
+	/*
+	 * Does not really do anything, but can be called in order for the qTree to be created
+	 */	
+	public static void initializeEntireQuadTree()
+	{
+		qTree.getClass();
 	}
 
 	public static void main(String[] args) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException

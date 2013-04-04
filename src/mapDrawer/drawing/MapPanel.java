@@ -58,7 +58,7 @@ public class MapPanel extends JPanel {
 	private void makeLinesForMap() {
 		if(area == null)
 			area = new AreaToDraw();
-		HashSet<Edge> edgeSet = FindRelevantEdges.findNodesToDraw(area);
+		HashSet<Edge> edgeSet = FindRelevantEdges.findEdgesToDraw(area);
 		Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 		linesOfEdges = new EdgeLine[edgeSet.size()];
 		CoordinateConverter coordConverter = new CoordinateConverter((int)width, (int)height, area);
@@ -104,7 +104,7 @@ public class MapPanel extends JPanel {
 
 
 				//If the points are not unreasonably far away from each other, and lie within the area, then make a new line
-					if(distanceBetweenPoints < 7000)
+					if(distanceBetweenPoints < 4000)
 						list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 100));
 
 				line2 = line1;
