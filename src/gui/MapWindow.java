@@ -307,6 +307,9 @@ public class MapWindow {
 			}
 		}
 	}
+	/**
+	 * Flips the from and to address
+	 */
 	class ReverseActionListener implements ActionListener{
 
 		@Override
@@ -316,7 +319,10 @@ public class MapWindow {
 			toSearchQuery.setText(tempFrom);			
 		}
 	}
-	
+	/**
+	 * If the user is in the search text field, then by pressing enter
+	 * is the same as clicking the find route button
+	 */
 	class EnterKeyListener implements KeyListener{
 
 		@Override
@@ -334,7 +340,9 @@ public class MapWindow {
 		public void keyTyped(KeyEvent arg0) {
 		}
 	}
-	
+	/**
+	 * This listeren isn't done yet.
+	 */
 	class FindRouteActionListener implements ActionListener{
 
 		@Override

@@ -21,14 +21,16 @@ import com.ximpleware.XPathParseException;
  */
 public class FindRelevantEdges {
 
-	//A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
-	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
 
-	//A HashSet of all Edges in the entire map
+	/*A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
+	This is made at startup so the program can access it at will. */
+	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
+	/*A set of all edges. When at 100% zoom all edges from this are drawn. When closer less are drawn.
+	This is made at startup so the program can access it at will. */
 	private static final HashSet<Edge> allEdgesSet = makeEdgeSet();
 
 	/*
-	 * A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
+	 * Finds all Edges, which are connected to a node in the specified AreaToDraw
 	 * @return A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
 	 */
 	public static HashSet<Edge> findEdgesToDraw(AreaToDraw area)
@@ -40,6 +42,13 @@ public class FindRelevantEdges {
 		return findEdges(area, nodeSet);
 	}
 
+	/**
+	 * This method parses the XML-file kdv_unload containing edge information. It uses an autoPilot when moving
+	 * the cursor from "node" to "node" and then manually navigates through the child-elements in the while-loop
+	 * After manual navigation it returns to its parent and the autoPilot moves to the next "node". It is only called
+	 * once at startup. See field: allEdgesSet. 
+	 * @return A HashSet containing all Edges as Edge-objects. 
+	 */
 	private static HashSet<Edge> makeEdgeSet()
 	{
 		long startTime = System.currentTimeMillis();
@@ -84,17 +93,26 @@ public class FindRelevantEdges {
 		System.out.println("makeEdgeSet laver " + count + " Edges");
 		return edgeSet;
 	}
-
+	/**
+	 * This method retrieves the currently viewed area's nodes. 
+	 * @param area The current area the user are viewing on the map.
+	 * @return A HashSet of all of the found Nodes ID's. 
+	 */
 	private static HashSet<Integer> findNodes(AreaToDraw area)
 	{
 		return QuadTree.searchAreaForNodeIDs(area);
 	}
-
+	/**
+	 * This method finds the Edges, that is found inside the input area and belongs to a Node in the nodeIDSet.
+	 * @param area Current area the user are viewing on the map.
+	 * @param nodeIDSet A HashSets of nodes. Supplied by findNodes which gets it from the QuadTree. 
+	 * @return A HashSet of the Edges, that is found inside the input area and belongs to a Node in the nodeIDSet.
+	 */
 	private static HashSet<Edge> findEdges(AreaToDraw area, HashSet<Integer> nodeIDSet)
 	{
 		Iterator<Edge> iterator = allEdgesSet.iterator();
 		HashSet<Edge> foundEdgesSet = new HashSet<Edge>();
-		
+
 		HashSet<Integer> zoomLevel = ZoomLevel.getlevel(area.getPercentageOfEntireMap());
 
 		System.out.println("Size of nodeset parsed to findEdges(): " + nodeIDSet.size());
@@ -111,7 +129,12 @@ public class FindRelevantEdges {
 
 		return foundEdgesSet;
 	}
-
+	/**
+	 * This method parses the XML-file kdv_node containing nodes and their coordinates. It uses an autoPilot
+	 * to navigate nodes and manually retrieves child-elements. At the end it navigates to the parent again. 
+	 * @return A HashMap of nodes where the ID is node-id and value is an Array[2] of doubles 
+	 * containing x-/y-coordinates. 
+	 */
 	private static HashMap<Integer, Double[]> makeNodeCoordinatesMap()
 	{
 		HashMap<Integer, Double[]> map = new HashMap<Integer, Double[]>();
@@ -151,8 +174,8 @@ public class FindRelevantEdges {
 	}
 
 	/*
-	 * A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are its coordinates
-	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are its coordinates
+	 * Gets a HashMap of all of the entire map's Nodes and their coordinates - the Node ID is the key, the values are its coordinates
+	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are x-/y- coordinates
 	 */
 	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()	{
 		return nodeCoordinatesMap;

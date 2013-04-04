@@ -1,7 +1,6 @@
 package inputHandler;
 
 public class Main {
-	@SuppressWarnings("unused")
 	public static void main( String[] args ) throws Exception {
 		//File file = new File("kdv_node_unload.txt");
 

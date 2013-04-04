@@ -2,8 +2,6 @@ package mapDrawer.dataSupplying;
 
 import java.util.HashSet;
 
-import org.omg.CORBA.INITIALIZE;
-
 import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
