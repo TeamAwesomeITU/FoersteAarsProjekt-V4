@@ -44,7 +44,7 @@ public class MainGui {
 			return instance;
 		}
 	}
-
+	
 	private MainGui(){
 		new StartupWindow();
 	}

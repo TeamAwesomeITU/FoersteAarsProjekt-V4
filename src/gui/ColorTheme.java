@@ -3,6 +3,7 @@ package gui;
 import java.awt.Color;
 
 public class ColorTheme {
+	//The four colors for our program, set by default.
 	public static Color DARK_COLOR = new Color(210,180,140);
 
 	public static  Color BACKGROUND_COLOR = new Color(240, 230, 140);
@@ -10,7 +11,7 @@ public class ColorTheme {
 	public static  Color BUTTON_CLICKED_COLOR = new Color(189, 183, 107);
 	
 	public static  Color TEXT_COLOR = new Color(139, 69, 19);
-	
+	//What ever boolean is true, is the theme the progams starts in
 	public static boolean summerTheme = false;
 
 	public static boolean winterTheme = false;
@@ -18,11 +19,9 @@ public class ColorTheme {
 	public static boolean springTheme = false;
 	
 	public static boolean autumnTheme = true;
-	
-	
-	public ColorTheme(){
-	}
-	
+	/**
+	 * Sets the color theme to our SUMMERtheme
+	 */
 	public static void setSummerTheme(){
 		summerTheme = true;
 				
@@ -31,7 +30,9 @@ public class ColorTheme {
 		autumnTheme = false;
 		setTheme();
 	}
-	
+	/**
+	 * Sets the color theme to our WINTERtheme
+	 */
 	public static void setWinterTheme(){
 		winterTheme = true;
 		
@@ -40,7 +41,9 @@ public class ColorTheme {
 		autumnTheme = false;
 		setTheme();
 	}
-	
+	/**
+	 * Sets the color theme to our SPRINGtheme
+	 */
 	public static void setSpringTheme(){
 		springTheme = true;
 		
@@ -49,7 +52,9 @@ public class ColorTheme {
 		autumnTheme = false;
 		setTheme();
 	}
-	
+	/**
+	 * Sets the color theme to our AUTUMNtheme
+	 */
 	public static void setAutumnTheme(){
 		autumnTheme = true;
 		
@@ -58,7 +63,9 @@ public class ColorTheme {
 		springTheme = false;
 		setTheme();
 	}
-	
+	/**
+	 * Changes the theme of the gui to the theme boolean that is true
+	 */
 	public static void setTheme(){
 		if(summerTheme){
 			Color orangeRed = new Color(255,69,0);
@@ -89,7 +96,13 @@ public class ColorTheme {
 			setColors(tan, khaki, paleGoldenRod, saddleBrown);
 		}
 	}
-	
+	/**
+	 * Sets the colors of theme
+	 * @param darkColor changes the DARK_COLOR field
+	 * @param background changes the BACKGROUND_COLOR field
+	 * @param buttonClicked changes the BUTTON_CLICKED_COLOR field
+	 * @param textColor changes the TEXT_COLOR field
+	 */
 	public static void setColors(Color darkColor, Color background, Color buttonClicked, Color textColor){
 		DARK_COLOR = darkColor;
 		BACKGROUND_COLOR = background;
