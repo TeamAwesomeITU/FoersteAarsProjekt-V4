@@ -6,6 +6,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+
+import mapDrawer.dataSupplying.FindRelevantEdges;
+import mapDrawer.dataSupplying.QuadTree;
 /**
  * This is our main gui class. It holds methods that is common for all
  * old and future windows.
@@ -13,15 +16,6 @@ import javax.swing.*;
 public class MainGui {
 
 	private static MainGui instance;
-
-	//Three static final fields to easily change the color of our program
-	//public static final Color DARK_COLOR = new Color(207, 181, 59);
-
-	//public static final Color BACKGROUND_COLOR = new Color(255, 215, 0);
-
-	//public static final Color BUTTON_CLICKED_COLOR = new Color(230, 190, 138);
-	
-	//public static final Color TEXT_COLOR = new Color(153, 101, 21);
 
 	public static boolean undecoratedBoolean = false;
 
@@ -31,6 +25,10 @@ public class MainGui {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		System.out.println("Making QuadTree"); 
+		QuadTree.initializeEntireQuadTree();
+		System.out.println("Making NodeMap"); 
+		FindRelevantEdges.getNodeCoordinatesMap();
 		MainGui.getInstance();
 	}
 
