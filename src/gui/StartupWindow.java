@@ -28,12 +28,18 @@ public class StartupWindow {
 	private JFrame frame;
 	private JTextField searchQuery;
 	private Container contentPane;
-	
+	/**
+	 * The constructor for startupwindow.
+	 * It makes the screen
+	 */
 	public StartupWindow(){
 		createStartupScreen();
 	}
 	
-	
+	/**
+	 * Gets the window ID
+	 * @return the window id
+	 */
 	public static final int getWindowId(){
 		return WINDOW_ID;
 	}
@@ -116,7 +122,11 @@ public class StartupWindow {
 		frame.dispose();
 	}
 	
-	
+	/**
+	 * Parses the address through our addressParser class
+	 * It opens the map and copies the search address into the
+	 * new map window.
+	 */
 	public void searchForAnAddress(){
 		if(searchQuery.getText().trim().length() != 0){
 			adressParser = new AdressParser();
@@ -133,7 +143,10 @@ public class StartupWindow {
 	}
 	
 	//---------------------------------Listeners from here-----------------------------//
-
+	/**
+	 * If the user is in the search text field, then by pressing enter
+	 * is the same as clicking the find address button
+	 */
 	class EnterKeyListener implements KeyListener{
 
 		@Override
@@ -151,7 +164,9 @@ public class StartupWindow {
 		public void keyTyped(KeyEvent arg0) {
 		}
 	}
-
+	/**
+	 * Parses the address through the AddressParser class
+	 */
 	class FindAddressActionListener implements ActionListener{
 	
 		@Override
@@ -159,15 +174,18 @@ public class StartupWindow {
 			searchForAnAddress();
 		}
 	}
-	
-	
+	/**
+	 * By clicking the globe it opens the map window
+	 */
 	class MapActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			openMap();
 		}
 	}
-	
+	/**
+	 * clears the text field of text
+	 */
 	class ClearActionListener implements ActionListener{
 	
 		@Override
