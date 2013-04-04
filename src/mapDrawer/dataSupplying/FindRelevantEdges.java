@@ -17,18 +17,19 @@ import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 
 /*
- * Locates the Edges that lies within the AreaToDraw
+ * Locates the Edges that has a least one point that lies within the AreaToDraw
  */
 public class FindRelevantEdges {
 
 	//A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
 
+	//A HashSet of all Edges in the entire map
 	private static final HashSet<Edge> allEdgesSet = makeEdgeSet();
 
 	/*
-	 * 
-	 * @return HashSet<Edge> A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
+	 * A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
+	 * @return A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
 	 */
 	public static HashSet<Edge> findEdgesToDraw(AreaToDraw area)
 	{
@@ -149,6 +150,10 @@ public class FindRelevantEdges {
 		return map;
 	}
 
+	/*
+	 * A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are its coordinates
+	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are its coordinates
+	 */
 	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()	{
 		return nodeCoordinatesMap;
 	}
