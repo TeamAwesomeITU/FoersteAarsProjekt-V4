@@ -1,7 +1,10 @@
 package gui;
 
 import java.awt.Color;
-
+/**
+ * This is class handles our gui's color theme. Only one
+ * theme is enabled at any time.
+ */
 public class ColorTheme {
 	//The four colors for our program, set by default.
 	public static Color DARK_COLOR = new Color(210,180,140);
