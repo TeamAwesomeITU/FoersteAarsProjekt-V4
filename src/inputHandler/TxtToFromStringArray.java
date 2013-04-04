@@ -12,12 +12,12 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-/*
+/**
  * Converts a .txt-file to a String[] or vice versa
  */
 public class TxtToFromStringArray {
 
-	/*
+	/**
 	 * Converts a .txt-file to a String[] and saves it
 	 * 
 	 * @param file The path to the .txt-file to convert
@@ -50,7 +50,7 @@ public class TxtToFromStringArray {
 		out.close();        
 	}
 
-	/*
+	/**
 	 * Converts a String[] to a .txt-file and saves it
 	 * 
 	 * @param 	array The String[] to convert
@@ -72,7 +72,7 @@ public class TxtToFromStringArray {
 		out.close();
 	}
 
-	/*
+	/**
 	 * Converts a String[] to a .txt-file and saves it
 	 * 
 	 * @param 	file The path to the .txt-file to convert
@@ -105,7 +105,7 @@ public class TxtToFromStringArray {
 		return arr;
 	}
 
-	/*
+	/**
 	 * Reads a stored String[] and returns it
 	 * 
 	 * @param 	fileName The path to the stored String[]

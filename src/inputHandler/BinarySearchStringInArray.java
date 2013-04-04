@@ -2,8 +2,17 @@ package inputHandler;
 
 import java.util.Arrays;
 
+/**
+ * Performs a binary search in an array of Strings
+ */
 public class BinarySearchStringInArray
 {
+	/**
+	 * Performs a binary search in an array of Strings
+	 * @param input The String to search for
+	 * @param arr The array to search in
+	 * @return The found String - returns null, if nothing is found.
+	 */
 	public String search(String input, String[] arr)
 	{
 		input.matches("\\w.*");

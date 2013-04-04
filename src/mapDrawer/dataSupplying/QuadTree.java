@@ -12,6 +12,9 @@ import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 import mapDrawer.exceptions.InvalidAreaProportionsException;
 
+/**
+ *  A QuadTree containing up to four Nodes, and if more Nodes are added, the QuadTree is split into four QuadTrees, each having a quarter of the original QuadTree's area, and the Node is inserted in one of them.
+ */
 public class QuadTree {
 
 	private static QuadTree qTree = makeQuadTreeFromXML();	
@@ -25,7 +28,7 @@ public class QuadTree {
 	//Number of nodes in the QuadTree
 	private int numberOfQuadTreeNodes;
 
-	//The boundaries of this quadtree
+	//The boundaries of this QuadTree
 	private AreaToDraw area;
 
 	//Four sub QuadTrees, "Leafs"
@@ -34,12 +37,21 @@ public class QuadTree {
 	private QuadTree southWestNode;
 	private QuadTree southEastNode;
 
+	/**
+	 * Creates a QuadTree with the specified area
+	 * @param area The area for which the QuadTree should be constructed
+	 */
 	private QuadTree(AreaToDraw area)
 	{
 		this.area = area;
 		numberOfQuadTreeNodes = 0;
 	}
 
+	/**
+	 * Attempts to insert a Node in the QuadTree
+	 * @param node The Node to be inserted
+	 * @return If the Node could be inserted in this QuadTree, this method returns true.
+	 */
 	private boolean insert(Node node)
 	{
 		//If the Node is not inside this QuadTree's area, don't add it
@@ -69,6 +81,12 @@ public class QuadTree {
 		return false;
 	}
 
+	/**
+	 * Divides the current QuadTree's area into four areas, which each is exactly a quarter of the current QuadTrees area.
+	 * @throws NegativeAreaSizeException
+	 * @throws AreaIsNotWithinDenmarkException
+	 * @throws InvalidAreaProportionsException
+	 */
 	private void subdivide() throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException {
 	
 		double midPointX = area.getWidth()/2 + area.getSmallestX();
@@ -85,6 +103,11 @@ public class QuadTree {
 		southEastNode = new QuadTree(southEastArea);
 	}
 
+	/**
+	 * Finds all of the Nodes which are contained within a specified area.
+	 * @param area The area to search for Nodes.
+	 * @return A HashSet of all Nodes found within the specified area.
+	 */
 	private HashSet<Node> search(AreaToDraw area)
 	{
 		HashSet<Node> foundNodeSet= new HashSet<Node>();
@@ -111,6 +134,11 @@ public class QuadTree {
 		return foundNodeSet;
 	}
 	
+	/**
+	 * Finds the ID's of all Nodes which are contained within a specified area.
+	 * @param area The area to search for Nodes.
+	 * @return A HashSet of the ID's of all Nodes found within the specified area.
+	 */
 	private HashSet<Integer> searchForNodeIDs(AreaToDraw area)
 	{
 		HashSet<Integer> foundNodeSet= new HashSet<Integer>();
@@ -137,6 +165,10 @@ public class QuadTree {
 		return foundNodeSet;
 	}
 
+	/**
+	 * Creates a QuadTree from an XML file.
+	 * @return The created QuadTree
+	 */
 	private static QuadTree makeQuadTreeFromXML()
 	{
 		AreaToDraw area = new AreaToDraw();
@@ -180,17 +212,27 @@ public class QuadTree {
 		return quadTree;
 	}
 	
+	/**
+	 * Finds all of the Nodes which are contained within a specified area.
+	 * @param area The area to search for Nodes.
+	 * @return A HashSet of all Nodes found within the specified area.
+	 */
 	public static HashSet<Node> searchAreaForNodes(AreaToDraw area)
 	{
 		return qTree.search(area);
 	}
 	
+	/**
+	 * Finds the ID's of all Nodes which are contained within a specified area.
+	 * @param area The area to search for Nodes.
+	 * @return A HashSet of the ID's of all Nodes found within the specified area.
+	 */
 	public static HashSet<Integer> searchAreaForNodeIDs(AreaToDraw area)
 	{
 		return qTree.searchForNodeIDs(area);
 	}
 	
-	/*
+	/**
 	 * Does not really do anything, but can be called in order for the qTree to be created
 	 */	
 	public static void initializeEntireQuadTree()

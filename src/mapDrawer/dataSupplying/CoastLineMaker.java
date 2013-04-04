@@ -11,16 +11,16 @@ import mapDrawer.AreaToDraw;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 
-/*
- * Creates polygons to draw the coastline of Denmark
+/**
+ * Creates GeneralPaths to draw the coast line of Denmark
  */
 public class CoastLineMaker {
 
-	//A HashSet of all of the coastline-polygons in Denmark
+	//A HashSet of all of the coast line polygons in Denmark
 	private static HashSet<Polygon> polygonSet = createPolygonSet("resources/coasts_polygon.txt_convertedJCOORD.txt");
 
-	/*
-	 * Generates an array of GeneralPaths which represents the coastline of Denmark within the specified AreaToDraw.
+	/**
+	 * Generates an array of GeneralPaths which represents the coast line of Denmark within the specified AreaToDraw.
 	 * 
 	 * @param 	canvasWidth The width of the drawing area
 	 * @param 	canvasHeight The height of the drawing area
@@ -33,7 +33,7 @@ public class CoastLineMaker {
 		return createGeneralPaths(canvasWidth, canvasHeight, area, relevantPolygonSet);
 	}	
 
-	/*
+	/**
 	 * Locates the Polygons that intersects with the specified AreaToDraw
 	 * @param	area The area to search for polygons to draw
 	 * @return 	A HashSet of the found Polygons
@@ -51,7 +51,7 @@ public class CoastLineMaker {
 		return relevantPolygonSet;
 	}	
 
-	/*
+	/**
 	 * Creates GenerealPaths from the found Polygons
 	 * @param 	canvasWidth The width of the drawing area
 	 * @param 	canvasHeight The height of the drawing area
@@ -86,7 +86,7 @@ public class CoastLineMaker {
 	}
 
 
-	/*
+	/**
 	 * Creates a HashSet of Polygons from the specified .txt-file
 	 * @param 	filenameAndLocation The .txt-file from which to create the HashSet of Polygons from
 	 * @return	A HashSet of every Polygon found in the specified .txt-file
@@ -144,7 +144,7 @@ public class CoastLineMaker {
 		return setOfPolygons;
 	}
 
-	/*
+	/**
 	 * Helper class - represents a Polygon.
 	 */
 	private static class Polygon {

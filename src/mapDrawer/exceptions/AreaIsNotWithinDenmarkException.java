@@ -1,6 +1,6 @@
 package mapDrawer.exceptions;
 
-/*
+/**
  * This exception is thrown when the programs attempts to create an AreaToDraw, which is not within the minimum and maximum coordinates of the map of Denmark, as given as static fields in AreaToDraw.
  */
 @SuppressWarnings("serial")

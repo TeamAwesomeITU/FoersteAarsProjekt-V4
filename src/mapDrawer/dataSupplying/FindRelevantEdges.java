@@ -16,7 +16,7 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 
-/*
+/**
  * Locates the Edges that has a least one point that lies within the AreaToDraw
  */
 public class FindRelevantEdges {
@@ -29,7 +29,7 @@ public class FindRelevantEdges {
 	This is made at startup so the program can access it at will. */
 	private static final HashSet<Edge> allEdgesSet = makeEdgeSet();
 
-	/*
+	/**
 	 * Finds all Edges, which are connected to a node in the specified AreaToDraw
 	 * @return A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
 	 */
@@ -173,7 +173,7 @@ public class FindRelevantEdges {
 		return map;
 	}
 
-	/*
+	/**
 	 * Gets a HashMap of all of the entire map's Nodes and their coordinates - the Node ID is the key, the values are its coordinates
 	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are x-/y- coordinates
 	 */

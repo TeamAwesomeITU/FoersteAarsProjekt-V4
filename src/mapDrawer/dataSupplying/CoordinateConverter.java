@@ -2,7 +2,7 @@ package mapDrawer.dataSupplying;
 
 import mapDrawer.AreaToDraw;
 
-/*
+/**
  * This class can convert coordinates to/from UTM and Java pixels.
  */
 public class CoordinateConverter {	
@@ -16,7 +16,7 @@ public class CoordinateConverter {
 	//The Area to draw in
 	private AreaToDraw area;
 	
-	/*
+	/**
 	 * Create a CoordinateConverter with the specified screen size and AreaToDraw.
 	 * 
 	 * @param canvasWidth The width of the drawing area in pixels
@@ -31,11 +31,21 @@ public class CoordinateConverter {
 			
 	}
 	
+	/**
+	 * Converts an X-coordinate from UTM to Java-coordinate pixels
+	 * @param x The coordinate in UTM
+	 * @return The converted coordinate in Java-coordinate pixels
+	 */
 	public double UTMToPixelCoordX(double x)
 	{
 		return UTMToNormalizedCoord(x, area.getSmallestX(), area.getLargestX(), canvasWidth);
 	}
 	
+	/**
+	 * Converts an Y-coordinate from UTM to Java-coordinate pixels
+	 * @param y The coordinate in UTM
+	 * @return The converted coordinate in Java-coordinate pixels
+	 */
 	public double UTMToPixelCoordY(double y)
 	{
 		double coord = UTMToNormalizedCoord(y, area.getSmallestY(), area.getLargestY(), canvasHeight);
@@ -43,7 +53,7 @@ public class CoordinateConverter {
 		return coord;
 	}
 	
-	/*
+	/**
 	 * Converts an X-coordinate from Java-coordinate pixels to UTM
 	 * @param x The coordinate in Java-coordinate pixels
 	 * @return The converted coordinate in UTM
@@ -54,7 +64,7 @@ public class CoordinateConverter {
 		return coord;
 	}
 	
-	/*
+	/**
 	 * Converts a Y-coordinate from Java-coordinate pixels to UTM
 	 * @param y The coordinate in Java-coordinate pixels
 	 * @return The converted coordinate in UTM
@@ -65,16 +75,37 @@ public class CoordinateConverter {
 		return NormalizedToUTMCoord(coord, area.getSmallestY(), area.getLargestY(), canvasHeight);
 	}
 	
+	/**
+	 * Converts from UTM to pixel coordinates - does not take Java's reversed y-axis into account.
+	 * @param coord The coordinate to convert
+	 * @param axisMinimum The coordinate's axis' minimum value.
+	 * @param axisMaximum The coordinate's axis' maximum value.
+	 * @param screenSizeAxis The canvas' size in pixels
+	 * @return The converted coordinate
+	 */
 	private double UTMToNormalizedCoord(double coord, double axisMinimum, double axisMaximum, double screenSizeAxis)
 	{
 		return ((coord-axisMinimum)*screenSizeAxis)/(axisMaximum-axisMinimum);		
 	}
 	
+	/**
+	 * Converts from pixel coordinates to UTM - does not take Java's reversed y-axis into account.
+	 * @param coord The coordinate to convert
+	 * @param axisMinimum The coordinate's axis' minimum value.
+	 * @param axisMaximum The coordinate's axis' maximum value.
+	 * @param screenSizeAxis The canvas' size in pixels
+	 * @return The converted coordinate
+	 */
 	private double NormalizedToUTMCoord(double coord, double axisMinimum, double axisMaximum, double screenSizeAxis)
 	{
 		return (((coord*(axisMaximum-axisMinimum))/screenSizeAxis)+axisMinimum);
 	}
 	
+	/**
+	 * Mirrors the y-coordinates in the y-axis.  
+	 * @param coord The y-coordinate to reflect
+	 * @return The reflect y-coordinate
+	 */
 	private double reflectCoordY(double coord)
 	{
 		return canvasHeight - coord;

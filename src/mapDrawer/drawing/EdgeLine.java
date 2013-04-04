@@ -1,5 +1,9 @@
 package mapDrawer.drawing;
 
+/**
+ *
+ *
+ */
 public class EdgeLine {
 	double startX, startY, endX, endY;
 	int roadType;

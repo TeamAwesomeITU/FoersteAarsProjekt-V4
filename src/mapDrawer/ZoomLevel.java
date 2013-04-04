@@ -2,7 +2,7 @@ package mapDrawer;
 
 import java.util.HashSet;
 
-/*
+/**
  * Holds seven different levels of zoom, which indicate which type of roads to draw. 
  * The roadtypes are determined from the percentage of the entire map, which the specified area fills.
  * Returns a String to use in a getRelevantRoadTypes search through an XML-file.
@@ -51,7 +51,7 @@ public enum ZoomLevel {
 		this.percentageOfEntireMap = percentageOfEntireMap;
 	}
 	
-	/*
+	/**
 	 * 
 	 * @return The getRelevantRoadTypes String to use to search the XML-file for the wanted road types.
 	 */
@@ -71,6 +71,10 @@ public enum ZoomLevel {
 		return foundLevel.getRelevantRoadTypes();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	private HashSet<Integer> getRelevantRoadTypes()
 	{
 		return this.relevantRoadTypes();
