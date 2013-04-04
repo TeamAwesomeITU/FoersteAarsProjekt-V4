@@ -9,7 +9,7 @@ import javax.swing.JCheckBox;
 public class ColoredJCheckBox extends JCheckBox {
 	/**
 	 * Calls the super constructor. 
-	 * @param Sets the text of the checkbox.
+	 * @param text Sets the text of the checkbox.
 	 */
 	ColoredJCheckBox(String text){
 		super();

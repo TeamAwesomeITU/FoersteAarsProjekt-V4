@@ -92,8 +92,8 @@ public class AdressParser {
 
 	/** This method is a shortcut that saves lines when using a pattern in a matcher
 	 * 
-	 * @param pattern: Is a string that can either be a literal word or a regex pattern. 	
-	 * @param input: Whatever input you want. Most likely the address. Also called a subjectstring.
+	 * @param pattern Is a string that can either be a literal word or a regex pattern. 	
+	 * @param input Whatever input you want. Most likely the address. Also called a subjectstring.
 	 * @return A matcher with a pattern and a subjectstring which you "apply" the pattern to. 
 	 */
 	private Matcher match(String pattern, String input) {

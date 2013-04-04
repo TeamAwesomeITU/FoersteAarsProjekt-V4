@@ -5,3 +5,4 @@
 *.ear
 /testresults.txt
 /nbproject/private/
+/doc/

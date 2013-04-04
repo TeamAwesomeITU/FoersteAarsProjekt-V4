@@ -132,12 +132,13 @@ public class MapPanel extends JPanel {
 
 	}
 
+
+	private Line2D line = new Line2D.Double();
 	/**
 	 * Draws all the lines for the map. Also, draws the rectangle used by the user
 	 * to see where you are about to zoom.
 	 * @param g The graphics object which is used.
 	 */
-	private Line2D line = new Line2D.Double();
 	public void paint(Graphics g) {
 		super.paint(g);
 		for (EdgeLine edgeLine : linesOfEdges) {
@@ -164,7 +165,7 @@ public class MapPanel extends JPanel {
 	}
 	/**
 	 * Sets the area to be used for drawing the map.
-	 * @param Area The area which is to be set.
+	 * @param area The area which is to be set.
 	 */
 	public void setArea(AreaToDraw area) {
 		this.area = area;

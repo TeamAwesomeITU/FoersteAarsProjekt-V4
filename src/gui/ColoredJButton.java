@@ -22,7 +22,7 @@ public class ColoredJButton extends JButton {
 	}
 	/**
 	 * Calls its superclass and makes a button with text.
-	 * @param the text of the button
+	 * @param text the text of the button
 	 */
 	public ColoredJButton(String text){
 		super(text);
