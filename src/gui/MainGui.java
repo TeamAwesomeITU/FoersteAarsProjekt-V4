@@ -21,7 +21,7 @@ public class MainGui {
 
 	public static boolean coordinatesBoolean = false;
 	
-	private static JProgressBar loadingBar;
+	private static ColoredJProgressBar loadingBar;
 	
 	private static JFrame loadingFrame;
 	
@@ -33,11 +33,7 @@ public class MainGui {
 		loadingFrame.setLocationRelativeTo(null);
 		loadingFrame.setSize(new Dimension(200, 100));
 		
-		loadingBar = new JProgressBar();
-		loadingBar.setIndeterminate(true);
-		loadingBar.setBackground(ColorTheme.BACKGROUND_COLOR);
-		loadingBar.setForeground(ColorTheme.BUTTON_CLICKED_COLOR);
-		loadingBar.setStringPainted(true);
+		loadingBar = new ColoredJProgressBar();
 		
 		loadingFrame.add(loadingBar);
 		loadingFrame.setVisible(true);		
