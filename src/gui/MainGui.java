@@ -21,23 +21,33 @@ public class MainGui {
 
 	public static boolean coordinatesBoolean = false;
 	
+	private static JProgressBar loadingBar;
+	
+	private static JFrame loadingFrame;
+	
 	/**
-	 * @param args
+	 * Makes the loading screen.
 	 */
-	public static void main(String[] args) {
-		ColorTheme.setTheme();
-		JFrame loadingFrame = new JFrame("Loading");
+	public static void makeLoadingScreen(){
+		loadingFrame = new JFrame("Loading");
 		loadingFrame.setLocationRelativeTo(null);
 		loadingFrame.setSize(new Dimension(200, 100));
 		
-		JProgressBar loadingBar = new JProgressBar();
+		loadingBar = new JProgressBar();
 		loadingBar.setIndeterminate(true);
 		loadingBar.setBackground(ColorTheme.BACKGROUND_COLOR);
 		loadingBar.setForeground(ColorTheme.BUTTON_CLICKED_COLOR);
 		loadingBar.setStringPainted(true);
 		
 		loadingFrame.add(loadingBar);
-		loadingFrame.setVisible(true);
+		loadingFrame.setVisible(true);		
+	}
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		ColorTheme.setTheme();
+		makeLoadingScreen();
 		
 		System.out.println("Making QuadTree");
 		loadingBar.setString("Making QuadTree");
