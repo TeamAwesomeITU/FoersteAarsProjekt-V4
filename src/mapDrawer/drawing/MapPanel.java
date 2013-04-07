@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
@@ -32,20 +31,17 @@ public class MapPanel extends JPanel {
 	private RectZoomer rectZoomer;
 	private AreaToDraw area;
 	private EdgeLine[] linesOfEdges; 
-	private JFrame jf;
-	private double height, width;
+	private double mapHeight, mapWidth;
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
 	 *  
-	 * @param jf - This is the JFrame which the MapPanel works with.
 	 * @param width - The width of the panel.
 	 * @param height - The heigth of the panel
 	 */
-	public MapPanel(JFrame jf, double width, double height) {
-		this.jf = jf;
-		this.height = height;
-		this.width = width;
+	public MapPanel(double width, double height) {
+		mapHeight = height;
+		mapWidth = width;
 		rectZoomer = new RectZoomer(this);
 		makeLinesForMap();
 		setBorderForPanel();
@@ -63,7 +59,7 @@ public class MapPanel extends JPanel {
 		HashSet<Edge> edgeSet = FindRelevantEdges.findEdgesToDraw(area);
 		Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 		linesOfEdges = new EdgeLine[edgeSet.size()];
-		CoordinateConverter coordConverter = new CoordinateConverter((int)width, (int)height, area);
+		CoordinateConverter coordConverter = new CoordinateConverter((int)mapWidth, (int)mapHeight, area);
 
 		int numberOfEdges = 0;
 		while(edgeSetIterator.hasNext() == true) {
@@ -149,7 +145,7 @@ public class MapPanel extends JPanel {
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			((Graphics2D)g).setStroke(new BasicStroke(RoadType.getStroke(roadType)));
 			((Graphics2D)g).draw(line); 
-			setBounds(new Rectangle((int)width, (int) height));
+			setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
 		}
 
 		Graphics2D g2 = (Graphics2D) g;
@@ -163,11 +159,14 @@ public class MapPanel extends JPanel {
 		} 
 	}
 	/**
-	 * Sets the area to be used for drawing the map.
-	 * @param area The area which is to be set.
+	 * Repaints the map to the new AreaToDraw. Also if the map needs to be withdrawn with same area but new size,
+	 * this method takes care of it.
 	 */
-	public void setArea(AreaToDraw area) {
+	
+	public void repaintMap(AreaToDraw area) {
 		this.area = area;
+		makeLinesForMap();
+		repaint();
 	}
 
 	/**
@@ -178,26 +177,19 @@ public class MapPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the JFrame which the MapPanel is contained within.
-	 */
-	public JFrame getParentFrame() {
-		return jf;
-	}
-
-	/**
 	 * Sets the width of the MapPanel. Is used when resizing.
 	 * @param width is the width-to-be.
 	 */
-	public void setWidth(double width) {
-		this.width = width;
+	public void setMapWidth(double width) {
+		mapWidth = width;
 	}
 
 	/**
 	 * Sets the height of the MapPanel. Is used when resizing.
 	 * @param height is the height-to-be.
 	 */
-	public void setHeight(double height) {
-		this.height = height;
+	public void setMapHeight(double height) {
+		mapHeight = height;
 	}
 
 	/**
@@ -208,24 +200,18 @@ public class MapPanel extends JPanel {
 
 	}
 
-	/**
-	 * Draws the map. Is used when resizing and zooming.
-	 */
-	public void setLinesForMap() {
-		makeLinesForMap();
-	}
 
 	/**
 	 * Returns the width of the map.
 	 */
 	public double getMapWidth() {
-		return width;
+		return mapWidth;
 	}
 
 	/**
 	 * Returns the height of the  map.
 	 */
 	public double getMapHeight() {
-		return height;
+		return mapHeight;
 	}
 }
