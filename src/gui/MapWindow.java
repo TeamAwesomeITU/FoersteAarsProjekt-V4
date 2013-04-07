@@ -175,7 +175,19 @@ public class MapWindow {
 	 * @return the calculated height
 	 */
 	private double heightForMap() {
-		return frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
+		double height = frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
+		if(height <= Math.round(frame.getWidth()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight())))
+			return  height;
+		else 
+			return heightForMap(height);
+	}
+	
+	private double heightForMap(double temporaryHeight) {
+		double height = temporaryHeight*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
+		if(height <= Math.round(frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight())))
+			return  height;
+		else 
+			return heightForMap(height);
 	}
 	/**
 	 * @return the height of the map
@@ -205,7 +217,7 @@ public class MapWindow {
 	private double widthForMap(double height) {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = Math.round(height*areaToDraw.getWidthHeightRelation());
-		if(width <Math.round(frame.getWidth()*0.9 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+		if(width <= Math.round(frame.getWidth()*0.9 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
 			return width;
 		else 
 			return widthForMap(height*0.9);

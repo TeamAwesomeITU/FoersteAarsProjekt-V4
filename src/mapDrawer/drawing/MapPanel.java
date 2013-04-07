@@ -2,7 +2,6 @@ package mapDrawer.drawing;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -49,7 +48,7 @@ public class MapPanel extends JPanel {
 		this.width = width;
 		rectZoomer = new RectZoomer(this);
 		makeLinesForMap();
-		setBorderForPanel(this);
+		setBorderForPanel();
 		addMouseListener(rectZoomer);
 		addMouseMotionListener(rectZoomer);
 	}
@@ -203,48 +202,10 @@ public class MapPanel extends JPanel {
 
 	/**
 	 * Creates a border around the MapPanel.
-	 * @param mp is the MapPanel you're drawing a border around.
 	 */
-	private void setBorderForPanel(MapPanel mp) {
-		Dimension d = new Dimension((int)mp.getMapWidth(), (int)getMapHeight());
-		d = mp.setPanelDimensions(new Dimension());
-		mp.setMaximumSize(d);
-		mp.setBorder(new LineBorder(Color.black));
+	private void setBorderForPanel() {
+		setBorder(new LineBorder(Color.black));
 
-	}
-	/**
-	 * Takes a Dimension and makes it's width and height match the relation between area's width and height.
-	 * Is also used to adjust the size of the map to a size that matches this relation.
-	 * 
-	 * @param d - Takes a dimension for the panel. 
-	 */
-
-	private Dimension setPanelDimensions(Dimension d) {
-		if(height < width) {
-			double whRelation = area.getWidthHeightRelation();
-			double newWidth = height*(whRelation);
-			if(newWidth > width) {
-				height = height*0.9;
-				setPanelDimensions(d);
-			}
-			else {
-				d.setSize(newWidth, height);
-				return d;
-			}
-		}
-
-		else {
-			double newHeight = (width*area.getHeight())/area.getWidth();
-			if(newHeight > height) {
-				width = width*0.9;
-				setPanelDimensions(d);
-			}
-			else {
-				d.setSize(width, newHeight);
-				return d;
-			}
-		}
-		return d;
 	}
 
 	/**
