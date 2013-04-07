@@ -159,12 +159,19 @@ public class MapPanel extends JPanel {
 		} 
 	}
 	/**
-	 * Repaints the map to the new AreaToDraw. Also if the map needs to be withdrawn with same area but new size,
-	 * this method takes care of it.
+	 * Repaints the map to the new AreaToDraw.
 	 */
 	
 	public void repaintMap(AreaToDraw area) {
 		this.area = area;
+		makeLinesForMap();
+		repaint();
+	}
+	
+	/**
+	 * Repaints the map with same AreaToDraw. Should be used if the window has been resized.
+	 */
+	public void repaintMap() {
 		makeLinesForMap();
 		repaint();
 	}

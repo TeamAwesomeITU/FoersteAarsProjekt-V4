@@ -71,7 +71,7 @@ public class MapComponentAdapter extends ComponentAdapter {
 					mp.setMapWidth(Math.round(newWidth)); 
 					double newHeight = (newWidth*mp.getArea().getHeight())/mp.getArea().getWidth();
 					mp.setMapHeight(Math.round(newHeight));
-					mp.repaintMap(mp.getArea());
+					mp.repaintMap();
 					isResizing = false;
 			}
 		}
