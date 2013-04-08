@@ -36,19 +36,99 @@ public class AreaToDraw {
 	 * @throws NegativeAreaSizeException
 	 * @throws AreaIsNotWithinDenmarkException
 	 */
-	public AreaToDraw(double smallestX, double largestX, double smallestY, double largestY) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException
+	public AreaToDraw(double smallestX, double largestX, double smallestY, double largestY, boolean shouldCorrectDistortion) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException
 	{
 		if(smallestX > largestX || smallestY > largestY || smallestX < 0 || smallestY < 0)
 			throw new NegativeAreaSizeException("Area size was invalid");
-		
+
 		if(smallestX < entireMapSmallestX || smallestY < entireMapSmallestY || largestX > entireMapLargestX || largestY > entireMapLargestY)
 			throw new AreaIsNotWithinDenmarkException("Some part of the area is not within the map of Denmark");
 
 		else {
-			this.smallestX = smallestX;
-			this.largestX = largestX;	
-			this.smallestY = smallestY;
-			this.largestY = largestY;
+			double widthHeightRelation = (largestX-smallestX)/(largestY-smallestY);
+			double roundedwidthHeightRelation = Math.round((widthHeightRelation*100.0))/100.0;
+			
+			if(shouldCorrectDistortion && !(widthHeightRelation == 1.0))
+			{				
+				//If the width is greater than the height
+				if(widthHeightRelation < 1.0)
+				{
+					this.smallestX = smallestX;
+					this.largestX = largestX;	
+					double newHeight = (largestX-smallestX)*widthHeightRelation;
+					
+					boolean newSmallestYisInsideMap = (smallestY - newHeight/2) > entireMapSmallestY;
+					boolean newLargestYisInsideMap = (largestY + newHeight/2) < entireMapLargestY;
+					
+					//If the new height does not exceed any of the edges of the map
+					if(newSmallestYisInsideMap && newLargestYisInsideMap)
+					{
+						smallestY -= newHeight/2;
+						largestY += newHeight/2;
+					}
+					
+					else
+					{
+						if(!newLargestYisInsideMap)
+						{
+							this.largestY = entireMapLargestY;
+							this.smallestY = largestY - newHeight;
+						}
+						
+						else
+						{
+							this.smallestY = entireMapSmallestY;
+							this.largestY = smallestY + newHeight;
+						}							
+						
+					}
+				}
+				
+				//If the height is greater than the width
+				else
+				{
+					this.smallestY = smallestY;
+
+					//FORKERT
+					double newWidth = (largestY-smallestY)*((entireMapLargestX-entireMapSmallestX)/(entireMapLargestY-entireMapSmallestY));
+					
+
+					boolean newSmallestXisInsideMap = (smallestX - newWidth/2) > entireMapSmallestX;
+					boolean newLargestXisInsideMap = (largestX + newWidth/2) < entireMapLargestX;
+					
+					//If the new height does not exceed any of the edges of the map
+					if(newSmallestXisInsideMap && newLargestXisInsideMap)
+					{
+						smallestY -= newWidth/2;
+						largestY += newWidth/2;
+					}
+					
+					else
+					{
+						if(!newLargestXisInsideMap)
+						{
+							this.largestY = entireMapLargestY;
+							this.smallestY = largestY - newWidth;
+						}
+						
+						else
+						{
+							this.smallestY = entireMapSmallestY;
+							this.largestY = smallestY + newWidth;
+						}							
+						
+					}
+				}
+				
+			}
+
+			else {
+				this.smallestX = smallestX;
+				this.largestX = largestX;	
+				this.smallestY = smallestY;
+				this.largestY = largestY;				
+			}
+
 		}
 	}
 
@@ -143,10 +223,10 @@ public class AreaToDraw {
 		//Doing a "separating axis test"
 		double areaMidX = (area.getWidth()/2) + area.getSmallestX();
 		double areaMidY = (area.getHeight()/2) + area.getSmallestY();
-		
+
 		double thisMidX = (this.getWidth()/2) + this.getSmallestX();
 		double thisMidY = (this.getHeight()/2) + this.getSmallestY();
-		
+
 		return (Math.abs(areaMidX - thisMidX) < (Math.abs(area.getWidth() + this.getWidth()) / 2) 
 				&& (Math.abs(areaMidY - thisMidY) < (Math.abs(area.getHeight() + this.getHeight()) / 2)));
 	}

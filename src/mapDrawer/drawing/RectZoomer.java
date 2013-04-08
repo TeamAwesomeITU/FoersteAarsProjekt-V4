@@ -119,7 +119,7 @@ public class RectZoomer extends MouseAdapter {
 					throw new InvalidAreaProportionsException("Area proportions do not equal those of the entire map of Denmark");
 				}
 				else {
-					area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord);
+					area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord, true);
 					mp.repaintMap(area);
 				}
 			} 
