@@ -56,7 +56,7 @@ public class RectZoomer extends MouseAdapter {
 			if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
 
 			double rectWidth = Math.abs(endX);
-			double rectHeight = Math.abs((rectWidth*AreaToDraw.getHeightOfEntireMap())/AreaToDraw.getWidthOfEntireMap());    
+			double rectHeight = Math.abs(endY);//Math.abs((rectWidth*AreaToDraw.getHeightOfEntireMap())/AreaToDraw.getWidthOfEntireMap());    
 
 			startX = Math.min(mousePress.x, e.getPoint().x);
 			
@@ -91,12 +91,28 @@ public class RectZoomer extends MouseAdapter {
 			if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
 			double startXCoord = coordConverter.pixelToUTMCoordX((int) startX);
 			double startYCoord = coordConverter.pixelToUTMCoordY((int) endY);
-			double endXCoord = coordConverter.pixelToUTMCoordX((int) endX);
-			double endYCoord = coordConverter.pixelToUTMCoordY((int) startY);
-			System.out.println("startX: " +startXCoord + " startY: " +startYCoord+ " endX: " +endXCoord+ "endY: " +endYCoord);
+			
+			double endXCoord = AreaToDraw.getLargestXOfEntireMap();
+			double endYCoord = AreaToDraw.getLargestYOfEntireMap();
+			
+			//If width is greater than height, then the width decides the AreaToDraw - else, it's vice versa
+			//HVIS Y ER STØRRE END X BLIVER DE STØREST EKONVERTEDE KOORDINATER PRÆCIST DE SAMME SOM DE MINDSTE - WTF
+			if(Math.abs(endX-startX) > Math.abs(endY-startY))
+			{
+				endXCoord = coordConverter.pixelToUTMCoordX((int) endX);
+				endYCoord = ((AreaToDraw.getHeightOfEntireMap()*endXCoord)-(AreaToDraw.getHeightOfEntireMap()*startXCoord)+(AreaToDraw.getWidthOfEntireMap()*startYCoord))/AreaToDraw.getWidthOfEntireMap();
+			}
+			else
+			{
+				endYCoord = coordConverter.pixelToUTMCoordY((int) endY);
+				endXCoord = ((AreaToDraw.getWidthOfEntireMap()*endYCoord)-(AreaToDraw.getWidthOfEntireMap()*startYCoord)+(AreaToDraw.getHeightOfEntireMap()*startXCoord))/AreaToDraw.getHeightOfEntireMap();
+			}
+			
+			System.out.println("startX: " +startXCoord + " startY: " +startYCoord+ " endX: " + endXCoord + " endY: " + endYCoord );
 			try {
 				rect = null;    		
-				double newAreaProportions = Math.round((((endX-startX)/(endY-startY))*100.0))/100.0;
+				//double newAreaProportions = Math.round((((endX-startX)/(endY-startY))*100.0))/100.0;
+				double newAreaProportions = Math.round((((endXCoord-startXCoord)/(endYCoord-startYCoord))*100.0))/100.0;
 				double proportionsOfDenmarkMap = Math.round(((AreaToDraw.getWidthOfEntireMap()/AreaToDraw.getHeightOfEntireMap())*100.0))/100.0;
 				System.out.println("newAreaProportions: " + newAreaProportions + ", proportionsOfDenmarkMap: " + proportionsOfDenmarkMap);
 				if(newAreaProportions != proportionsOfDenmarkMap) {
