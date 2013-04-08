@@ -1,4 +1,3 @@
-
 package gui;
 
 import java.awt.*;
@@ -77,7 +76,7 @@ public class MainGui {
 	/**
 	 * Makes the menu and adds shortcuts to it. This is the standard menu for all future windows.
 	 * @param frameForMenu the frame the menu is created for
-	 * @param windowID the unique indentifier for the frame
+	 * @param windowID the unique identifier for the frame
 	 */
 	public static void makeMenu(final JFrame frameForMenu, final int windowID){
 		final int SHORT_CUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();

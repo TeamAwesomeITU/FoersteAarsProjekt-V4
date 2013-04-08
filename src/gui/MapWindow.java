@@ -203,7 +203,7 @@ public class MapWindow {
 		centerColoredJPanel = new ColoredJPanel();
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
 		
-		MapPanel mapPanel = new MapPanel(frame, (int)Math.round(width), (int)Math.round(height));
+		MapPanel mapPanel = new MapPanel((int)Math.round(width), (int)Math.round(height));
 		mapPanel.setLayout(new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS));
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
@@ -227,7 +227,19 @@ public class MapWindow {
 	 * @return the calculated height
 	 */
 	private double heightForMap() {
-		return frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
+		double height = frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
+		if(height <= Math.round(frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight())))
+			return  height;
+		else 
+			return heightForMap(height);
+	}
+	
+	private double heightForMap(double temporaryHeight) {
+		double height = temporaryHeight*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
+		if(height <= Math.round(frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight())))
+			return  height;
+		else 
+			return heightForMap(height);
 	}
 	/**
 	 * @return the height of the map
@@ -257,7 +269,7 @@ public class MapWindow {
 	private double widthForMap(double height) {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = Math.round(height*areaToDraw.getWidthHeightRelation());
-		if(width <Math.round(frame.getWidth()*0.9 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+		if(width <= Math.round(frame.getWidth()*0.9 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
 			return width;
 		else 
 			return widthForMap(height*0.9);

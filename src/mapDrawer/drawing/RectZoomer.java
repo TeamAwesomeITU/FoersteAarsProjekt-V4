@@ -104,9 +104,7 @@ public class RectZoomer extends MouseAdapter {
 				}
 				else {
 					area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord);
-					mp.setArea(area);
-					mp.setLinesForMap();
-					mp.repaint();
+					mp.repaintMap(area);
 				}
 			} 
 			catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
@@ -139,8 +137,6 @@ public class RectZoomer extends MouseAdapter {
 	public void zoomOut()
 	{
 		AreaToDraw area = ras.pop();
-		mp.setArea(area);
-		mp.setLinesForMap();
-		mp.repaint();
+		mp.repaintMap(area);
 	}
 }
