@@ -44,6 +44,15 @@ public class AreaToDraw {
 		if(smallestX < entireMapSmallestX || smallestY < entireMapSmallestY || largestX > entireMapLargestX || largestY > entireMapLargestY)
 			throw new AreaIsNotWithinDenmarkException("Some part of the area is not within the map of Denmark");
 
+		this.smallestX = smallestX;
+		this.largestX = largestX;	
+		this.smallestY = smallestY;
+		this.largestY = largestY;	
+		
+		
+		
+		//loooooooooooooooooooooooooooooooooooRT
+		/*
 		else {
 			double widthHeightRelation = (largestX-smallestX)/(largestY-smallestY);
 			double roundedwidthHeightRelation = Math.round((widthHeightRelation*100.0))/100.0;
@@ -128,8 +137,10 @@ public class AreaToDraw {
 				this.smallestY = smallestY;
 				this.largestY = largestY;				
 			}
-
+			
 		}
+			*/
+
 	}
 
 	/**
