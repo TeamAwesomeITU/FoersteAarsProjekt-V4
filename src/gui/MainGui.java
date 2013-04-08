@@ -19,15 +19,40 @@ public class MainGui {
 	public static boolean undecoratedBoolean = false;
 
 	public static boolean coordinatesBoolean = false;
-
+	
+	private static ColoredJProgressBar loadingBar;
+	
+	private static JFrame loadingFrame;
+	
+	/**
+	 * Makes the loading screen.
+	 */
+	public static void makeLoadingScreen(){
+		loadingFrame = new JFrame("Loading");
+		loadingFrame.setLocationRelativeTo(null);
+		loadingFrame.setSize(new Dimension(200, 100));
+		
+		loadingBar = new ColoredJProgressBar();
+		
+		loadingFrame.add(loadingBar);
+		loadingFrame.setVisible(true);		
+	}
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("Making QuadTree"); 
+		ColorTheme.setTheme();
+		makeLoadingScreen();
+		
+		System.out.println("Making QuadTree");
+		loadingBar.setString("Making QuadTree");
 		QuadTree.initializeEntireQuadTree();
-		System.out.println("Making NodeMap"); 
+		
+		System.out.println("Making NodeMap");
+		loadingBar.setString("Making NodeMap");
 		FindRelevantEdges.getNodeCoordinatesMap();
+		
+		loadingFrame.dispose();
 		MainGui.getInstance();
 	}
 
