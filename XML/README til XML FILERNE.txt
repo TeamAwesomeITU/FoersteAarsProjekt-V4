@@ -1,1 +1,0 @@
-Husk at det der før hed node hedder nu roadSegment og nodeCollection hedder nu roadSegmentCollection. 

@@ -1,4 +1,3 @@
-
 package gui;
 
 import java.awt.*;
@@ -20,15 +19,40 @@ public class MainGui {
 	public static boolean undecoratedBoolean = false;
 
 	public static boolean coordinatesBoolean = false;
-
+	
+	private static ColoredJProgressBar loadingBar;
+	
+	private static JFrame loadingFrame;
+	
+	/**
+	 * Makes the loading screen.
+	 */
+	public static void makeLoadingScreen(){
+		loadingFrame = new JFrame("Loading");
+		loadingFrame.setLocationRelativeTo(null);
+		loadingFrame.setSize(new Dimension(200, 100));
+		
+		loadingBar = new ColoredJProgressBar();
+		
+		loadingFrame.add(loadingBar);
+		loadingFrame.setVisible(true);		
+	}
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("Making QuadTree"); 
+		ColorTheme.setTheme();
+		makeLoadingScreen();
+		
+		System.out.println("Making QuadTree");
+		loadingBar.setString("Making QuadTree");
 		QuadTree.initializeEntireQuadTree();
-		System.out.println("Making NodeMap"); 
+		
+		System.out.println("Making NodeMap");
+		loadingBar.setString("Making NodeMap");
 		FindRelevantEdges.getNodeCoordinatesMap();
+		
+		loadingFrame.dispose();
 		MainGui.getInstance();
 	}
 
@@ -52,7 +76,7 @@ public class MainGui {
 	/**
 	 * Makes the menu and adds shortcuts to it. This is the standard menu for all future windows.
 	 * @param frameForMenu the frame the menu is created for
-	 * @param windowID the unique indentifier for the frame
+	 * @param windowID the unique identifier for the frame
 	 */
 	public static void makeMenu(final JFrame frameForMenu, final int windowID){
 		final int SHORT_CUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();

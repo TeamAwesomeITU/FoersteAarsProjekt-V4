@@ -2,7 +2,6 @@ package mapDrawer.drawing;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
@@ -33,23 +31,20 @@ public class MapPanel extends JPanel {
 	private RectZoomer rectZoomer;
 	private AreaToDraw area;
 	private EdgeLine[] linesOfEdges; 
-	private JFrame jf;
-	private double height, width;
+	private double mapHeight, mapWidth;
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
 	 *  
-	 * @param jf - This is the JFrame which the MapPanel works with.
 	 * @param width - The width of the panel.
 	 * @param height - The heigth of the panel
 	 */
-	public MapPanel(JFrame jf, double width, double height) {
-		this.jf = jf;
-		this.height = height;
-		this.width = width;
+	public MapPanel(double width, double height) {
+		mapHeight = height;
+		mapWidth = width;
 		rectZoomer = new RectZoomer(this);
 		makeLinesForMap();
-		setBorderForPanel(this);
+		setBorderForPanel();
 		addMouseListener(rectZoomer);
 		addMouseMotionListener(rectZoomer);
 	}
@@ -64,7 +59,7 @@ public class MapPanel extends JPanel {
 		HashSet<Edge> edgeSet = FindRelevantEdges.findEdgesToDraw(area);
 		Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 		linesOfEdges = new EdgeLine[edgeSet.size()];
-		CoordinateConverter coordConverter = new CoordinateConverter((int)width, (int)height, area);
+		CoordinateConverter coordConverter = new CoordinateConverter((int)mapWidth, (int)mapHeight, area);
 
 		int numberOfEdges = 0;
 		while(edgeSetIterator.hasNext() == true) {
@@ -150,7 +145,7 @@ public class MapPanel extends JPanel {
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			((Graphics2D)g).setStroke(new BasicStroke(RoadType.getStroke(roadType)));
 			((Graphics2D)g).draw(line); 
-			setBounds(new Rectangle((int)width, (int) height));
+			setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
 		}
 
 		Graphics2D g2 = (Graphics2D) g;
@@ -164,11 +159,21 @@ public class MapPanel extends JPanel {
 		} 
 	}
 	/**
-	 * Sets the area to be used for drawing the map.
-	 * @param area The area which is to be set.
+	 * Repaints the map to the new AreaToDraw.
 	 */
-	public void setArea(AreaToDraw area) {
+	
+	public void repaintMap(AreaToDraw area) {
 		this.area = area;
+		makeLinesForMap();
+		repaint();
+	}
+	
+	/**
+	 * Repaints the map with same AreaToDraw. Should be used if the window has been resized.
+	 */
+	public void repaintMap() {
+		makeLinesForMap();
+		repaint();
 	}
 
 	/**
@@ -179,92 +184,41 @@ public class MapPanel extends JPanel {
 	}
 
 	/**
-	 * Returns the JFrame which the MapPanel is contained within.
-	 */
-	public JFrame getParentFrame() {
-		return jf;
-	}
-
-	/**
 	 * Sets the width of the MapPanel. Is used when resizing.
 	 * @param width is the width-to-be.
 	 */
-	public void setWidth(double width) {
-		this.width = width;
+	public void setMapWidth(double width) {
+		mapWidth = width;
 	}
 
 	/**
 	 * Sets the height of the MapPanel. Is used when resizing.
 	 * @param height is the height-to-be.
 	 */
-	public void setHeight(double height) {
-		this.height = height;
+	public void setMapHeight(double height) {
+		mapHeight = height;
 	}
 
 	/**
 	 * Creates a border around the MapPanel.
-	 * @param mp is the MapPanel you're drawing a border around.
 	 */
-	private void setBorderForPanel(MapPanel mp) {
-		Dimension d = new Dimension((int)mp.getMapWidth(), (int)getMapHeight());
-		d = mp.setPanelDimensions(new Dimension());
-		mp.setMaximumSize(d);
-		mp.setBorder(new LineBorder(Color.black));
+	private void setBorderForPanel() {
+		setBorder(new LineBorder(Color.black));
 
 	}
-	/**
-	 * Takes a Dimension and makes it's width and height match the relation between area's width and height.
-	 * Is also used to adjust the size of the map to a size that matches this relation.
-	 * 
-	 * @param d - Takes a dimension for the panel. 
-	 */
 
-	private Dimension setPanelDimensions(Dimension d) {
-		if(height < width) {
-			double whRelation = area.getWidthHeightRelation();
-			double newWidth = height*(whRelation);
-			if(newWidth > width) {
-				height = height*0.9;
-				setPanelDimensions(d);
-			}
-			else {
-				d.setSize(newWidth, height);
-				return d;
-			}
-		}
-
-		else {
-			double newHeight = (width*area.getHeight())/area.getWidth();
-			if(newHeight > height) {
-				width = width*0.9;
-				setPanelDimensions(d);
-			}
-			else {
-				d.setSize(width, newHeight);
-				return d;
-			}
-		}
-		return d;
-	}
-
-	/**
-	 * Draws the map. Is used when resizing and zooming.
-	 */
-	public void setLinesForMap() {
-		makeLinesForMap();
-	}
 
 	/**
 	 * Returns the width of the map.
 	 */
 	public double getMapWidth() {
-		return width;
+		return mapWidth;
 	}
 
 	/**
 	 * Returns the height of the  map.
 	 */
 	public double getMapHeight() {
-		return height;
+		return mapHeight;
 	}
 }
