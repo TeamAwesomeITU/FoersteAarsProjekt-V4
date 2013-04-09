@@ -138,17 +138,14 @@ public class MapWindow {
 	 */
 	private void createMapOfDenmark(double width, double height) {
 		centerColoredJPanel = new ColoredJPanel();
-		centerColoredJPanel.setAlignmentX(centerColoredJPanel.CENTER_ALIGNMENT);
-		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.Y_AXIS));
-		
+		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
+
 		MapPanel mapPanel = new MapPanel((int)Math.round(width), (int)Math.round(height));
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		MapKeyBinding.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
-		
-		mapPanel.setAlignmentX(mapPanel.CENTER_ALIGNMENT);
-		mapPanel.setLayout(new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS));
+
 		centerColoredJPanel.add(mapPanel);
 		MainGui.contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
 	}
