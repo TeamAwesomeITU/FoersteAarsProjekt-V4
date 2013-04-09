@@ -17,9 +17,9 @@ public class ColorTheme {
 	//What ever boolean is true, is the theme the progams starts in
 	public static boolean summerTheme = false;
 
-	public static boolean winterTheme = true;
+	public static boolean winterTheme = false;
 	
-	public static boolean springTheme = false;
+	public static boolean springTheme = true;
 	
 	public static boolean autumnTheme = false;
 	/**

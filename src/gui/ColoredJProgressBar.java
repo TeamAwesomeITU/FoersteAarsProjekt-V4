@@ -1,5 +1,6 @@
 package gui;
 
+import javax.swing.BorderFactory;
 import javax.swing.JProgressBar;
 
 @SuppressWarnings("serial")
@@ -15,5 +16,6 @@ public class ColoredJProgressBar extends JProgressBar {
 		setBackground(ColorTheme.BACKGROUND_COLOR);
 		setForeground(ColorTheme.BUTTON_CLICKED_COLOR);
 		setStringPainted(true);
+		setBorder(BorderFactory.createEmptyBorder());
 	}
 }
