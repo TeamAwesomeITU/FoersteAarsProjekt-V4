@@ -17,6 +17,7 @@ import javax.swing.*;
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.drawing.MapComponentAdapter;
+import mapDrawer.drawing.MapKeyBinding;
 import mapDrawer.drawing.MapPanel;
 /**
  * This class holds the window with the map of denmark.
@@ -144,6 +145,7 @@ public class MapWindow {
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
+		MapKeyBinding.addKeyBinding("B", mapPanel, toSearchQuery, fromSearchQuery);
 
 		centerColoredJPanel.add(mapPanel);
 		MainGui.contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
@@ -250,14 +252,6 @@ public class MapWindow {
 	 */
 	public JFrame getJFrame() {
 		return MainGui.frame;
-	}
-	
-	public JTextField getFromSearchQuery() {
-		return fromSearchQuery;
-	}
-	
-	public JTextField getToSearchQuery() {
-		return toSearchQuery;
 	}
 
 	//---------------------------------Listeners from here-----------------------------//
