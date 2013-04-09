@@ -251,6 +251,14 @@ public class MapWindow {
 	public JFrame getJFrame() {
 		return MainGui.frame;
 	}
+	
+	public JTextField getFromSearchQuery() {
+		return fromSearchQuery;
+	}
+	
+	public JTextField getToSearchQuery() {
+		return toSearchQuery;
+	}
 
 	//---------------------------------Listeners from here-----------------------------//
 
