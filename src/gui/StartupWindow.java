@@ -25,7 +25,7 @@ import javax.swing.JTextField;
  * a simple search window.
  */
 public class StartupWindow {
-	
+
 	private static final int WINDOW_ID = 1;
 	private AdressParser adressParser;
 	private JFrame frame;
@@ -38,7 +38,7 @@ public class StartupWindow {
 	public StartupWindow(){
 		createStartupScreen();
 	}
-	
+
 	/**
 	 * Gets the window ID
 	 * @return the window id
@@ -46,7 +46,7 @@ public class StartupWindow {
 	public static final int getWindowId(){
 		return WINDOW_ID;
 	}
-	
+
 	/**
 	 * Builds the frame and sets it up
 	 */
@@ -57,7 +57,7 @@ public class StartupWindow {
 		frame.setBounds(0,0,frameSize.width, frameSize.height);
 		frame.setPreferredSize(frameSize);
 		frame.setLocationRelativeTo(null);
-		
+
 		MainGui.makeMenu(frame, WINDOW_ID);
 		fillContentPane();		
 
@@ -66,7 +66,7 @@ public class StartupWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 	}
-	
+
 	/**
 	 * Fills the contentpane, and calls the makeButton method to make the buttons.
 	 */
@@ -77,7 +77,7 @@ public class StartupWindow {
 		contentPane.add(MainGui.makeFooter(), BorderLayout.SOUTH);
 		contentPane.add(makeButtons(), BorderLayout.CENTER);
 	}
-	
+
 	/**
 	 * makes the buttons
 	 * @return a ColoredJPanel to be inserted into the contentpane 
@@ -126,7 +126,7 @@ public class StartupWindow {
 		frame.setCursor(Cursor.getDefaultCursor());
 		frame.dispose();
 	}
-	
+
 	/**
 	 * Parses the address through our addressParser class
 	 * It opens the map and copies the search address into the
@@ -146,7 +146,7 @@ public class StartupWindow {
 			JOptionPane.showMessageDialog(frame, "You have to enter an address");
 		}
 	}
-	
+
 	//---------------------------------Listeners from here-----------------------------//
 	/**
 	 * If the user is in the search text field, then by pressing enter
@@ -173,7 +173,7 @@ public class StartupWindow {
 	 * Parses the address through the AddressParser class
 	 */
 	class FindAddressActionListener implements ActionListener{
-	
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			searchForAnAddress();
@@ -192,7 +192,7 @@ public class StartupWindow {
 	 * clears the text field of text
 	 */
 	class ClearActionListener implements ActionListener{
-	
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			searchQuery.setText("");

@@ -22,7 +22,7 @@ import mapDrawer.drawing.MapPanel;
  * This class holds the window with the map of denmark.
  */
 public class MapWindow {
-	
+
 	private static final int WINDOW_ID = 2;
 	private JFrame frame;
 	private Container contentPane;
@@ -30,9 +30,9 @@ public class MapWindow {
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeCoordinateJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private JLabel X_CORD, Y_CORD;
-	
+
 	private GridBagConstraints c = new GridBagConstraints();
-	
+
 	/**
 	 * A constructor for making the window with an empty search query
 	 */
@@ -47,7 +47,7 @@ public class MapWindow {
 		createMapScreen();
 		toSearchQuery.setText(searchQuery);
 	}
-	
+
 	/**
 	 * An unique windowID for the window
 	 * @return the window id
@@ -55,7 +55,7 @@ public class MapWindow {
 	public static final int getWindowId(){
 		return WINDOW_ID;
 	}
-	
+
 	/**
 	 * Makes the frame and fills it.
 	 */
@@ -65,10 +65,10 @@ public class MapWindow {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setBounds(0,0,screenSize.width, screenSize.height);
 		frame.setPreferredSize(screenSize);
-		
+
 		MainGui.makeMenu(frame, WINDOW_ID);
 		fillContentPane();
-		
+
 		frame.pack();
 		fromSearchQuery.requestFocusInWindow();
 		frame.setVisible(true);
@@ -82,7 +82,7 @@ public class MapWindow {
 		frame.addComponentListener(mcp);
 		frame.setVisible(true);
 	}
-	
+
 	/**
 	 * Fills the contentpane with the panels
 	 */
@@ -126,7 +126,7 @@ public class MapWindow {
 		contentPane.add(westColoredJPanel, BorderLayout.WEST);
 		contentPane.add(eastColoredJPanel, BorderLayout.EAST);
 	}
-	
+
 	/**
 	 * Makes the toolbar for the search input
 	 * @return the toolbar to be inserted later.
@@ -134,37 +134,37 @@ public class MapWindow {
 	public ColoredJPanel makeToolBar(){
 		ColoredJPanel toolBar = new ColoredJPanel();
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
-		
+
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
 		fromSearchQuery = new JTextField();
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
-		
+
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(ColorTheme.TEXT_COLOR);
 		toSearchQuery = new JTextField();
 		toSearchQuery.addKeyListener(new EnterKeyListener());
-		
+
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
-		
+
 		ColoredJButton reverseButton = new ColoredJButton(); 
 		reverseButton.setIcon(new ImageIcon("resources/reverse.png"));
 		reverseButton.setBorder(BorderFactory.createEmptyBorder());
 		reverseButton.setContentAreaFilled(false);
 		reverseButton.setToolTipText("Click to reverse from and to");
 		reverseButton.addActionListener(new ReverseActionListener());
-		
+
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
 		toolBar.add(fromSearchQuery);
 		toolBar.add(toHeader);
 		toolBar.add(toSearchQuery);
 		toolBar.add(findRouteButton);
-		
+
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(toolBar);
-		
+
 		return flow;
 	}
 	/**
@@ -174,26 +174,26 @@ public class MapWindow {
 	public ColoredJPanel makeCoordinateJPanel(){
 		ColoredJPanel coordPanel = new ColoredJPanel();
 		coordPanel.setLayout(new GridLayout(2, 2, 5, 3));
-		
+
 		JLabel xCordJLabel = new JLabel("X-CORD");
 		xCordJLabel.setForeground(ColorTheme.TEXT_COLOR);
 		JLabel yCordJLabel = new JLabel("Y-CORD");
 		yCordJLabel.setForeground(ColorTheme.TEXT_COLOR);
-		
+
 		X_CORD = new JLabel();
 		Y_CORD = new JLabel();
-		
+
 		coordPanel.add(xCordJLabel);
 		coordPanel.add(yCordJLabel);
 		coordPanel.add(X_CORD);
 		coordPanel.add(Y_CORD);
-		
+
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(coordPanel);
-		
+
 		return flow;
 	}
-	
+
 	/**
 	 * Makes the map of denmark. It makes an instance of MapPanel
 	 * @param width the width of the map
@@ -202,7 +202,7 @@ public class MapWindow {
 	private void createMapOfDenmark(double width, double height) {
 		centerColoredJPanel = new ColoredJPanel();
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
-		
+
 		MapPanel mapPanel = new MapPanel((int)Math.round(width), (int)Math.round(height));
 		mapPanel.setLayout(new BoxLayout(mapPanel, BoxLayout.PAGE_AXIS));
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
@@ -233,7 +233,7 @@ public class MapWindow {
 		else 
 			return heightForMap(height);
 	}
-	
+
 	private double heightForMap(double temporaryHeight) {
 		double height = temporaryHeight*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
 		if(height <= Math.round(frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight())))
@@ -294,14 +294,14 @@ public class MapWindow {
 				for(int i = 0; adressParser.getAdressArray().length > i; i++){
 					fromArray[i] = adressParser.getAdressArray()[i];
 				}
-				
+
 				adressParser.parseAdress(toSearchQuery.getText());
 
 				String[] toArray = adressParser.getAdressArray();
 				for(int i = 0; adressParser.getAdressArray().length > i; i++){
 					toArray[i] = adressParser.getAdressArray()[i];
 				}
-				
+
 				JOptionPane.showMessageDialog(frame, "From: " + fromArray[0] 
 												+ "\nTo: " + toArray[0]);
 			} catch (MalformedAdressException e1) {
@@ -325,18 +325,18 @@ public class MapWindow {
 	public JFrame getJFrame() {
 		return frame;
 	}
-	
+
 	//---------------------------------Listeners from here-----------------------------//
-	
+
 	/**
 	 * The listener for the coordinates
 	 */
 	class CoordinatesMouseMotionListener extends MouseAdapter{
-		
+
 		private MapPanel mapPanel;
 		private AreaToDraw mapAreaToDraw;
 		private CoordinateConverter coordConverter;
-		
+
 		public CoordinatesMouseMotionListener(MapPanel mapPanel){
 			this.mapPanel = mapPanel;
 		}
@@ -405,11 +405,9 @@ public class MapWindow {
 		public void actionPerformed(ActionEvent arg0) {
 			findRoute();			
 		}
-		
+
 	}
-	
-	
+
+
 
 }
-
-

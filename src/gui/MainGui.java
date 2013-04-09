@@ -19,11 +19,11 @@ public class MainGui {
 	public static boolean undecoratedBoolean = false;
 
 	public static boolean coordinatesBoolean = false;
-	
+
 	private static ColoredJProgressBar loadingBar;
-	
+
 	private static JFrame loadingFrame;
-	
+
 	/**
 	 * Makes the loading screen.
 	 */
@@ -31,9 +31,9 @@ public class MainGui {
 		loadingFrame = new JFrame("Loading");
 		loadingFrame.setLocationRelativeTo(null);
 		loadingFrame.setSize(new Dimension(200, 100));
-		
+
 		loadingBar = new ColoredJProgressBar();
-		
+
 		loadingFrame.add(loadingBar);
 		loadingFrame.setVisible(true);		
 	}
@@ -43,15 +43,15 @@ public class MainGui {
 	public static void main(String[] args) {
 		ColorTheme.setTheme();
 		makeLoadingScreen();
-		
+
 		System.out.println("Making QuadTree");
 		loadingBar.setString("Making QuadTree");
 		QuadTree.initializeEntireQuadTree();
-		
+
 		System.out.println("Making NodeMap");
 		loadingBar.setString("Making NodeMap");
 		FindRelevantEdges.getNodeCoordinatesMap();
-		
+
 		loadingFrame.dispose();
 		MainGui.getInstance();
 	}
@@ -145,11 +145,11 @@ public class MainGui {
 							coordinatesBoolean = true;
 					}
 				});
-				
+
 				JLabel themesLabel = new JLabel("Themes:");
-				
+
 				String[] themes = {"Summer", "Winter", "Spring", "Autumn"};
-				
+
 				JComboBox<String> colorThemesBox = new JComboBox<>(themes);
 				if(ColorTheme.autumnTheme) colorThemesBox.setSelectedIndex(3);
 				else if(ColorTheme.springTheme) colorThemesBox.setSelectedIndex(2);
@@ -172,14 +172,14 @@ public class MainGui {
 						settingsFrame.dispose();
 					}
 				});
-				
+
 				ColoredJPanel themesPanel = new ColoredJPanel();
 				themesPanel.add(themesLabel);
 				themesPanel.add(colorThemesBox);				
 
 				container.add(settingsPanel, BorderLayout.CENTER);
 				container.add(themesPanel, BorderLayout.SOUTH);
-				
+
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);
 				settingsFrame.pack();
