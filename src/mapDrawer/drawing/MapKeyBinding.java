@@ -12,6 +12,7 @@ public class MapKeyBinding extends AbstractAction{
 	String action;
 	JTextField toField, fromField;
 	    
+	@SuppressWarnings("static-access")
 	public static void addKeyBinding(String key, MapPanel mp, JTextField toField, JTextField fromField){
 
 		mp.getInputMap(mp.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key), key);
@@ -28,7 +29,7 @@ public class MapKeyBinding extends AbstractAction{
 	    if(action.equals("R")){
 	        System.out.println("R");
 	    }
-	    if(action.equals("B")){
+	    if(action.equals("B") && toField.hasFocus() == false && fromField.hasFocus() == false){
 	        System.out.println("B");
 	    }
 	}
