@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
 
 import mapDrawer.AreaToDraw;
@@ -47,6 +48,8 @@ public class MapPanel extends JPanel {
 		setBorderForPanel();
 		addMouseListener(rectZoomer);
 		addMouseMotionListener(rectZoomer);
+		addKeyBinding("B");
+	    addKeyBinding("R");
 	}
 
 	/**
@@ -220,5 +223,11 @@ public class MapPanel extends JPanel {
 	 */
 	public double getMapHeight() {
 		return mapHeight;
+	}
+	
+	public void addKeyBinding(String key){
+
+		getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(key), key);
+    	getActionMap().put(key, new MapKeyBinding(key));
 	}
 }
