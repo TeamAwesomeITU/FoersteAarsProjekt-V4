@@ -47,7 +47,7 @@ public class MapWindow {
 		double heightOfFrame = heightForMap();
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		MainGui.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		MainGui.frame.pack();
+		//MainGui.frame.pack();
 		MapComponentAdapter mcp = new MapComponentAdapter(this);
 		MainGui.frame.addComponentListener(mcp);
 	}

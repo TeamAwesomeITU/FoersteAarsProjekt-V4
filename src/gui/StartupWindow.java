@@ -63,9 +63,9 @@ public class StartupWindow{
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(logo);
 		loadingBar = new ColoredJProgressBar();
-		flow.add(loadingBar);
-		
+
 		loadingPanel.add(flow);
+		loadingPanel.add(loadingBar);
 		return loadingPanel;
 	}
 }
