@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
 
 import mapDrawer.AreaToDraw;
