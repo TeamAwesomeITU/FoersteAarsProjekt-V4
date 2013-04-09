@@ -24,7 +24,7 @@ public class MapKeyBinding extends AbstractAction{
 	private MapPanel mp;
 	private AreaToDraw currentArea, newArea;
 	private double smallX, bigX, smallY, bigY;
-	private Timer recalculateTimer = new Timer(500, new MapPanActionListener());
+	private Timer recalculateTimer = new Timer(250, new MapPanActionListener());
 	private double keyPressedRight = 0, keyPressedLeft = 0, keyPressedUp = 0, keyPressedDown = 0;
 	    
 	public MapKeyBinding(String actionName, JTextField toField, JTextField fromField, MapPanel mp){
