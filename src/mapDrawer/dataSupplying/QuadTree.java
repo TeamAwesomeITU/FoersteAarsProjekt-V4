@@ -92,10 +92,10 @@ public class QuadTree {
 		double midPointX = area.getWidth()/2 + area.getSmallestX();
 		double midPointY = area.getHeight()/2 + area.getSmallestY();
 
-		AreaToDraw northWestArea = new AreaToDraw(area.getSmallestX(), midPointX, midPointY, area.getLargestY());
-		AreaToDraw northEastArea = new AreaToDraw(midPointX, area.getLargestX(), midPointY, area.getLargestY());
-		AreaToDraw southWestArea = new AreaToDraw(area.getSmallestX(), midPointX, area.getSmallestY(), midPointY);
-		AreaToDraw southEastArea = new AreaToDraw(midPointX, area.getLargestX(), area.getSmallestY(), midPointY);
+		AreaToDraw northWestArea = new AreaToDraw(area.getSmallestX(), midPointX, midPointY, area.getLargestY(), false);
+		AreaToDraw northEastArea = new AreaToDraw(midPointX, area.getLargestX(), midPointY, area.getLargestY(), false);
+		AreaToDraw southWestArea = new AreaToDraw(area.getSmallestX(), midPointX, area.getSmallestY(), midPointY, false);
+		AreaToDraw southEastArea = new AreaToDraw(midPointX, area.getLargestX(), area.getSmallestY(), midPointY, false);
 
 		northWestNode = new QuadTree(northWestArea);
 		northEastNode = new QuadTree(northEastArea);
@@ -270,7 +270,7 @@ public class QuadTree {
 		
 		double maxXHalf = (area.getWidth()/2) + area.getSmallestX();
 		long startTime5 = System.currentTimeMillis();
-		nodeSet = QuadTree.searchAreaForNodes(new AreaToDraw(maxXHalf, area.getLargestX(), area.getSmallestY(), area.getLargestY()));
+		nodeSet = QuadTree.searchAreaForNodes(new AreaToDraw(maxXHalf, area.getLargestX(), area.getSmallestY(), area.getLargestY(), false));
 		long endTime5 = System.currentTimeMillis();
 		System.out.println("Size of retrieved HashSet<Node>: " + nodeSet.size());
 		System.out.println("At retrieve 1/2 af kortets nodes fra QuadTree tager " + (endTime5 - startTime5) + " milliseconds");
@@ -279,7 +279,7 @@ public class QuadTree {
 		double maxYQuarter = (area.getHeight()/2) + area.getSmallestY();		
 				
 		long startTime6 = System.currentTimeMillis();
-		nodeSet = QuadTree.searchAreaForNodes(new AreaToDraw(area.getSmallestX(), maxXHalf, area.getSmallestY(), maxYQuarter));
+		nodeSet = QuadTree.searchAreaForNodes(new AreaToDraw(area.getSmallestX(), maxXHalf, area.getSmallestY(), maxYQuarter, false));
 		long endTime6 = System.currentTimeMillis();
 		System.out.println("Size of retrieved HashSet<Node>: " + nodeSet.size());
 		System.out.println("At retrieve 1/4 af kortets nodes fra QuadTree tager " + (endTime6 - startTime6) + " milliseconds");

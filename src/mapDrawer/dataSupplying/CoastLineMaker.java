@@ -179,7 +179,7 @@ public class CoastLineMaker {
 			}				
 
 			try {
-				return new AreaToDraw(xMin, xMax, yMin, yMax);
+				return new AreaToDraw(xMin, xMax, yMin, yMax, false);
 			} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException e) {
 				e.printStackTrace();		
 				return null;
