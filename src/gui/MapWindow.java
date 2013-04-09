@@ -23,15 +23,10 @@ import mapDrawer.drawing.MapPanel;
  */
 public class MapWindow {
 
-	private static final int WINDOW_ID = 2;
-	private JFrame frame;
-	private Container contentPane;
 	private JTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeCoordinateJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private JLabel X_CORD, Y_CORD;
-
-	private GridBagConstraints c = new GridBagConstraints();
 
 	/**
 	 * A constructor for making the window with an empty search query
@@ -39,92 +34,33 @@ public class MapWindow {
 	public MapWindow(){
 		createMapScreen();
 	}
-	/**
-	 * A constructor for making the window with a search query
-	 * @param searchQuery the text for the search query
-	 */
-	public MapWindow(String searchQuery){
-		createMapScreen();
-		toSearchQuery.setText(searchQuery);
-	}
-
-	/**
-	 * An unique windowID for the window
-	 * @return the window id
-	 */
-	public static final int getWindowId(){
-		return WINDOW_ID;
-	}
 
 	/**
 	 * Makes the frame and fills it.
 	 */
 	public void createMapScreen(){
-		frame = new JFrame("Team Awesome Maps");
-		frame.setUndecorated(MainGui.undecoratedBoolean);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setBounds(0,0,screenSize.width, screenSize.height);
-		frame.setPreferredSize(screenSize);
-
-		MainGui.makeMenu(frame, WINDOW_ID);
 		fillContentPane();
 
-		frame.pack();
+		MainGui.frame.pack();
 		fromSearchQuery.requestFocusInWindow();
-		frame.setVisible(true);
 		double widthOfFrame = widthForMap();
 		double heightOfFrame = heightForMap();
-		frame.setVisible(false);
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
+		MainGui.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MainGui.frame.pack();
 		MapComponentAdapter mcp = new MapComponentAdapter(this);
-		frame.addComponentListener(mcp);
-		frame.setVisible(true);
+		MainGui.frame.addComponentListener(mcp);
 	}
 
 	/**
 	 * Fills the contentpane with the panels
 	 */
 	public void fillContentPane(){
-		contentPane = frame.getContentPane();
-		contentPane.setLayout(new BorderLayout());
-		//contentPane.setLayout(new GridBagLayout());
-		/*
-		c.fill = GridBagConstraints.HORIZONTAL;
-	    c.ipady = 0;       //reset to default
-	    c.weighty = 1.0;   //request any extra vertical space
-	    c.anchor = GridBagConstraints.PAGE_END; //bottom of space
-	    c.insets = new Insets(10,0,0,0);  //top padding
-	    c.gridx = 1;       //aligned with button 2
-	    c.gridwidth = 3;   //2 columns wide
-	    c.gridy = 2;       //third row
-		
-		contentPane.add(southColoredJPanel, c);
-		
-	    c.fill = GridBagConstraints.VERTICAL;
-	    c.ipady = 0;       //reset to default
-	    c.weighty = 1.0;   //request any extra vertical space
-	    c.anchor = GridBagConstraints.LINE_END; //bottom of space
-	    c.insets = new Insets(10,0,0,0);  //top padding
-	    c.gridx = 1;       //aligned with button 2
-	    c.gridwidth = 1;   //2 columns wide
-	    c.gridy = 2;       //third row
-		contentPane.add(westColoredJPanel, c);
-		
-	    c.fill = GridBagConstraints.VERTICAL;
-	    c.ipady = 0;       //reset to default
-	    c.weighty = 1.0;   //request any extra vertical space
-	    c.anchor = GridBagConstraints.LINE_START; //bottom of space
-	    c.insets = new Insets(10,0,0,0);  //top padding
-	    c.gridx = 1;       //aligned with button 2
-	    c.gridwidth = 1;   //2 columns wide
-	    c.gridy = 2;       //third row
-		contentPane.add(eastColoredJPanel, c);
-		*/
-		contentPane.add(southColoredJPanel, BorderLayout.SOUTH);
-		contentPane.add(westColoredJPanel, BorderLayout.WEST);
-		contentPane.add(eastColoredJPanel, BorderLayout.EAST);
+		MainGui.contentPane.removeAll();
+		MainGui.makeMenu();
+		MainGui.contentPane.add(westColoredJPanel, BorderLayout.WEST);
+		MainGui.contentPane.add(eastColoredJPanel, BorderLayout.EAST);
+		MainGui.contentPane.add(MainGui.makeFooter(), BorderLayout.SOUTH);
 	}
 
 	/**
@@ -210,33 +146,23 @@ public class MapWindow {
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 
 		centerColoredJPanel.add(mapPanel);
-		/*
-	    c.fill = GridBagConstraints.HORIZONTAL;
-	    c.ipady = 0;       //reset to default
-	    c.weighty = 1.0;   //request any extra vertical space
-	    c.anchor = GridBagConstraints.CENTER; //bottom of space
-	    c.insets = new Insets(10,0,0,0);  //top padding
-	    c.gridx = 1;       //aligned with button 2
-	    c.gridwidth = 1;   //2 columns wide
-	    c.gridy = 2;       //third row
-		contentPane.add(centerColoredJPanel, c);*/
-		contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
+		MainGui.contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
 	}
 	/**
 	 * calculates the height for the map
 	 * @return the calculated height
 	 */
 	private double heightForMap() {
-		double height = frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
-		if(height <= Math.round(frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight())))
+		double height = MainGui.frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
+		if(height <= Math.round(MainGui.frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
 			return  height;
 		else 
 			return heightForMap(height);
 	}
 
 	private double heightForMap(double temporaryHeight) {
-		double height = temporaryHeight*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight());
-		if(height <= Math.round(frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+frame.getJMenuBar().getHeight())))
+		double height = temporaryHeight*0.9 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
+		if(height <= Math.round(MainGui.frame.getHeight()*0.9 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
 			return  height;
 		else 
 			return heightForMap(height);
@@ -255,7 +181,7 @@ public class MapWindow {
 	private double widthForMap() {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = heightForMap()*areaToDraw.getWidthHeightRelation();
-		if(width <= Math.round(frame.getWidth()*0.9 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+		if(width <= Math.round(MainGui.frame.getWidth()*0.9 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
 			return  width;
 		else 
 			return widthForMap(heightForMap()*0.9);
@@ -269,7 +195,7 @@ public class MapWindow {
 	private double widthForMap(double height) {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = Math.round(height*areaToDraw.getWidthHeightRelation());
-		if(width <= Math.round(frame.getWidth()*0.9 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+		if(width <= Math.round(MainGui.frame.getWidth()*0.9 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
 			return width;
 		else 
 			return widthForMap(height*0.9);
@@ -302,7 +228,7 @@ public class MapWindow {
 					toArray[i] = adressParser.getAdressArray()[i];
 				}
 
-				JOptionPane.showMessageDialog(frame, "From: " + fromArray[0] 
+				JOptionPane.showMessageDialog(MainGui.frame, "From: " + fromArray[0] 
 												+ "\nTo: " + toArray[0]);
 			} catch (MalformedAdressException e1) {
 				// TODO Auto-generated catch block
@@ -310,7 +236,7 @@ public class MapWindow {
 			}
 		}
 		else {
-			JOptionPane.showMessageDialog(frame, "You have to enter an address");
+			JOptionPane.showMessageDialog(MainGui.frame, "You have to enter an address");
 		}
 	}
 	/**
@@ -323,7 +249,7 @@ public class MapWindow {
 	 * @return the frame
 	 */
 	public JFrame getJFrame() {
-		return frame;
+		return MainGui.frame;
 	}
 
 	//---------------------------------Listeners from here-----------------------------//
