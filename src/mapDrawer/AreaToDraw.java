@@ -109,7 +109,9 @@ public class AreaToDraw {
 			
 			foundSmallestX = smallestX;
 			foundLargestX = largestX;	
+			//Calculates the correct height of the area, then subtracts the length, that the height already has
 			double heightToAdd = ((largestX-smallestX)/getWidthHeightRelationOfEntireMap())-(largestY-smallestY);
+			
 			System.out.println("heightToAdd is calculated to be: " + heightToAdd);
 
 			boolean newSmallestYisInsideMap = (smallestY - heightToAdd/2) > entireMapSmallestY;
