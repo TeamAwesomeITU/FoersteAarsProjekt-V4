@@ -35,19 +35,20 @@ public class RectZoomer extends MouseAdapter {
 
 	/**
 	 * Registers when mouse is pressed.
-	 * @param e The cursors point when the mouse is pressed.
+	 * @param e The event for the mouse.
 	 */
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e ) {
 		mousePress = e.getPoint();
+		mp.requestFocusInWindow();
 	}
 
 	/**
 	 * Registers when the mouse is dragged and draws the rectangle. 
-	 * @param e Which mousebutton is used.
+	 * @param e The event for the mouse.
 	 */
 	public void mouseDragged(MouseEvent e) {
 
-		if(SwingUtilities.isLeftMouseButton(e)) {
+		if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
 			drawing = true;
 
 			endX = Math.abs(mousePress.x - e.getPoint().x);
@@ -77,13 +78,13 @@ public class RectZoomer extends MouseAdapter {
 
 	/**
 	 * Registers if the mouse is released and then draws the new area.
-	 * @param e When the mouse is released.
+	 * @param e The event for the mouse.
 	 */
 	public void mouseReleased(MouseEvent e) {
 		if(SwingUtilities.isRightMouseButton(e)) { 	
 			zoomOut();
 		}
-		else if(SwingUtilities.isLeftMouseButton(e)) {
+		else if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
 			AreaToDraw area = mp.getArea();
 			ras.push(area);
 			CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getMapWidth(), (int)mp.getMapHeight(), area);

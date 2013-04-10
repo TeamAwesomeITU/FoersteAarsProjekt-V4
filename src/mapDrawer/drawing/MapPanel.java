@@ -47,6 +47,7 @@ public class MapPanel extends JPanel {
 		setBorderForPanel();
 		addMouseListener(rectZoomer);
 		addMouseMotionListener(rectZoomer);
+		setFocusable(true);
 	}
 
 	/**
