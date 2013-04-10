@@ -29,14 +29,15 @@ public class AreaToDraw {
 
 	/**
 	 * Creates an AreaToDraw from the input parameters.
-	 * @param smallestX
-	 * @param largestX
-	 * @param smallestY
-	 * @param largestY
+	 * @param smallestX The smallest x-coordinate of the area
+	 * @param largestX The largest x-coordinate of the area
+	 * @param smallestY The smallest y-coordinate of the area
+	 * @param largestY The largest y-coordinate of the area
+	 * @param preventDistortion Whether the area should be padded to fit the proportions of the entire map of Denmark or not - if true, the shortest side will be padded to fit the proportions.
 	 * @throws NegativeAreaSizeException
 	 * @throws AreaIsNotWithinDenmarkException
 	 */
-	public AreaToDraw(double smallestX, double largestX, double smallestY, double largestY, boolean shouldCorrectDistortion) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException
+	public AreaToDraw(double smallestX, double largestX, double smallestY, double largestY, boolean preventDistortion) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException
 	{
 		if(smallestX > largestX || smallestY > largestY || smallestX < 0 || smallestY < 0)
 			throw new NegativeAreaSizeException("Area size was invalid");
@@ -44,104 +45,30 @@ public class AreaToDraw {
 		if(smallestX < entireMapSmallestX || smallestY < entireMapSmallestY || largestX > entireMapLargestX || largestY > entireMapLargestY)
 			throw new AreaIsNotWithinDenmarkException("Some part of the area is not within the map of Denmark");
 
-		this.smallestX = smallestX;
-		this.largestX = largestX;	
-		this.smallestY = smallestY;
-		this.largestY = largestY;	
-		
-		
-		
-		//loooooooooooooooooooooooooooooooooooRT
-		/*
-		else {
-			double widthHeightRelation = (largestX-smallestX)/(largestY-smallestY);
-			double roundedwidthHeightRelation = Math.round((widthHeightRelation*100.0))/100.0;
-			
-			if(shouldCorrectDistortion && !(widthHeightRelation == 1.0))
-			{				
-				//If the width is greater than the height
-				if(widthHeightRelation < 1.0)
-				{
-					this.smallestX = smallestX;
-					this.largestX = largestX;	
-					double newHeight = (largestX-smallestX)*widthHeightRelation;
-					
-					boolean newSmallestYisInsideMap = (smallestY - newHeight/2) > entireMapSmallestY;
-					boolean newLargestYisInsideMap = (largestY + newHeight/2) < entireMapLargestY;
-					
-					//If the new height does not exceed any of the edges of the map
-					if(newSmallestYisInsideMap && newLargestYisInsideMap)
-					{
-						smallestY -= newHeight/2;
-						largestY += newHeight/2;
-					}
-					
-					else
-					{
-						if(!newLargestYisInsideMap)
-						{
-							this.largestY = entireMapLargestY;
-							this.smallestY = largestY - newHeight;
-						}
-						
-						else
-						{
-							this.smallestY = entireMapSmallestY;
-							this.largestY = smallestY + newHeight;
-						}							
-						
-					}
-				}
-				
-				//If the height is greater than the width
-				else
-				{
-					this.smallestY = smallestY;
+		double widthHeightRelation = (largestX-smallestX)/(largestY-smallestY);
+		double roundedwidthHeightRelation = Math.round((widthHeightRelation*100.0))/100.0;
+		double roundedwidthHeightRelationEntireMap = Math.round(((getWidthHeightRelationOfEntireMap())*100.0))/100.0;
 
-					//FORKERT
-					double newWidth = (largestY-smallestY)*((entireMapLargestX-entireMapSmallestX)/(entireMapLargestY-entireMapSmallestY));
-					
-
-					boolean newSmallestXisInsideMap = (smallestX - newWidth/2) > entireMapSmallestX;
-					boolean newLargestXisInsideMap = (largestX + newWidth/2) < entireMapLargestX;
-					
-					//If the new height does not exceed any of the edges of the map
-					if(newSmallestXisInsideMap && newLargestXisInsideMap)
-					{
-						smallestY -= newWidth/2;
-						largestY += newWidth/2;
-					}
-					
-					else
-					{
-						if(!newLargestXisInsideMap)
-						{
-							this.largestY = entireMapLargestY;
-							this.smallestY = largestY - newWidth;
-						}
-						
-						else
-						{
-							this.smallestY = entireMapSmallestY;
-							this.largestY = smallestY + newWidth;
-						}							
-						
-					}
-				}
-				
-			}
-
-			else {
-				this.smallestX = smallestX;
-				this.largestX = largestX;	
-				this.smallestY = smallestY;
-				this.largestY = largestY;				
-			}
+		//If it should be padded and the proportions are not correct, pad the area
+		if(preventDistortion && roundedwidthHeightRelation != roundedwidthHeightRelationEntireMap)
+		{
+			double[] paddedCoords = padArea(smallestX, largestX, smallestY, largestY, widthHeightRelation);
+			this.smallestX = paddedCoords[0];
+			this.largestX = paddedCoords[1];
+			this.smallestY = paddedCoords[2];
+			this.largestY = paddedCoords[3];	
 			
 		}
-			*/
+
+		else {
+			this.smallestX = smallestX;
+			this.largestX = largestX;	
+			this.smallestY = smallestY;
+			this.largestY = largestY;				
+		}
 
 	}
+
 
 	/**
 	 * Creates an AreaToDraw consisting of the area of the entire map of Denmark.
@@ -152,6 +79,103 @@ public class AreaToDraw {
 		largestX = entireMapLargestX;
 		smallestY = entireMapSmallestY;
 		largestY = entireMapLargestY;
+	}
+
+	/**
+	 * Pads the area so it will have the same proportions, as the entire map of Denmark. Is used in order to prevent distortion, when the area is drawn.
+	 * @param smallestX The smallest x-coordinate of the area
+	 * @param largestX The largest x-coordinate of the area
+	 * @param smallestY The smallest y-coordinate of the area
+	 * @param largestY The largest y-coordinate of the area
+	 * @param widthHeightRelation The relation between the width and the height of the area.
+	 * @return A double[], where index 0: smallestX, index 1: largestX, index 2: smallestY and index 3: largestY
+	 */
+	private double[] padArea(double smallestX, double largestX, double smallestY, double largestY, double widthHeightRelation)
+	{				
+		System.out.println("Padding area!");
+		double foundSmallestX = 0.0;
+		double foundLargestX = 0.0;
+		double foundSmallestY = 0.0;
+		double foundLargestY = 0.0;
+		
+		//If the width is greater than the height
+		if(widthHeightRelation < getWidthHeightRelationOfEntireMap())
+		{
+			System.out.println("Width is greater than height!");
+			System.out.print("thisW/R: " + widthHeightRelation + ", entireMapW/R: " + getWidthHeightRelationOfEntireMap());
+			
+			foundSmallestX = smallestX;
+			foundLargestX = largestX;	
+			double newHeight = (largestX-smallestX)*widthHeightRelation;
+
+			boolean newSmallestYisInsideMap = (smallestY - newHeight/2) > entireMapSmallestY;
+			boolean newLargestYisInsideMap = (largestY + newHeight/2) < entireMapLargestY;
+
+			//If the new height does not exceed the top or bottom of the map
+			if(newSmallestYisInsideMap && newLargestYisInsideMap)
+			{
+				foundSmallestY -= newHeight/2;
+				foundLargestY += newHeight/2;
+			}
+
+			//If the new height DOES exceed the top or bottom of the map
+			else
+			{
+				
+				if(!newLargestYisInsideMap)
+				{
+					foundLargestY = entireMapLargestY;
+					foundSmallestY = largestY - newHeight;
+				}
+
+				else
+				{
+					foundSmallestY = entireMapSmallestY;
+					foundLargestY = smallestY + newHeight;
+				}							
+			}
+		}
+
+		//If the height is greater than the width
+		else
+		{
+			System.out.println("Height is greater than width!");
+			System.out.println("thisW/R: " + widthHeightRelation + ", entireMapW/R: " + getWidthHeightRelationOfEntireMap());
+			foundSmallestY = smallestY;
+			foundLargestY = largestY;	
+			double newWidth = (largestY-smallestY)*widthHeightRelation; //FORKERT????
+
+			boolean newSmallestXisInsideMap = (smallestX - newWidth/2) > entireMapSmallestX;
+			boolean newLargestXisInsideMap = (largestX + newWidth/2) < entireMapLargestX;
+
+			//If the new width does not exceed the left side or right side of the map
+			if(newSmallestXisInsideMap && newLargestXisInsideMap)
+			{
+				System.out.println("New coordinates do NOT exceed the map!");
+				foundSmallestX -= newWidth/2;
+				foundLargestX += newWidth/2;
+			}
+
+			//If the new width DOES exceed the top or bottom of the map
+			else
+			{
+				if(!newLargestXisInsideMap)
+				{
+					foundLargestX = entireMapLargestX;
+					foundSmallestX = largestY - newWidth;
+				}
+
+				else
+				{
+					foundSmallestX = entireMapSmallestX;
+					foundLargestX = smallestY + newWidth;
+				}							
+
+			}
+		}
+		
+		//Index 0: smallestX, index 1: largestX, index 2: smallestY, index 3: largestY
+		return new double[]{foundSmallestX,foundLargestX,foundSmallestY,foundLargestY};
 	}
 
 	/**
@@ -283,5 +307,12 @@ public class AreaToDraw {
 	 */
 	public static double getHeightOfEntireMap()
 	{ return entireMapLargestY-entireMapSmallestY; }	
+	
+	/**
+	 * Gets the width-height relation of the entire map of Denmark
+	 * @return The width-height relation of the entire map of Denmark
+	 */
+	public static double getWidthHeightRelationOfEntireMap()
+	{ return getWidthOfEntireMap()/getHeightOfEntireMap(); }		
 }
 
