@@ -58,7 +58,7 @@ public class MapWindow {
 	 */
 	public void fillContentPane(){
 		MainGui.contentPane.removeAll();
-		MainGui.makeMenu();
+		//MainGui.makeMenu();
 		MainGui.contentPane.add(westColoredJPanel, BorderLayout.WEST);
 		MainGui.contentPane.add(eastColoredJPanel, BorderLayout.EAST);
 		MainGui.contentPane.add(MainGui.makeFooter(), BorderLayout.SOUTH);
