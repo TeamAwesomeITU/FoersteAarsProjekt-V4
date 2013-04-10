@@ -37,7 +37,7 @@ public class RectZoomer extends MouseAdapter {
 	 * Registers when mouse is pressed.
 	 * @param e The cursors point when the mouse is pressed.
 	 */
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e ) {
 		mousePress = e.getPoint();
 		mp.requestFocusInWindow();
 	}
@@ -48,7 +48,7 @@ public class RectZoomer extends MouseAdapter {
 	 */
 	public void mouseDragged(MouseEvent e) {
 
-		if(SwingUtilities.isLeftMouseButton(e)) {
+		if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
 			drawing = true;
 
 			endX = Math.abs(mousePress.x - e.getPoint().x);
@@ -84,7 +84,7 @@ public class RectZoomer extends MouseAdapter {
 		if(SwingUtilities.isRightMouseButton(e)) { 	
 			zoomOut();
 		}
-		else if(SwingUtilities.isLeftMouseButton(e)) {
+		else if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
 			AreaToDraw area = mp.getArea();
 			ras.push(area);
 			CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getMapWidth(), (int)mp.getMapHeight(), area);
