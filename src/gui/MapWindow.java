@@ -153,8 +153,8 @@ public class MapWindow {
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
 		MapKeyBinding.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
 
-		//centerColoredJPanel.add(mapPanel);
-		MainGui.contentPane.add(mapPanel, BorderLayout.CENTER);
+		centerColoredJPanel.add(mapPanel);
+		MainGui.contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
 	}
 	/**
 	 * calculates the height for the map

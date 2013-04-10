@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+
+import org.hamcrest.core.Is;
 /**
  * This is our main gui class. It holds methods that is common for all
  * old and future windows.
@@ -45,10 +47,24 @@ public class MainGui {
 	 * the constructor for the main gui. It makes the frame and adds the footer.
 	 */
 	private MainGui(){
+		setMacLookAndFeel();
 		makeFrameAndContentPane();
 		contentPane.add(makeFooter(), BorderLayout.SOUTH);
 		new StartupWindow();
 	}
+	
+	private void setMacLookAndFeel(){
+		String OS = System.getProperty("os.name").toLowerCase();
+		if(OS.indexOf("mac") >= 0)
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (ClassNotFoundException | InstantiationException
+					| IllegalAccessException | UnsupportedLookAndFeelException e) {
+				e.printStackTrace();
+			}
+			
+	}
+
 	/**
 	 * The frame is maded and the contentpane is initialized
 	 */
