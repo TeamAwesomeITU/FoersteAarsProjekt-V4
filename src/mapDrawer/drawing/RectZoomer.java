@@ -39,6 +39,7 @@ public class RectZoomer extends MouseAdapter {
 	 */
 	public void mousePressed(MouseEvent e) {
 		mousePress = e.getPoint();
+		mp.requestFocusInWindow();
 	}
 
 	/**
