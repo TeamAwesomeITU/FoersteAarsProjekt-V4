@@ -79,7 +79,7 @@ public class MainGui {
 		quitItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
 		quitItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				frame.dispose();			
+				System.exit(0);
 			}
 		});
 		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, SHORT_CUT_MASK));

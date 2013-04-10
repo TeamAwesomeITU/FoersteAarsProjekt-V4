@@ -58,7 +58,7 @@ public class MapWindow {
 	 */
 	public void fillContentPane(){
 		MainGui.contentPane.removeAll();
-		//MainGui.makeMenu();
+		MainGui.makeMenu();
 		MainGui.contentPane.add(westColoredJPanel, BorderLayout.WEST);
 		MainGui.contentPane.add(eastColoredJPanel, BorderLayout.EAST);
 		MainGui.contentPane.add(MainGui.makeFooter(), BorderLayout.SOUTH);
@@ -76,6 +76,7 @@ public class MapWindow {
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
 		fromSearchQuery = new JTextField();
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
+		fromSearchQuery.setPreferredSize(new Dimension(240, 20));
 
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(ColorTheme.TEXT_COLOR);
@@ -84,6 +85,10 @@ public class MapWindow {
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
+		
+		ColoredJPanel buttonPanel = new ColoredJPanel();
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		buttonPanel.add(findRouteButton);
 
 		ColoredJButton reverseButton = new ColoredJButton(); 
 		reverseButton.setIcon(new ImageIcon("resources/reverse.png"));
@@ -97,7 +102,7 @@ public class MapWindow {
 		toolBar.add(fromSearchQuery);
 		toolBar.add(toHeader);
 		toolBar.add(toSearchQuery);
-		toolBar.add(findRouteButton);
+		toolBar.add(buttonPanel);
 
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(toolBar);
@@ -146,8 +151,8 @@ public class MapWindow {
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		MapKeyBinding.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
 
-		centerColoredJPanel.add(mapPanel);
-		MainGui.contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
+		//centerColoredJPanel.add(mapPanel);
+		MainGui.contentPane.add(mapPanel, BorderLayout.CENTER);
 	}
 	/**
 	 * calculates the height for the map

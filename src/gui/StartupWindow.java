@@ -58,11 +58,11 @@ public class StartupWindow{
 		JLabel logo = new JLabel();
 		logo.setIcon(new ImageIcon("resources/Logo.png"));
 		logo.setBorder(BorderFactory.createEmptyBorder());
-		logo.setToolTipText("Press the globe to browse the map");
 
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(logo);
 		loadingBar = new ColoredJProgressBar();
+		loadingBar.setFont(loadingBar.getFont().deriveFont(40.0f));
 
 		loadingPanel.add(flow);
 		loadingPanel.add(loadingBar);
