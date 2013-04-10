@@ -64,14 +64,9 @@ public enum ZoomLevel {
 					{
 						ZoomLevel foundLevel = ONE;
 
-						for(ZoomLevel zoom : values())
-						{
+						for(ZoomLevel zoom : values())						
 							if(zoom.percentageOfEntireMap >= areasPercentageOfEntireMap)
-							{
-								foundLevel = zoom;			
-								System.out.println("changed zoomlevel to: " + zoom);
-							}
-						}
+								foundLevel = zoom;								
 
 						return foundLevel.getRelevantRoadTypes();
 					}

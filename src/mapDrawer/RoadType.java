@@ -162,17 +162,13 @@ public enum RoadType {
 	{
 		//WHAT THE FUCK - MIND.EQUALS(BLOWN) == TRUE
 		HashSet<Integer> relevantRoadTypeSet = new HashSet<>();
-		System.out.println("Before everything something: " + relevantRoadTypeSet.size());
 		relevantRoadTypeSet = (HashSet<Integer>) category6.clone();
-		System.out.println("Before something: " + relevantRoadTypeSet.size());
 
-		System.out.print("Draw categories: ");
 		switch (numberOfWantedCategories) {
-		case 4: relevantRoadTypeSet.addAll(category4); relevantRoadTypeSet.addAll(category5); System.out.print("4, ");
-		case 3: relevantRoadTypeSet.addAll(category3); System.out.print("3, ");
-		case 2: relevantRoadTypeSet.addAll(category2); System.out.print("2, ");
-		case 1: relevantRoadTypeSet.addAll(category1); relevantRoadTypeSet.addAll(category2); System.out.println("1");
-		System.out.println("After something: " + relevantRoadTypeSet.size());
+		case 4: relevantRoadTypeSet.addAll(category4); relevantRoadTypeSet.addAll(category5);
+		case 3: relevantRoadTypeSet.addAll(category3);
+		case 2: relevantRoadTypeSet.addAll(category2);
+		case 1: relevantRoadTypeSet.addAll(category1); relevantRoadTypeSet.addAll(category2);
 		return relevantRoadTypeSet;
 
 		default: return relevantRoadTypeSet;
