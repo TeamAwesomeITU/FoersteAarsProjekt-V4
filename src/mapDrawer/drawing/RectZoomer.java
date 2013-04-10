@@ -60,7 +60,7 @@ public class RectZoomer extends MouseAdapter {
 			double rectHeight = Math.abs(endY);//Math.abs((rectWidth*AreaToDraw.getHeightOfEntireMap())/AreaToDraw.getWidthOfEntireMap());    
 
 			startX = Math.min(mousePress.x, e.getPoint().x);
-			
+
 			if(mousePress.y < e.getPoint().y)
 				startY = mousePress.y;
 			else
@@ -87,45 +87,39 @@ public class RectZoomer extends MouseAdapter {
 		else if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
 			AreaToDraw area = mp.getArea();
 			ras.push(area);
-			CoordinateConverter coordConverter = new CoordinateConverter((int)mp.getMapWidth(), (int)mp.getMapHeight(), area);
-			if(startX < 0) startX = 0; if(startY < 0) startY = 0;
-			if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
+			CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), area);
+			
+			//SWITCHING STARTY AND ENDY - WHAT DA FUCK
+			double temp = startY;
+			startY = endY;
+			endY = temp;
+			
+			if(startX < 0)
+				startX = 0;
+			if(startY < 0)
+				startY = 0;			
+			if(endX > mp.getWidth())
+				endX = mp.getWidth();
+			if(endY > mp.getHeight())
+				endY = mp.getHeight();
+			
 			double startXCoord = coordConverter.pixelToUTMCoordX((int) startX);
-			double startYCoord = coordConverter.pixelToUTMCoordY((int) endY);
-			
-			double endXCoord = AreaToDraw.getLargestXOfEntireMap();
-			double endYCoord = AreaToDraw.getLargestYOfEntireMap();
-			
-			//If width is greater than height, then the width decides the AreaToDraw - else, it's vice versa
-			//HVIS Y ER STØRRE END X BLIVER DE STØREST EKONVERTEDE KOORDINATER PRÆCIST DE SAMME SOM DE MINDSTE - WTF
-			if(Math.abs(endX-startX) > Math.abs(endY-startY))
-			{
-				endXCoord = coordConverter.pixelToUTMCoordX((int) endX);
-				endYCoord = ((AreaToDraw.getHeightOfEntireMap()*endXCoord)-(AreaToDraw.getHeightOfEntireMap()*startXCoord)+(AreaToDraw.getWidthOfEntireMap()*startYCoord))/AreaToDraw.getWidthOfEntireMap();
-			}
-			else
-			{
-				endYCoord = coordConverter.pixelToUTMCoordY((int) endY);
-				endXCoord = ((AreaToDraw.getWidthOfEntireMap()*endYCoord)-(AreaToDraw.getWidthOfEntireMap()*startYCoord)+(AreaToDraw.getHeightOfEntireMap()*startXCoord))/AreaToDraw.getHeightOfEntireMap();
-			}
-			
-			System.out.println("startX: " +startXCoord + " startY: " +startYCoord+ " endX: " + endXCoord + " endY: " + endYCoord );
+			double startYCoord = coordConverter.pixelToUTMCoordY((int) startY);
+
+			double endXCoord = coordConverter.pixelToUTMCoordX((int) endX);
+			double endYCoord = coordConverter.pixelToUTMCoordY((int) endY);
+
 			try {
-				rect = null;    		
-				//double newAreaProportions = Math.round((((endX-startX)/(endY-startY))*100.0))/100.0;
-				double newAreaProportions = Math.round((((endXCoord-startXCoord)/(endYCoord-startYCoord))*100.0))/100.0;
-				double proportionsOfDenmarkMap = Math.round(((AreaToDraw.getWidthOfEntireMap()/AreaToDraw.getHeightOfEntireMap())*100.0))/100.0;
-				System.out.println("newAreaProportions: " + newAreaProportions + ", proportionsOfDenmarkMap: " + proportionsOfDenmarkMap);
-				if(newAreaProportions != proportionsOfDenmarkMap) {
-					throw new InvalidAreaProportionsException("Area proportions do not equal those of the entire map of Denmark");
-				}
-				else {
-					area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord, true);
-					mp.repaintMap(area);
-				}
-			} 
-			catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
+				System.out.println("Relation-calculation: startXCoord: " + startXCoord + ", endXCoord: " + endXCoord + ", startYCoord: " + startYCoord + ", endYCoord: " + endYCoord);	
+				area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord, true);	
+				System.out.println("W/H of zoomed area: " + area.getWidth()/area.getHeight());
+				rect = null;
+				mp.repaintMap(area);
+			}
+
+			catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException e1) {
 				JOptionPane.showMessageDialog(mp, "The selected area is not within the map, please try again.");
+				System.out.println("ERROR: " + e1.getMessage());					
 				rect = null;
 				mp.repaint();
 			}
