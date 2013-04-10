@@ -89,8 +89,7 @@ public class FindRelevantEdges {
 			e.printStackTrace();
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("EdgeHalløj tager " + (endTime - startTime) + " milliseconds");
-		System.out.println("makeEdgeSet laver " + count + " Edges");
+		System.out.println("Creating HashSet of all Edges takes " + (endTime - startTime) + " milliseconds");
 		return edgeSet;
 	}
 	/**
@@ -115,8 +114,6 @@ public class FindRelevantEdges {
 
 		HashSet<Integer> zoomLevel = ZoomLevel.getlevel(area.getPercentageOfEntireMap());
 
-		System.out.println("Size of nodeset parsed to findEdges(): " + nodeIDSet.size());
-
 		while(iterator.hasNext())
 		{
 			Edge edge = iterator.next();	
@@ -124,8 +121,6 @@ public class FindRelevantEdges {
 				if(nodeIDSet.contains(edge.getFromNode()) || nodeIDSet.contains(edge.getToNode()))
 					foundEdgesSet.add(edge);
 		}			
-
-		System.out.println("Number of relevant Edges found: " + foundEdgesSet.size());
 
 		return foundEdgesSet;
 	}
@@ -166,7 +161,7 @@ public class FindRelevantEdges {
 				ap.resetXPath();
 			}
 			long endTime = System.currentTimeMillis();
-			System.out.println("nodeMap tager " + (endTime - startTime) + " milliseconds");
+			System.out.println("Creating HashMap of all Nodes takes " + (endTime - startTime) + " milliseconds");
 		} catch (NavException | XPathEvalException | XPathParseException e) {
 			e.printStackTrace();
 		}

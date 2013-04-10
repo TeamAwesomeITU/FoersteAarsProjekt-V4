@@ -93,7 +93,6 @@ public class MapKeyBinding extends AbstractAction{
 	    		//GOING LEFT
 	    		if (keyPressedLeft>keyPressedRight) {
 					NumberOfTimesToPan = 1-((keyPressedLeft-keyPressedRight)/100);
-					System.out.println(NumberOfTimesToPan);
 					smallX = smallX*NumberOfTimesToPan;
 					bigX = bigX*NumberOfTimesToPan;
 				}

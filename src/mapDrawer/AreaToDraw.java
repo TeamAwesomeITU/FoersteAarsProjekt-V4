@@ -208,10 +208,7 @@ public class AreaToDraw {
 	 * @return How much of the entire map which consists of the AreaToDraw in percent
 	 */
 	public double getPercentageOfEntireMap()
-	{
-		System.out.println((getWidth()*getHeight())/((getWidthOfEntireMap())*(getHeightOfEntireMap()))*100);
-		return (getWidth()*getHeight())/((getWidthOfEntireMap())*(getHeightOfEntireMap()))*100;
-	}
+	{ return (getWidth()*getHeight())/((getWidthOfEntireMap())*(getHeightOfEntireMap()))*100; }
 
 	/**
 	 * Checks whether the input Node lies within the area or not
