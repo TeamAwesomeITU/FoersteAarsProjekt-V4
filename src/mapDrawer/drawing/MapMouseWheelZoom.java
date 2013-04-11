@@ -17,13 +17,14 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 	private Timer recalculateTimer = new Timer(300, new ZoomWheelActionListener());
 	private double zoomWay = 0;
 	private MapPanel mp;
-	private double smallX = 0, bigX = 0, smallY = 0, bigY = 0;
+	private double smallX, bigX, smallY, bigY;
 	private Point mouseLocation;
 	private AreaToDraw currentArea, newArea;
 	
 	public MapMouseWheelZoom(MapPanel mp) {
 		recalculateTimer.setRepeats(false);
 		this.mp = mp;
+		
 	}
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		if (recalculateTimer.isRunning()) {
@@ -41,50 +42,50 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 	
 	private class ZoomWheelActionListener implements ActionListener {
 		
+		@SuppressWarnings("static-access")
 		public void actionPerformed(ActionEvent e) {
 			if(zoomWay != 0) {
-				currentArea = mp.getArea();								
-				if(zoomWay>0) {
+				smallX = 0; bigX = mp.getMapWidth(); smallY = 0; bigY = mp.getMapHeight();
+				double xCoord = mouseLocation.getX();
+				double yCoord = mouseLocation.getY();
+				currentArea = mp.getArea();		
+				CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), currentArea);
+				double zoomX = Math.abs(zoomWay)*(10*((coordConverter.pixelToUTMCoordX((int)bigX) - coordConverter.pixelToUTMCoordX((int)smallX))/100));
+				double zoomY = Math.abs(zoomWay)*(10*((coordConverter.pixelToUTMCoordY((int)bigY) - coordConverter.pixelToUTMCoordY((int)smallY))/100));						
+				if(zoomWay > 0) {
 					//ZOOM OUT
-					System.out.println("over 0");
-					smallX = smallX*(1-((2*zoomWay)/100));
-					bigX = mp.getMapWidth()+(2*zoomWay);
-					smallY -= 2*zoomWay;
-					bigY = mp.getMapHeight()+(2*zoomWay);
-					CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), currentArea);
-					smallX = coordConverter.pixelToUTMCoordX((int)smallX);
-					bigX = coordConverter.pixelToUTMCoordX((int)bigX);
-					smallY = coordConverter.pixelToUTMCoordY((int)smallY);
-					bigY = coordConverter.pixelToUTMCoordY((int)bigY);
+					smallX = coordConverter.pixelToUTMCoordX((int)smallX) - zoomX;
+					bigX = coordConverter.pixelToUTMCoordX((int)bigX) + zoomX;
+					smallY = coordConverter.pixelToUTMCoordY((int)smallY) - zoomY;
+					bigY = coordConverter.pixelToUTMCoordY((int)bigY) + zoomY;
+					System.out.println(smallX +", "+ bigX +", "+ smallY +", "+ bigY);
+					if(bigX > currentArea.getLargestXOfEntireMap() || smallX < currentArea.getSmallestXOfEntireMap() || 
+							bigY > currentArea.getLargestYOfEntireMap() || smallY < currentArea.getSmallestYOfEntireMap()) {
+						smallX = currentArea.getSmallestXOfEntireMap(); bigX = currentArea.getLargestXOfEntireMap();
+						bigY = currentArea.getSmallestYOfEntireMap(); smallY = currentArea.getLargestYOfEntireMap();
+					}
 				}
 			
 				else {
-					zoomWay = Math.abs(zoomWay);					
-					double xCoord = mouseLocation.getX();
-					double yCoord = mouseLocation.getY();
-					double percentageOfMapX = zoomWay*(5*(mp.getMapWidth()/100));
-					double percentageOfMapY = zoomWay*(5*(mp.getMapHeight()/100));
-					System.out.println("under 0");
-					System.out.println(mouseLocation.getX() +", " +mouseLocation.getY());
-					smallX = xCoord-percentageOfMapX;
-					bigX = xCoord+percentageOfMapX;
-					smallY = yCoord-percentageOfMapY;
-					bigY = yCoord+percentageOfMapY;
-					if(bigX > mp.getWidth()) {
-						double diffX = bigX-mp.getWidth(); smallX -= diffX; bigX = mp.getWidth();
-					}
-					else if(smallX < 0)
-					if(bigY > mp.getHeight()) {
-						double diffY = bigY-mp.getHeight(); smallY -= diffY; bigY = mp.getHeight();
-					}
-					
+					//ZOOM IN				
+					smallX = coordConverter.pixelToUTMCoordX((int)xCoord) - zoomX;
+					bigX = coordConverter.pixelToUTMCoordX((int)xCoord) + zoomX;
+					smallY = coordConverter.pixelToUTMCoordY((int)yCoord) - zoomY;
+					bigY = coordConverter.pixelToUTMCoordY((int)yCoord) + zoomY;
 					System.out.println(smallX +", "+ bigX +", "+ smallY +", "+ bigY);
-					CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), currentArea);
-					smallX = coordConverter.pixelToUTMCoordX((int)smallX);
-					bigX = coordConverter.pixelToUTMCoordX((int)bigX);
-					smallY = coordConverter.pixelToUTMCoordY((int)smallY);
-					bigY = coordConverter.pixelToUTMCoordY((int)bigY);
-					System.out.println(smallX +", "+ bigX +", "+ smallY +", "+ bigY);
+					if(bigX > currentArea.getLargestX()) {
+						double diffX = bigX-currentArea.getLargestX(); smallX -= diffX; bigX = currentArea.getLargestX();
+						System.out.println(diffX);
+					}
+					else if(smallX < currentArea.getSmallestX()) {
+						double diffX = currentArea.getSmallestX()-smallX; bigX += diffX; smallX = currentArea.getSmallestX();
+					}
+					if(bigY > currentArea.getLargestY()) {
+						double diffY = bigY-currentArea.getLargestY(); smallY -= diffY; bigY = currentArea.getLargestY();
+					}
+					else if(smallY < currentArea.getSmallestY()) {
+						double diffY = currentArea.getSmallestY()-smallY; bigY += diffY; smallY = currentArea.getSmallestY();
+					}
 				}
 				zoomWay = 0;
 				try {
