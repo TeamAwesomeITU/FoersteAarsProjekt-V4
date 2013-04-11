@@ -1,8 +1,8 @@
 *.class
-config.txt
 # Package Files #
 *.war
 *.ear
+/config.txt
 /testresults.txt
 /nbproject/private/
 /doc/
