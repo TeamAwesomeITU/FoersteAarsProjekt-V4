@@ -1,5 +1,5 @@
 *.class
-
+config.txt
 # Package Files #
 *.war
 *.ear
