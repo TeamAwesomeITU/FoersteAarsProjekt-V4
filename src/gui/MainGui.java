@@ -3,10 +3,14 @@ package gui;
 import java.awt.*;
 
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.*;
-
-import org.hamcrest.core.Is;
 /**
  * This is our main gui class. It holds methods that is common for all
  * old and future windows.
@@ -27,6 +31,7 @@ public class MainGui {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		readSettingsFile();
 		ColorTheme.setTheme();
 		MainGui.getInstance();
 	}
@@ -51,18 +56,6 @@ public class MainGui {
 		makeFrameAndContentPane();
 		contentPane.add(makeFooter(), BorderLayout.SOUTH);
 		new StartupWindow();
-	}
-
-	private void setMacLookAndFeel(){
-		String OS = System.getProperty("os.name").toLowerCase();
-		if(OS.indexOf("mac") >= 0)
-			try {
-				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-			} catch (ClassNotFoundException | InstantiationException
-					| IllegalAccessException | UnsupportedLookAndFeelException e) {
-				JOptionPane.showMessageDialog(frame, "Something went wrong setting up the program, please contact TeamAwesome.");
-			}
-
 	}
 
 	/**
@@ -131,6 +124,7 @@ public class MainGui {
 							new MainGui();
 							settingsFrame.dispose();
 						}
+						updateSettingsFile();
 					}});
 
 				final ColoredJCheckBox coordinates = new ColoredJCheckBox("Coordinates");
@@ -141,6 +135,7 @@ public class MainGui {
 							coordinatesBoolean = false;
 						if(e.getStateChange() == ItemEvent.SELECTED)
 							coordinatesBoolean = true;
+						updateSettingsFile();
 					}
 				});
 
@@ -165,6 +160,7 @@ public class MainGui {
 						frame.dispose();
 						new MainGui();
 						settingsFrame.dispose();
+						updateSettingsFile();
 					}
 				});
 
@@ -212,5 +208,98 @@ public class MainGui {
 		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4");
 		footer.add(footerText);
 		return footer;
+	}
+
+	/**
+	 * reads the config file to start the program with the last settings.
+	 * 	 */
+	public static void readSettingsFile(){
+		try {
+			BufferedReader fileStream = new BufferedReader(new FileReader(getConfigFile()));
+			if(fileStream.ready()){
+				String undecoratedSetting = fileStream.readLine().trim();
+				String coordinatesSetting = fileStream.readLine().trim();
+				String colorThemeSetting = fileStream.readLine().trim();
+
+				if(undecoratedSetting.equals("true"))
+					undecoratedBoolean = true;
+				else if (undecoratedSetting.equals("false")) 
+					undecoratedBoolean = false;
+
+				if(coordinatesSetting.equals("true"))
+					coordinatesBoolean = true;
+				else if(coordinatesSetting.equals("false"))
+					coordinatesBoolean = false;
+
+				if(colorThemeSetting.equals("Spring"))
+					ColorTheme.setSpringTheme();
+				else if(colorThemeSetting.equals("Summer"))
+					ColorTheme.setSummerTheme();
+				else if(colorThemeSetting.equals("Winter"))
+					ColorTheme.setWinterTheme();
+				else if(colorThemeSetting.equals("Autumn"))
+					ColorTheme.setAutumnTheme();
+			}
+			else
+				updateSettingsFile();
+			fileStream.close();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(frame, "Could not find config file. Setting defualt settings");
+		}
+	}
+	
+	/**
+	 * Updates the config file with the new settings
+	 */
+	public static void updateSettingsFile(){
+		try {
+			BufferedWriter fileWriter = new BufferedWriter(new FileWriter(getConfigFile()));
+			if(undecoratedBoolean)
+				fileWriter.write("true\n");
+			else
+				fileWriter.write("false\n");
+			
+			if(coordinatesBoolean)
+				fileWriter.write("true\n");
+			else
+				fileWriter.write("false\n");
+			
+			if(ColorTheme.summerTheme)
+				fileWriter.write("Summer");
+			if(ColorTheme.winterTheme)
+				fileWriter.write("Winter");
+			if(ColorTheme.autumnTheme)
+				fileWriter.write("Autumn");
+			if(ColorTheme.springTheme)
+				fileWriter.write("Spring");
+			fileWriter.close();
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(frame, "Could not find config file. Setting defualt settings");
+		}
+	}
+	
+	public static File getConfigFile() {
+	    File configFile = new File("config.txt");
+	    if(!configFile.exists())
+			try {
+				configFile.createNewFile();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(frame, "Could not create config file");
+			}
+	    return configFile;
+	}
+
+	/**
+	 * Sets the look of the program on mac to be the same as on windows.
+	 */
+	private void setMacLookAndFeel(){
+		String OS = System.getProperty("os.name").toLowerCase();
+		if(OS.indexOf("mac") >= 0)
+			try {
+				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+			} catch (ClassNotFoundException | InstantiationException
+					| IllegalAccessException | UnsupportedLookAndFeelException e) {
+				JOptionPane.showMessageDialog(frame, "Something went wrong setting up the program, please contact TeamAwesome.");
+			}
 	}
 }
