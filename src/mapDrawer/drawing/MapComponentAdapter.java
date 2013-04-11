@@ -17,7 +17,7 @@ import javax.swing.Timer;
  * 
  */
 public class MapComponentAdapter extends ComponentAdapter {
-	private Timer recalculateTimer = new Timer( 500, new MapActionListener());
+	private Timer recalculateTimer = new Timer(500, new MapActionListener());
 	private boolean isResizing = false;
 	private JFrame jf;
 	private MapPanel mp;

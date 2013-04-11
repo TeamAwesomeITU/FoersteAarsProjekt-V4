@@ -11,7 +11,6 @@ import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
-import mapDrawer.exceptions.InvalidAreaProportionsException;
 
 /**
  * The rectangle that is used to zoom. 
