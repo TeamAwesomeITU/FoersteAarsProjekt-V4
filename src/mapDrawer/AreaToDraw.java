@@ -15,6 +15,7 @@ public class AreaToDraw {
 	private final static double entireMapLargestX = 905000; // 892658.21706;
 	private final static double entireMapSmallestY = 6047000; // 6049914.43018;
 	private final static double entireMapLargestY = 6408000; // 6402050.98297;
+	private final static double entireMapWidthHeightRelation = (entireMapLargestX-entireMapSmallestX)/(entireMapLargestY-entireMapSmallestY);
 
 	//The x-coordinate of the most western coordinate
 	private final double smallestX;
@@ -44,27 +45,25 @@ public class AreaToDraw {
 		if(smallestX > largestX || smallestY > largestY || smallestX < 0 || smallestY < 0)
 			throw new NegativeAreaSizeException("Area size was invalid");
 
-		if(smallestX < entireMapSmallestX || smallestY < entireMapSmallestY || largestX > entireMapLargestX || largestY > entireMapLargestY)
-			throw new AreaIsNotWithinDenmarkException("Some part of the area is not within the map of Denmark");
-
 		double widthHeightRelation = (largestX-smallestX)/(largestY-smallestY);	
 		double roundedwidthHeightRelation = Math.round((widthHeightRelation*100.0))/100.0;
 		double roundedwidthHeightRelationEntireMap = Math.round(((getWidthHeightRelationOfEntireMap())*100.0))/100.0;
 
 		//If it should be padded and the proportions are not correct, pad the area
 		if(preventDistortion && roundedwidthHeightRelation != roundedwidthHeightRelationEntireMap)
+			//if(preventDistortion)
 		{
 			double[] paddedCoords = padArea(smallestX, largestX, smallestY, largestY, widthHeightRelation);
 			this.smallestX = paddedCoords[0];
 			this.largestX = paddedCoords[1];
 			this.smallestY = paddedCoords[2];
 			this.largestY = paddedCoords[3];	
-			
+
 			System.out.println("Attempting to created padded AreaToDraw: smallestX: " + this.getSmallestX() + ", largestX: " + this.getLargestX() + ", smallestY: " + this.getSmallestY() + ", largestY: " + this.getLargestY());
-			
+
 			if(this.smallestX > largestX || this.smallestY > largestY || this.smallestX < 0 || this.smallestY < 0)
 				throw new NegativeAreaSizeException("Area size was padded to an invalid size");			
-			
+
 			double newWidthHeightRelation = (this.largestX-this.smallestX)/(this.largestY-this.smallestY);	
 			double newRoundedwidthHeightRelation = Math.round((newWidthHeightRelation*100.0))/100.0;
 			if(newRoundedwidthHeightRelation != roundedwidthHeightRelationEntireMap)
@@ -72,6 +71,9 @@ public class AreaToDraw {
 		}
 
 		else {
+			if(smallestX < entireMapSmallestX || smallestY < entireMapSmallestY || largestX > entireMapLargestX || largestY > entireMapLargestY)
+				throw new AreaIsNotWithinDenmarkException("Some part of the area is not within the map of Denmark");
+
 			this.smallestX = smallestX;
 			this.largestX = largestX;	
 			this.smallestY = smallestY;
@@ -101,24 +103,37 @@ public class AreaToDraw {
 	 * @return A double[], where index 0: smallestX, index 1: largestX, index 2: smallestY and index 3: largestY
 	 */
 	private double[] padArea(double smallestX, double largestX, double smallestY, double largestY, double widthHeightRelation)
-	{				
+	{		
+		
+		// IS THIS CORRECT?
+		if(smallestX < entireMapSmallestX )
+			smallestX = entireMapSmallestX;
+		if(smallestY < entireMapSmallestY)
+			smallestY = entireMapSmallestY;
+		if(largestX > entireMapLargestX)
+			largestX = entireMapLargestX;
+		if(largestY > entireMapLargestY)
+			largestY = entireMapLargestY;
+		// IS THIS CORRECT?
+		
 		System.out.println("Padding area!");
 		double foundSmallestX = 0.0;
 		double foundLargestX = 0.0;
 		double foundSmallestY = 0.0;
 		double foundLargestY = 0.0;
-		
+
 		//If the width is greater than the height
 		if(widthHeightRelation > getWidthHeightRelationOfEntireMap())
 		{
 			System.out.println("Width is greater than height!");
 			System.out.println("thisW/H-relation: " + widthHeightRelation + ", entireMapW/R: " + getWidthHeightRelationOfEntireMap());
-			
+
 			foundSmallestX = smallestX;
 			foundLargestX = largestX;	
 			//Calculates the correct height of the area, then subtracts the length, that the height already has
-			double heightToAdd = ((largestX-smallestX)/getWidthHeightRelationOfEntireMap())-(largestY-smallestY);
-			
+			double newHeight = (largestX-smallestX)/getWidthHeightRelationOfEntireMap();
+			double heightToAdd = newHeight-(largestY-smallestY);
+
 			System.out.println("heightToAdd is calculated to be: " + heightToAdd);
 
 			boolean newSmallestYisInsideMap = (smallestY - heightToAdd/2) > entireMapSmallestY;
@@ -140,14 +155,14 @@ public class AreaToDraw {
 				{
 					System.out.println("Largest coordinate exceed the map!");
 					foundLargestY = entireMapLargestY;
-					foundSmallestY = largestY - heightToAdd;
+					foundSmallestY = largestY - newHeight;
 				}
 
 				else
 				{
 					System.out.println("Smallest coordinate exceed the map!");
 					foundSmallestY = entireMapSmallestY;
-					foundLargestY = smallestY + heightToAdd;
+					foundLargestY = smallestY + newHeight;
 				}							
 			}
 		}
@@ -159,8 +174,9 @@ public class AreaToDraw {
 			System.out.println("thisW/H-relation: " + widthHeightRelation + ", entireMapW/R: " + getWidthHeightRelationOfEntireMap());
 			foundSmallestY = smallestY;
 			foundLargestY = largestY;	
-			double widthToAdd = ((largestY-smallestY)*getWidthHeightRelationOfEntireMap())-(largestX-smallestX); //FORKERT????
-			
+			double newWidth = (largestY-smallestY)*getWidthHeightRelationOfEntireMap();
+			double widthToAdd = newWidth-(largestX-smallestX);
+
 			System.out.println("widthToAdd is calculated to be: " + widthToAdd);
 
 			boolean newSmallestXisInsideMap = (smallestX - widthToAdd/2) > entireMapSmallestX;
@@ -194,7 +210,7 @@ public class AreaToDraw {
 
 			}
 		}
-				
+
 		//Index 0: smallestX, index 1: largestX, index 2: smallestY, index 3: largestY
 		return new double[]{foundSmallestX, foundLargestX, foundSmallestY, foundLargestY};
 	}
@@ -325,13 +341,13 @@ public class AreaToDraw {
 	 */
 	public static double getHeightOfEntireMap()
 	{ return entireMapLargestY-entireMapSmallestY; }	
-	
+
 
 	/**
 	 * Gets the width-height relation of the entire map of Denmark
 	 * @return The width-height relation of the entire map of Denmark
 	 */
 	public static double getWidthHeightRelationOfEntireMap()
-	{ return getWidthOfEntireMap()/getHeightOfEntireMap(); }		
+	{ return entireMapWidthHeightRelation; }		
 }
 
