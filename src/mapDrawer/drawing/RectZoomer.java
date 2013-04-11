@@ -21,7 +21,7 @@ public class RectZoomer extends MouseAdapter {
 	private double startX, startY, endX, endY;
 	private Rectangle rect = null;
 	private MapPanel mp = null;
-	private ResizingArrayStack<AreaToDraw> ras; 
+	private ResizingArrayStack<AreaToDraw> stack; 
 
 	/**
 	 * Initializes the RectZoomer.
@@ -29,7 +29,7 @@ public class RectZoomer extends MouseAdapter {
 	 */
 	public RectZoomer(MapPanel mp) {
 		this.mp = mp;
-		ras = new ResizingArrayStack<AreaToDraw>();
+		stack = new ResizingArrayStack<AreaToDraw>();
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class RectZoomer extends MouseAdapter {
 		}
 		else if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
 			AreaToDraw area = mp.getArea();
-			ras.push(area);
+			stack.push(area);
 			CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), area);
 			
 			//SWITCHING STARTY AND ENDY - WHAT DA FUCK
@@ -146,7 +146,7 @@ public class RectZoomer extends MouseAdapter {
 	 */
 	public void zoomOut()
 	{
-		AreaToDraw area = ras.pop();
+		AreaToDraw area = stack.pop();
 		mp.repaintMap(area);
 	}
 }
