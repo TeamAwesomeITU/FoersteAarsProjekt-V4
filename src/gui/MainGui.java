@@ -60,7 +60,7 @@ public class MainGui {
 				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			} catch (ClassNotFoundException | InstantiationException
 					| IllegalAccessException | UnsupportedLookAndFeelException e) {
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(frame, "Something went wrong setting up the program, please contact TeamAwesome.");
 			}
 
 	}
