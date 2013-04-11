@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
+import mapDrawer.exceptions.InvalidAreaProportionsException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 
 /**
@@ -180,7 +181,7 @@ public class CoastLineMaker {
 
 			try {
 				return new AreaToDraw(xMin, xMax, yMin, yMax, false);
-			} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException e) {
+			} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 				e.printStackTrace();		
 				return null;
 			}	

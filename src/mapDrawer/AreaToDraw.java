@@ -2,6 +2,7 @@ package mapDrawer;
 
 import mapDrawer.dataSupplying.Node;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
+import mapDrawer.exceptions.InvalidAreaProportionsException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 
 /**
@@ -36,8 +37,9 @@ public class AreaToDraw {
 	 * @param preventDistortion Whether the area should be padded to fit the proportions of the entire map of Denmark or not - if true, the shortest side will be padded to fit the proportions.
 	 * @throws NegativeAreaSizeException
 	 * @throws AreaIsNotWithinDenmarkException
+	 * @throws InvalidAreaProportionsException 
 	 */
-	public AreaToDraw(double smallestX, double largestX, double smallestY, double largestY, boolean preventDistortion) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException
+	public AreaToDraw(double smallestX, double largestX, double smallestY, double largestY, boolean preventDistortion) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException
 	{
 		if(smallestX > largestX || smallestY > largestY || smallestX < 0 || smallestY < 0)
 			throw new NegativeAreaSizeException("Area size was invalid");
@@ -62,6 +64,11 @@ public class AreaToDraw {
 			
 			if(this.smallestX > largestX || this.smallestY > largestY || this.smallestX < 0 || this.smallestY < 0)
 				throw new NegativeAreaSizeException("Area size was padded to an invalid size");			
+			
+			double newWidthHeightRelation = (this.largestX-this.smallestX)/(this.largestY-this.smallestY);	
+			double newRoundedwidthHeightRelation = Math.round((newWidthHeightRelation*100.0))/100.0;
+			if(newRoundedwidthHeightRelation != roundedwidthHeightRelationEntireMap)
+				throw new InvalidAreaProportionsException("Area size was padded to an an area with invalid proportions: " + newRoundedwidthHeightRelation);	
 		}
 
 		else {
@@ -187,7 +194,7 @@ public class AreaToDraw {
 
 			}
 		}
-		
+				
 		//Index 0: smallestX, index 1: largestX, index 2: smallestY, index 3: largestY
 		return new double[]{foundSmallestX, foundLargestX, foundSmallestY, foundLargestY};
 	}
@@ -319,6 +326,7 @@ public class AreaToDraw {
 	public static double getHeightOfEntireMap()
 	{ return entireMapLargestY-entireMapSmallestY; }	
 	
+
 	/**
 	 * Gets the width-height relation of the entire map of Denmark
 	 * @return The width-height relation of the entire map of Denmark

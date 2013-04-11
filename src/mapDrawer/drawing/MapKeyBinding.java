@@ -11,6 +11,7 @@ import javax.swing.Timer;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
+import mapDrawer.exceptions.InvalidAreaProportionsException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 
 
@@ -122,10 +123,9 @@ public class MapKeyBinding extends AbstractAction{
 		    	
 		    	try {
 		    		newArea = new AreaToDraw(smallX, bigX, smallY, bigY, true);
-		  		} catch (NegativeAreaSizeException e1) {
-		  			newArea = currentArea;
-				} catch (AreaIsNotWithinDenmarkException e1) {
-					newArea = currentArea;
+		  		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
+		  			e1.printStackTrace();
+		  			newArea = currentArea;		  			
 				}
 				mp.repaintMap(newArea);
 		   	}	

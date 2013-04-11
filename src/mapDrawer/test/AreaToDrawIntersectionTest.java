@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
+import mapDrawer.exceptions.InvalidAreaProportionsException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 
 import org.junit.Test;
@@ -18,7 +19,7 @@ public class AreaToDrawIntersectionTest {
 			assertTrue(area1.isAreaIntersectingWithArea(area2));
 			assertTrue(area2.isAreaIntersectingWithArea(area1));
 			
-		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException e) {
+		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 			fail();
 			e.printStackTrace();
 		}
@@ -32,7 +33,7 @@ public class AreaToDrawIntersectionTest {
 			assertTrue(area1.isAreaIntersectingWithArea(area2));
 			assertTrue(area2.isAreaIntersectingWithArea(area1));
 			
-		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException e) {
+		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 			fail();
 			e.printStackTrace();
 		}
@@ -46,7 +47,7 @@ public class AreaToDrawIntersectionTest {
 			assertFalse(area1.isAreaIntersectingWithArea(area2));
 			assertFalse(area2.isAreaIntersectingWithArea(area1));
 			
-		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException e) {
+		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 			fail();
 			e.printStackTrace();
 		}

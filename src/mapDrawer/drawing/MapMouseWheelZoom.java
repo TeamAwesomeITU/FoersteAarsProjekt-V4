@@ -9,6 +9,7 @@ import javax.swing.Timer;
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
+import mapDrawer.exceptions.InvalidAreaProportionsException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 
 public class MapMouseWheelZoom implements MouseWheelListener {
@@ -88,12 +89,9 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 				zoomWay = 0;
 				try {
 		    		newArea = new AreaToDraw(smallX, bigX, bigY, smallY, true);
-		  		} catch (NegativeAreaSizeException e1) {
-		  			System.out.println("NASE");
+		  		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
+		  			System.out.println(e1.getClass() + ": " + e1.getMessage());
 		  			newArea = currentArea;
-				} catch (AreaIsNotWithinDenmarkException e1) {
-					System.out.println("ASIWDE");
-					newArea = currentArea;
 				}
 				mp.repaintMap(newArea);
 			}

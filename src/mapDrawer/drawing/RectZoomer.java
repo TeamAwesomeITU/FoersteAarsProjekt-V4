@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
+import mapDrawer.exceptions.InvalidAreaProportionsException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 
 /**
@@ -116,7 +117,7 @@ public class RectZoomer extends MouseAdapter {
 				mp.repaintMap(area);
 			}
 
-			catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException e1) {
+			catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
 				JOptionPane.showMessageDialog(mp, "The selected area is not within the map, please try again.");
 				System.out.println("ERROR: " + e1.getMessage());					
 				rect = null;

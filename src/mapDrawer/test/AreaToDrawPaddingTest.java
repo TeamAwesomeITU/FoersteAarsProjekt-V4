@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
+import mapDrawer.exceptions.InvalidAreaProportionsException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class AreaToDrawPaddingTest {
 			
 			assertTrue(area.getWidthHeightRelation() == AreaToDraw.getWidthHeightRelationOfEntireMap());
 			
-		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException e) {
+		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 			fail();
 			e.printStackTrace();
 		}
@@ -93,7 +94,7 @@ public class AreaToDrawPaddingTest {
 			
 			assertTrue(area.getWidthHeightRelation() == AreaToDraw.getWidthHeightRelationOfEntireMap());
 			
-		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException e) {
+		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 			fail();
 			e.printStackTrace();
 		}
