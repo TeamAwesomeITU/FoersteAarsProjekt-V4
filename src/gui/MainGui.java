@@ -57,7 +57,7 @@ public class MainGui {
 		String OS = System.getProperty("os.name").toLowerCase();
 		if(OS.indexOf("mac") >= 0)
 			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 			} catch (ClassNotFoundException | InstantiationException
 					| IllegalAccessException | UnsupportedLookAndFeelException e) {
 				e.printStackTrace();
