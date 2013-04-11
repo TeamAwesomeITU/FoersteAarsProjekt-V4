@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import java_cup.internal_error;
+
 import javax.swing.*;
 /**
  * This is our main gui class. It holds methods that is common for all
@@ -26,7 +28,13 @@ public class MainGui {
 	public static JFrame frame;
 
 	public static Container contentPane;
-
+	
+	public static int screenWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	public static int screenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	public static int settingsWidth = screenWidth;
+	public static int settingsHeight = screenHeight;
+			
+	public static Dimension screenSize = new Dimension(settingsWidth, settingsHeight);
 	/**
 	 * @param args
 	 */
@@ -64,7 +72,7 @@ public class MainGui {
 	public static void makeFrameAndContentPane(){
 		frame = new JFrame("Team Awesome Maps");
 		frame.setUndecorated(MainGui.undecoratedBoolean);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
 		frame.setBounds(0,0,screenSize.width, screenSize.height);
 		frame.setPreferredSize(screenSize);
 
@@ -163,13 +171,48 @@ public class MainGui {
 						updateSettingsFile();
 					}
 				});
+				
+				JLabel fameSizesLabel = new JLabel("Frame Size:");
+				
+				String[] frameSizes = {"Fullscreen", "Medium", "Small", "Dualscreen"};
 
-				ColoredJPanel themesPanel = new ColoredJPanel();
-				themesPanel.add(themesLabel);
-				themesPanel.add(colorThemesBox);				
+				JComboBox<String> frameSizesBox = new JComboBox<>(frameSizes);
+				frameSizesBox.addActionListener(new ActionListener() {
+					@SuppressWarnings({ "rawtypes" })
+					public void actionPerformed(ActionEvent e) {
+						JComboBox cb = (JComboBox)e.getSource();
+						String selectedTheme = (String)cb.getSelectedItem();
+						if(selectedTheme.equals("Fullscreen")){ 
+							frame.setBounds(0, 0, screenWidth, screenHeight);
+						}
+						if(selectedTheme.equals("Medium")){ 
+							settingsWidth = (int) (screenWidth*0.75);
+							settingsHeight = (int) (screenHeight*0.75);
+							frame.setBounds(0, 0, settingsWidth, settingsHeight);
+						}
+						if(selectedTheme.equals("Small")){ 
+							settingsWidth = (int) (screenWidth*0.40);
+							settingsHeight = (int) (screenHeight*0.40);
+							frame.setBounds(0, 0, settingsWidth, settingsHeight);
+						}
+						if(selectedTheme.equals("Dualscreen")){ 
+							settingsWidth = (int) (screenWidth*0.50);
+							settingsHeight = (int) (screenHeight);
+							frame.setBounds(0, 0, settingsWidth, settingsHeight);
+						}
+						settingsFrame.dispose();
+						updateSettingsFile();
+					}
+				});
+
+				ColoredJPanel checkboxPanel = new ColoredJPanel();
+				checkboxPanel.add(themesLabel);
+				checkboxPanel.add(colorThemesBox);
+				checkboxPanel.add(fameSizesLabel);
+				checkboxPanel.add(frameSizesBox);				
 
 				container.add(settingsPanel, BorderLayout.CENTER);
-				container.add(themesPanel, BorderLayout.SOUTH);
+				container.add(checkboxPanel, BorderLayout.SOUTH);
 
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);
@@ -213,32 +256,50 @@ public class MainGui {
 	/**
 	 * reads the config file to start the program with the last settings.
 	 * 	 */
+	@SuppressWarnings("static-access")
 	public static void readSettingsFile(){
 		try {
 			BufferedReader fileStream = new BufferedReader(new FileReader(getConfigFile()));
 			if(fileStream.ready()){
-				String undecoratedSetting = fileStream.readLine().trim();
-				String coordinatesSetting = fileStream.readLine().trim();
-				String colorThemeSetting = fileStream.readLine().trim();
-
-				if(undecoratedSetting.equals("true"))
-					undecoratedBoolean = true;
-				else if (undecoratedSetting.equals("false")) 
-					undecoratedBoolean = false;
-
-				if(coordinatesSetting.equals("true"))
-					coordinatesBoolean = true;
-				else if(coordinatesSetting.equals("false"))
-					coordinatesBoolean = false;
-
-				if(colorThemeSetting.equals("Spring"))
-					ColorTheme.setSpringTheme();
-				else if(colorThemeSetting.equals("Summer"))
-					ColorTheme.setSummerTheme();
-				else if(colorThemeSetting.equals("Winter"))
-					ColorTheme.setWinterTheme();
-				else if(colorThemeSetting.equals("Autumn"))
-					ColorTheme.setAutumnTheme();
+				
+				if(fileStream.ready()){
+					String undecoratedSetting = fileStream.readLine().trim();
+					if(undecoratedSetting.equals("true"))
+						undecoratedBoolean = true;
+					else if (undecoratedSetting.equals("false")) 
+						undecoratedBoolean = false;
+				}else updateSettingsFile();
+				
+				if(fileStream.ready()){
+					String coordinatesSetting = fileStream.readLine().trim();
+					if(coordinatesSetting.equals("true"))
+						coordinatesBoolean = true;
+					else if(coordinatesSetting.equals("false"))
+						coordinatesBoolean = false;
+				}else updateSettingsFile();
+				
+				if(fileStream.ready()){
+					String colorThemeSetting = fileStream.readLine().trim();
+					if(colorThemeSetting.equals("Spring"))
+						ColorTheme.setSpringTheme();
+					else if(colorThemeSetting.equals("Summer"))
+						ColorTheme.setSummerTheme();
+					else if(colorThemeSetting.equals("Winter"))
+						ColorTheme.setWinterTheme();
+					else if(colorThemeSetting.equals("Autumn"))
+						ColorTheme.setAutumnTheme();
+				}else updateSettingsFile();
+				
+				if(fileStream.ready()){
+					String screenWidthSetting = fileStream.readLine().trim();
+					settingsWidth = Integer.parseInt(screenWidthSetting);
+				}else updateSettingsFile();
+				
+				if(fileStream.ready()){
+					String screenHeightSetting = fileStream.readLine().trim();
+					settingsHeight = Integer.parseInt(screenHeightSetting);
+				} else updateSettingsFile();
+				
 			}
 			else
 				updateSettingsFile();
@@ -265,13 +326,17 @@ public class MainGui {
 				fileWriter.write("false\n");
 			
 			if(ColorTheme.summerTheme)
-				fileWriter.write("Summer");
+				fileWriter.write("Summer\n");
 			if(ColorTheme.winterTheme)
-				fileWriter.write("Winter");
+				fileWriter.write("Winter\n");
 			if(ColorTheme.autumnTheme)
-				fileWriter.write("Autumn");
+				fileWriter.write("Autumn\n");
 			if(ColorTheme.springTheme)
-				fileWriter.write("Spring");
+				fileWriter.write("Spring\n");
+			
+			fileWriter.write(screenWidth + "\n");
+			fileWriter.write(screenHeight + "\n");
+			
 			fileWriter.close();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(frame, "Could not find config file. Setting defualt settings");
