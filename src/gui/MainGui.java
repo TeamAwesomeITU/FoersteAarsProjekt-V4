@@ -18,9 +18,9 @@ public class MainGui {
 	public static boolean undecoratedBoolean = true;
 
 	public static boolean coordinatesBoolean = false;
-	
+
 	public static JFrame frame;
-	
+
 	public static Container contentPane;
 
 	/**
@@ -52,7 +52,7 @@ public class MainGui {
 		contentPane.add(makeFooter(), BorderLayout.SOUTH);
 		new StartupWindow();
 	}
-	
+
 	private void setMacLookAndFeel(){
 		String OS = System.getProperty("os.name").toLowerCase();
 		if(OS.indexOf("mac") >= 0)
@@ -62,7 +62,7 @@ public class MainGui {
 					| IllegalAccessException | UnsupportedLookAndFeelException e) {
 				e.printStackTrace();
 			}
-			
+
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class MainGui {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setBounds(0,0,screenSize.width, screenSize.height);
 		frame.setPreferredSize(screenSize);
-		
+
 		contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
 	}
@@ -181,6 +181,7 @@ public class MainGui {
 				settingsFrame.setVisible(true);
 			}
 		});
+		
 		settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, SHORT_CUT_MASK));
 		fileMenu.add(settingsItem);
 		fileMenu.add(quitItem);
