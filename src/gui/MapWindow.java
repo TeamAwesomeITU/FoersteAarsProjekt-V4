@@ -161,16 +161,16 @@ public class MapWindow {
 	 * @return the calculated height
 	 */
 	private double heightForMap() {
-		double height = MainGui.frame.getHeight()*0.99 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
-		if(height <= Math.round(MainGui.frame.getHeight()*0.99 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
+		double height = MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
+		if(height <= Math.round(MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
 			return  height;
 		else 
 			return heightForMap(height);
 	}
 
 	private double heightForMap(double temporaryHeight) {
-		double height = temporaryHeight*0.99 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
-		if(height <= Math.round(MainGui.frame.getHeight()*0.99 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
+		double height = temporaryHeight*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
+		if(height <= Math.round(MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
 			return  height;
 		else 
 			return heightForMap(height);

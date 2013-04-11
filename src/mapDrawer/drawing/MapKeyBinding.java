@@ -24,7 +24,7 @@ public class MapKeyBinding extends AbstractAction{
 	private MapPanel mp;
 	private AreaToDraw currentArea, newArea;
 	private double smallX, bigX, smallY, bigY;
-	private Timer recalculateTimer = new Timer(250, new MapPanActionListener());
+	private Timer recalculateTimer = new Timer(10, new MapPanActionListener());
 	private double keyPressedRight = 0, keyPressedLeft = 0, keyPressedUp = 0, keyPressedDown = 0;
 	    
 	public MapKeyBinding(String actionName, JTextField toField, JTextField fromField, MapPanel mp){
@@ -68,15 +68,19 @@ public class MapKeyBinding extends AbstractAction{
 	public static void addKeyBinding(MapPanel mp, JTextField toField, JTextField fromField) {
 
     	mp.getInputMap(mp.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0, false), "right");
+    	mp.getInputMap(mp.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, false), "right");
     	mp.getActionMap().put("right", new MapKeyBinding("right", toField, fromField, mp));
     	
     	mp.getInputMap(mp.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0, false), "left");
+    	mp.getInputMap(mp.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, false), "left");
     	mp.getActionMap().put("left", new MapKeyBinding("left", toField, fromField, mp));
     	
     	mp.getInputMap(mp.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0, false), "up");
+    	mp.getInputMap(mp.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, false), "up");
     	mp.getActionMap().put("up", new MapKeyBinding("up", toField, fromField, mp));
     	
     	mp.getInputMap(mp.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0, false), "down");
+    	mp.getInputMap(mp.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, false), "down");
     	mp.getActionMap().put("down", new MapKeyBinding("down", toField, fromField, mp));
     }
     

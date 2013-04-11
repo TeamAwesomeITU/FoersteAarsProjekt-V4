@@ -69,13 +69,13 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 					bigX = xCoord+percentageOfMapX;
 					smallY = yCoord-percentageOfMapY;
 					bigY = yCoord+percentageOfMapY;
-					/*if(bigX > mp.getWidth()) {
+					if(bigX > mp.getWidth()) {
 						double diffX = bigX-mp.getWidth(); smallX -= diffX; bigX = mp.getWidth();
 					}
 					else if(smallX < 0)
 					if(bigY > mp.getHeight()) {
 						double diffY = bigY-mp.getHeight(); smallY -= diffY; bigY = mp.getHeight();
-					}*/
+					}
 					
 					System.out.println(smallX +", "+ bigX +", "+ smallY +", "+ bigY);
 					CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), currentArea);
