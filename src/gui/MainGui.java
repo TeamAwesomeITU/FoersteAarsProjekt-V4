@@ -166,22 +166,24 @@ public class MainGui {
 				
 				JLabel fameSizesLabel = new JLabel("Frame Size:");
 				
-				String[] frameSizes = {"Fullscreen", "Medium", "Small", "Dualscreen"};
+				String[] frameSizes = {"Fullscreen", "Medium", "Small", "Dualscreen LEFT", "Dualscreen RIGHT"};
 
 				JComboBox<String> frameSizesBox = new JComboBox<>(frameSizes);
 				if(ScreenSize.fullScreen) frameSizesBox.setSelectedIndex(0);
 				else if(ScreenSize.mediumScreen) frameSizesBox.setSelectedIndex(1);
 				else if(ScreenSize.smallScreen) frameSizesBox.setSelectedIndex(2);
-				else if(ScreenSize.dualScreen) frameSizesBox.setSelectedIndex(3);
+				else if(ScreenSize.dualScreenLeft) frameSizesBox.setSelectedIndex(3);
+				else if(ScreenSize.dualScreenRight) frameSizesBox.setSelectedIndex(4);
 				frameSizesBox.addActionListener(new ActionListener() {
 					@SuppressWarnings({ "rawtypes" })
 					public void actionPerformed(ActionEvent e) {
 						JComboBox cb = (JComboBox)e.getSource();
-						String selectedTheme = (String)cb.getSelectedItem();
-						if(selectedTheme.equals("Fullscreen")) ScreenSize.setFullScreen();
-						if(selectedTheme.equals("Medium")) ScreenSize.setMediumScreen();
-						if(selectedTheme.equals("Small")) ScreenSize.setSmallScreen();
-						if(selectedTheme.equals("Dualscreen")) ScreenSize.setDualScreen();
+						String selectedSize = (String)cb.getSelectedItem();
+						if(selectedSize.equals("Fullscreen")) ScreenSize.setFullScreen();
+						if(selectedSize.equals("Medium")) ScreenSize.setMediumScreen();
+						if(selectedSize.equals("Small")) ScreenSize.setSmallScreen();
+						if(selectedSize.equals("Dualscreen LEFT")) ScreenSize.setDualScreenLeft();
+						if(selectedSize.equals("Dualscreen RIGHT")) ScreenSize.setDualScreenRight();
 						settingsFrame.dispose();
 						changeScreenSize();
 						updateSettingsFile();
@@ -235,11 +237,15 @@ public class MainGui {
 		footer.add(footerText);
 		return footer;
 	}
-	
+	/**
+	 * Changes the screen size depending on the chosen setting.
+	 */
 	public static void changeScreenSize(){
 		frame.setBounds(0, 0, ScreenSize.screenWidth, ScreenSize.screenHeight);
 		if(ScreenSize.mediumScreen || ScreenSize.smallScreen)
 			frame.setLocationRelativeTo(null);
+		if(ScreenSize.dualScreenRight)
+			frame.setLocation((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2), 0);
 	}
 
 	/**
@@ -286,8 +292,10 @@ public class MainGui {
 						ScreenSize.setMediumScreen();
 					if(screenSetting.equals("Smallscreen"))
 						ScreenSize.setSmallScreen();
-					if(screenSetting.equals("Dualscreen"))
-						ScreenSize.setDualScreen();
+					if(screenSetting.equals("Dualscreenleft"))
+						ScreenSize.setDualScreenLeft();
+					if(screenSetting.equals("Dualscreenright"))
+						ScreenSize.setDualScreenRight();
 				}else updateSettingsFile();
 				
 			}
@@ -330,8 +338,10 @@ public class MainGui {
 				fileWriter.write("Mediumscreen\n");
 			if(ScreenSize.smallScreen)
 				fileWriter.write("Smallscreen\n");
-			if(ScreenSize.dualScreen)
-				fileWriter.write("Dualscreen\n");
+			if(ScreenSize.dualScreenLeft)
+				fileWriter.write("Dualscreenleft\n");
+			if(ScreenSize.dualScreenRight)
+				fileWriter.write("Dualscreenright\n");
 			
 			fileWriter.close();
 		} catch (IOException e) {
@@ -339,6 +349,10 @@ public class MainGui {
 		}
 	}
 	
+	/**
+	 * Reads the config file. If none is found, one is made with the default settings
+	 * @return the configfile for the settings
+	 */
 	public static File getConfigFile() {
 	    File configFile = new File("config.txt");
 	    if(!configFile.exists())
