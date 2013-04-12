@@ -10,8 +10,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import java_cup.internal_error;
-
 import javax.swing.*;
 /**
  * This is our main gui class. It holds methods that is common for all
@@ -28,19 +26,13 @@ public class MainGui {
 	public static JFrame frame;
 
 	public static Container contentPane;
-	
-	public static int screenWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-	public static int screenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-	public static int settingsWidth = screenWidth;
-	public static int settingsHeight = screenHeight;
-			
-	public static Dimension screenSize = new Dimension(settingsWidth, settingsHeight);
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		readSettingsFile();
 		ColorTheme.setTheme();
+		ScreenSize.setScreenSize();
 		MainGui.getInstance();
 	}
 
@@ -73,8 +65,8 @@ public class MainGui {
 		frame = new JFrame("Team Awesome Maps");
 		frame.setUndecorated(MainGui.undecoratedBoolean);
 		
-		frame.setBounds(0,0,screenSize.width, screenSize.height);
-		frame.setPreferredSize(screenSize);
+		changeScreenSize();
+		frame.setPreferredSize(ScreenSize.screenSize);
 
 		contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
@@ -177,30 +169,21 @@ public class MainGui {
 				String[] frameSizes = {"Fullscreen", "Medium", "Small", "Dualscreen"};
 
 				JComboBox<String> frameSizesBox = new JComboBox<>(frameSizes);
+				if(ScreenSize.fullScreen) frameSizesBox.setSelectedIndex(0);
+				else if(ScreenSize.mediumScreen) frameSizesBox.setSelectedIndex(1);
+				else if(ScreenSize.smallScreen) frameSizesBox.setSelectedIndex(2);
+				else if(ScreenSize.dualScreen) frameSizesBox.setSelectedIndex(3);
 				frameSizesBox.addActionListener(new ActionListener() {
 					@SuppressWarnings({ "rawtypes" })
 					public void actionPerformed(ActionEvent e) {
 						JComboBox cb = (JComboBox)e.getSource();
 						String selectedTheme = (String)cb.getSelectedItem();
-						if(selectedTheme.equals("Fullscreen")){ 
-							frame.setBounds(0, 0, screenWidth, screenHeight);
-						}
-						if(selectedTheme.equals("Medium")){ 
-							settingsWidth = (int) (screenWidth*0.75);
-							settingsHeight = (int) (screenHeight*0.75);
-							frame.setBounds(0, 0, settingsWidth, settingsHeight);
-						}
-						if(selectedTheme.equals("Small")){ 
-							settingsWidth = (int) (screenWidth*0.40);
-							settingsHeight = (int) (screenHeight*0.40);
-							frame.setBounds(0, 0, settingsWidth, settingsHeight);
-						}
-						if(selectedTheme.equals("Dualscreen")){ 
-							settingsWidth = (int) (screenWidth*0.50);
-							settingsHeight = (int) (screenHeight);
-							frame.setBounds(0, 0, settingsWidth, settingsHeight);
-						}
+						if(selectedTheme.equals("Fullscreen")) ScreenSize.setFullScreen();
+						if(selectedTheme.equals("Medium")) ScreenSize.setMediumScreen();
+						if(selectedTheme.equals("Small")) ScreenSize.setSmallScreen();
+						if(selectedTheme.equals("Dualscreen")) ScreenSize.setDualScreen();
 						settingsFrame.dispose();
+						changeScreenSize();
 						updateSettingsFile();
 					}
 				});
@@ -252,11 +235,16 @@ public class MainGui {
 		footer.add(footerText);
 		return footer;
 	}
+	
+	public static void changeScreenSize(){
+		frame.setBounds(0, 0, ScreenSize.screenWidth, ScreenSize.screenHeight);
+		if(ScreenSize.mediumScreen || ScreenSize.smallScreen)
+			frame.setLocationRelativeTo(null);
+	}
 
 	/**
 	 * reads the config file to start the program with the last settings.
 	 * 	 */
-	@SuppressWarnings("static-access")
 	public static void readSettingsFile(){
 		try {
 			BufferedReader fileStream = new BufferedReader(new FileReader(getConfigFile()));
@@ -291,14 +279,16 @@ public class MainGui {
 				}else updateSettingsFile();
 				
 				if(fileStream.ready()){
-					String screenWidthSetting = fileStream.readLine().trim();
-					settingsWidth = Integer.parseInt(screenWidthSetting);
+					String screenSetting = fileStream.readLine().trim();
+					if(screenSetting.equals("Fullscreen"))
+						ScreenSize.setFullScreen();
+					if(screenSetting.equals("Mediumscreen"))
+						ScreenSize.setMediumScreen();
+					if(screenSetting.equals("Smallscreen"))
+						ScreenSize.setSmallScreen();
+					if(screenSetting.equals("Dualscreen"))
+						ScreenSize.setDualScreen();
 				}else updateSettingsFile();
-				
-				if(fileStream.ready()){
-					String screenHeightSetting = fileStream.readLine().trim();
-					settingsHeight = Integer.parseInt(screenHeightSetting);
-				} else updateSettingsFile();
 				
 			}
 			else
@@ -334,8 +324,14 @@ public class MainGui {
 			if(ColorTheme.springTheme)
 				fileWriter.write("Spring\n");
 			
-			fileWriter.write(screenWidth + "\n");
-			fileWriter.write(screenHeight + "\n");
+			if(ScreenSize.fullScreen)
+				fileWriter.write("Fullscreen\n");
+			if(ScreenSize.mediumScreen)
+				fileWriter.write("Mediumscreen\n");
+			if(ScreenSize.smallScreen)
+				fileWriter.write("Smallscreen\n");
+			if(ScreenSize.dualScreen)
+				fileWriter.write("Dualscreen\n");
 			
 			fileWriter.close();
 		} catch (IOException e) {
