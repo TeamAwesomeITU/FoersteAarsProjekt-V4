@@ -44,6 +44,9 @@ public class AreaToDraw {
 	{
 		if(smallestX > largestX || smallestY > largestY || smallestX < 0 || smallestY < 0)
 			throw new NegativeAreaSizeException("Area size was invalid");
+		
+		if(smallestX < entireMapSmallestX || smallestY < entireMapSmallestY || largestX > entireMapLargestX || largestY > entireMapLargestY)
+			throw new AreaIsNotWithinDenmarkException("Some part of the area is not within the map of Denmark");
 
 		double widthHeightRelation = (largestX-smallestX)/(largestY-smallestY);	
 		double roundedwidthHeightRelation = Math.round((widthHeightRelation*100.0))/100.0;
@@ -70,10 +73,8 @@ public class AreaToDraw {
 				throw new InvalidAreaProportionsException("Area size was padded to an an area with invalid proportions: " + newRoundedwidthHeightRelation);	
 		}
 
+		//If no padding is wanted and the proportions are correct
 		else {
-			if(smallestX < entireMapSmallestX || smallestY < entireMapSmallestY || largestX > entireMapLargestX || largestY > entireMapLargestY)
-				throw new AreaIsNotWithinDenmarkException("Some part of the area is not within the map of Denmark");
-
 			this.smallestX = smallestX;
 			this.largestX = largestX;	
 			this.smallestY = smallestY;
@@ -105,6 +106,8 @@ public class AreaToDraw {
 	private double[] padArea(double smallestX, double largestX, double smallestY, double largestY, double widthHeightRelation)
 	{		
 		
+		
+		  
 		// IS THIS CORRECT?
 		if(smallestX < entireMapSmallestX )
 			smallestX = entireMapSmallestX;
@@ -115,6 +118,8 @@ public class AreaToDraw {
 		if(largestY > entireMapLargestY)
 			largestY = entireMapLargestY;
 		// IS THIS CORRECT?
+		 
+		 
 		
 		System.out.println("Padding area!");
 		double foundSmallestX = 0.0;
@@ -134,6 +139,7 @@ public class AreaToDraw {
 			double newHeight = (largestX-smallestX)/getWidthHeightRelationOfEntireMap();
 			double heightToAdd = newHeight-(largestY-smallestY);
 
+			System.out.println("newHeight is calculated to be: " + newHeight);
 			System.out.println("heightToAdd is calculated to be: " + heightToAdd);
 
 			boolean newSmallestYisInsideMap = (smallestY - heightToAdd/2) > entireMapSmallestY;
@@ -143,8 +149,8 @@ public class AreaToDraw {
 			if(newSmallestYisInsideMap && newLargestYisInsideMap)
 			{
 				System.out.println("New coordinates do NOT exceed the map!");
-				foundSmallestY = smallestY - heightToAdd/2;
-				foundLargestY = largestY + heightToAdd/2;
+				foundSmallestY = smallestY - (heightToAdd/2);
+				foundLargestY = largestY + (heightToAdd/2);
 			}
 
 			//If the new height DOES exceed the top or bottom of the map
@@ -155,14 +161,14 @@ public class AreaToDraw {
 				{
 					System.out.println("Largest coordinate exceed the map!");
 					foundLargestY = entireMapLargestY;
-					foundSmallestY = largestY - newHeight;
+					foundSmallestY = foundLargestY - newHeight;
 				}
 
 				else
 				{
 					System.out.println("Smallest coordinate exceed the map!");
 					foundSmallestY = entireMapSmallestY;
-					foundLargestY = smallestY + newHeight;
+					foundLargestY = foundSmallestY + newHeight;
 				}							
 			}
 		}
@@ -177,6 +183,7 @@ public class AreaToDraw {
 			double newWidth = (largestY-smallestY)*getWidthHeightRelationOfEntireMap();
 			double widthToAdd = newWidth-(largestX-smallestX);
 
+			System.out.println("newWidth is calculated to be: " + newWidth);
 			System.out.println("widthToAdd is calculated to be: " + widthToAdd);
 
 			boolean newSmallestXisInsideMap = (smallestX - widthToAdd/2) > entireMapSmallestX;
@@ -186,8 +193,8 @@ public class AreaToDraw {
 			if(newSmallestXisInsideMap && newLargestXisInsideMap)
 			{
 				System.out.println("New coordinates do NOT exceed the map!");
-				foundSmallestX = smallestX - widthToAdd/2;
-				foundLargestX = largestX + widthToAdd/2;
+				foundSmallestX = smallestX - (widthToAdd/2);
+				foundLargestX = largestX + (widthToAdd/2);
 			}
 
 			//If the new width DOES exceed the top or bottom of the map
@@ -198,14 +205,14 @@ public class AreaToDraw {
 				{
 					System.out.println("Largest coordinate exceed the map!");
 					foundLargestX = entireMapLargestX;
-					foundSmallestX = largestX - widthToAdd;
+					foundSmallestX = foundLargestX - newWidth;
 				}
 
 				else
 				{
 					System.out.println("Smallest coordinate exceed the map!");
 					foundSmallestX = entireMapSmallestX;
-					foundLargestX = smallestX + widthToAdd;
+					foundLargestX = foundSmallestX + newWidth;
 				}							
 
 			}
