@@ -106,7 +106,7 @@ public class AreaToDraw {
 	private double[] padArea(double smallestX, double largestX, double smallestY, double largestY, double widthHeightRelation)
 	{		
 		
-		/*
+		
 		  
 		// IS THIS CORRECT?
 		if(smallestX < entireMapSmallestX )
@@ -119,7 +119,7 @@ public class AreaToDraw {
 			largestY = entireMapLargestY;
 		// IS THIS CORRECT?
 		 
-		 */
+		 
 		
 		System.out.println("Padding area!");
 		double foundSmallestX = 0.0;
