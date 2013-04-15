@@ -53,7 +53,6 @@ public class FindRelevantEdges {
 	{
 		long startTime = System.currentTimeMillis();
 		HashSet<Edge> edgeSet = new HashSet<Edge>();
-		int count = 0;
 		try {	
 			VTDGen vgEdge = new VTDGen();
 			if(vgEdge.parseFile("XML/kdv_unload_new.xml", false)) {
@@ -78,7 +77,6 @@ public class FindRelevantEdges {
 					POST = vnEdge.parseInt(vnEdge.getText());
 
 					edgeSet.add(new Edge(FNODE,TNODE,TYP,ROAD,POST));
-					count++;
 
 					vnEdge.toElement(VTDNav.PARENT); 
 				} 
