@@ -50,9 +50,11 @@ public class FindRelevantEdges {
 	 * @return A HashSet containing all Edges as Edge-objects. 
 	 */
 	private static HashSet<Edge> makeEdgeSet()
-	{
-		long startTime = System.currentTimeMillis();
+	{		
+		long startTime = System.currentTimeMillis();		
+		
 		HashSet<Edge> edgeSet = new HashSet<Edge>();
+			
 		try {	
 			VTDGen vgEdge = new VTDGen();
 			if(vgEdge.parseFile("XML/kdv_unload_new.xml", false)) {
@@ -134,7 +136,7 @@ public class FindRelevantEdges {
 
 		try {
 			long startTime = System.currentTimeMillis();
-			VTDGen vg =new VTDGen();
+			VTDGen vg = new VTDGen();
 			AutoPilot ap = new AutoPilot(); 
 			ap.selectXPath("/nodeCollection/node");
 			if (vg.parseFile("XML/kdv_node_unload.xml", false))
@@ -172,5 +174,13 @@ public class FindRelevantEdges {
 	 */
 	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()	{
 		return nodeCoordinatesMap;
+	}
+	
+	/**
+	 * Gets a HashSet of all of the entire map's Edges
+	 * @return A HashSet of all of the maps Edges 
+	 */
+	public static HashSet<Edge> getEdgeSet()	{
+		return allEdgesSet;
 	}
 }

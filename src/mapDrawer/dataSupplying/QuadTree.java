@@ -172,7 +172,7 @@ public class QuadTree {
 	private static QuadTree makeQuadTreeFromXML()
 	{
 		AreaToDraw area = new AreaToDraw();
-
+		
 		QuadTree quadTree = new QuadTree(area);
 
 		long startTime = System.currentTimeMillis();
@@ -238,6 +238,15 @@ public class QuadTree {
 	public static void initializeEntireQuadTree()
 	{
 		qTree.getClass();
+	}
+	
+	/**
+	 * Returns the entire static QuadTree
+	 * @return The entire static QuadTree
+	 */
+	public static QuadTree getEntireQuadTree()
+	{
+		return qTree;
 	}
 
 	public static void main(String[] args) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException

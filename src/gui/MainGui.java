@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.*;
+
 /**
  * This is our main gui class. It holds methods that is common for all
  * old and future windows.
