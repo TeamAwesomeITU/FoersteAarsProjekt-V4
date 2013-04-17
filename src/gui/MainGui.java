@@ -212,16 +212,26 @@ public class MainGui {
 		fileMenu.add(quitItem);
 
 		JMenu helpMenu = new JMenu("Help");
+		JMenuItem controlsItem = new JMenuItem("Contols");
+		controlsItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
+		controlsItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(frame, "Zooming: Use the scrollwheel or SHIFT + Left Mouse Button to use a rectangle zoomer. To go a zoomlevel out use Right Mouse button.\n"
+						+ "Panning: Use the arrows buttons or W, S, A or D or drag the map with Left Mouse Button");
+			}
+		});
 		JMenuItem aboutItem = new JMenuItem("About");
 		aboutItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);;
 		aboutItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(frame, "Welcome to T-A-M maps. Please enter an address" +
-						" to get on your way, or simply click the globe to browse the map");		
+						" to get on your way.");		
 			}
 		});
+		
 		aboutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, SHORT_CUT_MASK));
 		helpMenu.add(aboutItem);
+		helpMenu.add(controlsItem);
 
 		menuBar.add(fileMenu);
 		menuBar.add(helpMenu);		

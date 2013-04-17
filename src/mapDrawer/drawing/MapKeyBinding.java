@@ -10,6 +10,7 @@ import javax.swing.KeyStroke;
 import javax.swing.Timer;
 
 import mapDrawer.AreaToDraw;
+import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.InvalidAreaProportionsException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
@@ -87,44 +88,63 @@ public class MapKeyBinding extends AbstractAction{
     
     private class MapPanActionListener implements ActionListener {
 
+		@SuppressWarnings("static-access")
 		public void actionPerformed(ActionEvent e) {
 			currentArea = mp.getArea();
-			smallX = currentArea.getSmallestX();
-			bigX = currentArea.getLargestX();
-			smallY = currentArea.getSmallestY();
-			bigY = currentArea.getLargestY();
+			smallX = 0;
+			bigX = mp.getMapWidth();
+			smallY = 0;
+			bigY = mp.getMapHeight();
+			CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), currentArea);
+			smallX = coordConverter.pixelToUTMCoordX((int)smallX);
+			bigX = coordConverter.pixelToUTMCoordX((int)bigX);
+			smallY = coordConverter.pixelToUTMCoordY((int)smallY);
+			bigY = coordConverter.pixelToUTMCoordY((int)bigY);
+			double zoomX = (bigX - smallX) /100;
+			double zoomY = (bigY - smallY) /100;
+			double temp = bigY; bigY = smallY; smallY = temp;
+			System.out.println(zoomX +", "+ smallX +","+ bigX +", "+ smallY +", "+ bigY);
 	    	if(toField.hasFocus() == false && fromField.hasFocus() == false) {
-	    		double NumberOfTimesToPan = 0;
+	    		double pan = 0;
 	    		//GOING LEFT
 	    		if (keyPressedLeft>keyPressedRight) {
-					NumberOfTimesToPan = 1-((keyPressedLeft-keyPressedRight)/100);
-					smallX = smallX*NumberOfTimesToPan;
-					bigX = bigX*NumberOfTimesToPan;
+					pan = (keyPressedLeft-keyPressedRight)*zoomX;
+					smallX -= pan;
+					bigX -= pan;
+					if (smallX < currentArea.getSmallestXOfEntireMap()) 
+						smallX = currentArea.getSmallestXOfEntireMap();
 				}
 	    		//GOING RIGHT
 	    		else if (keyPressedRight>keyPressedLeft) {
-					NumberOfTimesToPan = 1+((keyPressedRight-keyPressedLeft)/100);
-					smallX = smallX*NumberOfTimesToPan;
-					bigX = bigX*NumberOfTimesToPan;
-				}
-	    		//GOING UP
-	    		if (keyPressedDown>keyPressedUp) {
-					NumberOfTimesToPan = 1-((keyPressedDown-keyPressedUp)/1000);
-					smallY = smallY*NumberOfTimesToPan;
-					bigY = bigY*NumberOfTimesToPan;
+					pan = (keyPressedRight-keyPressedLeft)*zoomX;
+					smallX += pan;
+					bigX += pan;
+					if (bigX > currentArea.getLargestXOfEntireMap()) 
+						bigX = currentArea.getLargestXOfEntireMap();
 				}
 	    		//GOING DOWN
-	    		else if (keyPressedUp>keyPressedDown) {
-					NumberOfTimesToPan = 1+((keyPressedUp-keyPressedDown)/1000);
-					smallY = smallY*NumberOfTimesToPan;
-					bigY = bigY*NumberOfTimesToPan;
+	    		if (keyPressedDown>keyPressedUp) {
+					pan = (keyPressedDown-keyPressedUp)*zoomY;
+					smallY += pan;
+					bigY += pan;
+					if (smallY < currentArea.getSmallestYOfEntireMap())
+						smallY = currentArea.getSmallestYOfEntireMap();
 				}
+	    		//GOING UP
+	    		else if (keyPressedUp>keyPressedDown) {
+					pan = (keyPressedUp-keyPressedDown)*zoomY;
+					smallY -= pan;
+					bigY -= pan;
+					if (bigY > currentArea.getLargestYOfEntireMap())
+						bigY = currentArea.getLargestYOfEntireMap();
+				}
+	    		System.out.println(zoomX +", "+ smallX +","+ bigX +", "+ smallY +", "+ bigY);
 		    	keyPressedRight = 0; keyPressedLeft = 0; keyPressedUp = 0; keyPressedDown = 0;
 		    	
 		    	try {
 		    		newArea = new AreaToDraw(smallX, bigX, smallY, bigY, true);
 		  		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
-		  			e1.printStackTrace();
+		  			System.out.println(e1.getClass() + ": " + e1.getMessage());
 		  			newArea = currentArea;		  			
 				}
 				mp.repaintMap(newArea);

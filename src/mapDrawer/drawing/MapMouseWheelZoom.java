@@ -76,63 +76,46 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 			smallY = coordConverter.pixelToUTMCoordY((int)smallY) - (zoomY*15)*Math.abs(zoomWay);
 			bigY = coordConverter.pixelToUTMCoordY((int)bigY) + (zoomY*15)*Math.abs(zoomWay);
 			double temp = bigY; bigY = smallY; smallY = temp;
-			System.out.println(smallX +", "+ bigX +", "+ smallY +", "+ bigY);
 			if(bigX > currentArea.getLargestXOfEntireMap()) {
 				System.out.println("bigX");
-				double diffX = bigX - currentArea.getLargestXOfEntireMap(); bigX = currentArea.getLargestXOfEntireMap();
-				smallX -= diffX;
-				System.out.println("Step 1: " + smallX);
-				if(smallX < currentArea.getSmallestXOfEntireMap()) {
-					smallX = currentArea.getSmallestXOfEntireMap();
-				}
+				bigX = currentArea.getLargestXOfEntireMap();
 			}
-			else if(smallX < currentArea.getSmallestXOfEntireMap()) {
+			if(smallX < currentArea.getSmallestXOfEntireMap()) {
 				System.out.println("SmallX");
-				double diffX = currentArea.getSmallestX() - smallX; smallX = currentArea.getSmallestXOfEntireMap();
-				bigX += diffX;
-				if(bigX > currentArea.getLargestXOfEntireMap())
-					bigX = currentArea.getLargestXOfEntireMap();
+				smallX = currentArea.getSmallestXOfEntireMap();
 			}
-			System.out.println("Step 1½: "+ smallX);
 			if(bigY > currentArea.getLargestYOfEntireMap()) {
 				System.out.println("bigY");
-				double diffY = bigY - currentArea.getLargestYOfEntireMap(); bigY = currentArea.getLargestYOfEntireMap();
-				smallY -= diffY;
-				if(smallY < currentArea.getSmallestYOfEntireMap())
-					smallY = currentArea.getSmallestYOfEntireMap();
+				bigY = currentArea.getLargestYOfEntireMap();
 			}
-			else if(smallY < currentArea.getSmallestYOfEntireMap()) {
+			if(smallY < currentArea.getSmallestYOfEntireMap()) {
 				System.out.println("SmallY");
-				double diffY = currentArea.getSmallestY() - smallY; smallY = currentArea.getSmallestYOfEntireMap();
-				bigY += diffY; 
-				if(bigY > currentArea.getLargestYOfEntireMap())
-					bigY = currentArea.getLargestYOfEntireMap();
+				smallY = currentArea.getSmallestYOfEntireMap();
 			} 
 				System.out.println("step 2: "+ smallX +", "+ bigX +", "+ smallY +", "+ bigY);
 		}
 		
+		@SuppressWarnings("static-access")
 		private void zoomingIn(double zoomWay, CoordinateConverter coordConverter, double xCoord, double yCoord, double zoomX, double zoomY) {				
 			smallX = coordConverter.pixelToUTMCoordX((int)xCoord) - (zoomX*20)*Math.abs(zoomWay);
 			bigX = coordConverter.pixelToUTMCoordX((int)xCoord) + (zoomX*20)*Math.abs(zoomWay);
 			smallY = coordConverter.pixelToUTMCoordY((int)yCoord) + (zoomY*20)*Math.abs(zoomWay);
 			bigY = coordConverter.pixelToUTMCoordY((int)yCoord) - (zoomY*20)*Math.abs(zoomWay);
-			System.out.println(smallX +", "+ bigX +", "+ smallY +", "+ bigY);
-			System.out.println(currentArea.getSmallestX() +", "+ currentArea.getLargestX() +", "+ currentArea.getSmallestY() +", "+ currentArea.getLargestY());
-			if(bigX > currentArea.getLargestX()) {
+			if(bigX > currentArea.getLargestXOfEntireMap()) {
 				System.out.println("bigX");
-				double diffX = bigX-currentArea.getLargestX(); smallX -= diffX; bigX = currentArea.getLargestX();
+				bigX = currentArea.getLargestXOfEntireMap();
 			}
-			else if(smallX < currentArea.getSmallestX()) {
+			if(smallX < currentArea.getSmallestXOfEntireMap()) {
 				System.out.println("smallX");
-				double diffX = currentArea.getSmallestX()-smallX; bigX += +diffX; smallX = currentArea.getSmallestX();
+				smallX = currentArea.getSmallestXOfEntireMap();
 			}
-			if(bigY > currentArea.getLargestY()) {
+			if(bigY > currentArea.getLargestYOfEntireMap()) {
 				System.out.println("bigY");
-				double diffY = bigY-currentArea.getLargestY(); smallY -= diffY; bigY = currentArea.getLargestY();
+				bigY = currentArea.getLargestYOfEntireMap();
 			}
-			else if(smallY < currentArea.getSmallestY()) {
+			if(smallY < currentArea.getSmallestYOfEntireMap()) {
 				System.out.println("smallY");
-				double diffY = currentArea.getSmallestY()-smallY; bigY += diffY; smallY = currentArea.getSmallestY();
+				smallY = currentArea.getSmallestYOfEntireMap();
 			}
 		}
 	}

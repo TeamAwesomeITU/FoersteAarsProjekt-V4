@@ -77,7 +77,7 @@ public class MapWindow {
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
 		fromSearchQuery = new JTextField();
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
-		fromSearchQuery.setPreferredSize(new Dimension(240, 20));
+		fromSearchQuery.setPreferredSize(new Dimension(200, 20));
 
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(ColorTheme.TEXT_COLOR);
