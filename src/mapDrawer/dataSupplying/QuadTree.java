@@ -17,7 +17,7 @@ import mapDrawer.exceptions.InvalidAreaProportionsException;
  */
 public class QuadTree {
 
-	private static QuadTree qTree = makeQuadTreeFromXML();	
+	private static QuadTree qTree;	
 
 	//The maximum amount of Nodes, that each QuadTree can hold
 	private final static int QUADTREE_CAPACITY = 4;
@@ -36,7 +36,7 @@ public class QuadTree {
 	private QuadTree northEastNode;
 	private QuadTree southWestNode;
 	private QuadTree southEastNode;
-
+	
 	/**
 	 * Creates a QuadTree with the specified area
 	 * @param area The area for which the QuadTree should be constructed
@@ -219,7 +219,7 @@ public class QuadTree {
 	 */
 	public static HashSet<Node> searchAreaForNodes(AreaToDraw area)
 	{
-		return qTree.search(area);
+		return getEntireQuadTree().search(area);
 	}
 	
 	/**
@@ -229,30 +229,23 @@ public class QuadTree {
 	 */
 	public static HashSet<Integer> searchAreaForNodeIDs(AreaToDraw area)
 	{
-		return qTree.searchForNodeIDs(area);
+		return getEntireQuadTree().searchForNodeIDs(area);
 	}
-	
-	/**
-	 * Does not really do anything, but can be called in order for the qTree to be created
-	 */	
-	public static void initializeEntireQuadTree()
-	{
-		qTree.getClass();
-	}
-	
+		
 	/**
 	 * Returns the entire static QuadTree
 	 * @return The entire static QuadTree
 	 */
 	public static QuadTree getEntireQuadTree()
 	{
+		initializeQuadTree();
 		return qTree;
 	}
 
 	public static void main(String[] args) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException
 	{	
 		AreaToDraw area = new AreaToDraw();
-		
+				
 		long startTime = System.currentTimeMillis();
 		HashSet<Node> nodeSet = QuadTree.searchAreaForNodes(area);
 		long endTime = System.currentTimeMillis();
@@ -295,6 +288,25 @@ public class QuadTree {
 		
 		
 	}
+	
+	private static void initializeQuadTree()
+	{
+		if(qTree == null)
+			qTree = makeQuadTreeFromXML();
+		else
+			return;
+	}
+	
 
-
+	
+	public static class QuadTreeCreation implements Runnable {
+		
+		public QuadTreeCreation()
+		{	}
+		
+		public void run() 
+		{
+			initializeQuadTree();
+		}		
+	}
 }

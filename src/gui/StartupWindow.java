@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -24,15 +25,25 @@ public class StartupWindow{
 	 */
 	public StartupWindow(){
 		createStartupScreen();
+		
+		System.out.println("Making static fields");
+		loadingBar.setString("Making static fields");
+		Thread t1 = new Thread(new QuadTree.QuadTreeCreation(), "Thread1");
+		Thread t2 = new Thread(new FindRelevantEdges.EdgeSetCreation(),"Thread2");
+		Thread t3 = new Thread(new FindRelevantEdges.NodeMapCreation(),"Thread3");
 
-		System.out.println("Making QuadTree");
-		loadingBar.setString("Making QuadTree");
-		QuadTree.initializeEntireQuadTree();
-
-		System.out.println("Making NodeMap");
-		loadingBar.setString("Making NodeMap");
-		FindRelevantEdges.getNodeCoordinatesMap();
-		new MapWindow();
+        try {    		
+            t1.start();
+            t2.start();
+			t2.join();
+			t3.start();
+			t3.join();			
+			new MapWindow();
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**

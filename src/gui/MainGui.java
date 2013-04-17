@@ -31,10 +31,13 @@ public class MainGui {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis();
 		readSettingsFile();
 		ColorTheme.setTheme();
 		ScreenSize.setScreenSize();
 		MainGui.getInstance();
+		long endTime = System.currentTimeMillis();
+		System.out.println("Total startup time is " + (endTime - startTime) + " milliseconds");
 	}
 
 	/**

@@ -24,10 +24,10 @@ public class FindRelevantEdges {
 
 	/*A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	This is made at startup so the program can access it at will. */
-	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
+	private static HashMap<Integer, Double[]> nodeCoordinatesMap;
 	/*A set of all edges. When at 100% zoom all edges from this are drawn. When closer less are drawn.
 	This is made at startup so the program can access it at will. */
-	private static final HashSet<Edge> allEdgesSet = makeEdgeSet();
+	private static HashSet<Edge> allEdgesSet;
 
 	/**
 	 * Finds all Edges, which are connected to a node in the specified AreaToDraw
@@ -172,7 +172,9 @@ public class FindRelevantEdges {
 	 * Gets a HashMap of all of the entire map's Nodes and their coordinates - the Node ID is the key, the values are its coordinates
 	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are x-/y- coordinates
 	 */
-	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()	{
+	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()
+	{
+		initializeNodeCoordinatesMap();
 		return nodeCoordinatesMap;
 	}
 	
@@ -180,7 +182,44 @@ public class FindRelevantEdges {
 	 * Gets a HashSet of all of the entire map's Edges
 	 * @return A HashSet of all of the maps Edges 
 	 */
-	public static HashSet<Edge> getEdgeSet()	{
+	public static HashSet<Edge> getEdgeSet()
+	{
+		initializeEdgeSet();
 		return allEdgesSet;
+	}
+	
+	private static void initializeNodeCoordinatesMap()
+	{
+		if(nodeCoordinatesMap == null)
+			nodeCoordinatesMap = makeNodeCoordinatesMap();
+		else
+			return;
+	}
+	
+	private static void initializeEdgeSet()
+	{
+		if(allEdgesSet == null)
+			allEdgesSet = makeEdgeSet();
+		else
+			return;
+	}
+	
+	public static class EdgeSetCreation implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			initializeEdgeSet();
+		}
+		
+	}
+	
+	public static class NodeMapCreation implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			initializeNodeCoordinatesMap();
+		}
 	}
 }
