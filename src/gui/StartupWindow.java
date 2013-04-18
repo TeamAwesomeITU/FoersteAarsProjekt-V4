@@ -48,6 +48,7 @@ public class StartupWindow{
 		long endTime3 = System.currentTimeMillis();
 		System.out.println("EdgeSet creation takes " + (endTime3 - startTime3) + " milliseconds");
 		
+		MainGui.menuBoolean = true;
 		
 		/*
         try {    
