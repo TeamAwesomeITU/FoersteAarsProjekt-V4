@@ -1,8 +1,16 @@
 package mapDrawer.dataSupplying;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+
+import java_cup.internal_error;
+
+import javax.sound.sampled.Line;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.ZoomLevel;
@@ -24,10 +32,10 @@ public class FindRelevantEdges {
 
 	/*A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	This is made at startup so the program can access it at will. */
-	private static final HashMap<Integer, Double[]> nodeCoordinatesMap = makeNodeCoordinatesMap();
+	private static HashMap<Integer, Double[]> nodeCoordinatesMap;
 	/*A set of all edges. When at 100% zoom all edges from this are drawn. When closer less are drawn.
 	This is made at startup so the program can access it at will. */
-	private static final HashSet<Edge> allEdgesSet = makeEdgeSet();
+	private static HashSet<Edge> allEdgesSet;
 
 	/**
 	 * Finds all Edges, which are connected to a node in the specified AreaToDraw
@@ -49,7 +57,7 @@ public class FindRelevantEdges {
 	 * once at startup. See field: allEdgesSet. 
 	 * @return A HashSet containing all Edges as Edge-objects. 
 	 */
-	private static HashSet<Edge> makeEdgeSet()
+	private static HashSet<Edge> makeEdgeSetFromXML()
 	{		
 		long startTime = System.currentTimeMillis();		
 		
@@ -92,6 +100,41 @@ public class FindRelevantEdges {
 		System.out.println("Creating HashSet of all Edges takes " + (endTime - startTime) + " milliseconds");
 		return edgeSet;
 	}
+	
+	private static HashSet<Edge> makeEdgeSetFromTXT()
+	{
+		try {				
+			HashSet<Edge> edgeSet = new HashSet<Edge>();
+			
+			File file = new File("XML/kdv_unload.txt");
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			
+			//To skip the first line
+			reader.readLine();
+			
+			String line;
+			
+			while((line = reader.readLine()) != null)
+			{
+				String[] lineParts = line.split(("(?<=[']|\\d|\\*)[,](?=[']|\\d|\\*)"));
+				int fromNode = Integer.parseInt(lineParts[0]);
+				int toNode = Integer.parseInt(lineParts[1]);
+				int type = Integer.parseInt(lineParts[5]);
+				String roadName = lineParts[6];
+				int postalNumber = Integer.parseInt(lineParts[17]);
+				
+				edgeSet.add(new Edge(fromNode, toNode, type, roadName, postalNumber));
+			}
+				
+			reader.close();			
+			return edgeSet;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}		
+	}
+		
 	/**
 	 * This method retrieves the currently viewed area's nodes. 
 	 * @param area The current area the user are viewing on the map.
@@ -130,7 +173,7 @@ public class FindRelevantEdges {
 	 * @return A HashMap of nodes where the ID is node-id and value is an Array[2] of doubles 
 	 * containing x-/y-coordinates. 
 	 */
-	private static HashMap<Integer, Double[]> makeNodeCoordinatesMap()
+	private static HashMap<Integer, Double[]> makeNodeCoordinatesMapFromXML()
 	{
 		HashMap<Integer, Double[]> map = new HashMap<Integer, Double[]>();
 
@@ -167,12 +210,45 @@ public class FindRelevantEdges {
 		}
 		return map;
 	}
+	
+	private static HashMap<Integer, Double[]> makeNodeCoordinatesMapFromTXT()
+	{
+
+		try {				
+			HashMap<Integer, Double[]> nodeMap = new HashMap<Integer, Double[]>();
+			
+			File file = new File("XML/kdv_node_unload.txt");
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			
+			//To skip the first line
+			reader.readLine();
+			
+			String line;
+			
+			while((line = reader.readLine()) != null)
+			{
+				String[] lineParts = line.split("\\,");
+				Integer KDV = Integer.parseInt(lineParts[2]);
+				Double[] coords = new Double[]{Double.parseDouble(lineParts[3]), Double.parseDouble(lineParts[4])};
+				nodeMap.put(KDV, coords);
+			}
+				
+			reader.close();			
+			return nodeMap;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}		
+	}
 
 	/**
 	 * Gets a HashMap of all of the entire map's Nodes and their coordinates - the Node ID is the key, the values are its coordinates
 	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are x-/y- coordinates
 	 */
-	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()	{
+	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()
+	{
+		initializeNodeCoordinatesMap();
 		return nodeCoordinatesMap;
 	}
 	
@@ -180,7 +256,53 @@ public class FindRelevantEdges {
 	 * Gets a HashSet of all of the entire map's Edges
 	 * @return A HashSet of all of the maps Edges 
 	 */
-	public static HashSet<Edge> getEdgeSet()	{
+	public static HashSet<Edge> getEdgeSet()
+	{
+		initializeEdgeSet();
 		return allEdgesSet;
 	}
+	
+	private static void initializeNodeCoordinatesMap()
+	{
+		if(nodeCoordinatesMap == null)
+			nodeCoordinatesMap = makeNodeCoordinatesMapFromTXT();
+		else
+			return;
+	}
+	
+	public static void initializeNodeCoordinatesMap(HashMap<Integer, Double[]> nodeMap ) 
+	{
+		if(nodeCoordinatesMap == null)
+			nodeCoordinatesMap = nodeMap;
+		else
+			return;
+	}
+		
+	private static void initializeEdgeSet()
+	{
+		if(allEdgesSet == null)
+			allEdgesSet = makeEdgeSetFromXML();
+		else
+			return;
+	}
+	
+	public static class EdgeSetCreation implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			initializeEdgeSet();
+		}		
+	}
+	
+	public static class NodeMapCreation implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			initializeNodeCoordinatesMap();
+		}
+	}
+
+
 }

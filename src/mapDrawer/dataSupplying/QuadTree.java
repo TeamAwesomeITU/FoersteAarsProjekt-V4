@@ -1,5 +1,11 @@
 package mapDrawer.dataSupplying;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.ximpleware.AutoPilot;
@@ -17,7 +23,7 @@ import mapDrawer.exceptions.InvalidAreaProportionsException;
  */
 public class QuadTree {
 
-	private static QuadTree qTree = makeQuadTreeFromXML();	
+	private static QuadTree qTree;	
 
 	//The maximum amount of Nodes, that each QuadTree can hold
 	private final static int QUADTREE_CAPACITY = 4;
@@ -36,7 +42,7 @@ public class QuadTree {
 	private QuadTree northEastNode;
 	private QuadTree southWestNode;
 	private QuadTree southEastNode;
-
+	
 	/**
 	 * Creates a QuadTree with the specified area
 	 * @param area The area for which the QuadTree should be constructed
@@ -212,6 +218,46 @@ public class QuadTree {
 		return quadTree;
 	}
 	
+	private static QuadTree makeQuadTreeAndNodeMapFromTXT()
+	{
+
+		try {				
+			AreaToDraw area = new AreaToDraw();	
+			QuadTree quadTree = new QuadTree(area);
+			HashMap<Integer, Double[]> nodeMap = new HashMap<Integer, Double[]>();
+			
+			File file = new File("XML/kdv_node_unload.txt");
+			BufferedReader reader = new BufferedReader(new FileReader(file));
+			
+			//To skip the first line
+			reader.readLine();
+			
+			String line;
+			
+			while((line = reader.readLine()) != null)
+			{
+				String[] lineParts = line.split("\\,");
+				Integer KDV = Integer.parseInt(lineParts[2]);
+				Double[] coords = new Double[]{Double.parseDouble(lineParts[3]), Double.parseDouble(lineParts[4])};				
+				
+				quadTree.insert(new Node(KDV, coords[0], coords[1]));
+				nodeMap.put(KDV, coords);
+			}
+				
+			reader.close();
+			
+			//noget her giver synk issues - fordi QuadTree stadig kører og laver nodemap, imens nodemaps initializer tjekker om den er null, hvilket den er men ikke må være
+			//FindRelevantEdges.initializeNodeCoordinatesMap(nodeMap);
+			return quadTree;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		
+	}
+	
 	/**
 	 * Finds all of the Nodes which are contained within a specified area.
 	 * @param area The area to search for Nodes.
@@ -219,7 +265,7 @@ public class QuadTree {
 	 */
 	public static HashSet<Node> searchAreaForNodes(AreaToDraw area)
 	{
-		return qTree.search(area);
+		return getEntireQuadTree().search(area);
 	}
 	
 	/**
@@ -229,30 +275,23 @@ public class QuadTree {
 	 */
 	public static HashSet<Integer> searchAreaForNodeIDs(AreaToDraw area)
 	{
-		return qTree.searchForNodeIDs(area);
+		return getEntireQuadTree().searchForNodeIDs(area);
 	}
-	
-	/**
-	 * Does not really do anything, but can be called in order for the qTree to be created
-	 */	
-	public static void initializeEntireQuadTree()
-	{
-		qTree.getClass();
-	}
-	
+		
 	/**
 	 * Returns the entire static QuadTree
 	 * @return The entire static QuadTree
 	 */
 	public static QuadTree getEntireQuadTree()
 	{
+		initializeQuadTree();
 		return qTree;
 	}
 
 	public static void main(String[] args) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException
 	{	
 		AreaToDraw area = new AreaToDraw();
-		
+				
 		long startTime = System.currentTimeMillis();
 		HashSet<Node> nodeSet = QuadTree.searchAreaForNodes(area);
 		long endTime = System.currentTimeMillis();
@@ -295,6 +334,26 @@ public class QuadTree {
 		
 		
 	}
+	
+	private static void initializeQuadTree()
+	{
+		if(qTree == null)
+			qTree = makeQuadTreeAndNodeMapFromTXT();
+			//qTree = makeQuadTreeFromXML();
+		else
+			return;
+	}
+	
 
-
+	
+	public static class QuadTreeCreation implements Runnable {
+		
+		public QuadTreeCreation()
+		{	}
+		
+		public void run() 
+		{
+			initializeQuadTree();
+		}		
+	}
 }
