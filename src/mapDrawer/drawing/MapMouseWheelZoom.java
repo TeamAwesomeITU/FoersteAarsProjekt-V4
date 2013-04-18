@@ -55,7 +55,7 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 					zoomingOut(zoomX, zoomY, coordConverter);
 			
 				else 
-					zoomingIn(zoomWay, coordConverter, xCoord, yCoord, zoomX, zoomY);
+					zoomingIn(coordConverter, xCoord, yCoord, zoomX, zoomY);
 				
 				zoomWay = 0;
 				try {
@@ -96,11 +96,11 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 		}
 		
 		@SuppressWarnings("static-access")
-		private void zoomingIn(double zoomWay, CoordinateConverter coordConverter, double xCoord, double yCoord, double zoomX, double zoomY) {				
-			smallX = coordConverter.pixelToUTMCoordX((int)xCoord) - (zoomX*20)*Math.abs(zoomWay);
-			bigX = coordConverter.pixelToUTMCoordX((int)xCoord) + (zoomX*20)*Math.abs(zoomWay);
-			smallY = coordConverter.pixelToUTMCoordY((int)yCoord) + (zoomY*20)*Math.abs(zoomWay);
-			bigY = coordConverter.pixelToUTMCoordY((int)yCoord) - (zoomY*20)*Math.abs(zoomWay);
+		private void zoomingIn(CoordinateConverter coordConverter, double xCoord, double yCoord, double zoomX, double zoomY) {				
+			smallX = coordConverter.pixelToUTMCoordX((int)xCoord) - (zoomX*20);
+			bigX = coordConverter.pixelToUTMCoordX((int)xCoord) + (zoomX*20);
+			smallY = coordConverter.pixelToUTMCoordY((int)yCoord) + (zoomY*20);
+			bigY = coordConverter.pixelToUTMCoordY((int)yCoord) - (zoomY*20);
 			if(bigX > currentArea.getLargestXOfEntireMap()) {
 				System.out.println("bigX");
 				bigX = currentArea.getLargestXOfEntireMap();
