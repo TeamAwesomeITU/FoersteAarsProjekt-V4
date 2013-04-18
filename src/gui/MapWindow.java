@@ -42,7 +42,7 @@ public class MapWindow {
 	 */
 	public void createMapScreen(){
 		fillContentPane();
-
+		
 		MainGui.frame.pack();
 		fromSearchQuery.requestFocusInWindow();
 		double widthOfFrame = widthForMap();
@@ -221,7 +221,7 @@ public class MapWindow {
 	 * NOT DONE
 	 */
 	public void findRoute(){
-		if(fromSearchQuery.getText().trim().length() != 0 && 
+		if(fromSearchQuery.getText().trim().length() != 0 || 
 				toSearchQuery.getText().trim().length() != 0){
 			AdressParser adressParser = new AdressParser();
 			try {
@@ -241,8 +241,45 @@ public class MapWindow {
 				JOptionPane.showMessageDialog(MainGui.frame, "From: " + fromArray[0] 
 												+ "\nTo: " + toArray[0]);
 			} catch (MalformedAdressException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				final JFrame zoidbergFrame = new JFrame("Malformed Address");
+				zoidbergFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				
+				Container contentPane = zoidbergFrame.getContentPane();
+				contentPane.setLayout(new GridLayout(0, 1, 0, 5));
+				
+				JPanel zoidbergPanel = new JPanel();
+				zoidbergPanel.setLayout(new FlowLayout());
+				
+				JLabel zoidbergLabel = new JLabel(new ImageIcon("resources/WhyNotZoidberg.png"));
+				JButton okayButton = new JButton(new ImageIcon("resources/okay.png"));
+				okayButton.setToolTipText("Click me!");
+				okayButton.addKeyListener(new KeyListener() {
+					public void keyPressed(KeyEvent arg0) {
+						if(arg0.getKeyCode() == 10){
+							zoidbergFrame.dispose();
+							toSearchQuery.setText("");
+							fromSearchQuery.setText("");							
+						}
+					}
+					public void keyTyped(KeyEvent arg0) {}	public void keyReleased(KeyEvent arg0) {}
+				});
+				okayButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						zoidbergFrame.dispose();
+						toSearchQuery.setText("");
+						fromSearchQuery.setText("");
+					}
+				});
+				okayButton.setBorder(BorderFactory.createEmptyBorder());
+				
+				zoidbergPanel.add(zoidbergLabel);
+				zoidbergPanel.add(okayButton);
+
+				contentPane.add(zoidbergPanel);
+				
+				zoidbergFrame.pack();
+				zoidbergFrame.setLocationRelativeTo(null);
+				zoidbergFrame.setVisible(true);
 			}
 		}
 		else {
@@ -293,7 +330,6 @@ public class MapWindow {
 				
 				X_CORD.setText(xString);
 				Y_CORD.setText(yString);
-				eastColoredJPanel.repaint();
 			} else {
 				X_CORD.setText("");
 				Y_CORD.setText("");

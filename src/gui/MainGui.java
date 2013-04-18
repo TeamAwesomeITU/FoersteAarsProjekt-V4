@@ -102,7 +102,6 @@ public class MainGui {
 		settingsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				final JFrame settingsFrame = new JFrame("Settings");
-				settingsFrame.setLocationRelativeTo(null);	
 
 				Container container = settingsFrame.getContentPane();
 				container.setLayout(new BorderLayout());
@@ -206,6 +205,7 @@ public class MainGui {
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);
 				settingsFrame.pack();
+				settingsFrame.setLocationRelativeTo(null);	
 				settingsFrame.setVisible(true);
 			}
 		});
