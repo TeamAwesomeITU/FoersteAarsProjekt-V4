@@ -12,6 +12,8 @@ public class Node {
 	
 	//The y-coordinate of the Node
 	private double yCoord;
+	
+	private int[] edgeIDsFromOrTo;
 
 	public Node(int ID, double xCoord, double yCoord)
 	{

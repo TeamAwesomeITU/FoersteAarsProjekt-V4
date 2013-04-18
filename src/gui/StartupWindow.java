@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -24,14 +25,51 @@ public class StartupWindow{
 	 */
 	public StartupWindow(){
 		createStartupScreen();
-
+		
+		
+		long startTime = System.currentTimeMillis();
 		System.out.println("Making QuadTree");
 		loadingBar.setString("Making QuadTree");
-		QuadTree.initializeEntireQuadTree();
+		QuadTree.getEntireQuadTree();
+		long endTime = System.currentTimeMillis();
+		System.out.println("QuadTree creation takes " + (endTime - startTime) + " milliseconds");
 
+		long startTime2 = System.currentTimeMillis();
 		System.out.println("Making NodeMap");
 		loadingBar.setString("Making NodeMap");
 		FindRelevantEdges.getNodeCoordinatesMap();
+		long endTime2 = System.currentTimeMillis();
+		System.out.println("NodeMap creation takes " + (endTime2 - startTime2) + " milliseconds");
+		
+		long startTime3 = System.currentTimeMillis();
+		System.out.println("Making EdgeSet");
+		loadingBar.setString("Making EdgeSet");
+		FindRelevantEdges.getEdgeSet();
+		long endTime3 = System.currentTimeMillis();
+		System.out.println("EdgeSet creation takes " + (endTime3 - startTime3) + " milliseconds");
+		
+		
+		/*
+        try {    
+    		System.out.println("Making static fields");
+    		loadingBar.setString("Making static fields");
+    		Thread t1 = new Thread(new QuadTree.QuadTreeCreation(), "Thread1");
+    		Thread t2 = new Thread(new FindRelevantEdges.EdgeSetCreation(),"Thread2");
+    		Thread t3 = new Thread(new FindRelevantEdges.NodeMapCreation(),"Thread3");
+
+            t1.start();
+            t1.join();
+            t2.start();
+            t2.join();
+			t3.start();		
+			t3.join();
+			
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		*/
+		
+		
 		new MapWindow();
 	}
 

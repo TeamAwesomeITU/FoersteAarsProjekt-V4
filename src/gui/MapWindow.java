@@ -59,6 +59,8 @@ public class MapWindow {
 	 */
 	public void fillContentPane(){
 		MainGui.contentPane.removeAll();
+		MainGui.contentPane.revalidate();
+		MainGui.contentPane.repaint();
 		MainGui.makeMenu();
 		MainGui.contentPane.add(westColoredJPanel, BorderLayout.WEST);
 		MainGui.contentPane.add(eastColoredJPanel, BorderLayout.EAST);
@@ -282,15 +284,16 @@ public class MapWindow {
 		public void mouseMoved(MouseEvent e) {
 			if (MainGui.coordinatesBoolean) {
 				mapAreaToDraw = mapPanel.getArea();
-				coordConverter = new CoordinateConverter((int)Math.round(widthForMap()*0.98), (int)Math.round(heightForMap()*0.98), mapAreaToDraw);
+				coordConverter = new CoordinateConverter((int)Math.round(getCenterColoredJPanel().getWidth()*0.98), (int)Math.round(centerColoredJPanel.getHeight()*0.98), mapAreaToDraw);
 				double xCord = coordConverter.pixelToUTMCoordX(e.getX());
 				double yCord = coordConverter.pixelToUTMCoordY(e.getY());
 
 				String xString = String.format("%.2f", xCord);
 				String yString = String.format("%.2f", yCord);
-
+				
 				X_CORD.setText(xString);
 				Y_CORD.setText(yString);
+				eastColoredJPanel.repaint();
 			} else {
 				X_CORD.setText("");
 				Y_CORD.setText("");

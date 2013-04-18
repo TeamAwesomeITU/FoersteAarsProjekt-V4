@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.*;
+
 /**
  * This is our main gui class. It holds methods that is common for all
  * old and future windows.
@@ -30,10 +31,13 @@ public class MainGui {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis();
 		readSettingsFile();
 		ColorTheme.setTheme();
 		ScreenSize.setScreenSize();
 		MainGui.getInstance();
+		long endTime = System.currentTimeMillis();
+		System.out.println("Total startup time is " + (endTime - startTime) + " milliseconds");
 	}
 
 	/**
