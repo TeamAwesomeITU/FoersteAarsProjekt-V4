@@ -211,6 +211,7 @@ public class MainGui {
 		});
 		
 		settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, SHORT_CUT_MASK));
+
 		fileMenu.add(settingsItem);
 		fileMenu.add(quitItem);
 

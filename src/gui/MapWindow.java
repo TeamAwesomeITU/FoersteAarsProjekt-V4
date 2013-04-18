@@ -242,7 +242,6 @@ public class MapWindow {
 												+ "\nTo: " + toArray[0]);
 			} catch (MalformedAdressException e1) {
 				final JFrame zoidbergFrame = new JFrame("Malformed Address");
-				zoidbergFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				
 				Container contentPane = zoidbergFrame.getContentPane();
 				contentPane.setLayout(new GridLayout(0, 1, 0, 5));
