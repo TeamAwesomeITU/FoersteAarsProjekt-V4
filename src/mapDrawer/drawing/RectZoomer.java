@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
@@ -23,6 +22,9 @@ public class RectZoomer extends MouseAdapter {
 	private Rectangle rect = null;
 	private MapPanel mp = null;
 	private ResizingArrayStack<AreaToDraw> stack; 
+	private double bigX, bigY,smallX,smallY;
+	private AreaToDraw currentArea;
+	private AreaToDraw newArea;
 
 	/**
 	 * Initializes the RectZoomer.
@@ -74,7 +76,65 @@ public class RectZoomer extends MouseAdapter {
 			endX = startX+rectWidth;
 			endY = startY+rectHeight;
 			mp.repaint();
-		}}
+		}
+		else {
+			Point cp = e.getPoint();
+			currentArea = mp.getArea();
+			smallX = 0;
+			bigX = mp.getMapWidth();
+			smallY = 0;
+			bigY = mp.getMapHeight();
+			CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), currentArea);
+			smallX = coordConverter.pixelToUTMCoordX((int)smallX);
+			bigX = coordConverter.pixelToUTMCoordX((int)bigX);
+			smallY = coordConverter.pixelToUTMCoordY((int)smallY);
+			bigY = coordConverter.pixelToUTMCoordY((int)bigY);
+			double panX = (bigX - smallX) /100;
+			double panY = (bigY - smallY) /100;
+			double temp = bigY; bigY = smallY; smallY = temp;
+			
+			if(cp.x > mousePress.x)
+			{
+				double tempX = ((mousePress.x - cp.x)/10)*panX;
+				smallX += tempX;
+				bigX += tempX;
+				//bevæger os til højre
+			}
+			else if(cp.x < mousePress.x)
+			{
+				double tempX = ((cp.x - mousePress.x)/10)*panX;
+				smallX -= tempX;
+				bigX -= tempX;
+				//bevæger os til venstre
+			}
+			
+			if(cp.y > mousePress.y)
+			{
+				double tempY = ((mousePress.y - cp.y)/10)*panY;
+				smallY += tempY;
+				bigY += tempY;
+				//bevæger os ned ad
+			}
+			else if(cp.y < mousePress.y)
+			{
+				double tempY = ((cp.y - mousePress.y)/10)*panY;
+				smallY -= tempY;
+				bigY -= tempY;
+				//bevæger os ned ad
+			}
+			try {
+				newArea = new AreaToDraw(smallX, bigX, smallY, bigY, true);
+			
+			} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException
+					| InvalidAreaProportionsException e1) {
+				newArea = currentArea;
+				e1.printStackTrace();
+			}	
+			mp.repaintMap(newArea);
+			System.out.println("Mouse is moved, should be panning!");
+			
+		}
+			}
 
 	/**
 	 * Registers if the mouse is released and then draws the new area.
