@@ -171,11 +171,14 @@ public class QuadTree {
 		return foundNodeSet;
 	}
 
+	
+	
+	
 	/**
 	 * Creates a QuadTree from an XML file.
 	 * @return The created QuadTree
 	 */
-	private static QuadTree makeQuadTreeFromXML()
+	/* private static QuadTree makeQuadTreeFromXML()
 	{
 		AreaToDraw area = new AreaToDraw();
 		
@@ -218,6 +221,8 @@ public class QuadTree {
 		return quadTree;
 	}
 	
+	*/
+	
 	private static QuadTree makeQuadTreeAndNodeMapFromTXT()
 	{
 
@@ -226,7 +231,8 @@ public class QuadTree {
 			QuadTree quadTree = new QuadTree(area);
 			HashMap<Integer, Double[]> nodeMap = new HashMap<Integer, Double[]>();
 			
-			File file = new File("XML/kdv_node_unload.txt");
+			//File file = new File("XML/kdv_node_unload.txt");
+			File file = new File("XML/kdv_node_unload.txt_modified.txt");			
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			
 			//To skip the first line
@@ -238,9 +244,16 @@ public class QuadTree {
 			{
 				String[] lineParts = line.split("\\,");
 				Integer KDV = Integer.parseInt(lineParts[2]);
-				Double[] coords = new Double[]{Double.parseDouble(lineParts[3]), Double.parseDouble(lineParts[4])};				
+				Double[] coords = new Double[]{Double.parseDouble(lineParts[3]), Double.parseDouble(lineParts[4])};	
 				
-				quadTree.insert(new Node(KDV, coords[0], coords[1]));
+				//Edge ID's is pulled out
+				String[] edgeIDsAsStrings = lineParts[5].split("\\s+");
+				int[] edgeIDs = new int[edgeIDsAsStrings.length];				
+				for (int i = 0; i < edgeIDsAsStrings.length; i++) {
+					edgeIDs[i] = Integer.parseInt(edgeIDsAsStrings[i]);
+				}
+								
+				quadTree.insert(new Node(KDV, coords[0], coords[1], edgeIDs));
 				nodeMap.put(KDV, coords);
 			}
 				

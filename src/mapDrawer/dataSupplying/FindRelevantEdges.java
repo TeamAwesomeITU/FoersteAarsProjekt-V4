@@ -35,7 +35,7 @@ public class FindRelevantEdges {
 	private static HashMap<Integer, Double[]> nodeCoordinatesMap;
 	/*A set of all edges. When at 100% zoom all edges from this are drawn. When closer less are drawn.
 	This is made at startup so the program can access it at will. */
-	private static HashSet<Edge> allEdgesSet;
+	private static HashMap<Integer, Edge> allEdgesMap;
 
 	/**
 	 * Finds all Edges, which are connected to a node in the specified AreaToDraw
@@ -43,11 +43,7 @@ public class FindRelevantEdges {
 	 */
 	public static HashSet<Edge> findEdgesToDraw(AreaToDraw area)
 	{
-		long startTime = System.currentTimeMillis();
-		HashSet<Integer> nodeSet = findNodes(area);
-		long endTime = System.currentTimeMillis();
-		System.out.println("Retrieving nodeIDs from area took " + (endTime - startTime) + " milliseconds");
-		return findEdges(area, nodeSet);
+		return findEdges(area);
 	}
 
 	/**
@@ -57,11 +53,11 @@ public class FindRelevantEdges {
 	 * once at startup. See field: allEdgesSet. 
 	 * @return A HashSet containing all Edges as Edge-objects. 
 	 */
-	private static HashSet<Edge> makeEdgeSetFromXML()
+	private static HashMap<Integer, Edge> makeEdgeMapFromXML()
 	{		
 		long startTime = System.currentTimeMillis();		
 		
-		HashSet<Edge> edgeSet = new HashSet<Edge>();
+		HashMap<Integer, Edge> edgeMap = new HashMap<Integer, Edge>();
 			
 		try {	
 			VTDGen vgEdge = new VTDGen();
@@ -86,7 +82,8 @@ public class FindRelevantEdges {
 					vnEdge.toElement(VTDNav.NEXT_SIBLING, "H_POSTNR");
 					POST = vnEdge.parseInt(vnEdge.getText());
 
-					edgeSet.add(new Edge(FNODE,TNODE,TYP,ROAD,POST));
+					//PUT VTD-XML ID GETTING CALL HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					edgeMap.put(1,new Edge(FNODE,TNODE,TYP,ROAD,POST));
 
 					vnEdge.toElement(VTDNav.PARENT); 
 				} 
@@ -98,13 +95,13 @@ public class FindRelevantEdges {
 		}
 		long endTime = System.currentTimeMillis();
 		System.out.println("Creating HashSet of all Edges takes " + (endTime - startTime) + " milliseconds");
-		return edgeSet;
+		return edgeMap;
 	}
 	
-	private static HashSet<Edge> makeEdgeSetFromTXT()
+	private static HashMap<Integer, Edge> makeEdgeMapFromTXT()
 	{
 		try {				
-			HashSet<Edge> edgeSet = new HashSet<Edge>();
+			HashMap<Integer, Edge> edgeMap = new HashMap<Integer, Edge>();
 			
 			File file = new File("XML/kdv_unload.txt");
 			BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -119,15 +116,16 @@ public class FindRelevantEdges {
 				String[] lineParts = line.split(("(?<=[']|\\d|\\*)[,](?=[']|\\d|\\*)"));
 				int fromNode = Integer.parseInt(lineParts[0]);
 				int toNode = Integer.parseInt(lineParts[1]);
+				Integer edgeID = Integer.parseInt(lineParts[4]);
 				int type = Integer.parseInt(lineParts[5]);
 				String roadName = lineParts[6];
 				int postalNumber = Integer.parseInt(lineParts[17]);
 				
-				edgeSet.add(new Edge(fromNode, toNode, type, roadName, postalNumber));
+				edgeMap.put(edgeID, new Edge(fromNode, toNode, type, roadName, postalNumber));
 			}
 				
 			reader.close();			
-			return edgeSet;
+			return edgeMap;
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -135,38 +133,38 @@ public class FindRelevantEdges {
 		}		
 	}
 		
+
 	/**
-	 * This method retrieves the currently viewed area's nodes. 
-	 * @param area The current area the user are viewing on the map.
-	 * @return A HashSet of all of the found Nodes ID's. 
-	 */
-	private static HashSet<Integer> findNodes(AreaToDraw area)
-	{
-		return QuadTree.searchAreaForNodeIDs(area);
-	}
-	/**
-	 * This method finds the Edges, that is found inside the input area and belongs to a Node in the nodeIDSet.
+	 * This method finds the Edges, that is found inside the input area and belongs to a Node in the nodeSet.
 	 * @param area Current area the user are viewing on the map.
-	 * @param nodeIDSet A HashSets of nodes. Supplied by findNodes which gets it from the QuadTree. 
-	 * @return A HashSet of the Edges, that is found inside the input area and belongs to a Node in the nodeIDSet.
+	 * @param nodeSet A HashSets of nodes. Supplied by findNodes which gets it from the QuadTree. 
+	 * @return A HashSet of the Edges, that is found inside the input area and belongs to a Node in the nodeSet.
 	 */
-	private static HashSet<Edge> findEdges(AreaToDraw area, HashSet<Integer> nodeIDSet)
+	private static HashSet<Edge> findEdges(AreaToDraw area)
 	{
-		Iterator<Edge> iterator = allEdgesSet.iterator();
+		HashSet<Node> nodeSet = QuadTree.searchAreaForNodes(area);
+		Iterator<Node> iterator = nodeSet.iterator();
 		HashSet<Edge> foundEdgesSet = new HashSet<Edge>();
 
 		HashSet<Integer> zoomLevel = ZoomLevel.getlevel(area.getPercentageOfEntireMap());
 
 		while(iterator.hasNext())
 		{
-			Edge edge = iterator.next();	
-			if(zoomLevel.contains(edge.getRoadType()))
-				if(nodeIDSet.contains(edge.getFromNode()) || nodeIDSet.contains(edge.getToNode()))
-					foundEdgesSet.add(edge);
+			Node node = iterator.next();
+			int[] edgeIDs = node.getEdgeIDs();
+			
+			for (int i = 0; i < edgeIDs.length; i++) {
+				Edge edge = allEdgesMap.get(edgeIDs[i]);
+				if(zoomLevel.contains(edge.getRoadType()))
+						foundEdgesSet.add(edge);
+			}
+			
+
 		}			
 
 		return foundEdgesSet;
 	}
+	
 	/**
 	 * This method parses the XML-file kdv_node containing nodes and their coordinates. It uses an autoPilot
 	 * to navigate nodes and manually retrieves child-elements. At the end it navigates to the parent again. 
@@ -213,7 +211,6 @@ public class FindRelevantEdges {
 	
 	private static HashMap<Integer, Double[]> makeNodeCoordinatesMapFromTXT()
 	{
-
 		try {				
 			HashMap<Integer, Double[]> nodeMap = new HashMap<Integer, Double[]>();
 			
@@ -256,10 +253,10 @@ public class FindRelevantEdges {
 	 * Gets a HashSet of all of the entire map's Edges
 	 * @return A HashSet of all of the maps Edges 
 	 */
-	public static HashSet<Edge> getEdgeSet()
+	public static HashMap<Integer, Edge> getEdgeMap()
 	{
-		initializeEdgeSet();
-		return allEdgesSet;
+		initializeEdgeMap();
+		return allEdgesMap;
 	}
 	
 	private static void initializeNodeCoordinatesMap()
@@ -278,20 +275,20 @@ public class FindRelevantEdges {
 			return;
 	}
 		
-	private static void initializeEdgeSet()
+	private static void initializeEdgeMap()
 	{
-		if(allEdgesSet == null)
-			allEdgesSet = makeEdgeSetFromXML();
+		if(allEdgesMap == null)
+			allEdgesMap = makeEdgeMapFromTXT();
 		else
 			return;
 	}
 	
-	public static class EdgeSetCreation implements Runnable
+	public static class EdgeMapCreation implements Runnable
 	{
 		@Override
 		public void run()
 		{
-			initializeEdgeSet();
+			initializeEdgeMap();
 		}		
 	}
 	
