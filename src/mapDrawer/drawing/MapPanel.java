@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.JPanel;
@@ -19,6 +20,7 @@ import javax.swing.border.LineBorder;
 import mapDrawer.AreaToDraw;
 import mapDrawer.RoadType;
 import mapDrawer.dataSupplying.CoordinateConverter;
+import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.FindRelevantEdges;
 
 @SuppressWarnings("serial")
@@ -61,14 +63,15 @@ public class MapPanel extends JPanel {
 		Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 		linesOfEdges = new EdgeLine[edgeSet.size()];
 		CoordinateConverter coordConverter = new CoordinateConverter((int)mapWidth, (int)mapHeight, area);
+		HashMap<Integer, Double[]> nodeCoordinatesMap = DataHolding.getNodeCoordinatesMap();
 
 		int numberOfEdges = 0;
 		while(edgeSetIterator.hasNext() == true) {
 			Edge edge = edgeSetIterator.next();
 			int fromNode = edge.getFromNode();
 			int toNode = edge.getToNode();
-			Double[] fromNodeCoords = FindRelevantEdges.getNodeCoordinatesMap().get(fromNode);
-			Double[] toNodeCoords = FindRelevantEdges.getNodeCoordinatesMap().get(toNode);
+			Double[] fromNodeCoords = nodeCoordinatesMap.get(fromNode);
+			Double[] toNodeCoords = nodeCoordinatesMap.get(toNode);
 			double drawFromCoordX = coordConverter.UTMToPixelCoordX(fromNodeCoords[0]);
 			double drawFromCoordY = coordConverter.UTMToPixelCoordY(fromNodeCoords[1]);
 			double drawToCoordX = coordConverter.UTMToPixelCoordX(toNodeCoords[0]);

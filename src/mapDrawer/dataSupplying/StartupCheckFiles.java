@@ -99,13 +99,13 @@ public class StartupCheckFiles implements Serializable {
 
 	private static void storeCoordinatesMap()
 	{
-		HashMap<Integer, Double[]> coordinatesMap = FindRelevantEdges.getNodeCoordinatesMap();
+		HashMap<Integer, Double[]> coordinatesMap = DataHolding.getNodeCoordinatesMap();
 		storeObject(coordinatesMap, coordinatesMapFileName);		
 	}
 
 	private static void storeEdgeSet()
 	{
-		HashMap<Integer, Edge> edgeMap = FindRelevantEdges.getEdgeMap();
+		HashMap<Integer, Edge> edgeMap = DataHolding.getEdgeMap();
 		storeObject(edgeMap, edgeMapFileName);	
 	}
 

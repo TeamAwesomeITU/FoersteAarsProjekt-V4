@@ -27,7 +27,6 @@ public class RefinedTxtCreator {
 
 	private static ArrayList<HashSet<Integer>> readEdgeReferences(int numberOfNodes)
 	{
-		@SuppressWarnings("unchecked")
 		ArrayList<HashSet<Integer>> hashSetsList = new ArrayList<HashSet<Integer>>(numberOfNodes);
 		
 		for (int i = 0; i < numberOfNodes; i++) {
