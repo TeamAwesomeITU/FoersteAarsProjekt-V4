@@ -16,10 +16,10 @@ import javax.swing.*;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
-import mapDrawer.drawing.MapComponentAdapter;
-import mapDrawer.drawing.MapKeyBinding;
-import mapDrawer.drawing.MapMouseWheelZoom;
 import mapDrawer.drawing.MapPanel;
+import mapDrawer.drawing.mutators.MapPanelResize;
+import mapDrawer.drawing.mutators.MapKeyPan;
+import mapDrawer.drawing.mutators.MapMouseWheelZoom;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -50,7 +50,7 @@ public class MapWindow {
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		MainGui.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainGui.frame.pack();
-		MapComponentAdapter mcp = new MapComponentAdapter(this);
+		MapPanelResize mcp = new MapPanelResize(this);
 		MainGui.frame.addComponentListener(mcp);
 	}
 
@@ -153,7 +153,7 @@ public class MapWindow {
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
-		MapKeyBinding.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
+		MapKeyPan.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
 
 		centerColoredJPanel.add(mapPanel);
 		MainGui.contentPane.add(centerColoredJPanel, BorderLayout.CENTER);

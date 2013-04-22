@@ -16,9 +16,6 @@ public class EdgeWeightedDigraph
 			adj[n] = new Bag<DirectedEdge>();
 	}
 
-	/*public EdgeWeightedDigraph(In in)
-	// See Exercise 4.4.2.
-	*/
 	
 	public int N() { return N; }
 	public int E() { return E; }

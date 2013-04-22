@@ -22,6 +22,7 @@ import mapDrawer.RoadType;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.FindRelevantEdges;
+import mapDrawer.drawing.mutators.MapMouseZoomAndPan;
 
 @SuppressWarnings("serial")
 /**
@@ -30,7 +31,7 @@ import mapDrawer.dataSupplying.FindRelevantEdges;
  */
 public class MapPanel extends JPanel {
 
-	private RectZoomer rectZoomer;
+	private MapMouseZoomAndPan mapMouseZoomAndPan;
 	private AreaToDraw area;
 	private EdgeLine[] linesOfEdges; 
 	private double mapHeight, mapWidth;
@@ -44,11 +45,11 @@ public class MapPanel extends JPanel {
 	public MapPanel(double width, double height) {
 		mapHeight = height;
 		mapWidth = width;
-		rectZoomer = new RectZoomer(this);
+		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
 		makeLinesForMap();
 		setBorderForPanel();
-		addMouseListener(rectZoomer);
-		addMouseMotionListener(rectZoomer);
+		addMouseListener(mapMouseZoomAndPan);
+		addMouseMotionListener(mapMouseZoomAndPan);
 		setFocusable(true);
 	}
 
@@ -153,13 +154,13 @@ public class MapPanel extends JPanel {
 		}
 
 		Graphics2D g2 = (Graphics2D) g;
-		if (rectZoomer.getRect() == null) {
+		if (mapMouseZoomAndPan.getRect() == null) {
 			return; 
 		} 
-		else if (rectZoomer.isDrawing() == true) {
+		else if (mapMouseZoomAndPan.isDrawing() == true) {
 			g2.setStroke(new BasicStroke(1));
 			g2.setColor(Color.red);
-			g2.draw(rectZoomer.getRect());
+			g2.draw(mapMouseZoomAndPan.getRect());
 		} 
 	}
 	/**
