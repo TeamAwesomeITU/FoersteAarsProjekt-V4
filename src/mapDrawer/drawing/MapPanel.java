@@ -67,7 +67,7 @@ public class MapPanel extends JPanel {
 
 		int numberOfEdges = 0;
 		while(edgeSetIterator.hasNext() == true) {
-			Edge edge = edgeSetIterator.next();
+			Edge edge = edgeSetIterator.next();						
 			int fromNode = edge.getFromNode();
 			int toNode = edge.getToNode();
 			Double[] fromNodeCoords = nodeCoordinatesMap.get(fromNode);

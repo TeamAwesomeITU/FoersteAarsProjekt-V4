@@ -112,7 +112,7 @@ public class DataHolding {
 		try {				
 			HashMap<Integer, Double[]> nodeMap = new HashMap<Integer, Double[]>();
 			
-			File file = new File("XML/kdv_node_unload.txt");
+			File file = new File("XML/kdv_node_unload.txt_modified.txt");
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			
 			//To skip the first line
@@ -123,8 +123,8 @@ public class DataHolding {
 			while((line = reader.readLine()) != null)
 			{
 				String[] lineParts = line.split("\\,");
-				Integer KDV = Integer.parseInt(lineParts[2]);
-				Double[] coords = new Double[]{Double.parseDouble(lineParts[3]), Double.parseDouble(lineParts[4])};
+				Integer KDV = Integer.parseInt(lineParts[0]);				
+				Double[] coords = new Double[]{Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2])};
 				nodeMap.put(KDV, coords);
 			}
 				
