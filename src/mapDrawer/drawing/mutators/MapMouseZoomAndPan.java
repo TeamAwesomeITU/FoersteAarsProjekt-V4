@@ -160,38 +160,46 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 		bigX = coordConverter.pixelToUTMCoordX((int)bigX);
 		smallY = coordConverter.pixelToUTMCoordY((int)smallY);
 		bigY = coordConverter.pixelToUTMCoordY((int)bigY);
-		double panX = (bigX - smallX) /100;
-		double panY = (bigY - smallY) /100;
+		double panX = (bigX - smallX) /150;
+		double panY = (bigY - smallY) /150;
 		double temp = bigY; bigY = smallY; smallY = temp;
 
 		if(mouseMovedTo.x > mousePressedAt.x)
 		{
-			double tempX = ((mousePressedAt.x - mouseMovedTo.x)/10)*panX;
+			double tempX = ((mousePressedAt.x - mouseMovedTo.x)/100)*panX;
+			System.out.println("x left: " + tempX);
 			smallX += tempX;
 			bigX += tempX;
-			//bevæger os til højre
+			//bevæger os til venstre
+			
 		}
 		else if(mouseMovedTo.x < mousePressedAt.x)
 		{
-			double tempX = ((mouseMovedTo.x - mousePressedAt.x)/10)*panX;
+			double tempX = ((mouseMovedTo.x - mousePressedAt.x)/100)*panX;
+			System.out.println("x right: " + tempX);
 			smallX -= tempX;
 			bigX -= tempX;
-			//bevæger os til venstre
+			//bevæger os til højre
+			
 		}
 
-		if(mouseMovedTo.y > mousePressedAt.y)
+		if(mouseMovedTo.y < mousePressedAt.y)
 		{
-			double tempY = ((mousePressedAt.y - mouseMovedTo.y)/10)*panY;
+			double tempY = Math.abs(((mouseMovedTo.y - mousePressedAt.y)/100))*panY;
+			System.out.println("y up: " + tempY);
 			smallY += tempY;
 			bigY += tempY;
-			//bevæger os ned ad
+			//bevæger os op ad
+			
 		}
-		else if(mouseMovedTo.y < mousePressedAt.y)
+		else if(mouseMovedTo.y > mousePressedAt.y)
 		{
-			double tempY = ((mouseMovedTo.y - mousePressedAt.y)/10)*panY;
+			double tempY = Math.abs(((mousePressedAt.y - mouseMovedTo.y)/100))*panY;
+			System.out.println("y down: " + tempY);
 			smallY -= tempY;
 			bigY -= tempY;
 			//bevæger os ned ad
+			
 		}
 		
 		try {
