@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class RefinedTxtCreator {
+public class RefinedNODEUNLOADTxtCreator {
 
 	private static String nodeFileName = "XML/kdv_node_unload.txt";
 	private static String edgeFileName = "XML/kdv_unload.txt";
@@ -74,8 +74,10 @@ public class RefinedTxtCreator {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			BufferedWriter writer = new BufferedWriter(new FileWriter(nodeFileName + "_modified.txt"));
 
-			//Copies the first line of the old file into the modified file
-			writer.write(reader.readLine() + ",EDGE-IDS");
+			//Skips the first line of the file
+			reader.readLine();
+			
+			writer.write("MODIFIED FILE");
 			writer.newLine();
 
 			String line;
@@ -84,13 +86,14 @@ public class RefinedTxtCreator {
 			{
 				String[] lineParts = line.split("\\,");
 				int nodeID = Integer.parseInt(lineParts[2]);
-				String stringToAdd = ",";
+				//Leaves out the unnecessary information in the original file
+				String stringToAdd = lineParts[2] + "," + lineParts[3] + "," + lineParts[4] + ",";
 				
 				Iterator<Integer> iterator = hashSetsList.get(nodeID-1).iterator();
 				while(iterator.hasNext())
 					stringToAdd += iterator.next() + " "; 
 				
-				writer.write(line + stringToAdd.trim());
+				writer.write(stringToAdd.trim());
 				writer.newLine();
 			}	    	
 	        

@@ -29,8 +29,7 @@ public class FindRelevantEdges {
 	 * @return A HashSet of the Edges, that is found inside the input area and belongs to a Node in the nodeSet.
 	 */
 	private static HashSet<Edge> findEdges(AreaToDraw area)
-	{
-		
+	{		
 		HashSet<Node> nodeSet = QuadTree.searchAreaForNodes(area);
 		Iterator<Node> iterator = nodeSet.iterator();
 		HashSet<Edge> foundEdgesSet = new HashSet<Edge>();
