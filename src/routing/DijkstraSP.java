@@ -53,11 +53,11 @@ public class DijkstraSP
 		return distTo[v] < Double.POSITIVE_INFINITY; 
 	}
 
-	public Iterable<DirectedEdge> pathTo(int v) {
+	public Iterable<Edge> pathTo(int v) {
 		if (!hasPathTo(v)) 
 			return null;
-		Stack<DirectedEdge> path = new Stack<DirectedEdge>();
-		for (DirectedEdge e = edgeTo[v]; e != null; e = edgeTo[e.from()])
+		Stack<Edge> path = new Stack<Edge>();
+		for (Edge e = allEdgesMap.get(edgeTo[v]); e != null; e = allEdgesMap.get(edgeTo[e.getFromNode()]))
 			path.push(e);
 		return path;
 	}
