@@ -69,7 +69,7 @@ public class MainGui {
 	}
 
 	/**
-	 * The frame is maded and the contentpane is initialized
+	 * The frame is made and the contentpane is initialized
 	 */
 	public static void makeFrameAndContentPane(){
 		frame = new JFrame("Team Awesome Maps");
@@ -428,6 +428,9 @@ public class MainGui {
 			}
 	}
 	
+	/**
+	 * Defines the cursor as the dragon cursor or as the default cursor.
+	 */
 	public static void setMainHand(){
 		if(dragonBoolean == false)
 		 frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
