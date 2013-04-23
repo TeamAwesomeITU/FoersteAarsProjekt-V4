@@ -33,27 +33,34 @@ public class DataHolding {
 		try {				
 			HashMap<Integer, Edge> edgeMap = new HashMap<Integer, Edge>();
 			
-			File file = new File("XML/kdv_unload.txt");
+			File file = new File("XML/edge.txt");
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			
 			//To skip the first line
 			reader.readLine();
 			
 			String line;
+			int fromNode, toNode, type, postalNumber = 0;
+			Integer edgeID = 0;
+			String roadName, oneWay = "";
+
 			
+			long startTime = System.currentTimeMillis();
 			while((line = reader.readLine()) != null)
 			{
-				String[] lineParts = line.split(("(?<=[']|\\d|\\*)[,](?=[']|\\d|\\*)"));
-				int fromNode = Integer.parseInt(lineParts[0]);
-				int toNode = Integer.parseInt(lineParts[1]);
-				Integer edgeID = Integer.parseInt(lineParts[4]);
-				int type = Integer.parseInt(lineParts[5]);
-				String roadName = lineParts[6];
-				int postalNumber = Integer.parseInt(lineParts[17]);
-				
-				edgeMap.put(edgeID, new Edge(fromNode, toNode, type, roadName, postalNumber));
+				String[] lineParts = line.split(("\\;"));
+				fromNode = Integer.parseInt(lineParts[0]);
+				toNode = Integer.parseInt(lineParts[1]);
+				edgeID = Integer.parseInt(lineParts[3]);
+				type = Integer.parseInt(lineParts[4]);
+				roadName = lineParts[5];
+				oneWay = lineParts[18];
+				postalNumber = Integer.parseInt(lineParts[14]);
+
+				edgeMap.put(edgeID, new Edge(fromNode, toNode, type, roadName, postalNumber, oneWay));
 			}
-				
+			long endTime = System.currentTimeMillis();
+			System.out.println(endTime-startTime);
 			reader.close();			
 			return edgeMap;
 			

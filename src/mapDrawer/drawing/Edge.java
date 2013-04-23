@@ -98,7 +98,7 @@ public class Edge {
 	/**
 	 * ONLY FOR TEST-PURPOSES
 	 */
-	public Edge(int fromNode, int toNode, int roadType, String roadName, int postalNumber)
+	public Edge(int fromNode, int toNode, int roadType, String roadName, int postalNumber, String oneWay)
 	{
 		this.fromNode = fromNode;
 		this.toNode = toNode;
