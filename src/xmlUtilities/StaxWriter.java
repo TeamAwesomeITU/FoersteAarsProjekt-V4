@@ -130,7 +130,7 @@ public class StaxWriter {
   private void createNodesForKDVunload(String line, XMLStreamWriter streamWriter, String[] values) throws XMLStreamException {
 	  Scanner scan = new Scanner(line); 
 	  scan.useDelimiter("(?<=[']|\\d|\\*)[,](?=[']|\\d|\\*)");    	
-	  int[] intArray = {2,3,4,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33};
+	  int[] intArray = {1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,28,29,30,31,32};
 	  int x = 0;
 	  streamWriter.writeDTD("\t");
 	  streamWriter.writeStartElement(nodeName);
