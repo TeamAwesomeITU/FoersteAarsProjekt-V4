@@ -13,6 +13,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
+import org.omg.PortableServer.POAPackage.WrongAdapter;
+
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
@@ -164,7 +166,7 @@ public class MapWindow {
 	 */
 	private double heightForMap() {
 		double height = MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
-		if(height <= Math.round(MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
+		if(height < Math.round(MainGui.frame.getHeight()*0.968 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
 			return  height;
 		else 
 			return heightForMap(height);
@@ -172,7 +174,7 @@ public class MapWindow {
 
 	private double heightForMap(double temporaryHeight) {
 		double height = temporaryHeight*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
-		if(height <= Math.round(MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
+		if(height < Math.round(MainGui.frame.getHeight()*0.968 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
 			return  height;
 		else 
 			return heightForMap(height);
@@ -191,10 +193,10 @@ public class MapWindow {
 	private double widthForMap() {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = heightForMap()*areaToDraw.getWidthHeightRelation();
-		if(width <= Math.round(MainGui.frame.getWidth()*0.99 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+		if(width < Math.round(MainGui.frame.getWidth()*0.98 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
 			return  width;
 		else 
-			return widthForMap(heightForMap()*0.99);
+			return widthForMap(heightForMap()*0.98);
 	}
 	/**
 	 * is the recursive method called by the widthForMap without input parameters. If the new width is too big,
@@ -205,10 +207,10 @@ public class MapWindow {
 	private double widthForMap(double height) {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = Math.round(height*areaToDraw.getWidthHeightRelation());
-		if(width <= Math.round(MainGui.frame.getWidth()*0.99 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+		if(width < Math.round(MainGui.frame.getWidth()*0.978 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
 			return width;
 		else 
-			return widthForMap(height*0.99);
+			return widthForMap(height*0.98);
 	}
 	/**
 	 * @return the width for the map
