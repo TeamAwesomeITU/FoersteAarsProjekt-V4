@@ -20,21 +20,25 @@ import mapDrawer.drawing.Edge;
 
 public class DataHolding {
 
+	private static int numberOfNodes = 675902;
+	private static int numberOfEdges = 812301;
+	
 	/*A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	This is made at startup so the program can access it at will. */
-	private static HashMap<Integer, Node> nodeMap;
+	private static Node[] nodeArray;
 	/*A set of all edges. When at 100% zoom all edges from this are drawn. When closer less are drawn.
 	This is made at startup so the program can access it at will. */
-	private static HashMap<Integer, Edge> allEdgesMap;
+	private static Edge[] allEdgesArray;
+	
 	private static EdgeWeightedDigraph graph = new EdgeWeightedDigraph(675902);
 
-	//At some point, the nodeMap and QuadTree should be created in parallel, as they use the same resource-file in the same way - will decrease startup time
+	//At some point, the nodeArray and QuadTree should be created in parallel, as they use the same resource-file in the same way - will decrease startup time
 	private static QuadTree qTree;
 
-	private static HashMap<Integer, Edge> makeEdgeMapFromTXT()
+	private static Edge[] makeEdgeArrayFromTXT()
 	{
 		try {				
-			HashMap<Integer, Edge> edgeMap = new HashMap<Integer, Edge>();
+			Edge[] edgeArray = new Edge[numberOfEdges];
 
 			File file = new File("XML/edge.txt");
 			BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -60,12 +64,12 @@ public class DataHolding {
 				oneWay = lineParts[18];
 				postalNumber = Integer.parseInt(lineParts[14]);
 
-				edgeMap.put(edgeID, new Edge(fromNode, toNode, type, roadName, postalNumber, oneWay));
+				edgeArray[edgeID-1] = new Edge(fromNode, toNode, type, roadName, postalNumber, oneWay);
 			}
 			long endTime = System.currentTimeMillis();
 			System.out.println(endTime-startTime);
 			reader.close();			
-			return edgeMap;
+			return edgeArray;
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -79,6 +83,7 @@ public class DataHolding {
 	 * @return A HashMap of nodes where the ID is node-id and value is an Array[2] of doubles 
 	 * containing x-/y-coordinates. 
 	 */
+	@Deprecated
 	private static HashMap<Integer, Double[]> makeNodeCoordinatesMapFromXML()
 	{
 		HashMap<Integer, Double[]> map = new HashMap<Integer, Double[]>();
@@ -117,10 +122,10 @@ public class DataHolding {
 		return map;
 	}
 
-	private static HashMap<Integer, Node> makeNodeMapFromTXT()
+	private static Node[] makeNodeArrayFromTXT()
 	{
 		try {				
-			HashMap<Integer, Node> nodeMap = new HashMap<Integer, Node>();
+			Node[] nodeArray = new Node[numberOfNodes];
 
 			File file = new File("XML/kdv_node_unload.txt_modified.txt");
 			BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -145,17 +150,17 @@ public class DataHolding {
 				for(int i = 0; i < references.length; i++){
 					edgeIDs[i] = Integer.parseInt(references[i]);
 					/*
-					if(allEdgesMap.get(references[i]).getOneWay().equals("ft") || allEdgesMap.get(references[i]).getOneWay().equals("")) {
+					if(allEdgesArray.get(references[i]).getOneWay().equals("ft") || allEdgesArray.get(references[i]).getOneWay().equals("")) {
 						graph.addEdge(Integer.parseInt(lineParts[0]), Integer.parseInt(references[i]));
 						}					
 						*/				
 				}
 				
-				nodeMap.put(KDV, new Node(KDV, Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2]), edgeIDs));
+				nodeArray[KDV-1] = new Node(KDV, Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2]), edgeIDs);
 			}
 
 			reader.close();			
-			return nodeMap;
+			return nodeArray;
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -167,20 +172,20 @@ public class DataHolding {
 	 * Gets a HashMap of all of the entire map's Nodes - the Node ID is the key, the value is the Node
 	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are x-/y- coordinates
 	 */
-	public static HashMap<Integer, Node> getNodeMap()
+	public static Node[] getNodeArray()
 	{
-		initializeNodeCoordinatesMap();
-		return nodeMap;
+		initializeNodeArray();
+		return nodeArray;
 	}
 
 	/**
 	 * Gets a HashSet of all of the entire map's Edges
 	 * @return A HashSet of all of the maps Edges 
 	 */
-	public static HashMap<Integer, Edge> getEdgeMap()
+	public static Edge[] getEdgeArray()
 	{
-		initializeEdgeMap();
-		return allEdgesMap;
+		initializeEdgeArray();
+		return allEdgesArray;
 	}
 
 	/**
@@ -188,37 +193,37 @@ public class DataHolding {
 	 * @param nodeID The ID of the Node
 	 * @return The Node with the input ID
 	 */
-	public static Node getNode(Integer nodeID)
-	{ return nodeMap.get(nodeID); }
+	public static Node getNode(int nodeID)
+	{ return nodeArray[nodeID-1]; }
 
 	/**
 	 * 
 	 * @param edgeID The ID of the Edge
 	 * @return The Edge with the input ID
 	 */
-	public static Edge getEdge(Integer edgeID)
-	{ return allEdgesMap.get(edgeID); }
+	public static Edge getEdge(int edgeID)
+	{ return allEdgesArray[edgeID-1]; }
 
-	private static void initializeNodeCoordinatesMap()
+	private static void initializeNodeArray()
 	{
-		if(nodeMap == null)
-			nodeMap = makeNodeMapFromTXT();
+		if(nodeArray == null)
+			nodeArray = makeNodeArrayFromTXT();
 		else
 			return;
 	}
 
-	public static void initializeNodeCoordinatesMap(HashMap<Integer, Double[]> nodeMap ) 
+	public static void initializeNodeArray(HashMap<Integer, Double[]> nodeArray ) 
 	{
-		if(nodeMap == null)
-			nodeMap = nodeMap;
+		if(nodeArray == null)
+			nodeArray = nodeArray;
 		else
 			return;
 	}
 
-	private static void initializeEdgeMap()
+	private static void initializeEdgeArray()
 	{
-		if(allEdgesMap == null)
-			allEdgesMap = makeEdgeMapFromTXT();
+		if(allEdgesArray == null)
+			allEdgesArray = makeEdgeArrayFromTXT();
 		else
 			return;
 	}
@@ -229,7 +234,7 @@ public class DataHolding {
 		@Override
 		public void run()
 		{
-			initializeEdgeMap();
+			initializeEdgeArray();
 		}		
 	}
 
@@ -238,7 +243,7 @@ public class DataHolding {
 		@Override
 		public void run()
 		{
-			initializeNodeCoordinatesMap();
+			initializeNodeArray();
 		}
 	}
 

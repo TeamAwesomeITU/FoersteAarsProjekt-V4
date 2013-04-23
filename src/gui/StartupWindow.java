@@ -38,14 +38,14 @@ public class StartupWindow{
 		long startTime2 = System.currentTimeMillis();
 		System.out.println("Making NodeMap");
 		loadingBar.setString("Making NodeMap");
-		DataHolding.getNodeMap();
+		DataHolding.getNodeArray();
 		long endTime2 = System.currentTimeMillis();
 		System.out.println("NodeMap creation takes " + (endTime2 - startTime2) + " milliseconds");
 		
 		long startTime3 = System.currentTimeMillis();
 		System.out.println("Making EdgeMap");
 		loadingBar.setString("Making EdgeMap");
-		DataHolding.getEdgeMap();
+		DataHolding.getEdgeArray();
 		long endTime3 = System.currentTimeMillis();
 		System.out.println("EdgeSet creation takes " + (endTime3 - startTime3) + " milliseconds");
 		

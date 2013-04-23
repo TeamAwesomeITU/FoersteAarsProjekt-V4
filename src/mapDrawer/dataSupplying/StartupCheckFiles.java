@@ -22,8 +22,8 @@ public class StartupCheckFiles implements Serializable {
 
 	private static String indexFileName = storedObjectsLocation + "index.lol";
 	private static String quadTreeFileName = storedObjectsLocation + "quadTree.lol";
-	private static String coordinatesMapFileName = storedObjectsLocation + "coordinatesMap.lol";
-	private static String edgeMapFileName = storedObjectsLocation + "edgeSet.lol";
+	private static String nodeArrayFileName = storedObjectsLocation + "coordinatesMap.lol";
+	private static String edgeArrayFileName = storedObjectsLocation + "edgeSet.lol";
 
 	//Which XML-files to check - the index file is expected to have the XML files stored in this order
 	private static String[] xmlFilesToCheck = new String[]{xmlFilesLocation + "kdv_node_unload.xml", xmlFilesLocation + "kdv_unload_new.xml"};
@@ -69,8 +69,8 @@ public class StartupCheckFiles implements Serializable {
 		if(!shouldLoad)
 		{
 			storeQuadTree();
-			storeCoordinatesMap();
-			storeEdgeSet();	
+			storeNodeArray();
+			storeEdgeArray();	
 		}
 		return true;
 	}
@@ -98,16 +98,16 @@ public class StartupCheckFiles implements Serializable {
 	}
 
 	
-	private static void storeCoordinatesMap()
+	private static void storeNodeArray()
 	{
-		HashMap<Integer, Double[]> coordinatesMap = DataHolding.getNodeCoordinatesMap();
-		storeObject(coordinatesMap, coordinatesMapFileName);		
+		Node[] nodeArray = DataHolding.getNodeArray();
+		storeObject(nodeArray, nodeArrayFileName);		
 	}
 
-	private static void storeEdgeSet()
+	private static void storeEdgeArray()
 	{
-		HashMap<Integer, Edge> edgeMap = DataHolding.getEdgeMap();
-		storeObject(edgeMap, edgeMapFileName);	
+		Edge[] edgeArray = DataHolding.getEdgeArray();
+		storeObject(edgeArray, edgeArrayFileName);	
 	}
 
 	private static void storeObject(Object object, String fileNameAndPath)
@@ -171,12 +171,12 @@ public class StartupCheckFiles implements Serializable {
 
 	public static HashMap<Integer, Double[]> getStoredCoordinatesMap()
 	{
-		return (HashMap<Integer, Double[]>) loadFile(coordinatesMapFileName);		
+		return (HashMap<Integer, Double[]>) loadFile(nodeArrayFileName);		
 	}	
 
 	public static HashSet<Edge> getStoredEdgeSet()
 	{
-		return (HashSet<Edge>) loadFile(edgeMapFileName);	
+		return (HashSet<Edge>) loadFile(edgeArrayFileName);	
 	}
 
 	private static Object loadFile(String fileName)

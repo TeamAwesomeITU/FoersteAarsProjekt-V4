@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,6 +20,7 @@ import javax.swing.border.LineBorder;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.RoadType;
+import mapDrawer.dataSupplying.CoastLineMaker;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.FindRelevantEdges;
@@ -34,6 +36,7 @@ public class MapPanel extends JPanel {
 	private MapMouseZoomAndPan mapMouseZoomAndPan;
 	private AreaToDraw area;
 	private HashSet<Edge> edgesToDraw; 
+	private GeneralPath[] coastLineToDraw;
 	private CoordinateConverter coordConverter;
 	private double mapHeight, mapWidth;
 
@@ -48,6 +51,7 @@ public class MapPanel extends JPanel {
 		mapWidth = width;
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
 		makeLinesForMap();
+		makeCoastLineForMap();
 		setBorderForPanel();
 		addMouseListener(mapMouseZoomAndPan);
 		addMouseMotionListener(mapMouseZoomAndPan);
@@ -115,9 +119,12 @@ public class MapPanel extends JPanel {
 		}
 */
 	}
-
-
-	private Line2D line = new Line2D.Double();
+	
+	private void makeCoastLineForMap()
+	{
+		coastLineToDraw = CoastLineMaker.getCoastLineToDraw((int)mapWidth, (int)mapHeight, area);
+	}
+	
 	/**
 	 * Draws all the lines for the map. Also, draws the rectangle used by the user
 	 * to see where you are about to zoom.
@@ -125,17 +132,20 @@ public class MapPanel extends JPanel {
 	 */
 	public void paint(Graphics g) {
 		super.paint(g);
+		Line2D line = new Line2D.Double();
 		for (Edge edge : edgesToDraw) {
 			line.setLine(edge.getLine2DToDraw(coordConverter));
 			int roadType = edge.getRoadType();
+						
 			g.setColor(RoadType.getColor(roadType));
-			((Graphics2D)g).setRenderingHint(
-					RenderingHints.KEY_ANTIALIASING, 
-					RenderingHints.VALUE_ANTIALIAS_ON);
+			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			((Graphics2D)g).setStroke(new BasicStroke(RoadType.getStroke(roadType)));
 			((Graphics2D)g).draw(line); 
-			setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
+			//Linjen under denne kan vel godt slettes??
+			//setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
 		}
+		
+		//HER SKAL COASTLINE TEGNES
 
 		Graphics2D g2 = (Graphics2D) g;
 		if (mapMouseZoomAndPan.getRect() == null) {
@@ -147,6 +157,7 @@ public class MapPanel extends JPanel {
 			g2.draw(mapMouseZoomAndPan.getRect());
 		} 
 	}
+	
 	/**
 	 * Repaints the map to the new AreaToDraw.
 	 */
