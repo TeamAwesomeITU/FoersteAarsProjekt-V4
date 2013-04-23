@@ -97,6 +97,7 @@ public class StartupCheckFiles implements Serializable {
 		storeObject(qTree, quadTreeFileName);		
 	}
 
+	
 	private static void storeCoordinatesMap()
 	{
 		HashMap<Integer, Double[]> coordinatesMap = DataHolding.getNodeCoordinatesMap();

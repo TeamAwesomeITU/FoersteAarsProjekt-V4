@@ -19,35 +19,35 @@ import mapDrawer.drawing.Edge;
 
 
 public class DataHolding {
-	
+
 	/*A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	This is made at startup so the program can access it at will. */
-	private static HashMap<Integer, Double[]> nodeCoordinatesMap;
+	private static HashMap<Integer, Node> nodeMap;
 	/*A set of all edges. When at 100% zoom all edges from this are drawn. When closer less are drawn.
 	This is made at startup so the program can access it at will. */
 	private static HashMap<Integer, Edge> allEdgesMap;
 	private static EdgeWeightedDigraph graph = new EdgeWeightedDigraph(675902);
-	
+
 	//At some point, the nodeMap and QuadTree should be created in parallel, as they use the same resource-file in the same way - will decrease startup time
 	private static QuadTree qTree;
-	
+
 	private static HashMap<Integer, Edge> makeEdgeMapFromTXT()
 	{
 		try {				
 			HashMap<Integer, Edge> edgeMap = new HashMap<Integer, Edge>();
-			
+
 			File file = new File("XML/edge.txt");
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-			
+
 			//To skip the first line
 			reader.readLine();
-			
+
 			String line;
 			int fromNode, toNode, type, postalNumber = 0;
 			Integer edgeID = 0;
 			String roadName, oneWay = "";
 
-			
+
 			long startTime = System.currentTimeMillis();
 			while((line = reader.readLine()) != null)
 			{
@@ -66,13 +66,13 @@ public class DataHolding {
 			System.out.println(endTime-startTime);
 			reader.close();			
 			return edgeMap;
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}		
 	}
-	
+
 	/**
 	 * This method parses the XML-file kdv_node containing nodes and their coordinates. It uses an autoPilot
 	 * to navigate nodes and manually retrieves child-elements. At the end it navigates to the parent again. 
@@ -116,42 +116,47 @@ public class DataHolding {
 		}
 		return map;
 	}
-	
-	private static HashMap<Integer, Double[]> makeNodeCoordinatesMapFromTXT()
+
+	private static HashMap<Integer, Node> makeNodeMapFromTXT()
 	{
 		try {				
-			HashMap<Integer, Double[]> nodeMap = new HashMap<Integer, Double[]>();
-			
+			HashMap<Integer, Node> nodeMap = new HashMap<Integer, Node>();
+
 			File file = new File("XML/kdv_node_unload.txt_modified.txt");
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-			
+
 			//To skip the first line
 			reader.readLine();
-			
+
 			String line;
 			String[] lineParts = null;
 			Integer KDV = 0; 
 			String[] references = null;
-			int i = 0;
-			
+
 			while((line = reader.readLine()) != null)
 			{
 				lineParts = line.split("\\,");
-				KDV = Integer.parseInt(lineParts[0]);				
-				Double[] coords = new Double[]{Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2])};
-				nodeMap.put(KDV, coords);
-				
+				KDV = Integer.parseInt(lineParts[0]);
+
+
 				references = lineParts[3].split("\\s");
-				for(String ref: references) {
-					if(allEdgesMap.get(ref).getOneWay().equals("ft") || allEdgesMap.get(ref).getOneWay().equals("")) {
-						graph.addEdge(Integer.parseInt(lineParts[0]), Integer.parseInt(ref));
-					}			
-				}
-			}
+				int[] edgeIDs = new int[references.length];
 				
+				for(int i = 0; i < references.length; i++){
+					edgeIDs[i] = Integer.parseInt(references[i]);
+					/*
+					if(allEdgesMap.get(references[i]).getOneWay().equals("ft") || allEdgesMap.get(references[i]).getOneWay().equals("")) {
+						graph.addEdge(Integer.parseInt(lineParts[0]), Integer.parseInt(references[i]));
+						}					
+						*/				
+				}
+				
+				nodeMap.put(KDV, new Node(KDV, Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2]), edgeIDs));
+			}
+
 			reader.close();			
 			return nodeMap;
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -159,15 +164,15 @@ public class DataHolding {
 	}
 
 	/**
-	 * Gets a HashMap of all of the entire map's Nodes and their coordinates - the Node ID is the key, the values are its coordinates
+	 * Gets a HashMap of all of the entire map's Nodes - the Node ID is the key, the value is the Node
 	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are x-/y- coordinates
 	 */
-	public static HashMap<Integer, Double[]> getNodeCoordinatesMap()
+	public static HashMap<Integer, Node> getNodeMap()
 	{
 		initializeNodeCoordinatesMap();
-		return nodeCoordinatesMap;
+		return nodeMap;
 	}
-	
+
 	/**
 	 * Gets a HashSet of all of the entire map's Edges
 	 * @return A HashSet of all of the maps Edges 
@@ -177,23 +182,39 @@ public class DataHolding {
 		initializeEdgeMap();
 		return allEdgesMap;
 	}
-	
+
+	/**
+	 * 
+	 * @param nodeID The ID of the Node
+	 * @return The Node with the input ID
+	 */
+	public static Node getNode(Integer nodeID)
+	{ return nodeMap.get(nodeID); }
+
+	/**
+	 * 
+	 * @param edgeID The ID of the Edge
+	 * @return The Edge with the input ID
+	 */
+	public static Edge getEdge(Integer edgeID)
+	{ return allEdgesMap.get(edgeID); }
+
 	private static void initializeNodeCoordinatesMap()
 	{
-		if(nodeCoordinatesMap == null)
-			nodeCoordinatesMap = makeNodeCoordinatesMapFromTXT();
+		if(nodeMap == null)
+			nodeMap = makeNodeMapFromTXT();
 		else
 			return;
 	}
-	
+
 	public static void initializeNodeCoordinatesMap(HashMap<Integer, Double[]> nodeMap ) 
 	{
-		if(nodeCoordinatesMap == null)
-			nodeCoordinatesMap = nodeMap;
+		if(nodeMap == null)
+			nodeMap = nodeMap;
 		else
 			return;
 	}
-		
+
 	private static void initializeEdgeMap()
 	{
 		if(allEdgesMap == null)
@@ -201,8 +222,8 @@ public class DataHolding {
 		else
 			return;
 	}
-	
-	
+
+
 	public static class EdgeMapCreation implements Runnable
 	{
 		@Override
@@ -211,7 +232,7 @@ public class DataHolding {
 			initializeEdgeMap();
 		}		
 	}
-	
+
 	public static class NodeMapCreation implements Runnable
 	{
 		@Override

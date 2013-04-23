@@ -38,7 +38,7 @@ public class StartupWindow{
 		long startTime2 = System.currentTimeMillis();
 		System.out.println("Making NodeMap");
 		loadingBar.setString("Making NodeMap");
-		DataHolding.getNodeCoordinatesMap();
+		DataHolding.getNodeMap();
 		long endTime2 = System.currentTimeMillis();
 		System.out.println("NodeMap creation takes " + (endTime2 - startTime2) + " milliseconds");
 		

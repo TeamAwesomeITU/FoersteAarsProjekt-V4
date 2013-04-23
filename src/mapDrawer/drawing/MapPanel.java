@@ -33,7 +33,8 @@ public class MapPanel extends JPanel {
 
 	private MapMouseZoomAndPan mapMouseZoomAndPan;
 	private AreaToDraw area;
-	private EdgeLine[] linesOfEdges; 
+	private HashSet<Edge> edgesToDraw; 
+	private CoordinateConverter coordConverter;
 	private double mapHeight, mapWidth;
 
 	/**
@@ -60,26 +61,9 @@ public class MapPanel extends JPanel {
 	private void makeLinesForMap() {
 		if(area == null)
 			area = new AreaToDraw();
-		HashSet<Edge> edgeSet = FindRelevantEdges.findEdgesToDraw(area);
-		Iterator<Edge> edgeSetIterator = edgeSet.iterator();
-		linesOfEdges = new EdgeLine[edgeSet.size()];
-		CoordinateConverter coordConverter = new CoordinateConverter((int)mapWidth, (int)mapHeight, area);
-		HashMap<Integer, Double[]> nodeCoordinatesMap = DataHolding.getNodeCoordinatesMap();
+		edgesToDraw = FindRelevantEdges.findEdgesToDraw(area);
+		coordConverter = new CoordinateConverter((int)mapWidth, (int)mapHeight, area);
 
-		int numberOfEdges = 0;
-		while(edgeSetIterator.hasNext() == true) {
-			Edge edge = edgeSetIterator.next();						
-			int fromNode = edge.getFromNode();
-			int toNode = edge.getToNode();
-			Double[] fromNodeCoords = nodeCoordinatesMap.get(fromNode);
-			Double[] toNodeCoords = nodeCoordinatesMap.get(toNode);
-			double drawFromCoordX = coordConverter.UTMToPixelCoordX(fromNodeCoords[0]);
-			double drawFromCoordY = coordConverter.UTMToPixelCoordY(fromNodeCoords[1]);
-			double drawToCoordX = coordConverter.UTMToPixelCoordX(toNodeCoords[0]);
-			double drawToCoordY = coordConverter.UTMToPixelCoordY(toNodeCoords[1]);
-
-			linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
-		}
 		/*
 		String file = ("resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz_convertedJCOORD.txt");
 
@@ -112,16 +96,16 @@ public class MapPanel extends JPanel {
 				line1 = reader.readLine();
 			}
 
-			EdgeLine[] newLinesOfEdges = new EdgeLine[linesOfEdges.length + list.size()];
+			EdgeLine[] newLinesOfEdges = new EdgeLine[edgesToDraw.length + list.size()];
 			for(int i = 0; i < newLinesOfEdges.length; i++)
 			{
-				if(i < linesOfEdges.length)
-					newLinesOfEdges[i] = linesOfEdges[i];
+				if(i < edgesToDraw.length)
+					newLinesOfEdges[i] = edgesToDraw[i];
 				else
-					newLinesOfEdges[i] = list.get(i-linesOfEdges.length);
+					newLinesOfEdges[i] = list.get(i-edgesToDraw.length);
 			}
 
-			linesOfEdges = newLinesOfEdges;
+			edgesToDraw = newLinesOfEdges;
 
 			reader.close();
 
@@ -141,9 +125,9 @@ public class MapPanel extends JPanel {
 	 */
 	public void paint(Graphics g) {
 		super.paint(g);
-		for (EdgeLine edgeLine : linesOfEdges) {
-			line.setLine(edgeLine.getStartX(), edgeLine.getStartY(), edgeLine.getEndX(), edgeLine.getEndY());
-			int roadType = edgeLine.getRoadType();
+		for (Edge edge : edgesToDraw) {
+			line.setLine(edge.getLine2DToDraw(coordConverter));
+			int roadType = edge.getRoadType();
 			g.setColor(RoadType.getColor(roadType));
 			((Graphics2D)g).setRenderingHint(
 					RenderingHints.KEY_ANTIALIASING, 
