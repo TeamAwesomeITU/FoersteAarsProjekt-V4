@@ -48,7 +48,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 	public void mousePressed(MouseEvent e) {
 		mousePressedAt = e.getPoint();
 		mp.requestFocusInWindow();
-		if(!e.isShiftDown())
+		if(!e.isShiftDown() && SwingUtilities.isLeftMouseButton(e))
 			setHand();
 	}
 
@@ -86,7 +86,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			endY = startY+rectHeight;
 			mp.repaint();
 		}
-		else { mousePan(e);}
+		else { mousePan(e); }
 			}
 	
 
@@ -95,6 +95,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 	 * @param e The event for the mouse.
 	 */
 	public void mouseReleased(MouseEvent e) {
+		MainGui.setMainHand();
 		if(SwingUtilities.isRightMouseButton(e)) { 	
 			zoomOut();
 		}
@@ -138,7 +139,6 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 				mp.repaint();
 			}
 		}
-		MainGui.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 	
 	/**
@@ -160,55 +160,47 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 		bigX = coordConverter.pixelToUTMCoordX((int)bigX);
 		smallY = coordConverter.pixelToUTMCoordY((int)smallY);
 		bigY = coordConverter.pixelToUTMCoordY((int)bigY);
-		double panX = (bigX - smallX) /150;
-		double panY = (bigY - smallY) /150;
 		double temp = bigY; bigY = smallY; smallY = temp;
 
 		if(mouseMovedTo.x > mousePressedAt.x)
 		{
-			System.out.println(mouseMovedTo.x - mousePressedAt.x);
-			double tempX = coordConverter.pixelToUTMCoordX(mouseMovedTo.x - mousePressedAt.x);
-			System.out.println("x left: " + tempX);
-			smallX += tempX;
-			bigX += tempX;
-			//bevÃ¦ger os til venstre
-			
+			double tempX = coordConverter.pixelToUTMCoordX(mouseMovedTo.x) - coordConverter.pixelToUTMCoordX(mousePressedAt.x);
+			smallX -= tempX;
+			bigX -= tempX;
+			//bevæger os til højre
 		}
 		else if(mouseMovedTo.x < mousePressedAt.x)
 		{
-			double tempX = coordConverter.pixelToUTMCoordX(mouseMovedTo.x - mousePressedAt.x);
-			System.out.println("x right: " + tempX);
-			smallX -= tempX;
-			bigX -= tempX;
-			//bevÃ¦ger os til hÃ¸jre
-			
+			double tempX = coordConverter.pixelToUTMCoordX(mousePressedAt.x) - coordConverter.pixelToUTMCoordX(mouseMovedTo.x);
+			smallX += tempX;
+			bigX += tempX;
+			//bevæger os til venstre
 		}
 
 		if(mouseMovedTo.y < mousePressedAt.y)
-		{
-			double tempY = coordConverter.pixelToUTMCoordY(mouseMovedTo.y - mousePressedAt.y);
-			System.out.println("y up: " + tempY);
-			smallY += tempY;
-			bigY += tempY;
-			//bevÃ¦ger os op ad
-			
+		{	
+			double tempY = coordConverter.pixelToUTMCoordY(mouseMovedTo.y) - coordConverter.pixelToUTMCoordY(mousePressedAt.y);
+			smallY -= tempY;
+			bigY -= tempY;
+			//bevæger os ned ad
 		}
 		else if(mouseMovedTo.y > mousePressedAt.y)
 		{
-			double tempY = coordConverter.pixelToUTMCoordY(mousePressedAt.y - mouseMovedTo.y);
-			System.out.println("y down: " + tempY);
-			smallY -= tempY;
-			bigY -= tempY;
-			//bevÃ¦ger os ned ad
-			
+			double tempY = coordConverter.pixelToUTMCoordY(mousePressedAt.y) - coordConverter.pixelToUTMCoordY(mouseMovedTo.y);
+			smallY += tempY;
+			bigY += tempY;
+			//bevæger os op ad	
 		}
 		
 		try {
 			newArea = new AreaToDraw(smallX, bigX, smallY, bigY, true);
 			mp.repaintMap(newArea);
+			mousePressed(e);
 
 		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException
 				| InvalidAreaProportionsException e1) {
+			//e1.printStackTrace();
+			newArea = currentArea;
 		}	
 		
 	}

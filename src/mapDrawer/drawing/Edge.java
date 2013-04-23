@@ -1,6 +1,10 @@
 package mapDrawer.drawing;
 
-import java.awt.Graphics;
+import java.awt.geom.Line2D;
+
+import mapDrawer.dataSupplying.CoordinateConverter;
+import mapDrawer.dataSupplying.DataHolding;
+import mapDrawer.dataSupplying.Node;
 
 public class Edge {
 	
@@ -100,7 +104,7 @@ public class Edge {
 	/**
 	 * ONLY FOR TEST-PURPOSES
 	 */
-	public Edge(int fromNode, int toNode, int roadType, String roadName, int postalNumber)
+	public Edge(int fromNode, int toNode, int roadType, String roadName, int postalNumber, String oneWay)
 	{
 		this.fromNode = fromNode;
 		this.toNode = toNode;
@@ -125,7 +129,7 @@ public class Edge {
 		this.fromTurn = 2;
 		this.toTurn = 2;
 	}
-	
+
 	/**
 	 * @return the fromNode of the Edge
 	 */
@@ -278,6 +282,19 @@ public class Edge {
 	 */
 	public int getToTurn() {
 		return toTurn;
+	}
+	
+	/**
+	 * 
+	 * @param coordconverter The CoordConverter with which the coordinates should be converted
+	 * @return A Line2D representation of the Edge
+	 */
+	public Line2D getLine2DToDraw(CoordinateConverter coordconverter)
+	{
+		Node fromNode = DataHolding.getNode(getFromNode());
+		Node toNode = DataHolding.getNode(getToNode());
+		
+		return new Line2D.Double(coordconverter.UTMToPixelCoordX(fromNode.getXCoord()), coordconverter.UTMToPixelCoordY(fromNode.getYCoord()), coordconverter.UTMToPixelCoordX(toNode.getXCoord()), coordconverter.UTMToPixelCoordY(toNode.getYCoord()));
 	}
 
 
