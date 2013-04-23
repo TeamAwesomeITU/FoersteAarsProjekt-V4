@@ -41,14 +41,11 @@ public class FindRelevantEdges {
 			Node node = iterator.next();
 			int[] edgeIDs = node.getEdgeIDs();
 			
-			HashMap<Integer, Edge> allEdgesMap = DataHolding.getEdgeMap();
-			
 			for (int i = 0; i < edgeIDs.length; i++) {
-				Edge edge = allEdgesMap.get(edgeIDs[i]);
+				Edge edge = DataHolding.getEdge(edgeIDs[i]);
 				if(zoomLevel.contains(edge.getRoadType()))
 						foundEdgesSet.add(edge);
-			}
-			
+			}			
 
 		}			
 

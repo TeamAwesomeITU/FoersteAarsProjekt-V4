@@ -11,14 +11,12 @@ public class DijkstraSP
 	private int[] edgeTo;
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
-	private HashMap<Integer, Edge> allEdgesMap;
 	
 	public DijkstraSP(EdgeWeightedDigraph graph, int s)
 	{
 		edgeTo = new int[graph.nodes()];
 		distTo = new double[graph.nodes()];
 		pq = new IndexMinPQ<Double>(graph.nodes());
-		allEdgesMap = DataHolding.getEdgeMap();
 		
 		for (int v = 0; v < graph.nodes(); v++)
 			distTo[v] = Double.POSITIVE_INFINITY;
@@ -34,7 +32,7 @@ public class DijkstraSP
 		for(Integer e : graph.adj(v)) {
 			
 			//TODO Access EdgeMap and get the edge with edgeID e
-			currentEdge = allEdgesMap.get(e);
+			currentEdge = DataHolding.getEdge(e);
 			int w = currentEdge.getToNode();
 			if (distTo[w] > distTo[v] + currentEdge.getDriveTime()) {
 				distTo[w] = distTo[v] + currentEdge.getDriveTime();
