@@ -167,14 +167,14 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			double tempX = coordConverter.pixelToUTMCoordX(mouseMovedTo.x) - coordConverter.pixelToUTMCoordX(mousePressedAt.x);
 			smallX -= tempX;
 			bigX -= tempX;
-			//bevÃ¦ger os til hÃ¸jre
+			//bevæger os til højre
 		}
 		else if(mouseMovedTo.x < mousePressedAt.x)
 		{
 			double tempX = coordConverter.pixelToUTMCoordX(mousePressedAt.x) - coordConverter.pixelToUTMCoordX(mouseMovedTo.x);
 			smallX += tempX;
 			bigX += tempX;
-			//bevÃ¦ger os til venstre
+			//bevæger os til venstre
 		}
 
 		if(mouseMovedTo.y < mousePressedAt.y)
@@ -182,14 +182,14 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			double tempY = coordConverter.pixelToUTMCoordY(mouseMovedTo.y) - coordConverter.pixelToUTMCoordY(mousePressedAt.y);
 			smallY -= tempY;
 			bigY -= tempY;
-			//bevÃ¦ger os ned ad
+			//bevæger os ned ad
 		}
 		else if(mouseMovedTo.y > mousePressedAt.y)
 		{
 			double tempY = coordConverter.pixelToUTMCoordY(mousePressedAt.y) - coordConverter.pixelToUTMCoordY(mouseMovedTo.y);
 			smallY += tempY;
 			bigY += tempY;
-			//bevÃ¦ger os op ad	
+			//bevæger os op ad	
 		}
 		
 		try {
@@ -199,7 +199,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 
 		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException
 				| InvalidAreaProportionsException e1) {
-			e1.printStackTrace();
+			//e1.printStackTrace();
 			newArea = currentArea;
 		}	
 		

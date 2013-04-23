@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FastestPath {
+	private int numberOfNodes = 675902;
 	private int nodeCounter = 0;
 	//private ArrayList<Integer> nodesInGraph = new ArrayList<Integer>();
 	private HashMap<Integer, Integer> nodesHashMap;
