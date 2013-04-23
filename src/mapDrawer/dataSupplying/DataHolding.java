@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+import routing.EdgeWeightedDigraph;
+
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDGen;
@@ -24,6 +26,7 @@ public class DataHolding {
 	/*A set of all edges. When at 100% zoom all edges from this are drawn. When closer less are drawn.
 	This is made at startup so the program can access it at will. */
 	private static HashMap<Integer, Edge> allEdgesMap;
+	private static EdgeWeightedDigraph graph = new EdgeWeightedDigraph(675902);
 	
 	//At some point, the nodeMap and QuadTree should be created in parallel, as they use the same resource-file in the same way - will decrease startup time
 	private static QuadTree qTree;
@@ -126,13 +129,24 @@ public class DataHolding {
 			reader.readLine();
 			
 			String line;
+			String[] lineParts = null;
+			Integer KDV = 0; 
+			String[] references = null;
+			int i = 0;
 			
 			while((line = reader.readLine()) != null)
 			{
-				String[] lineParts = line.split("\\,");
-				Integer KDV = Integer.parseInt(lineParts[0]);				
+				lineParts = line.split("\\,");
+				KDV = Integer.parseInt(lineParts[0]);				
 				Double[] coords = new Double[]{Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2])};
 				nodeMap.put(KDV, coords);
+				
+				references = lineParts[3].split("\\s");
+				for(String ref: references) {
+					if(allEdgesMap.get(ref).getOneWay().equals("ft") || allEdgesMap.get(ref).getOneWay().equals("")) {
+						graph.addEdge(Integer.parseInt(lineParts[0]), Integer.parseInt(ref));
+					}			
+				}
 			}
 				
 			reader.close();			
