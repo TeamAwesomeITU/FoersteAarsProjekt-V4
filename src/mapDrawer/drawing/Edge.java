@@ -1,5 +1,7 @@
 package mapDrawer.drawing;
 
+import java.awt.Graphics;
+
 public class Edge {
 	
 	//The ID of the Node from which the Edge goes from
@@ -123,7 +125,7 @@ public class Edge {
 		this.fromTurn = 2;
 		this.toTurn = 2;
 	}
-
+	
 	/**
 	 * @return the fromNode of the Edge
 	 */
