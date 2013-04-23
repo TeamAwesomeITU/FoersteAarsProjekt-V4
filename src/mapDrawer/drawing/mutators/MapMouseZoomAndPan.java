@@ -48,7 +48,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 	public void mousePressed(MouseEvent e) {
 		mousePressedAt = e.getPoint();
 		mp.requestFocusInWindow();
-		if(!e.isShiftDown())
+		if(!e.isShiftDown() && SwingUtilities.isLeftMouseButton(e))
 			setHand();
 	}
 
@@ -86,7 +86,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			endY = startY+rectHeight;
 			mp.repaint();
 		}
-		else { mousePan(e);}
+		else { mousePan(e); }
 			}
 	
 
@@ -95,6 +95,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 	 * @param e The event for the mouse.
 	 */
 	public void mouseReleased(MouseEvent e) {
+		MainGui.setMainHand();
 		if(SwingUtilities.isRightMouseButton(e)) { 	
 			zoomOut();
 		}
@@ -138,7 +139,6 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 				mp.repaint();
 			}
 		}
-		MainGui.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 	
 	/**

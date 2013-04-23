@@ -25,6 +25,10 @@ public class MainGui {
 	public static boolean coordinatesBoolean = false;
 	
 	public static boolean menuBoolean = false;
+	
+	public static boolean isDefaultCursor;
+	
+	public static boolean dragonBoolean = false;
 
 	public static JFrame frame;
 
@@ -132,6 +136,20 @@ public class MainGui {
 						}
 						updateSettingsFile();
 					}});
+				
+				final ColoredJCheckBox dragon = new ColoredJCheckBox("Dragon");
+				dragon.setSelected(dragonBoolean);
+				dragon.addItemListener(new ItemListener() 
+				{
+					public void itemStateChanged(ItemEvent e) 
+					{
+						if(e.getStateChange() == ItemEvent.DESELECTED){
+							dragonBoolean = false; setMainHand();}	
+						if(e.getStateChange() == ItemEvent.SELECTED){
+							dragonBoolean = true; setMainHand(); }
+						settingsFrame.dispose();
+					}
+				});
 
 				final ColoredJCheckBox coordinates = new ColoredJCheckBox("Coordinates");
 				coordinates.setSelected(coordinatesBoolean);
@@ -207,6 +225,7 @@ public class MainGui {
 
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);
+				settingsPanel.add(dragon);
 				settingsFrame.pack();
 				settingsFrame.setLocationRelativeTo(null);	
 				settingsFrame.setVisible(true);
@@ -359,6 +378,7 @@ public class MainGui {
 				fileWriter.write("Dualscreenleft\n");
 			if(ScreenSize.dualScreenRight)
 				fileWriter.write("Dualscreenright\n");
+						
 			
 			fileWriter.close();
 		} catch (IOException e) {
@@ -393,5 +413,16 @@ public class MainGui {
 					| IllegalAccessException | UnsupportedLookAndFeelException e) {
 				JOptionPane.showMessageDialog(frame, "Something went wrong setting up the program, please contact TeamAwesome.");
 			}
+	}
+	
+	public static void setMainHand(){
+		if(dragonBoolean == false)
+		 frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		else { Toolkit toolkit = Toolkit.getDefaultToolkit(); 
+		Image image = toolkit.getImage("resources/dragon.png"); 
+		Point hotSpot = new Point(0,0);
+		Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "Dragon"); 
+		frame.setCursor(cursor);
+		}
 	}
 }
