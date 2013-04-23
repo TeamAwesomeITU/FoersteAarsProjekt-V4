@@ -13,13 +13,14 @@ public class Node {
 	//The y-coordinate of the Node
 	private double yCoord;
 	
-	private int[] edgeIDsFromOrTo;
+	private int[] edgeIDs;
 
-	public Node(int ID, double xCoord, double yCoord)
+	public Node(int ID, double xCoord, double yCoord, int[] edgeIDs)
 	{
 		this.ID = ID;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
+		this.edgeIDs = edgeIDs;
 	}	
 
 	/**
@@ -42,4 +43,11 @@ public class Node {
 	 */
 	public double getYCoord()
 	{ return yCoord; }
+	
+	/**
+	 * 
+	 * @return The ID's of the Edges that goes to or from the Node
+	 */
+	public int[] getEdgeIDs()
+	{ return edgeIDs; }
 }

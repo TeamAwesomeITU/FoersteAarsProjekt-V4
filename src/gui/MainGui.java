@@ -23,6 +23,8 @@ public class MainGui {
 	public static boolean undecoratedBoolean = true;
 
 	public static boolean coordinatesBoolean = false;
+	
+	public static boolean menuBoolean = false;
 
 	public static JFrame frame;
 
@@ -98,11 +100,11 @@ public class MainGui {
 		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, SHORT_CUT_MASK));
 
 		JMenuItem settingsItem = new JMenuItem("Settings");
+		settingsItem.setEnabled(menuBoolean);
 		settingsItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
 		settingsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				final JFrame settingsFrame = new JFrame("Settings");
-				settingsFrame.setLocationRelativeTo(null);	
 
 				Container container = settingsFrame.getContentPane();
 				container.setLayout(new BorderLayout());
@@ -206,6 +208,7 @@ public class MainGui {
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);
 				settingsFrame.pack();
+				settingsFrame.setLocationRelativeTo(null);	
 				settingsFrame.setVisible(true);
 			}
 		});

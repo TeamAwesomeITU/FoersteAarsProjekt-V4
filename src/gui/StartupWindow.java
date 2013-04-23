@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.FindRelevantEdges;
 import mapDrawer.dataSupplying.QuadTree;
 
@@ -37,25 +38,26 @@ public class StartupWindow{
 		long startTime2 = System.currentTimeMillis();
 		System.out.println("Making NodeMap");
 		loadingBar.setString("Making NodeMap");
-		FindRelevantEdges.getNodeCoordinatesMap();
+		DataHolding.getNodeCoordinatesMap();
 		long endTime2 = System.currentTimeMillis();
 		System.out.println("NodeMap creation takes " + (endTime2 - startTime2) + " milliseconds");
 		
 		long startTime3 = System.currentTimeMillis();
-		System.out.println("Making EdgeSet");
-		loadingBar.setString("Making EdgeSet");
-		FindRelevantEdges.getEdgeSet();
+		System.out.println("Making EdgeMap");
+		loadingBar.setString("Making EdgeMap");
+		DataHolding.getEdgeMap();
 		long endTime3 = System.currentTimeMillis();
 		System.out.println("EdgeSet creation takes " + (endTime3 - startTime3) + " milliseconds");
 		
+		MainGui.menuBoolean = true;		
 		
 		/*
         try {    
     		System.out.println("Making static fields");
     		loadingBar.setString("Making static fields");
     		Thread t1 = new Thread(new QuadTree.QuadTreeCreation(), "Thread1");
-    		Thread t2 = new Thread(new FindRelevantEdges.EdgeSetCreation(),"Thread2");
-    		Thread t3 = new Thread(new FindRelevantEdges.NodeMapCreation(),"Thread3");
+    		Thread t2 = new Thread(new DataHolding.EdgeMapCreation(),"Thread2");
+    		Thread t3 = new Thread(new DataHolding.NodeMapCreation(),"Thread3");
 
             t1.start();
             t1.join();
@@ -67,8 +69,8 @@ public class StartupWindow{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		*/
 		
+		*/
 		
 		new MapWindow();
 	}

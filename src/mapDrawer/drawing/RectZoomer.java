@@ -1,12 +1,16 @@
 package mapDrawer.drawing;
 
+import gui.MainGui;
+
+import java.awt.Cursor;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
@@ -18,11 +22,14 @@ import mapDrawer.exceptions.NegativeAreaSizeException;
  */
 public class RectZoomer extends MouseAdapter {
 	private boolean drawing = false;
-	private Point mousePress = null; 
+	private Point mousePressedAt = null; 
 	private double startX, startY, endX, endY;
 	private Rectangle rect = null;
 	private MapPanel mp = null;
 	private ResizingArrayStack<AreaToDraw> stack; 
+	private double bigX, bigY,smallX,smallY;
+	private AreaToDraw currentArea;
+	private AreaToDraw newArea;
 
 	/**
 	 * Initializes the RectZoomer.
@@ -37,13 +44,16 @@ public class RectZoomer extends MouseAdapter {
 	 * Registers when mouse is pressed.
 	 * @param e The event for the mouse.
 	 */
-	public void mousePressed(MouseEvent e ) {
-		mousePress = e.getPoint();
+	public void mousePressed(MouseEvent e) {
+		mousePressedAt = e.getPoint();
 		mp.requestFocusInWindow();
+		if(!e.isShiftDown())
+			setHand();
 	}
 
 	/**
 	 * Registers when the mouse is dragged and draws the rectangle. 
+	 * If shift isn't pressed, the mouse panning is initialized.
 	 * @param e The event for the mouse.
 	 */
 	public void mouseDragged(MouseEvent e) {
@@ -51,20 +61,20 @@ public class RectZoomer extends MouseAdapter {
 		if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
 			drawing = true;
 
-			endX = Math.abs(mousePress.x - e.getPoint().x);
-			endY = Math.abs(mousePress.y - e.getPoint().y);
+			endX = Math.abs(mousePressedAt.x - e.getPoint().x);
+			endY = Math.abs(mousePressedAt.y - e.getPoint().y);
 
 			if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
 
 			double rectWidth = Math.abs(endX);
 			double rectHeight = Math.abs(endY);//Math.abs((rectWidth*AreaToDraw.getHeightOfEntireMap())/AreaToDraw.getWidthOfEntireMap());    
 
-			startX = Math.min(mousePress.x, e.getPoint().x);
+			startX = Math.min(mousePressedAt.x, e.getPoint().x);
 
-			if(mousePress.y < e.getPoint().y)
-				startY = mousePress.y;
+			if(mousePressedAt.y < e.getPoint().y)
+				startY = mousePressedAt.y;
 			else
-				startY = mousePress.y - rectHeight;			
+				startY = mousePressedAt.y - rectHeight;			
 
 			if(startX < 0) startX = 0;
 			if(startY < 0) startY = 0;
@@ -74,7 +84,10 @@ public class RectZoomer extends MouseAdapter {
 			endX = startX+rectWidth;
 			endY = startY+rectHeight;
 			mp.repaint();
-		}}
+		}
+		else { mousePan(e);}
+			}
+	
 
 	/**
 	 * Registers if the mouse is released and then draws the new area.
@@ -124,6 +137,71 @@ public class RectZoomer extends MouseAdapter {
 				mp.repaint();
 			}
 		}
+		MainGui.frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+	}
+	
+	/**
+	 * Pans in the map by dragging the mouse.
+	 * @param e MouseEvent
+	 */
+	public void mousePan(MouseEvent e)
+	{	
+		
+		setHand();
+		Point mouseMovedTo = e.getPoint();
+		currentArea = mp.getArea();
+		smallX = 0;
+		bigX = mp.getMapWidth();
+		smallY = 0;
+		bigY = mp.getMapHeight();
+		CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), currentArea);
+		smallX = coordConverter.pixelToUTMCoordX((int)smallX);
+		bigX = coordConverter.pixelToUTMCoordX((int)bigX);
+		smallY = coordConverter.pixelToUTMCoordY((int)smallY);
+		bigY = coordConverter.pixelToUTMCoordY((int)bigY);
+		double panX = (bigX - smallX) /100;
+		double panY = (bigY - smallY) /100;
+		double temp = bigY; bigY = smallY; smallY = temp;
+
+		if(mouseMovedTo.x > mousePressedAt.x)
+		{
+			double tempX = ((mousePressedAt.x - mouseMovedTo.x)/10)*panX;
+			smallX += tempX;
+			bigX += tempX;
+			//bevæger os til højre
+		}
+		else if(mouseMovedTo.x < mousePressedAt.x)
+		{
+			double tempX = ((mouseMovedTo.x - mousePressedAt.x)/10)*panX;
+			smallX -= tempX;
+			bigX -= tempX;
+			//bevæger os til venstre
+		}
+
+		if(mouseMovedTo.y > mousePressedAt.y)
+		{
+			double tempY = ((mousePressedAt.y - mouseMovedTo.y)/10)*panY;
+			smallY += tempY;
+			bigY += tempY;
+			//bevæger os ned ad
+		}
+		else if(mouseMovedTo.y < mousePressedAt.y)
+		{
+			double tempY = ((mouseMovedTo.y - mousePressedAt.y)/10)*panY;
+			smallY -= tempY;
+			bigY -= tempY;
+			//bevæger os ned ad
+		}
+		
+		try {
+			newArea = new AreaToDraw(smallX, bigX, smallY, bigY, true);
+
+		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException
+				| InvalidAreaProportionsException e1) {
+			newArea = currentArea;
+			e1.printStackTrace();
+		}	
+		mp.repaintMap(newArea);
 	}
 
 	/**
@@ -149,5 +227,16 @@ public class RectZoomer extends MouseAdapter {
 	{
 		AreaToDraw area = stack.pop();
 		mp.repaintMap(area);
+	}
+	
+	/**
+	 * Sets the cursor as a dragging hand.
+	 */
+	public void setHand(){
+		Toolkit toolkit = Toolkit.getDefaultToolkit(); 
+		Image image = toolkit.getImage("resources/draggingHand.png"); 
+		Point hotSpot = new Point(0,0);
+		Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "Dragging Hand"); 
+		MainGui.frame.setCursor(cursor);
 	}
 }

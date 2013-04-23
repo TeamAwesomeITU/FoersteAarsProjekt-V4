@@ -23,7 +23,7 @@ public class StartupCheckFiles implements Serializable {
 	private static String indexFileName = storedObjectsLocation + "index.lol";
 	private static String quadTreeFileName = storedObjectsLocation + "quadTree.lol";
 	private static String coordinatesMapFileName = storedObjectsLocation + "coordinatesMap.lol";
-	private static String edgeSetFileName = storedObjectsLocation + "edgeSet.lol";
+	private static String edgeMapFileName = storedObjectsLocation + "edgeSet.lol";
 
 	//Which XML-files to check - the index file is expected to have the XML files stored in this order
 	private static String[] xmlFilesToCheck = new String[]{xmlFilesLocation + "kdv_node_unload.xml", xmlFilesLocation + "kdv_unload_new.xml"};
@@ -99,14 +99,14 @@ public class StartupCheckFiles implements Serializable {
 
 	private static void storeCoordinatesMap()
 	{
-		HashMap<Integer, Double[]> coordinatesMap = FindRelevantEdges.getNodeCoordinatesMap();
+		HashMap<Integer, Double[]> coordinatesMap = DataHolding.getNodeCoordinatesMap();
 		storeObject(coordinatesMap, coordinatesMapFileName);		
 	}
 
 	private static void storeEdgeSet()
 	{
-		HashSet<Edge> edgeSet = FindRelevantEdges.getEdgeSet();
-		storeObject(edgeSet, edgeSetFileName);	
+		HashMap<Integer, Edge> edgeMap = DataHolding.getEdgeMap();
+		storeObject(edgeMap, edgeMapFileName);	
 	}
 
 	private static void storeObject(Object object, String fileNameAndPath)
@@ -175,7 +175,7 @@ public class StartupCheckFiles implements Serializable {
 
 	public static HashSet<Edge> getStoredEdgeSet()
 	{
-		return (HashSet<Edge>) loadFile(edgeSetFileName);	
+		return (HashSet<Edge>) loadFile(edgeMapFileName);	
 	}
 
 	private static Object loadFile(String fileName)

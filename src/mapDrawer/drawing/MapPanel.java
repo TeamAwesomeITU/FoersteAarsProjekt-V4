@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.JPanel;
@@ -19,7 +20,9 @@ import javax.swing.border.LineBorder;
 import mapDrawer.AreaToDraw;
 import mapDrawer.RoadType;
 import mapDrawer.dataSupplying.CoordinateConverter;
+import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.FindRelevantEdges;
+import mapDrawer.drawing.mutators.MapMouseZoomAndPan;
 
 @SuppressWarnings("serial")
 /**
@@ -28,7 +31,7 @@ import mapDrawer.dataSupplying.FindRelevantEdges;
  */
 public class MapPanel extends JPanel {
 
-	private RectZoomer rectZoomer;
+	private MapMouseZoomAndPan mapMouseZoomAndPan;
 	private AreaToDraw area;
 	private EdgeLine[] linesOfEdges; 
 	private double mapHeight, mapWidth;
@@ -37,16 +40,16 @@ public class MapPanel extends JPanel {
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
 	 *  
 	 * @param width - The width of the panel.
-	 * @param height - The heigth of the panel
+	 * @param height - The height of the panel
 	 */
 	public MapPanel(double width, double height) {
 		mapHeight = height;
 		mapWidth = width;
-		rectZoomer = new RectZoomer(this);
+		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
 		makeLinesForMap();
 		setBorderForPanel();
-		addMouseListener(rectZoomer);
-		addMouseMotionListener(rectZoomer);
+		addMouseListener(mapMouseZoomAndPan);
+		addMouseMotionListener(mapMouseZoomAndPan);
 		setFocusable(true);
 	}
 
@@ -61,14 +64,15 @@ public class MapPanel extends JPanel {
 		Iterator<Edge> edgeSetIterator = edgeSet.iterator();
 		linesOfEdges = new EdgeLine[edgeSet.size()];
 		CoordinateConverter coordConverter = new CoordinateConverter((int)mapWidth, (int)mapHeight, area);
+		HashMap<Integer, Double[]> nodeCoordinatesMap = DataHolding.getNodeCoordinatesMap();
 
 		int numberOfEdges = 0;
 		while(edgeSetIterator.hasNext() == true) {
-			Edge edge = edgeSetIterator.next();
+			Edge edge = edgeSetIterator.next();						
 			int fromNode = edge.getFromNode();
 			int toNode = edge.getToNode();
-			Double[] fromNodeCoords = FindRelevantEdges.getNodeCoordinatesMap().get(fromNode);
-			Double[] toNodeCoords = FindRelevantEdges.getNodeCoordinatesMap().get(toNode);
+			Double[] fromNodeCoords = nodeCoordinatesMap.get(fromNode);
+			Double[] toNodeCoords = nodeCoordinatesMap.get(toNode);
 			double drawFromCoordX = coordConverter.UTMToPixelCoordX(fromNodeCoords[0]);
 			double drawFromCoordY = coordConverter.UTMToPixelCoordY(fromNodeCoords[1]);
 			double drawToCoordX = coordConverter.UTMToPixelCoordX(toNodeCoords[0]);
@@ -76,7 +80,7 @@ public class MapPanel extends JPanel {
 
 			linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
 		}
-
+		/*
 		String file = ("resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz_convertedJCOORD.txt");
 
 		ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
@@ -125,7 +129,7 @@ public class MapPanel extends JPanel {
 			e.printStackTrace();
 
 		}
-
+*/
 	}
 
 
@@ -150,13 +154,13 @@ public class MapPanel extends JPanel {
 		}
 
 		Graphics2D g2 = (Graphics2D) g;
-		if (rectZoomer.getRect() == null) {
+		if (mapMouseZoomAndPan.getRect() == null) {
 			return; 
 		} 
-		else if (rectZoomer.isDrawing() == true) {
+		else if (mapMouseZoomAndPan.isDrawing() == true) {
 			g2.setStroke(new BasicStroke(1));
 			g2.setColor(Color.red);
-			g2.draw(rectZoomer.getRect());
+			g2.draw(mapMouseZoomAndPan.getRect());
 		} 
 	}
 	/**
