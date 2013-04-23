@@ -147,7 +147,7 @@ public class MainGui {
 							dragonBoolean = false; setMainHand();}	
 						if(e.getStateChange() == ItemEvent.SELECTED){
 							dragonBoolean = true; setMainHand(); }
-						settingsFrame.dispose();
+						updateSettingsFile();
 					}
 				});
 
@@ -334,6 +334,14 @@ public class MainGui {
 						ScreenSize.setDualScreenRight();
 				}else updateSettingsFile();
 				
+				if(fileStream.ready()){
+					String dragonSetting = fileStream.readLine().trim();
+					if(dragonSetting.equals("true"))
+						dragonBoolean = true;
+					else if(dragonSetting.equals("false"))
+						dragonBoolean = false;
+				}else updateSettingsFile();
+				
 			}
 			else
 				updateSettingsFile();
@@ -378,6 +386,11 @@ public class MainGui {
 				fileWriter.write("Dualscreenleft\n");
 			if(ScreenSize.dualScreenRight)
 				fileWriter.write("Dualscreenright\n");
+			
+			if(dragonBoolean)
+				fileWriter.write("true\n");
+			else
+				fileWriter.write("false\n");
 						
 			
 			fileWriter.close();
