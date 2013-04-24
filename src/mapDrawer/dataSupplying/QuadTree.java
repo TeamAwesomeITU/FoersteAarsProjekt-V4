@@ -171,6 +171,9 @@ public class QuadTree {
 		return foundNodeSet;
 	}
 
+	
+	
+	
 	/**
 	 * Creates a QuadTree from an XML file.
 	 * @return The created QuadTree
@@ -203,8 +206,8 @@ public class QuadTree {
 					vnNode.toElement(VTDNav.PREV_SIBLING, "KDV");		
 					KDV = vnNode.parseInt(vnNode.getText());
 
-					if(quadTree.insert(new Node(KDV, xCoord, yCoord)))
-						count++;
+					//if(quadTree.insert(new Node(KDV, xCoord, yCoord)))
+					//	count++;
 
 					vnNode.toElement(VTDNav.PARENT);
 				}
@@ -218,15 +221,17 @@ public class QuadTree {
 		return quadTree;
 	}
 	
+	
+	
 	private static QuadTree makeQuadTreeAndNodeMapFromTXT()
 	{
 
 		try {				
 			AreaToDraw area = new AreaToDraw();	
 			QuadTree quadTree = new QuadTree(area);
-			HashMap<Integer, Double[]> nodeMap = new HashMap<Integer, Double[]>();
 			
-			File file = new File("XML/kdv_node_unload.txt");
+			//File file = new File("XML/kdv_node_unload.txt");
+			File file = new File("XML/kdv_node_unload.txt_modified.txt");			
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			
 			//To skip the first line
@@ -237,11 +242,17 @@ public class QuadTree {
 			while((line = reader.readLine()) != null)
 			{
 				String[] lineParts = line.split("\\,");
-				Integer KDV = Integer.parseInt(lineParts[2]);
-				Double[] coords = new Double[]{Double.parseDouble(lineParts[3]), Double.parseDouble(lineParts[4])};				
+				Integer KDV = Integer.parseInt(lineParts[0]);
+				Double[] coords = new Double[]{Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2])};	
 				
-				quadTree.insert(new Node(KDV, coords[0], coords[1]));
-				nodeMap.put(KDV, coords);
+				//Edge ID's is pulled out
+				String[] edgeIDsAsStrings = lineParts[3].split("\\s+");
+				int[] edgeIDs = new int[edgeIDsAsStrings.length];				
+				for (int i = 0; i < edgeIDsAsStrings.length; i++) {
+					edgeIDs[i] = Integer.parseInt(edgeIDsAsStrings[i]);
+				}
+								
+				quadTree.insert(new Node(KDV, coords[0], coords[1], edgeIDs));
 			}
 				
 			reader.close();
@@ -287,53 +298,6 @@ public class QuadTree {
 		initializeQuadTree();
 		return qTree;
 	}
-
-	public static void main(String[] args) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException
-	{	
-		AreaToDraw area = new AreaToDraw();
-				
-		long startTime = System.currentTimeMillis();
-		HashSet<Node> nodeSet = QuadTree.searchAreaForNodes(area);
-		long endTime = System.currentTimeMillis();
-		System.out.println("Size of retrieved HashSet<Node>: " + nodeSet.size());
-		System.out.println("At retrieve alle nodes fra QuadTree tager " + (endTime - startTime) + " milliseconds");
-		
-		long startTime2 = System.currentTimeMillis();
-		nodeSet = QuadTree.searchAreaForNodes(area);
-		long endTime2 = System.currentTimeMillis();
-		System.out.println("Size of retrieved HashSet<Node>: " + nodeSet.size());
-		System.out.println("At retrieve alle nodes fra QuadTree tager " + (endTime2 - startTime2) + " milliseconds");
-		
-		long startTime3 = System.currentTimeMillis();
-		nodeSet = QuadTree.searchAreaForNodes(area);
-		long endTime3 = System.currentTimeMillis();
-		System.out.println("Size of retrieved HashSet<Node>: " + nodeSet.size());
-		System.out.println("At retrieve alle nodes fra QuadTree tager " + (endTime3 - startTime3) + " milliseconds");
-		
-		long startTime4 = System.currentTimeMillis();
-		nodeSet = QuadTree.searchAreaForNodes(area);
-		long endTime4 = System.currentTimeMillis();
-		System.out.println("Size of retrieved HashSet<Node>: " + nodeSet.size());
-		System.out.println("At retrieve alle nodes fra QuadTree tager " + (endTime4 - startTime4) + " milliseconds");
-		
-		double maxXHalf = (area.getWidth()/2) + area.getSmallestX();
-		long startTime5 = System.currentTimeMillis();
-		nodeSet = QuadTree.searchAreaForNodes(new AreaToDraw(maxXHalf, area.getLargestX(), area.getSmallestY(), area.getLargestY(), false));
-		long endTime5 = System.currentTimeMillis();
-		System.out.println("Size of retrieved HashSet<Node>: " + nodeSet.size());
-		System.out.println("At retrieve 1/2 af kortets nodes fra QuadTree tager " + (endTime5 - startTime5) + " milliseconds");
-		
-		
-		double maxYQuarter = (area.getHeight()/2) + area.getSmallestY();		
-				
-		long startTime6 = System.currentTimeMillis();
-		nodeSet = QuadTree.searchAreaForNodes(new AreaToDraw(area.getSmallestX(), maxXHalf, area.getSmallestY(), maxYQuarter, false));
-		long endTime6 = System.currentTimeMillis();
-		System.out.println("Size of retrieved HashSet<Node>: " + nodeSet.size());
-		System.out.println("At retrieve 1/4 af kortets nodes fra QuadTree tager " + (endTime6 - startTime6) + " milliseconds");
-		
-		
-	}
 	
 	private static void initializeQuadTree()
 	{
@@ -343,8 +307,6 @@ public class QuadTree {
 		else
 			return;
 	}
-	
-
 	
 	public static class QuadTreeCreation implements Runnable {
 		

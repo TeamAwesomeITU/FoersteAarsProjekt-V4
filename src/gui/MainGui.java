@@ -25,6 +25,10 @@ public class MainGui {
 	public static boolean coordinatesBoolean = false;
 	
 	public static boolean menuBoolean = false;
+	
+	public static boolean isDefaultCursor;
+	
+	public static boolean dragonBoolean = false;
 
 	public static JFrame frame;
 
@@ -65,7 +69,7 @@ public class MainGui {
 	}
 
 	/**
-	 * The frame is maded and the contentpane is initialized
+	 * The frame is made and the contentpane is initialized
 	 */
 	public static void makeFrameAndContentPane(){
 		frame = new JFrame("Team Awesome Maps");
@@ -132,6 +136,20 @@ public class MainGui {
 						}
 						updateSettingsFile();
 					}});
+				
+				final ColoredJCheckBox dragon = new ColoredJCheckBox("Dragon");
+				dragon.setSelected(dragonBoolean);
+				dragon.addItemListener(new ItemListener() 
+				{
+					public void itemStateChanged(ItemEvent e) 
+					{
+						if(e.getStateChange() == ItemEvent.DESELECTED){
+							dragonBoolean = false; setMainHand();}	
+						if(e.getStateChange() == ItemEvent.SELECTED){
+							dragonBoolean = true; setMainHand(); }
+						updateSettingsFile();
+					}
+				});
 
 				final ColoredJCheckBox coordinates = new ColoredJCheckBox("Coordinates");
 				coordinates.setSelected(coordinatesBoolean);
@@ -207,6 +225,7 @@ public class MainGui {
 
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);
+				settingsPanel.add(dragon);
 				settingsFrame.pack();
 				settingsFrame.setLocationRelativeTo(null);	
 				settingsFrame.setVisible(true);
@@ -315,6 +334,14 @@ public class MainGui {
 						ScreenSize.setDualScreenRight();
 				}else updateSettingsFile();
 				
+				if(fileStream.ready()){
+					String dragonSetting = fileStream.readLine().trim();
+					if(dragonSetting.equals("true"))
+						dragonBoolean = true;
+					else if(dragonSetting.equals("false"))
+						dragonBoolean = false;
+				}else updateSettingsFile();
+				
 			}
 			else
 				updateSettingsFile();
@@ -360,6 +387,12 @@ public class MainGui {
 			if(ScreenSize.dualScreenRight)
 				fileWriter.write("Dualscreenright\n");
 			
+			if(dragonBoolean)
+				fileWriter.write("true\n");
+			else
+				fileWriter.write("false\n");
+						
+			
 			fileWriter.close();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(frame, "Could not find config file. Setting defualt settings");
@@ -393,5 +426,19 @@ public class MainGui {
 					| IllegalAccessException | UnsupportedLookAndFeelException e) {
 				JOptionPane.showMessageDialog(frame, "Something went wrong setting up the program, please contact TeamAwesome.");
 			}
+	}
+	
+	/**
+	 * Defines the cursor as the dragon cursor or as the default cursor.
+	 */
+	public static void setMainHand(){
+		if(dragonBoolean == false)
+		 frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		else { Toolkit toolkit = Toolkit.getDefaultToolkit(); 
+		Image image = toolkit.getImage("resources/dragon.png"); 
+		Point hotSpot = new Point(0,0);
+		Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "Dragon"); 
+		frame.setCursor(cursor);
+		}
 	}
 }

@@ -6,11 +6,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.JPanel;
@@ -18,8 +20,11 @@ import javax.swing.border.LineBorder;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.RoadType;
+import mapDrawer.dataSupplying.CoastLineMaker;
 import mapDrawer.dataSupplying.CoordinateConverter;
+import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.FindRelevantEdges;
+import mapDrawer.drawing.mutators.MapMouseZoomAndPan;
 
 @SuppressWarnings("serial")
 /**
@@ -28,25 +33,28 @@ import mapDrawer.dataSupplying.FindRelevantEdges;
  */
 public class MapPanel extends JPanel {
 
-	private RectZoomer rectZoomer;
+	private MapMouseZoomAndPan mapMouseZoomAndPan;
 	private AreaToDraw area;
-	private EdgeLine[] linesOfEdges; 
+	private HashSet<Edge> edgesToDraw; 
+	private GeneralPath[] coastLineToDraw;
+	private CoordinateConverter coordConverter;
 	private double mapHeight, mapWidth;
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
 	 *  
 	 * @param width - The width of the panel.
-	 * @param height - The heigth of the panel
+	 * @param height - The height of the panel
 	 */
 	public MapPanel(double width, double height) {
 		mapHeight = height;
 		mapWidth = width;
-		rectZoomer = new RectZoomer(this);
+		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
 		makeLinesForMap();
+		makeCoastLineForMap();
 		setBorderForPanel();
-		addMouseListener(rectZoomer);
-		addMouseMotionListener(rectZoomer);
+		addMouseListener(mapMouseZoomAndPan);
+		addMouseMotionListener(mapMouseZoomAndPan);
 		setFocusable(true);
 	}
 
@@ -57,26 +65,10 @@ public class MapPanel extends JPanel {
 	private void makeLinesForMap() {
 		if(area == null)
 			area = new AreaToDraw();
-		HashSet<Edge> edgeSet = FindRelevantEdges.findEdgesToDraw(area);
-		Iterator<Edge> edgeSetIterator = edgeSet.iterator();
-		linesOfEdges = new EdgeLine[edgeSet.size()];
-		CoordinateConverter coordConverter = new CoordinateConverter((int)mapWidth, (int)mapHeight, area);
+		edgesToDraw = FindRelevantEdges.findEdgesToDraw(area);
+		coordConverter = new CoordinateConverter((int)mapWidth, (int)mapHeight, area);
 
-		int numberOfEdges = 0;
-		while(edgeSetIterator.hasNext() == true) {
-			Edge edge = edgeSetIterator.next();
-			int fromNode = edge.getFromNode();
-			int toNode = edge.getToNode();
-			Double[] fromNodeCoords = FindRelevantEdges.getNodeCoordinatesMap().get(fromNode);
-			Double[] toNodeCoords = FindRelevantEdges.getNodeCoordinatesMap().get(toNode);
-			double drawFromCoordX = coordConverter.UTMToPixelCoordX(fromNodeCoords[0]);
-			double drawFromCoordY = coordConverter.UTMToPixelCoordY(fromNodeCoords[1]);
-			double drawToCoordX = coordConverter.UTMToPixelCoordX(toNodeCoords[0]);
-			double drawToCoordY = coordConverter.UTMToPixelCoordY(toNodeCoords[1]);
-
-			linesOfEdges[numberOfEdges++] = new EdgeLine(drawFromCoordX, drawFromCoordY, drawToCoordX, drawToCoordY, edge.getRoadType());
-		}
-
+		/*
 		String file = ("resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz_convertedJCOORD.txt");
 
 		ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
@@ -108,16 +100,16 @@ public class MapPanel extends JPanel {
 				line1 = reader.readLine();
 			}
 
-			EdgeLine[] newLinesOfEdges = new EdgeLine[linesOfEdges.length + list.size()];
+			EdgeLine[] newLinesOfEdges = new EdgeLine[edgesToDraw.length + list.size()];
 			for(int i = 0; i < newLinesOfEdges.length; i++)
 			{
-				if(i < linesOfEdges.length)
-					newLinesOfEdges[i] = linesOfEdges[i];
+				if(i < edgesToDraw.length)
+					newLinesOfEdges[i] = edgesToDraw[i];
 				else
-					newLinesOfEdges[i] = list.get(i-linesOfEdges.length);
+					newLinesOfEdges[i] = list.get(i-edgesToDraw.length);
 			}
 
-			linesOfEdges = newLinesOfEdges;
+			edgesToDraw = newLinesOfEdges;
 
 			reader.close();
 
@@ -125,11 +117,14 @@ public class MapPanel extends JPanel {
 			e.printStackTrace();
 
 		}
-
+*/
 	}
-
-
-	private Line2D line = new Line2D.Double();
+	
+	private void makeCoastLineForMap()
+	{
+		coastLineToDraw = CoastLineMaker.getCoastLineToDraw((int)mapWidth, (int)mapHeight, area);
+	}
+	
 	/**
 	 * Draws all the lines for the map. Also, draws the rectangle used by the user
 	 * to see where you are about to zoom.
@@ -137,28 +132,31 @@ public class MapPanel extends JPanel {
 	 */
 	public void paint(Graphics g) {
 		super.paint(g);
-		for (EdgeLine edgeLine : linesOfEdges) {
-			line.setLine(edgeLine.getStartX(), edgeLine.getStartY(), edgeLine.getEndX(), edgeLine.getEndY());
-			int roadType = edgeLine.getRoadType();
-			g.setColor(RoadType.getColor(roadType));
-			((Graphics2D)g).setRenderingHint(
-					RenderingHints.KEY_ANTIALIASING, 
-					RenderingHints.VALUE_ANTIALIAS_ON);
-			((Graphics2D)g).setStroke(new BasicStroke(RoadType.getStroke(roadType)));
-			((Graphics2D)g).draw(line); 
+		Graphics2D g2 = (Graphics2D) g;
+		Line2D line = new Line2D.Double();
+		for (Edge edge : edgesToDraw) {
+			line.setLine(edge.getLine2DToDraw(coordConverter));
+			int roadType = edge.getRoadType();
+						
+			g2.setColor(RoadType.getColor(roadType));
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
+			g2.draw(line); 
 			setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
 		}
+		
+		//HER SKAL COASTLINE TEGNES
 
-		Graphics2D g2 = (Graphics2D) g;
-		if (rectZoomer.getRect() == null) {
+		if (mapMouseZoomAndPan.getRect() == null) {
 			return; 
 		} 
-		else if (rectZoomer.isDrawing() == true) {
+		else if (mapMouseZoomAndPan.isDrawing() == true) {
 			g2.setStroke(new BasicStroke(1));
 			g2.setColor(Color.red);
-			g2.draw(rectZoomer.getRect());
+			g2.draw(mapMouseZoomAndPan.getRect());
 		} 
 	}
+	
 	/**
 	 * Repaints the map to the new AreaToDraw.
 	 */

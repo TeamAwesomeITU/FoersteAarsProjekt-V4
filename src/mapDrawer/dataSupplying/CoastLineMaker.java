@@ -18,7 +18,7 @@ import mapDrawer.exceptions.NegativeAreaSizeException;
 public class CoastLineMaker {
 
 	//A HashSet of all of the coast line polygons in Denmark
-	private static HashSet<Polygon> polygonSet = createPolygonSet("resources/coasts_polygon.txt_convertedJCOORD.txt");
+	private static HashSet<Polygon> polygonSet = createPolygonSet("resources/coast_polygon_orig.dat_convertedJCOORD.txt");
 
 	/**
 	 * Generates an array of GeneralPaths which represents the coast line of Denmark within the specified AreaToDraw.

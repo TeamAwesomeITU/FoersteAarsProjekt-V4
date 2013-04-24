@@ -13,13 +13,15 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
+import org.omg.PortableServer.POAPackage.WrongAdapter;
+
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
-import mapDrawer.drawing.MapComponentAdapter;
-import mapDrawer.drawing.MapKeyBinding;
-import mapDrawer.drawing.MapMouseWheelZoom;
 import mapDrawer.drawing.MapPanel;
+import mapDrawer.drawing.mutators.MapPanelResize;
+import mapDrawer.drawing.mutators.MapKeyPan;
+import mapDrawer.drawing.mutators.MapMouseWheelZoom;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -50,7 +52,7 @@ public class MapWindow {
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		MainGui.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainGui.frame.pack();
-		MapComponentAdapter mcp = new MapComponentAdapter(this);
+		MapPanelResize mcp = new MapPanelResize(this);
 		MainGui.frame.addComponentListener(mcp);
 	}
 
@@ -170,7 +172,7 @@ public class MapWindow {
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
-		MapKeyBinding.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
+		MapKeyPan.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
 
 		centerColoredJPanel.add(mapPanel);
 		MainGui.contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
@@ -181,7 +183,7 @@ public class MapWindow {
 	 */
 	private double heightForMap() {
 		double height = MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
-		if(height <= Math.round(MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
+		if(height < Math.round(MainGui.frame.getHeight()*0.968 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
 			return  height;
 		else 
 			return heightForMap(height);
@@ -189,7 +191,7 @@ public class MapWindow {
 
 	private double heightForMap(double temporaryHeight) {
 		double height = temporaryHeight*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
-		if(height <= Math.round(MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
+		if(height < Math.round(MainGui.frame.getHeight()*0.968 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
 			return  height;
 		else 
 			return heightForMap(height);
@@ -208,10 +210,10 @@ public class MapWindow {
 	private double widthForMap() {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = heightForMap()*areaToDraw.getWidthHeightRelation();
-		if(width <= Math.round(MainGui.frame.getWidth()*0.99 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+		if(width < Math.round(MainGui.frame.getWidth()*0.98 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
 			return  width;
 		else 
-			return widthForMap(heightForMap()*0.99);
+			return widthForMap(heightForMap()*0.98);
 	}
 	/**
 	 * is the recursive method called by the widthForMap without input parameters. If the new width is too big,
@@ -222,10 +224,10 @@ public class MapWindow {
 	private double widthForMap(double height) {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = Math.round(height*areaToDraw.getWidthHeightRelation());
-		if(width <= Math.round(MainGui.frame.getWidth()*0.99 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+		if(width < Math.round(MainGui.frame.getWidth()*0.978 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
 			return width;
 		else 
-			return widthForMap(height*0.99);
+			return widthForMap(height*0.98);
 	}
 	/**
 	 * @return the width for the map
