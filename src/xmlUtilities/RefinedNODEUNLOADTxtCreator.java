@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 
 public class RefinedNODEUNLOADTxtCreator {
@@ -20,17 +19,17 @@ public class RefinedNODEUNLOADTxtCreator {
 		//THE NUMBER OF NODES
 		int numberOfNodes = 675902;
 
-		ArrayList<HashSet<Integer>> hashSetsList = readEdgeReferences(numberOfNodes);
-		writeEdgeRefsToTXT(hashSetsList);
+		ArrayList<ArrayList<Integer>> edgeRefsLists = readEdgeReferences(numberOfNodes);
+		writeEdgeRefsToTXT(edgeRefsLists);
 	}
 
 
-	private static ArrayList<HashSet<Integer>> readEdgeReferences(int numberOfNodes)
+	private static ArrayList<ArrayList<Integer>> readEdgeReferences(int numberOfNodes)
 	{
-		ArrayList<HashSet<Integer>> hashSetsList = new ArrayList<HashSet<Integer>>(numberOfNodes);
+		ArrayList<ArrayList<Integer>> edgeRefsLists = new ArrayList<ArrayList<Integer>>(numberOfNodes);
 		
 		for (int i = 0; i < numberOfNodes; i++) {
-			hashSetsList.add(i, new HashSet<Integer>());
+			edgeRefsLists.add(i, new ArrayList<Integer>());
 		}
 		
 		try {				
@@ -50,14 +49,14 @@ public class RefinedNODEUNLOADTxtCreator {
 				int edgeID = Integer.parseInt(lineParts[4]);
 				
 				//-1 to compensate for the fact that an array's index starts at 0!
-				hashSetsList.get(nodeFrom-1).add(edgeID);
-				hashSetsList.get(nodeTo-1).add(edgeID);
+				edgeRefsLists.get(nodeFrom-1).add(edgeID);
+				edgeRefsLists.get(nodeTo-1).add(edgeID);
 			}
 			
-			System.out.println("Node 1 has this road: " + hashSetsList.get(0).iterator().next());
+			System.out.println("Node 1 has this road: " + edgeRefsLists.get(0).iterator().next());
 
 			reader.close();			
-			return hashSetsList;
+			return edgeRefsLists;
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -66,7 +65,7 @@ public class RefinedNODEUNLOADTxtCreator {
 		}
 	}
 	
-	private static void writeEdgeRefsToTXT(ArrayList<HashSet<Integer>> hashSetsList)
+	private static void writeEdgeRefsToTXT(ArrayList<ArrayList<Integer>> edgeRefsLists)
 	{
 	    try {
 	    	File file = new File(nodeFileName);
@@ -89,7 +88,7 @@ public class RefinedNODEUNLOADTxtCreator {
 				//Leaves out the unnecessary information in the original file
 				String stringToAdd = lineParts[2] + "," + lineParts[3] + "," + lineParts[4] + ",";
 				
-				Iterator<Integer> iterator = hashSetsList.get(nodeID-1).iterator();
+				Iterator<Integer> iterator = edgeRefsLists.get(nodeID-1).iterator();
 				while(iterator.hasNext())
 					stringToAdd += iterator.next() + " "; 
 				

@@ -1,6 +1,6 @@
 package mapDrawer.dataSupplying;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -17,7 +17,7 @@ public class FindRelevantEdges {
 	 * Finds all Edges, which are connected to a node in the specified AreaToDraw
 	 * @return A HashSet of all Edges, which are connected to a node in the specified AreaToDraw
 	 */
-	public static HashSet<Edge> findEdgesToDraw(AreaToDraw area)
+	public static ArrayList<Edge> findEdgesToDraw(AreaToDraw area)
 	{
 		return findEdges(area);
 	}
@@ -26,13 +26,13 @@ public class FindRelevantEdges {
 	/**
 	 * This method finds the Edges, that is found inside the input area.
 	 * @param area Current area the user are viewing on the map.
-	 * @return A HashSet of the Edges, that is found inside the input area and belongs to a Node in the nodeSet.
+	 * @return A HashSet of the Edges, that is found inside the input area and belongs to a Node in the nodeList.
 	 */
-	private static HashSet<Edge> findEdges(AreaToDraw area)
+	private static ArrayList<Edge> findEdges(AreaToDraw area)
 	{		
-		HashSet<Node> nodeSet = QuadTree.searchAreaForNodes(area);
-		Iterator<Node> iterator = nodeSet.iterator();
-		HashSet<Edge> foundEdgesSet = new HashSet<Edge>();
+		ArrayList<Node> nodeList = QuadTree.searchAreaForNodes(area);
+		Iterator<Node> iterator = nodeList.iterator();
+		ArrayList<Edge> foundEdgesSet = new ArrayList<Edge>();
 
 		HashSet<Integer> zoomLevel = ZoomLevel.getlevel(area.getPercentageOfEntireMap());
 

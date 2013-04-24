@@ -3,11 +3,12 @@ package xmlUtilities;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
+
+import mapDrawer.drawing.Edge;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -15,9 +16,6 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
-
-import mapDrawer.dataSupplying.Node;
-import mapDrawer.drawing.Edge;
 
 public class nodeTxt {
 

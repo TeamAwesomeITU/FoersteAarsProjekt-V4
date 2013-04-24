@@ -8,20 +8,19 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
-import java.util.HashSet;
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-
-import routing.DijkstraSP;
-import routing.EdgeWeightedDigraph;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.RoadType;
 import mapDrawer.dataSupplying.CoastLineMaker;
 import mapDrawer.dataSupplying.CoordinateConverter;
-import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.FindRelevantEdges;
 import mapDrawer.drawing.mutators.MapMouseZoomAndPan;
+import routing.DijkstraSP;
+import routing.EdgeWeightedDigraph;
 
 @SuppressWarnings("serial")
 /**
@@ -32,7 +31,7 @@ public class MapPanel extends JPanel {
 
 	private MapMouseZoomAndPan mapMouseZoomAndPan;
 	private AreaToDraw area;
-	private HashSet<Edge> edgesToDraw; 
+	private ArrayList<Edge> edgesToDraw; 
 	private GeneralPath[] coastLineToDraw;
 	private CoordinateConverter coordConverter;
 	private double mapHeight, mapWidth;
@@ -53,7 +52,7 @@ public class MapPanel extends JPanel {
 		addMouseListener(mapMouseZoomAndPan);
 		addMouseMotionListener(mapMouseZoomAndPan);
 		setFocusable(true);
-		markOgKasperTester();
+		//markOgKasperTester();
 	}
 
 	

@@ -3,7 +3,11 @@ package gui;
 import inputHandler.AdressParser;
 import inputHandler.exceptions.MalformedAdressException;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -11,17 +15,23 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*;
-
-import org.omg.PortableServer.POAPackage.WrongAdapter;
-
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.drawing.MapPanel;
-import mapDrawer.drawing.mutators.MapPanelResize;
 import mapDrawer.drawing.mutators.MapKeyPan;
 import mapDrawer.drawing.mutators.MapMouseWheelZoom;
+import mapDrawer.drawing.mutators.MapPanelResize;
 /**
  * This class holds the window with the map of denmark.
  */

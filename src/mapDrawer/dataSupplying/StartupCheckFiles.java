@@ -169,14 +169,14 @@ public class StartupCheckFiles implements Serializable {
 		return (QuadTree) loadFile(quadTreeFileName);	
 	}
 
-	public static HashMap<Integer, Double[]> getStoredCoordinatesMap()
+	public static Node[] getStoredNodeArray()
 	{
-		return (HashMap<Integer, Double[]>) loadFile(nodeArrayFileName);		
+		return (Node[]) loadFile(nodeArrayFileName);		
 	}	
 
-	public static HashSet<Edge> getStoredEdgeSet()
+	public static Edge[] getStoredEdgeArray()
 	{
-		return (HashSet<Edge>) loadFile(edgeArrayFileName);	
+		return (Edge[]) loadFile(edgeArrayFileName);	
 	}
 
 	private static Object loadFile(String fileName)

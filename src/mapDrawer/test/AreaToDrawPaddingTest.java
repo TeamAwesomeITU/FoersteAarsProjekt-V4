@@ -1,7 +1,7 @@
 package mapDrawer.test;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import mapDrawer.AreaToDraw;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.InvalidAreaProportionsException;

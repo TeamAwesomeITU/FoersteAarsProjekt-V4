@@ -1,7 +1,5 @@
 package routing.data;
 
-import mapDrawer.drawing.Edge;
-
 import com.ximpleware.AutoPilot;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;

@@ -1,7 +1,15 @@
 package gui;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 @SuppressWarnings({ "serial", "rawtypes" })
 public class ComboBoxRenderer extends JLabel implements ListCellRenderer {
 	private JLabel labelItem = new JLabel();

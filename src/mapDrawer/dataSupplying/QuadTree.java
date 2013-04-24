@@ -2,21 +2,15 @@ package mapDrawer.dataSupplying;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-
-import com.ximpleware.AutoPilot;
-import com.ximpleware.VTDException;
-import com.ximpleware.VTDGen;
-import com.ximpleware.VTDNav;
+import java.util.ArrayList;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
-import mapDrawer.exceptions.NegativeAreaSizeException;
 import mapDrawer.exceptions.InvalidAreaProportionsException;
+import mapDrawer.exceptions.NegativeAreaSizeException;
+
 
 /**
  *  A QuadTree containing up to four Nodes, and if more Nodes are added, the QuadTree is split into four QuadTrees, each having a quarter of the original QuadTree's area, and the Node is inserted in one of them.
@@ -114,9 +108,9 @@ public class QuadTree {
 	 * @param area The area to search for Nodes.
 	 * @return A HashSet of all Nodes found within the specified area.
 	 */
-	private HashSet<Node> search(AreaToDraw area)
+	private ArrayList<Node> search(AreaToDraw area)
 	{
-		HashSet<Node> foundNodeSet= new HashSet<Node>();
+		ArrayList<Node> foundNodeSet= new ArrayList<Node>();
 
 		if(!area.isAreaIntersectingWithArea(this.area))
 			return foundNodeSet; //Returns an empty set
@@ -145,9 +139,9 @@ public class QuadTree {
 	 * @param area The area to search for Nodes.
 	 * @return A HashSet of the ID's of all Nodes found within the specified area.
 	 */
-	private HashSet<Integer> searchForNodeIDs(AreaToDraw area)
+	private ArrayList<Integer> searchForNodeIDs(AreaToDraw area)
 	{
-		HashSet<Integer> foundNodeSet= new HashSet<Integer>();
+		ArrayList<Integer> foundNodeSet= new ArrayList<Integer>();
 
 		if(!area.isAreaIntersectingWithArea(this.area))
 			return foundNodeSet; //Returns an empty set
@@ -169,59 +163,7 @@ public class QuadTree {
 		foundNodeSet.addAll(southEastNode.searchForNodeIDs(area));
 
 		return foundNodeSet;
-	}
-
-	
-	
-	
-	/**
-	 * Creates a QuadTree from an XML file.
-	 * @return The created QuadTree
-	 */
-	private static QuadTree makeQuadTreeFromXML()
-	{
-		AreaToDraw area = new AreaToDraw();
-		
-		QuadTree quadTree = new QuadTree(area);
-
-		long startTime = System.currentTimeMillis();
-		try {
-			VTDGen vgNode = new VTDGen();
-			
-			if(vgNode.parseFile("XML/kdv_node_unload.xml", false)) {
-				VTDNav vnNode = vgNode.getNav();
-				AutoPilot apNode = new AutoPilot(vnNode);
-
-				double yCoord = 0.0; double xCoord = 0.0; int KDV = 0;
-				apNode.selectXPath("//nodeCollection/node");
-
-				int count = 0;
-				while (apNode.evalXPath() != -1) {
-					vnNode.toElement(VTDNav.FIRST_CHILD, "Y-COORD"); 
-					yCoord = vnNode.parseDouble(vnNode.getText());
-
-					vnNode.toElement(VTDNav.PREV_SIBLING, "X-COORD"); 
-					xCoord = vnNode.parseDouble(vnNode.getText());
-
-					vnNode.toElement(VTDNav.PREV_SIBLING, "KDV");		
-					KDV = vnNode.parseInt(vnNode.getText());
-
-					//if(quadTree.insert(new Node(KDV, xCoord, yCoord)))
-					//	count++;
-
-					vnNode.toElement(VTDNav.PARENT);
-				}
-				System.out.println("Total# of element in large QuadTree: " + count);
-			}
-		} catch (VTDException e){
-			e.printStackTrace();
-		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("QuadTree creation tager " + (endTime - startTime) + " milliseconds");
-		return quadTree;
-	}
-	
-	
+	}	
 	
 	private static QuadTree makeQuadTreeAndNodeMapFromTXT()
 	{
@@ -274,9 +216,9 @@ public class QuadTree {
 	 * @param area The area to search for Nodes.
 	 * @return A HashSet of all Nodes found within the specified area.
 	 */
-	public static HashSet<Node> searchAreaForNodes(AreaToDraw area)
+	public static ArrayList<Node> searchAreaForNodes(AreaToDraw area)
 	{
-		return getEntireQuadTree().search(area);
+		return qTree.search(area);
 	}
 	
 	/**
@@ -284,7 +226,7 @@ public class QuadTree {
 	 * @param area The area to search for Nodes.
 	 * @return A HashSet of the ID's of all Nodes found within the specified area.
 	 */
-	public static HashSet<Integer> searchAreaForNodeIDs(AreaToDraw area)
+	public static ArrayList<Integer> searchAreaForNodeIDs(AreaToDraw area)
 	{
 		return getEntireQuadTree().searchForNodeIDs(area);
 	}

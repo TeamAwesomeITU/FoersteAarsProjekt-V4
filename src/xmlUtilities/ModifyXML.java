@@ -1,8 +1,11 @@
 package xmlUtilities;
 
-import com.ximpleware.*;
+import java.io.FileOutputStream;
 
-import java.io.*;
+import com.ximpleware.AutoPilot;
+import com.ximpleware.VTDGen;
+import com.ximpleware.VTDNav;
+import com.ximpleware.XMLModifier;
 
 public class ModifyXML { 
 	public static void main(String[] s) throws Exception{

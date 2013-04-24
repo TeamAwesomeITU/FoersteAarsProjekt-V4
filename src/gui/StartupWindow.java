@@ -58,17 +58,15 @@ public class StartupWindow{
     		Thread t3 = new Thread(new DataHolding.NodeMapCreation(),"Thread3");
 
             t1.start();
-            t1.join();
             t2.start();
-            t2.join();
 			t3.start();		
 			t3.join();
 			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
 		*/
+		
 		
 		new MapWindow();
 	}

@@ -2,9 +2,8 @@ package mapDrawer.drawing;
 
 import java.awt.geom.Line2D;
 
-import java_cup.internal_error;
-
 import mapDrawer.RoadType;
+import mapDrawer.dataSupplying.City;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.Node;
@@ -25,6 +24,9 @@ public class Edge {
 	
 	//The roadType of the Edge
 	private final int roadType;
+	
+	//The roadTypeCategory of the Edge
+	private final int roadTypeCategory;
 	
 	//The roadName of the Edge
 	private final String roadName;
@@ -103,6 +105,7 @@ public class Edge {
 		this.tjekID = tjekID;
 		this.fromTurn = fromTurn;
 		this.toTurn = toTurn;
+		roadTypeCategory = RoadType.getCategory(roadType);
 	}
 
 	/**
@@ -216,6 +219,20 @@ public class Edge {
 	public int getPostalNumberRight() {
 		return postalNumberRight;
 	}
+	
+	/**
+	 * @return the postalNumberLeft of the Edge
+	 */
+	public String getPostalNumberLeftCityName() {
+		return City.getCityNameByPostalNumber(postalNumberLeft);
+	}
+
+	/**
+	 * @return the postalNumberRight of the Edge
+	 */
+	public String getPostalNumberRightCityName() {
+		return City.getCityNameByPostalNumber(postalNumberRight);
+	}
 
 	/**
 	 * @return the highWayTurnoff of the Edge
@@ -261,6 +278,15 @@ public class Edge {
 	
 	/**
 	 * 
+	 * @return the category of which the Edge's road type belong to
+	 */
+	public int getRoadTypeCategory()
+	{
+		return roadTypeCategory;
+	}
+	
+	/**
+	 * 
 	 * @param coordconverter The CoordConverter with which the coordinates should be converted
 	 * @return A Line2D representation of the Edge
 	 */
@@ -272,8 +298,5 @@ public class Edge {
 		return new Line2D.Double(coordconverter.UTMToPixelCoordX(fromNode.getXCoord()), coordconverter.UTMToPixelCoordY(fromNode.getYCoord()), coordconverter.UTMToPixelCoordX(toNode.getXCoord()), coordconverter.UTMToPixelCoordY(toNode.getYCoord()));
 	}
 	
-	public int getRoadTypeCategory()
-	{
-		return RoadType.getCategory(this.roadType);
-	}
+
 }

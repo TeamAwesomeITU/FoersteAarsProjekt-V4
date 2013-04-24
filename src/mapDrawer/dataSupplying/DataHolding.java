@@ -4,20 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
 
-import routing.EdgeWeightedDigraph;
-
-import com.ximpleware.AutoPilot;
-import com.ximpleware.NavException;
-import com.ximpleware.VTDGen;
-import com.ximpleware.VTDNav;
-import com.ximpleware.XPathEvalException;
-import com.ximpleware.XPathParseException;
-
-import mapDrawer.RoadType;
 import mapDrawer.drawing.Edge;
+import routing.EdgeWeightedDigraph;
 
 
 public class DataHolding {
@@ -30,7 +19,9 @@ public class DataHolding {
 	private static Node[] nodeArray;
 	/*A set of all edges. When at 100% zoom all edges from this are drawn. When closer less are drawn.
 	This is made at startup so the program can access it at will. */
-	private static Edge[] allEdgesArray;
+	private static Edge[] allEdgesByIDArray;
+	
+	private static Edge[] edgesByName;
 
 	private static EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numberOfNodes);
 
@@ -65,7 +56,8 @@ public class DataHolding {
 				length = Double.parseDouble(lineParts[2]);
 				edgeID = Integer.parseInt(lineParts[3]);
 				roadType = Integer.parseInt(lineParts[4]);
-				roadName = lineParts[5]; 
+				//If the roadName is 0, make it an empty string instead
+				roadName = (lineParts[5].equals("0") ? "" : lineParts[5]);
 				fromLeftNumber = Integer.parseInt(lineParts[6]);
 				toLeftNumber = Integer.parseInt(lineParts[7]);
 				fromRightNumber = Integer.parseInt(lineParts[8]);
@@ -89,11 +81,12 @@ public class DataHolding {
 				edgeArray[edgeID-1] = new Edge(fromNode, toNode, length, edgeID, roadType, roadName, fromLeftNumber, toLeftNumber,
 						fromRightNumber, toRightNumber, fromLeftLetter, toLeftLetter, fromRightLetter, toRightLetter,
 						postalNumberLeft, postalNumberRight, highWayTurnoff, driveTime, oneWay, tjekID, fromTurn, toTurn);
-						
+				
 			}
 			long endTime = System.currentTimeMillis();
 			System.out.println(endTime-startTime);
-			reader.close();			
+			reader.close();		
+						
 			return edgeArray;
 
 		} catch (IOException e) {
@@ -151,7 +144,7 @@ public class DataHolding {
 			return null;
 		}		
 	}
-
+	
 	/**
 	 * Gets a HashMap of all of the entire map's Nodes - the Node ID is the key, the value is the Node
 	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are x-/y- coordinates
@@ -169,7 +162,7 @@ public class DataHolding {
 	public static Edge[] getEdgeArray()
 	{
 		initializeEdgeArray();
-		return allEdgesArray;
+		return allEdgesByIDArray;
 	}
 
 	/**
@@ -186,7 +179,7 @@ public class DataHolding {
 	 * @return The Edge with the input ID
 	 */
 	public static Edge getEdge(int edgeID)
-	{ return allEdgesArray[edgeID-1]; }
+	{ return allEdgesByIDArray[edgeID-1]; }
 
 	private static void initializeNodeArray()
 	{
@@ -196,18 +189,10 @@ public class DataHolding {
 			return;
 	}
 
-	public static void initializeNodeArray(HashMap<Integer, Double[]> nodeArray ) 
-	{
-		if(nodeArray == null)
-			nodeArray = nodeArray;
-		else
-			return;
-	}
-
 	private static void initializeEdgeArray()
 	{
-		if(allEdgesArray == null)
-			allEdgesArray = makeEdgeArrayFromTXT();
+		if(allEdgesByIDArray == null)
+			allEdgesByIDArray = makeEdgeArrayFromTXT();
 		else
 			return;
 	}

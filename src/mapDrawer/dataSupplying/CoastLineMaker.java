@@ -4,6 +4,7 @@ import java.awt.geom.GeneralPath;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -18,7 +19,7 @@ import mapDrawer.exceptions.NegativeAreaSizeException;
 public class CoastLineMaker {
 
 	//A HashSet of all of the coast line polygons in Denmark
-	private static HashSet<Polygon> polygonSet = createPolygonSet("resources/coast_polygon_orig.dat_convertedJCOORD.txt");
+	private static ArrayList<Polygon> polygonSet = createPolygonSet("resources/coast_polygon_orig.dat_convertedJCOORD.txt");
 
 	/**
 	 * Generates an array of GeneralPaths which represents the coast line of Denmark within the specified AreaToDraw.
@@ -30,7 +31,7 @@ public class CoastLineMaker {
 	 */
 	public static GeneralPath[] getCoastLineToDraw(double canvasWidth, double canvasHeight, AreaToDraw area)
 	{
-		HashSet<Polygon> relevantPolygonSet = findWhichPolygonsToDraw(area);
+		ArrayList<Polygon> relevantPolygonSet = findWhichPolygonsToDraw(area);
 		return createGeneralPaths(canvasWidth, canvasHeight, area, relevantPolygonSet);
 	}	
 
@@ -39,9 +40,9 @@ public class CoastLineMaker {
 	 * @param	area The area to search for polygons to draw
 	 * @return 	A HashSet of the found Polygons
 	 */
-	private static HashSet<Polygon> findWhichPolygonsToDraw(AreaToDraw area)
+	private static ArrayList<Polygon> findWhichPolygonsToDraw(AreaToDraw area)
 	{
-		HashSet<Polygon> relevantPolygonSet = new HashSet<Polygon>();
+		ArrayList<Polygon> relevantPolygonSet = new ArrayList<Polygon>();
 
 		for(Polygon polygon : polygonSet)
 		{
@@ -60,7 +61,7 @@ public class CoastLineMaker {
 	 * @param	relevantPolygonSet A HashSet of the Polygons to make GeneralPaths from
 	 * @return	A GeneralPath[] of the found Polygons
 	 */
-	private static GeneralPath[] createGeneralPaths(double canvasWidth, double canvasHeight, AreaToDraw area, HashSet<Polygon> relevantPolygonSet)
+	private static GeneralPath[] createGeneralPaths(double canvasWidth, double canvasHeight, AreaToDraw area, ArrayList<Polygon> relevantPolygonSet)
 	{
 		GeneralPath[] polygonsArray = new GeneralPath[relevantPolygonSet.size()];
 		CoordinateConverter coordConverter = new CoordinateConverter(canvasWidth, canvasHeight, area);
@@ -92,9 +93,9 @@ public class CoastLineMaker {
 	 * @param 	filenameAndLocation The .txt-file from which to create the HashSet of Polygons from
 	 * @return	A HashSet of every Polygon found in the specified .txt-file
 	 */
-	private static HashSet<Polygon> createPolygonSet(String filenameAndLocation)
+	private static ArrayList<Polygon> createPolygonSet(String filenameAndLocation)
 	{
-		HashSet<Polygon> setOfPolygons = new HashSet<Polygon>();
+		ArrayList<Polygon> setOfPolygons = new ArrayList<Polygon>();
 		LinkedList<double[]> singlePolygonCoords = new LinkedList<double[]>();
 
 
