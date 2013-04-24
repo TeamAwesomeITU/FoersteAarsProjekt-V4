@@ -20,7 +20,7 @@ public class MainGui {
 
 	private static MainGui instance;
 
-	public static boolean undecoratedBoolean = true;
+	public static boolean undecoratedBoolean = false;
 
 	public static boolean coordinatesBoolean = false;
 	
