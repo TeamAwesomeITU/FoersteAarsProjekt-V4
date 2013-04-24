@@ -8,15 +8,12 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
+
+import routing.DijkstraSP;
+import routing.EdgeWeightedDigraph;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.RoadType;
@@ -56,8 +53,15 @@ public class MapPanel extends JPanel {
 		addMouseListener(mapMouseZoomAndPan);
 		addMouseMotionListener(mapMouseZoomAndPan);
 		setFocusable(true);
+		markOgKasperTester();
 	}
 
+	
+	public void markOgKasperTester() {
+		EdgeWeightedDigraph graph = new EdgeWeightedDigraph(675902);
+		DijkstraSP dip = new DijkstraSP(graph, "'Rued Langgaards Vej'");
+		System.out.println(dip.pathTo("'Følfodvej'"));
+	}
 	/**
 	 * Draws the lines for the map. 
 	 * Saves all the edges and converts the coordinates and saves them in an array. 
