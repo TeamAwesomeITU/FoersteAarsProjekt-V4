@@ -13,6 +13,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.*;
 
+import org.omg.PortableServer.POAPackage.WrongAdapter;
+
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
@@ -71,6 +73,7 @@ public class MapWindow {
 	 * Makes the toolbar for the search input
 	 * @return the toolbar to be inserted later.
 	 */
+	@SuppressWarnings("unchecked")
 	public ColoredJPanel makeToolBar(){
 		ColoredJPanel toolBar = new ColoredJPanel();
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
@@ -99,6 +102,20 @@ public class MapWindow {
 		reverseButton.setContentAreaFilled(false);
 		reverseButton.setToolTipText("Click to reverse from and to");
 		reverseButton.addActionListener(new ReverseActionListener());
+		
+		String[] vehicles = {"Bicycle", "Car"};
+		JComboBox<String> vehicleTypeBox = new JComboBox<>(vehicles);
+		vehicleTypeBox.addActionListener(new VehicleTypeActionListener());
+		
+		JComboBox countryBox = new JComboBox();
+		countryBox.setEditable(true);
+		countryBox.setRenderer(new ComboBoxRenderer());
+		countryBox.setEditor(new ComboBoxEditor());
+		
+		
+		String[] routeType = {"Fastest", "Shortest"};
+		JComboBox<String> routeTypeBox = new JComboBox<>(routeType);
+		routeTypeBox.addActionListener(new RouteTypeActionListener());
 
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
@@ -106,6 +123,8 @@ public class MapWindow {
 		toolBar.add(toHeader);
 		toolBar.add(toSearchQuery);
 		toolBar.add(buttonPanel);
+		toolBar.add(countryBox);
+		toolBar.add(routeTypeBox);
 
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(toolBar);
@@ -164,7 +183,7 @@ public class MapWindow {
 	 */
 	private double heightForMap() {
 		double height = MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
-		if(height <= Math.round(MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
+		if(height < Math.round(MainGui.frame.getHeight()*0.968 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
 			return  height;
 		else 
 			return heightForMap(height);
@@ -172,7 +191,7 @@ public class MapWindow {
 
 	private double heightForMap(double temporaryHeight) {
 		double height = temporaryHeight*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
-		if(height <= Math.round(MainGui.frame.getHeight()*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
+		if(height < Math.round(MainGui.frame.getHeight()*0.968 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
 			return  height;
 		else 
 			return heightForMap(height);
@@ -191,10 +210,10 @@ public class MapWindow {
 	private double widthForMap() {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = heightForMap()*areaToDraw.getWidthHeightRelation();
-		if(width <= Math.round(MainGui.frame.getWidth()*0.99 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+		if(width < Math.round(MainGui.frame.getWidth()*0.98 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
 			return  width;
 		else 
-			return widthForMap(heightForMap()*0.99);
+			return widthForMap(heightForMap()*0.98);
 	}
 	/**
 	 * is the recursive method called by the widthForMap without input parameters. If the new width is too big,
@@ -205,10 +224,10 @@ public class MapWindow {
 	private double widthForMap(double height) {
 		AreaToDraw areaToDraw = new AreaToDraw();
 		double width = Math.round(height*areaToDraw.getWidthHeightRelation());
-		if(width <= Math.round(MainGui.frame.getWidth()*0.99 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
+		if(width < Math.round(MainGui.frame.getWidth()*0.978 - (eastColoredJPanel.getWidth() + westColoredJPanel.getWidth())))
 			return width;
 		else 
-			return widthForMap(height*0.99);
+			return widthForMap(height*0.98);
 	}
 	/**
 	 * @return the width for the map
@@ -300,6 +319,32 @@ public class MapWindow {
 
 	//---------------------------------Listeners from here-----------------------------//
 
+	/**
+	 * Not yet implemented!
+	 */
+	class RouteTypeActionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	/**
+	 * Not yet implemented!
+	 */
+	class VehicleTypeActionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+		
+	}
+	
+	
 	/**
 	 * The listener for the coordinates
 	 */
