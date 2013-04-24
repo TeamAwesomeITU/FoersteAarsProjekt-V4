@@ -132,21 +132,21 @@ public class MapPanel extends JPanel {
 	 */
 	public void paint(Graphics g) {
 		super.paint(g);
+		Graphics2D g2 = (Graphics2D) g;
 		Line2D line = new Line2D.Double();
 		for (Edge edge : edgesToDraw) {
 			line.setLine(edge.getLine2DToDraw(coordConverter));
 			int roadType = edge.getRoadType();
 						
-			g.setColor(RoadType.getColor(roadType));
-			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			((Graphics2D)g).setStroke(new BasicStroke(RoadType.getStroke(roadType)));
-			((Graphics2D)g).draw(line); 
+			g2.setColor(RoadType.getColor(roadType));
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
+			g2.draw(line); 
 			setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
 		}
 		
 		//HER SKAL COASTLINE TEGNES
 
-		Graphics2D g2 = (Graphics2D) g;
 		if (mapMouseZoomAndPan.getRect() == null) {
 			return; 
 		} 

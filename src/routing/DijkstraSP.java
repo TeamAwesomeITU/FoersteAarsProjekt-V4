@@ -8,7 +8,7 @@ import mapDrawer.drawing.Edge;
 
 public class DijkstraSP
 {
-	private int[] edgeTo;
+	private int[] edgeTo; //contains edgeIDs on the edge towards the node i on edgeTo[i].
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
 	
@@ -30,8 +30,6 @@ public class DijkstraSP
 	private void relax(EdgeWeightedDigraph graph, int v) {
 		Edge currentEdge;
 		for(Integer e : graph.adj(v)) {
-			
-			//TODO Access EdgeMap and get the edge with edgeID e
 			currentEdge = DataHolding.getEdge(e);
 			int w = currentEdge.getToNode();
 			if (distTo[w] > distTo[v] + currentEdge.getDriveTime()) {
@@ -55,7 +53,7 @@ public class DijkstraSP
 		if (!hasPathTo(v)) 
 			return null;
 		Stack<Edge> path = new Stack<Edge>();
-		for (Edge e = allEdgesMap.get(edgeTo[v]); e != null; e = allEdgesMap.get(edgeTo[e.getFromNode()]))
+		for (Edge e = DataHolding.getEdge(edgeTo[v]); e != null; e = DataHolding.getEdge(e.getFromNode()))
 			path.push(e);
 		return path;
 	}
