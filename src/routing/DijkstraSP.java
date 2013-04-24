@@ -1,8 +1,6 @@
 package routing;
 
-import java.util.HashMap;
 import java.util.Stack;
-
 import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.drawing.Edge;
 
@@ -12,8 +10,15 @@ public class DijkstraSP
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
 	
-	public DijkstraSP(EdgeWeightedDigraph graph, int s)
-	{
+	public DijkstraSP(EdgeWeightedDigraph graph, String roadName) {
+		int s = 0;
+		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
+		{
+			if (DataHolding.getEdge(i).getRoadName().equals(roadName)) 
+			{
+				s = DataHolding.getEdge(i).getToNode();
+			}
+		}
 		edgeTo = new int[graph.nodes()];
 		distTo = new double[graph.nodes()];
 		pq = new IndexMinPQ<Double>(graph.nodes());
@@ -49,7 +54,16 @@ public class DijkstraSP
 		return distTo[v] < Double.POSITIVE_INFINITY; 
 	}
 
-	public Iterable<Edge> pathTo(int v) {
+	public Iterable<Edge> pathTo(String roadName) {
+		int v = 0;
+		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
+		{
+			if (DataHolding.getEdge(i).getRoadName().equals(roadName)) 
+			{
+				v = DataHolding.getEdge(i).getiD();
+				System.out.println(v);
+			}
+		}
 		if (!hasPathTo(v)) 
 			return null;
 		Stack<Edge> path = new Stack<Edge>();
