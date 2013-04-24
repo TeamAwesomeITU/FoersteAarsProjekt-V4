@@ -2,7 +2,6 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -10,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import mapDrawer.dataSupplying.DataHolding;
-import mapDrawer.dataSupplying.FindRelevantEdges;
 import mapDrawer.dataSupplying.QuadTree;
 
 /**

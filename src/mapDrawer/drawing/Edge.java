@@ -2,6 +2,9 @@ package mapDrawer.drawing;
 
 import java.awt.geom.Line2D;
 
+import java_cup.internal_error;
+
+import mapDrawer.RoadType;
 import mapDrawer.dataSupplying.CoordinateConverter;
 import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.Node;
@@ -17,6 +20,7 @@ public class Edge {
 	//The length of the Edge in meters
 	private final double length;
 	
+	//The ID of the Edge
 	private final int iD;
 	
 	//The roadType of the Edge
@@ -38,16 +42,16 @@ public class Edge {
 	private final int toRightNumber;
 	
 	//The beginning of the house letters on the	left
-	private final char fromLeftLetter;
+	private final String fromLeftLetter;
 	
 	//The end of the house letters on the	left
-	private final char toLeftLetter;
+	private final String toLeftLetter;
 	
 	//The beginning of the house letters on the	right
-	private final char fromRightLetter;
+	private final String fromRightLetter;
 	
 	//The end of the house letters on the right 
-	private final char toRightLetter;
+	private final String toRightLetter;
 	
 	//The postal numbers on the left
 	private final int postalNumberLeft;
@@ -72,10 +76,10 @@ public class Edge {
 	
 	//Road ID to use with turn restrictions
 	private final int toTurn;
-
+	
 	public Edge(int fromNode, int toNode, double length, int iD, int roadType, String roadName, int fromLeftNumber,
-			int toLeftNumber, int fromRightNumber, int toRightNumber, char fromLeftLetter, char toLeftLetter, char fromRightLetter,
-			char toRightLetter, int postalNumberLeft, int postalNumberRight, int highWayTurnoff, double driveTime, String oneWay, int tjekID,
+			int toLeftNumber, int fromRightNumber, int toRightNumber, String fromLeftLetter, String toLeftLetter, String fromRightLetter,
+			String toRightLetter, int postalNumberLeft, int postalNumberRight, int highWayTurnoff, double driveTime, String oneWay, int tjekID,
 			int fromTurn, int toTurn) {
 		this.fromNode = fromNode;
 		this.toNode = toNode;
@@ -99,35 +103,6 @@ public class Edge {
 		this.tjekID = tjekID;
 		this.fromTurn = fromTurn;
 		this.toTurn = toTurn;
-	}
-	
-	/**
-	 * ONLY FOR TEST-PURPOSES
-	 */
-	public Edge(int fromNode, int toNode, int roadType, String roadName, int postalNumber, String oneWay)
-	{
-		this.fromNode = fromNode;
-		this.toNode = toNode;
-		this.length = 0.0;
-		this.iD = 1;
-		this.roadType = roadType;
-		this.roadName = roadName;
-		this.fromLeftNumber = 1;
-		this.toLeftNumber = 1;
-		this.fromRightNumber = 1;
-		this.toRightNumber = 1;
-		this.fromLeftLetter = 'a';
-		this.toLeftLetter = 'a';
-		this.fromRightLetter = 'a';
-		this.toRightLetter = 'a';
-		this.postalNumberLeft = postalNumber;
-		this.postalNumberRight = 1;
-		this.highWayTurnoff = 1;
-		this.driveTime = 0.0;
-		this.oneWay = "rf";
-		this.tjekID = 2;
-		this.fromTurn = 2;
-		this.toTurn = 2;
 	}
 
 	/**
@@ -203,28 +178,28 @@ public class Edge {
 	/**
 	 * @return the fromLeftLetter of the Edge
 	 */
-	public char getFromLeftLetter() {
+	public String getFromLeftLetter() {
 		return fromLeftLetter;
 	}
 
 	/**
 	 * @return the toLeftLetter of the Edge
 	 */
-	public char getToLeftLetter() {
+	public String getToLeftLetter() {
 		return toLeftLetter;
 	}
 
 	/**
 	 * @return the fromRightLetter of the Edge
 	 */
-	public char getFromRightLetter() {
+	public String getFromRightLetter() {
 		return fromRightLetter;
 	}
 
 	/**
 	 * @return the toRightLetter of the Edge
 	 */
-	public char getToRightLetter() {
+	public String getToRightLetter() {
 		return toRightLetter;
 	}
 
@@ -296,6 +271,9 @@ public class Edge {
 		
 		return new Line2D.Double(coordconverter.UTMToPixelCoordX(fromNode.getXCoord()), coordconverter.UTMToPixelCoordY(fromNode.getYCoord()), coordconverter.UTMToPixelCoordX(toNode.getXCoord()), coordconverter.UTMToPixelCoordY(toNode.getYCoord()));
 	}
-
-
+	
+	public int getRoadTypeCategory()
+	{
+		return RoadType.getCategory(this.roadType);
+	}
 }

@@ -89,13 +89,14 @@ public class nodeTxt {
 			HashSet<Edge> edgeSet = new HashSet<Edge>();
 			
 			BufferedReader reader = new BufferedReader(new FileReader("XML/kdv_unload_1.txt"));
-			BufferedWriter writer = new BufferedWriter(new FileWriter("edge.txt"));
+			BufferedWriter writer = new BufferedWriter(new FileWriter("XML/edge.txt"));
 			
 			//To skip the first line
 			reader.readLine();
 			
 			String line;
-			String header = "FN, TN, LENGHT, TYP, NAME, FL, TL, FR, TR, FLB, TLB, FRB, TRB, Vpost, Hpost, Toff, DrTi, F-turn, T-turn, Tjek-id";
+			String header = "FromNodeID, ToNodeID, Length, ID, roadType, roadName, fromLeftNumber, toLeftNumber, fromRightNumber, toRightNumber," +
+					" fromLeftLetter, toLeftLetter, fromRightLetter, toRightLetter, LpostalNumber, RpostalNumber, Highway-turnoff, Drivetime, Direction, FromTurn, ToTurn, Tjek-ID";
 			System.out.println(header);
 			writer.write(header + "\n");
 			String newLine = "";
@@ -105,7 +106,7 @@ public class nodeTxt {
 			{
 				String[] lp = null;
 				lp = line.split(("(?<=[']|\\d|\\*)[,](?=[']|\\d|\\*)"));
-				System.out.println(lp[32] + " "+ lp[6]);
+				//System.out.println(lp[32] + " "+ lp[6]);
 				newLine = 
 						lp[0]+";"+
 						lp[1]+";"+ 
@@ -131,9 +132,11 @@ public class nodeTxt {
 						lp[32];
 				
 				//System.out.println(newLine);
+				newLine = newLine.replaceAll("\\'+", "");
+				//System.out.println(newLine);
 				i++;
-				writer.write(newLine + "\n");
-				
+				writer.write(newLine);
+				writer.newLine();
 			}
 		
 			writer.close();

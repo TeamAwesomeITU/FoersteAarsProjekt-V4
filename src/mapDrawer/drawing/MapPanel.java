@@ -142,7 +142,7 @@ public class MapPanel extends JPanel {
 			((Graphics2D)g).setStroke(new BasicStroke(RoadType.getStroke(roadType)));
 			((Graphics2D)g).draw(line); 
 			//Linjen under denne kan vel godt slettes??
-			//setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
+			setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
 		}
 		
 		//HER SKAL COASTLINE TEGNES

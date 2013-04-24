@@ -161,7 +161,7 @@ public enum RoadType {
 	public static HashSet<Integer> getRoadTypesRelevantToZoomLevel(int numberOfWantedCategories)
 	{
 		//WHAT THE FUCK - MIND.EQUALS(BLOWN) == TRUE
-		HashSet<Integer> relevantRoadTypeSet = new HashSet<>();
+		HashSet<Integer> relevantRoadTypeSet = new HashSet<Integer>();
 		relevantRoadTypeSet = (HashSet<Integer>) category6.clone();
 
 		switch (numberOfWantedCategories) {
@@ -180,7 +180,7 @@ public enum RoadType {
 	 * @param roadType Integer representing a road type
 	 * @return An integer representing a category.
 	 */
-	private static int getCategory(int roadType)
+	public static int getCategory(int roadType)
 	{
 		if(category1.contains(roadType)) return 1;
 		if(category2.contains(roadType)) return 2;

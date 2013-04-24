@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import routing.EdgeWeightedDigraph;
 
@@ -15,6 +16,7 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 
+import mapDrawer.RoadType;
 import mapDrawer.drawing.Edge;
 
 
@@ -22,15 +24,15 @@ public class DataHolding {
 
 	private static int numberOfNodes = 675902;
 	private static int numberOfEdges = 812301;
-	
+
 	/*A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	This is made at startup so the program can access it at will. */
 	private static Node[] nodeArray;
 	/*A set of all edges. When at 100% zoom all edges from this are drawn. When closer less are drawn.
 	This is made at startup so the program can access it at will. */
 	private static Edge[] allEdgesArray;
-	
-	private static EdgeWeightedDigraph graph = new EdgeWeightedDigraph(675902);
+
+	private static EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numberOfNodes);
 
 	//At some point, the nodeArray and QuadTree should be created in parallel, as they use the same resource-file in the same way - will decrease startup time
 	private static QuadTree qTree;
@@ -39,7 +41,6 @@ public class DataHolding {
 	{
 		try {				
 			Edge[] edgeArray = new Edge[numberOfEdges];
-
 			File file = new File("XML/edge.txt");
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 
@@ -47,24 +48,48 @@ public class DataHolding {
 			reader.readLine();
 
 			String line;
-			int fromNode, toNode, type, postalNumber = 0;
-			Integer edgeID = 0;
-			String roadName, oneWay = "";
+			
+			int fromNode, toNode, edgeID, roadType, fromLeftNumber, toLeftNumber, fromRightNumber, toRightNumber, 
+			postalNumberLeft, postalNumberRight, highWayTurnoff, fromTurn, toTurn, tjekID;
+			double length, driveTime;
+			String roadName, oneWay, fromLeftLetter, toLeftLetter, fromRightLetter, toRightLetter;
 
 
 			long startTime = System.currentTimeMillis();
 			while((line = reader.readLine()) != null)
 			{
 				String[] lineParts = line.split(("\\;"));
+				
 				fromNode = Integer.parseInt(lineParts[0]);
 				toNode = Integer.parseInt(lineParts[1]);
+				length = Double.parseDouble(lineParts[2]);
 				edgeID = Integer.parseInt(lineParts[3]);
-				type = Integer.parseInt(lineParts[4]);
-				roadName = lineParts[5];
-				oneWay = lineParts[18];
-				postalNumber = Integer.parseInt(lineParts[14]);
-
-				edgeArray[edgeID-1] = new Edge(fromNode, toNode, type, roadName, postalNumber, oneWay);
+				roadType = Integer.parseInt(lineParts[4]);
+				roadName = lineParts[5]; 
+				fromLeftNumber = Integer.parseInt(lineParts[6]);
+				toLeftNumber = Integer.parseInt(lineParts[7]);
+				fromRightNumber = Integer.parseInt(lineParts[8]);
+				toRightNumber = Integer.parseInt(lineParts[9]);
+				fromLeftLetter = lineParts[10];
+				toLeftLetter = lineParts[11];
+				fromRightLetter = lineParts[12];
+				toRightLetter = lineParts[13];				
+								
+				highWayTurnoff = Integer.parseInt(lineParts[16]); 
+				driveTime = Double.parseDouble(lineParts[17]);				
+				oneWay = lineParts[18]; 
+				
+				//Because Integer.parseInt can't handle empty Strings, we check to see if they'r empty - if they are, set them as -1.
+				postalNumberLeft = (!lineParts[14].isEmpty() ? Integer.parseInt(lineParts[14]) : -1);				
+				postalNumberRight = (!lineParts[15].isEmpty() ? Integer.parseInt(lineParts[15]) : -1);				
+				fromTurn = (!lineParts[19].isEmpty() ? Integer.parseInt(lineParts[19]) : -1);				
+				toTurn = (!lineParts[20].isEmpty() ? Integer.parseInt(lineParts[20]) : -1);				
+				tjekID = (!lineParts[21].isEmpty() ? Integer.parseInt(lineParts[21]) : -1);			
+				
+				edgeArray[edgeID-1] = new Edge(fromNode, toNode, length, edgeID, roadType, roadName, fromLeftNumber, toLeftNumber,
+						fromRightNumber, toRightNumber, fromLeftLetter, toLeftLetter, fromRightLetter, toRightLetter,
+						postalNumberLeft, postalNumberRight, highWayTurnoff, driveTime, oneWay, tjekID, fromTurn, toTurn);
+						
 			}
 			long endTime = System.currentTimeMillis();
 			System.out.println(endTime-startTime);
@@ -77,50 +102,6 @@ public class DataHolding {
 		}		
 	}
 
-	/**
-	 * This method parses the XML-file kdv_node containing nodes and their coordinates. It uses an autoPilot
-	 * to navigate nodes and manually retrieves child-elements. At the end it navigates to the parent again. 
-	 * @return A HashMap of nodes where the ID is node-id and value is an Array[2] of doubles 
-	 * containing x-/y-coordinates. 
-	 */
-	@Deprecated
-	private static HashMap<Integer, Double[]> makeNodeCoordinatesMapFromXML()
-	{
-		HashMap<Integer, Double[]> map = new HashMap<Integer, Double[]>();
-
-		try {
-			long startTime = System.currentTimeMillis();
-			VTDGen vg = new VTDGen();
-			AutoPilot ap = new AutoPilot(); 
-			ap.selectXPath("/nodeCollection/node");
-			if (vg.parseFile("XML/kdv_node_unload.xml", false))
-			{
-				VTDNav vn = vg.getNav();
-				ap.bind(vn);
-				while((ap.evalXPath())!=-1)
-				{ 
-					vn.toElement(VTDNav.FIRST_CHILD, "KDV");
-					Integer kdv = vn.parseInt(vn.getText());
-
-					Double[] coords = new Double[2];
-
-					vn.toElement(VTDNav.NEXT_SIBLING, "X-COORD"); 
-					coords[0] = vn.parseDouble(vn.getText());
-
-					vn.toElement(VTDNav.NEXT_SIBLING, "Y-COORD"); 
-					coords[1] = vn.parseDouble(vn.getText());
-					map.put(kdv, coords);
-					vn.toElement(VTDNav.PARENT); // move the cursor back
-				} 
-				ap.resetXPath();
-			}
-			long endTime = System.currentTimeMillis();
-			System.out.println("Creating HashMap of all Nodes takes " + (endTime - startTime) + " milliseconds");
-		} catch (NavException | XPathEvalException | XPathParseException e) {
-			e.printStackTrace();
-		}
-		return map;
-	}
 
 	private static Node[] makeNodeArrayFromTXT()
 	{
@@ -146,16 +127,19 @@ public class DataHolding {
 
 				references = lineParts[3].split("\\s");
 				int[] edgeIDs = new int[references.length];
-				
-				for(int i = 0; i < references.length; i++){
-					edgeIDs[i] = Integer.parseInt(references[i]);
-					/*
-					if(allEdgesArray.get(references[i]).getOneWay().equals("ft") || allEdgesArray.get(references[i]).getOneWay().equals("")) {
+
+				for(int i = 0; i < references.length; i++){				
+					int referencesConverted = Integer.parseInt(references[i]);
+					edgeIDs[i] = referencesConverted;
+
+					/* KAN IKKE LADE SIG GØRE, DA EDGEARRAYET ENDNU IKKE ER OPRETTET HER
+					if(getEdge(referencesConverted).getOneWay().equals("ft") || getEdge(referencesConverted).getOneWay().equals("")) {
 						graph.addEdge(Integer.parseInt(lineParts[0]), Integer.parseInt(references[i]));
-						}					
-						*/				
+						}			
+					 */		
+
 				}
-				
+
 				nodeArray[KDV-1] = new Node(KDV, Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2]), edgeIDs);
 			}
 
