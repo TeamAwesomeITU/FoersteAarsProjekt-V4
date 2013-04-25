@@ -113,19 +113,22 @@ public class MapWindow {
 		reverseButton.setToolTipText("Click to reverse from and to");
 		reverseButton.addActionListener(new ReverseActionListener());
 		
-		String[] vehicles = {"Bicycle", "Car"};
-		JComboBox<String> vehicleTypeBox = new JComboBox<>(vehicles);
-		vehicleTypeBox.addActionListener(new VehicleTypeActionListener());
+		ColoredJComboBox vehicleBox = new ColoredJComboBox();
+		vehicleBox.setPreferredSize(new Dimension(120, 30));
+		vehicleBox.setEditable(true);
+        String[][] vehicleList = {{"Bike", "resources/bicycle.png"},
+        						 {"Car", "resources/car.png"}};
+        vehicleBox.addItems(vehicleList);
+        vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
 		
-		JComboBox countryBox = new JComboBox();
-		countryBox.setEditable(true);
-		countryBox.setRenderer(new ComboBoxRenderer());
-		countryBox.setEditor(new ComboBoxEditor());
-		
-		
-		String[] routeType = {"Fastest", "Shortest"};
-		JComboBox<String> routeTypeBox = new JComboBox<>(routeType);
-		routeTypeBox.addActionListener(new RouteTypeActionListener());
+        
+        ColoredJComboBox routeBox = new ColoredJComboBox();
+        routeBox.setPreferredSize(new Dimension(120, 30));
+        routeBox.setEditable(true);
+        String[][] routeList = {{"Fastest", ""},
+        						 {"Shortest", ""}};
+        routeBox.addItems(routeList);
+        routeBox.setUI(ColoredArrowUI.createUI(routeBox));
 
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
@@ -133,8 +136,8 @@ public class MapWindow {
 		toolBar.add(toHeader);
 		toolBar.add(toSearchQuery);
 		toolBar.add(buttonPanel);
-		toolBar.add(countryBox);
-		toolBar.add(routeTypeBox);
+		toolBar.add(vehicleBox);
+		toolBar.add(routeBox);
 
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(toolBar);
