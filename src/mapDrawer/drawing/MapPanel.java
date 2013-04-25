@@ -49,7 +49,7 @@ public class MapPanel extends JPanel {
 		mapHeight = height;
 		mapWidth = width;
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
-		markOgKasperTester();
+		//markOgKasperTester();
 		makeLinesForMap();
 		makeCoastLineForMap();
 		setBorderForPanel();

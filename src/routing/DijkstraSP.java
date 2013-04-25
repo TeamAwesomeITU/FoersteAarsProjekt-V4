@@ -72,6 +72,7 @@ public class DijkstraSP
 			return null;
 		System.out.println("finding route");
 		Stack<Edge> path = new Stack<Edge>();
+		int i = 0;
 		for (Edge e = DataHolding.getEdge(edgeTo[v]); e != null; e = DataHolding.getEdge(e.getFromNode())) {
 			if (e.getFromNode() == s) 
 			{
