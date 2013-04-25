@@ -84,7 +84,8 @@ public class DataHolding {
 				
 			}
 			long endTime = System.currentTimeMillis();
-			System.out.println(endTime-startTime);
+			System.out.println("Creation of EdgeArray took " + (endTime-startTime));
+	
 			reader.close();		
 						
 			return edgeArray;
@@ -98,20 +99,20 @@ public class DataHolding {
 
 	private static Node[] makeNodeArrayFromTXT()
 	{
-		try {				
+		try {
+			long startTime = System.currentTimeMillis();
 			Node[] nodeArray = new Node[numberOfNodes];
-
 			File file = new File("XML/kdv_node_unload.txt_modified.txt");
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 
 			//To skip the first line
 			reader.readLine();
-
+			
 			String line;
 			String[] lineParts = null;
 			Integer KDV = 0; 
 			String[] references = null;
-
+			
 			while((line = reader.readLine()) != null)
 			{
 				lineParts = line.split("\\,");
@@ -124,19 +125,14 @@ public class DataHolding {
 				for(int i = 0; i < references.length; i++){				
 					int referencesConverted = Integer.parseInt(references[i]);
 					edgeIDs[i] = referencesConverted;
-
-					/* KAN IKKE LADE SIG GØRE, DA EDGEARRAYET ENDNU IKKE ER OPRETTET HER
-					if(getEdge(referencesConverted).getOneWay().equals("ft") || getEdge(referencesConverted).getOneWay().equals("")) {
-						graph.addEdge(Integer.parseInt(lineParts[0]), Integer.parseInt(references[i]));
-						}			
-					 */		
-
 				}
 
 				nodeArray[KDV-1] = new Node(KDV, Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2]), edgeIDs);
 			}
-
-			reader.close();			
+	
+			reader.close();		
+			long endTime = System.currentTimeMillis();
+			System.out.println("Creation of nodeArray took " +(endTime-startTime));
 			return nodeArray;
 
 		} catch (IOException e) {

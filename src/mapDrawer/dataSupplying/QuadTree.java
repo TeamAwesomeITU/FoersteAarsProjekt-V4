@@ -11,7 +11,6 @@ import mapDrawer.exceptions.AreaIsNotWithinDenmarkException;
 import mapDrawer.exceptions.InvalidAreaProportionsException;
 import mapDrawer.exceptions.NegativeAreaSizeException;
 
-
 /**
  *  A QuadTree containing up to four Nodes, and if more Nodes are added, the QuadTree is split into four QuadTrees, each having a quarter of the original QuadTree's area, and the Node is inserted in one of them.
  */
@@ -169,10 +168,10 @@ public class QuadTree {
 	{
 
 		try {				
+			long s = System.currentTimeMillis();
 			AreaToDraw area = new AreaToDraw();	
 			QuadTree quadTree = new QuadTree(area);
 			
-			//File file = new File("XML/kdv_node_unload.txt");
 			File file = new File("XML/kdv_node_unload.txt_modified.txt");			
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			
@@ -184,7 +183,7 @@ public class QuadTree {
 			while((line = reader.readLine()) != null)
 			{
 				String[] lineParts = line.split("\\,");
-				Integer KDV = Integer.parseInt(lineParts[0]);
+				//Integer KDV = Integer.parseInt(lineParts[0]);
 				Double[] coords = new Double[]{Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2])};	
 				
 				//Edge ID's is pulled out
@@ -192,23 +191,20 @@ public class QuadTree {
 				int[] edgeIDs = new int[edgeIDsAsStrings.length];				
 				for (int i = 0; i < edgeIDsAsStrings.length; i++) {
 					edgeIDs[i] = Integer.parseInt(edgeIDsAsStrings[i]);
-				}
-								
-				quadTree.insert(new Node(KDV, coords[0], coords[1], edgeIDs));
+				}			
+				quadTree.insert(new Node(Integer.parseInt(lineParts[0]), coords[0], coords[1], edgeIDs));
 			}
 				
 			reader.close();
-			
+			long t = System.currentTimeMillis();
+			System.out.println("Creation of Quadtree takes" + (t-s));
 			//noget her giver synk issues - fordi QuadTree stadig kører og laver nodemap, imens nodemaps initializer tjekker om den er null, hvilket den er men ikke må være
 			//FindRelevantEdges.initializeNodeCoordinatesMap(nodeMap);
-			return quadTree;
-			
+			return quadTree;	
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
-		
-		
 	}
 	
 	/**
