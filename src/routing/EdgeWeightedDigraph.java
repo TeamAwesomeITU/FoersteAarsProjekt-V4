@@ -40,6 +40,7 @@ public class EdgeWeightedDigraph {
 			}
 			
 		}
+
 		long t = System.currentTimeMillis();
 		System.out.println("Creation adj " + (t-s) + " wtf?");
 	}

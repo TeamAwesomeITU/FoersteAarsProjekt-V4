@@ -28,6 +28,10 @@ public class DataHolding {
 	//At some point, the nodeArray and QuadTree should be created in parallel, as they use the same resource-file in the same way - will decrease startup time
 	private static QuadTree qTree;
 
+	/**
+	 * This method creates an array of Edge-objects. Edge ID's equals the index of the array. 
+	 * @return
+	 */
 	private static Edge[] makeEdgeArrayFromTXT()
 	{
 		try {				
@@ -87,7 +91,7 @@ public class DataHolding {
 			System.out.println("Creation of EdgeArray took " + (endTime-startTime));
 	
 			reader.close();		
-						
+			System.out.println(edgeArray.length);
 			return edgeArray;
 
 		} catch (IOException e) {
@@ -123,8 +127,7 @@ public class DataHolding {
 				int[] edgeIDs = new int[references.length];
 
 				for(int i = 0; i < references.length; i++){				
-					int referencesConverted = Integer.parseInt(references[i]);
-					edgeIDs[i] = referencesConverted;
+					edgeIDs[i] = Integer.parseInt(references[i]);
 				}
 
 				nodeArray[KDV-1] = new Node(KDV, Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2]), edgeIDs);
