@@ -10,14 +10,16 @@ public class DijkstraSP
 	private int[] edgeTo; //contains edgeIDs on the edge towards the node i on edgeTo[i].
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
+	int s;
 	
 	public DijkstraSP(EdgeWeightedDigraph graph, String roadName) {
-		int s = 0;
+		s = 443901;
 		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
 		{
 			if (DataHolding.getEdge(i).getRoadName().equals(roadName)) 
 			{
 				s = DataHolding.getEdge(i).getToNode();
+				break;
 			}
 		}
 		edgeTo = new int[graph.nodes()];
@@ -35,7 +37,8 @@ public class DijkstraSP
 
 	private void relax(EdgeWeightedDigraph graph, int v) {
 		Edge currentEdge;
-		for(Integer e : graph.adj(v)) {
+		for(Integer e : graph.adj(v)) 
+		{
 			currentEdge = DataHolding.getEdge(e);
 			int w = currentEdge.getToNode();
 			if (distTo[w] > distTo[v] + currentEdge.getDriveTime()) {
@@ -56,20 +59,29 @@ public class DijkstraSP
 	}
 
 	public Iterable<Edge> pathTo(String roadName) {
-		int v = 0; 
+		int v = 441723; 
 		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
 		{
 			if (DataHolding.getEdge(i).getRoadName().equals(roadName)) 
 			{
-				v = DataHolding.getEdge(i).getiD();
-				System.out.println(v);
+				v = DataHolding.getEdge(i).getToNode();
+				break;
 			}
 		}
 		if (!hasPathTo(v)) 
 			return null;
+		System.out.println("finding route");
 		Stack<Edge> path = new Stack<Edge>();
-		for (Edge e = DataHolding.getEdge(edgeTo[v]); e != null; e = DataHolding.getEdge(e.getFromNode()))
+		int i = 0;
+		for (Edge e = DataHolding.getEdge(edgeTo[v]); e != null; e = DataHolding.getEdge(e.getFromNode())) {
+			if (e.getFromNode() == s) 
+			{
+				path.push(e);
+				System.out.println("Succes!");
+				break;
+			}
 			path.push(e);
+		}
 		return path;
 	}
 }
