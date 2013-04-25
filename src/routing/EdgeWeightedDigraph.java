@@ -42,7 +42,6 @@ public class EdgeWeightedDigraph {
 		}
 	}
 
-	
 	public int nodes() { return nodes; }
 	public int edges() { return edges; }
 
@@ -51,7 +50,7 @@ public class EdgeWeightedDigraph {
 		edges++;
 	}
 
-	public Iterable<Integer> adj(int n) { return adj[n]; }
+	public Iterable<Integer> adj(int n) { return adj[n-1]; }
 
 	public Iterable<Integer> Edges() {
 		Bag<Integer> bag = new Bag<Integer>();

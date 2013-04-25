@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
@@ -21,6 +22,7 @@ import mapDrawer.dataSupplying.FindRelevantEdges;
 import mapDrawer.drawing.mutators.MapMouseZoomAndPan;
 import routing.DijkstraSP;
 import routing.EdgeWeightedDigraph;
+import sun.java2d.loops.DrawPath;
 
 @SuppressWarnings("serial")
 /**
@@ -35,6 +37,7 @@ public class MapPanel extends JPanel {
 	private GeneralPath[] coastLineToDraw;
 	private CoordinateConverter coordConverter;
 	private double mapHeight, mapWidth;
+	private Stack<Edge> pathTo;
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
@@ -46,20 +49,19 @@ public class MapPanel extends JPanel {
 		mapHeight = height;
 		mapWidth = width;
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
+		markOgKasperTester();
 		makeLinesForMap();
 		makeCoastLineForMap();
 		setBorderForPanel();
 		addMouseListener(mapMouseZoomAndPan);
 		addMouseMotionListener(mapMouseZoomAndPan);
 		setFocusable(true);
-		//markOgKasperTester();
 	}
 
 	
 	public void markOgKasperTester() {
-		EdgeWeightedDigraph graph = new EdgeWeightedDigraph(675902);
-		DijkstraSP dip = new DijkstraSP(graph, "'Rued Langgaards Vej'");
-		System.out.println(dip.pathTo("'Følfodvej'"));
+		DijkstraSP dip = new DijkstraSP(new EdgeWeightedDigraph(675902), "Rued Langgaards Vej");
+		pathTo = (Stack<Edge>) dip.pathTo("Røde Mellemvej");
 	}
 	/**
 	 * Draws the lines for the map. 
@@ -137,7 +139,8 @@ public class MapPanel extends JPanel {
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
 		Line2D line = new Line2D.Double();
-		for (Edge edge : edgesToDraw) {
+		for (Edge edge : edgesToDraw) 
+		{
 			line.setLine(edge.getLine2DToDraw(coordConverter));
 			int roadType = edge.getRoadType();
 						
@@ -145,8 +148,21 @@ public class MapPanel extends JPanel {
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
 			g2.draw(line); 
-			setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
+			
 		}
+		if(pathTo != null) 
+		{
+			Stack<Edge> drawPath = pathTo;
+			while(!drawPath.empty()) 
+			{
+				g2.setColor(Color.PINK);
+				line.setLine(drawPath.pop().getLine2DToDraw(coordConverter));
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setStroke(new BasicStroke(1000));
+				g2.draw(line); 
+			}
+		}
+		setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
 		
 		//HER SKAL COASTLINE TEGNES
 
