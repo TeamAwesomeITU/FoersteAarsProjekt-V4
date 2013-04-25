@@ -128,7 +128,7 @@ public class MainGui {
 		settingsItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
 		settingsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				readSettingsFile();
+				readSettingsFile();				
 				final JFrame settingsFrame = new JFrame("Settings");
 
 				Container container = settingsFrame.getContentPane();
@@ -150,7 +150,6 @@ public class MainGui {
 					public void itemStateChanged(ItemEvent e) {
 						if(e.getStateChange() == ItemEvent.DESELECTED)	dragonBoolean = false; 
 						if(e.getStateChange() == ItemEvent.SELECTED)	dragonBoolean = true; 
-						setMainHand();
 					}
 				});
 
@@ -234,6 +233,7 @@ public class MainGui {
 						frame.setUndecorated(undecoratedBoolean);
 						changeScreenSize();
 						new MainGui();
+						setMainHand();
 						settingsFrame.dispose();
 						updateSettingsFile();
 					}
