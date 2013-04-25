@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -127,6 +128,7 @@ public class MainGui {
 		settingsItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
 		settingsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				readSettingsFile();
 				final JFrame settingsFrame = new JFrame("Settings");
 
 				Container container = settingsFrame.getContentPane();
@@ -138,35 +140,17 @@ public class MainGui {
 
 				undecorated.addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent e) {
-						if(e.getStateChange() == ItemEvent.DESELECTED){
-							undecoratedBoolean = false;
-							frame.dispose();
-							frame.setUndecorated(undecoratedBoolean);
-							new MainGui();
-							settingsFrame.dispose();
-						}
-
-						if(e.getStateChange() == ItemEvent.SELECTED){
-							undecoratedBoolean = true;
-							frame.dispose();
-							frame.setUndecorated(undecoratedBoolean);
-							new MainGui();
-							settingsFrame.dispose();
-						}
-						updateSettingsFile();
+						if(e.getStateChange() == ItemEvent.DESELECTED)	undecoratedBoolean = false;
+						if(e.getStateChange() == ItemEvent.SELECTED)	undecoratedBoolean = true;
 					}});
 				
 				final ColoredJCheckBox dragon = new ColoredJCheckBox("Dragon");
 				dragon.setSelected(dragonBoolean);
-				dragon.addItemListener(new ItemListener() 
-				{
-					public void itemStateChanged(ItemEvent e) 
-					{
-						if(e.getStateChange() == ItemEvent.DESELECTED){
-							dragonBoolean = false; setMainHand();}	
-						if(e.getStateChange() == ItemEvent.SELECTED){
-							dragonBoolean = true; setMainHand(); }
-						updateSettingsFile();
+				dragon.addItemListener(new ItemListener(){
+					public void itemStateChanged(ItemEvent e) {
+						if(e.getStateChange() == ItemEvent.DESELECTED)	dragonBoolean = false; 
+						if(e.getStateChange() == ItemEvent.SELECTED)	dragonBoolean = true; 
+						setMainHand();
 					}
 				});
 
@@ -174,19 +158,22 @@ public class MainGui {
 				coordinates.setSelected(coordinatesBoolean);
 				coordinates.addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent e) {
-						if(e.getStateChange() == ItemEvent.DESELECTED)
-							coordinatesBoolean = false;
-						if(e.getStateChange() == ItemEvent.SELECTED)
-							coordinatesBoolean = true;
-						updateSettingsFile();
+						if(e.getStateChange() == ItemEvent.DESELECTED)	coordinatesBoolean = false;
+						if(e.getStateChange() == ItemEvent.SELECTED)	coordinatesBoolean = true;
 					}
 				});
+				
+				ColoredJComboBox colorThemesBox = new ColoredJComboBox();
+				colorThemesBox.setPreferredSize(new Dimension(120, 30));
+				colorThemesBox.setEditable(true);
+		        String[][] themes = {{"Summer", "resources/SummerLogo.png"},
+		        					{"Winter", "resources/WinterLogo.png"},
+		        					{"Spring", "resources/SpringLogo.png"},
+		        					{"Autumn", "resources/AutumnLogo.png"}};
+		        colorThemesBox.addItems(themes);
+		        colorThemesBox.setUI(ColoredArrowUI.createUI(colorThemesBox));
 
 				JLabel themesLabel = new JLabel("Themes:");
-
-				String[] themes = {"Summer", "Winter", "Spring", "Autumn"};
-
-				JComboBox<String> colorThemesBox = new JComboBox<>(themes);
 				if(ColorTheme.autumnTheme) colorThemesBox.setSelectedIndex(3);
 				else if(ColorTheme.springTheme) colorThemesBox.setSelectedIndex(2);
 				else if(ColorTheme.winterTheme) colorThemesBox.setSelectedIndex(1);
@@ -194,24 +181,30 @@ public class MainGui {
 				colorThemesBox.addActionListener(new ActionListener() {
 					@SuppressWarnings({ "rawtypes" })
 					public void actionPerformed(ActionEvent e) {
-						JComboBox cb = (JComboBox)e.getSource();
-						String selectedTheme = (String)cb.getSelectedItem();
-						if(selectedTheme.equals("Summer")) ColorTheme.setSummerTheme();
-						if(selectedTheme.equals("Winter")) ColorTheme.setWinterTheme();
-						if(selectedTheme.equals("Spring")) ColorTheme.setSpringTheme();
-						if(selectedTheme.equals("Autumn")) ColorTheme.setAutumnTheme();
-						frame.dispose();
-						new MainGui();
-						settingsFrame.dispose();
-						updateSettingsFile();
+						try {
+							JComboBox cb = (JComboBox)e.getSource();
+							String selectedTheme = (String) cb.getSelectedItem();
+							if(selectedTheme.equals("Summer")) ColorTheme.setSummerTheme();
+							if(selectedTheme.equals("Winter")) ColorTheme.setWinterTheme();
+							if(selectedTheme.equals("Spring")) ColorTheme.setSpringTheme();
+							if(selectedTheme.equals("Autumn")) ColorTheme.setAutumnTheme();
+
+						} catch (ClassCastException e2) {
+							return;
+						}
+
 					}
 				});
-				
+				ColoredJComboBox frameSizesBox = new ColoredJComboBox();
+				frameSizesBox.setPreferredSize(new Dimension(120, 30));
+				frameSizesBox.setEditable(true);
+		        String[][] frameSizes = {{"Fullscreen", ""}, {"Medium", ""},
+		        					{"Small", ""}, {"Dualscreen LEFT", ""},
+		        					{"Dualscreen RIGHT", ""}};
+		        frameSizesBox.addItems(frameSizes);
+		        frameSizesBox.setUI(ColoredArrowUI.createUI(frameSizesBox));
 				JLabel fameSizesLabel = new JLabel("Frame Size:");
 				
-				String[] frameSizes = {"Fullscreen", "Medium", "Small", "Dualscreen LEFT", "Dualscreen RIGHT"};
-
-				JComboBox<String> frameSizesBox = new JComboBox<>(frameSizes);
 				if(ScreenSize.fullScreen) frameSizesBox.setSelectedIndex(0);
 				else if(ScreenSize.mediumScreen) frameSizesBox.setSelectedIndex(1);
 				else if(ScreenSize.smallScreen) frameSizesBox.setSelectedIndex(2);
@@ -220,27 +213,52 @@ public class MainGui {
 				frameSizesBox.addActionListener(new ActionListener() {
 					@SuppressWarnings({ "rawtypes" })
 					public void actionPerformed(ActionEvent e) {
-						JComboBox cb = (JComboBox)e.getSource();
-						String selectedSize = (String)cb.getSelectedItem();
-						if(selectedSize.equals("Fullscreen")) ScreenSize.setFullScreen();
-						if(selectedSize.equals("Medium")) ScreenSize.setMediumScreen();
-						if(selectedSize.equals("Small")) ScreenSize.setSmallScreen();
-						if(selectedSize.equals("Dualscreen LEFT")) ScreenSize.setDualScreenLeft();
-						if(selectedSize.equals("Dualscreen RIGHT")) ScreenSize.setDualScreenRight();
-						settingsFrame.dispose();
+						try {
+							JComboBox cb = (JComboBox)e.getSource();
+							String selectedSize = (String)cb.getSelectedItem();
+							if(selectedSize.equals("Fullscreen")) ScreenSize.setFullScreen();
+							if(selectedSize.equals("Medium")) ScreenSize.setMediumScreen();
+							if(selectedSize.equals("Small")) ScreenSize.setSmallScreen();
+							if(selectedSize.equals("Dualscreen LEFT")) ScreenSize.setDualScreenLeft();
+							if(selectedSize.equals("Dualscreen RIGHT")) ScreenSize.setDualScreenRight();
+						} catch (ClassCastException e2) {
+							return;
+						}
+					}
+				});				
+
+				ColoredJButton applyButton = new ColoredJButton("Apply");
+				applyButton.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e) {
+						frame.dispose();
+						frame.setUndecorated(undecoratedBoolean);
 						changeScreenSize();
+						new MainGui();
+						settingsFrame.dispose();
 						updateSettingsFile();
 					}
+					
 				});
-
+				ColoredJButton cancelButton = new ColoredJButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						settingsFrame.dispose();
+					}
+				});
+				
+				ColoredJPanel applySettingsPanel = new ColoredJPanel();
+				applySettingsPanel.add(applyButton);
+				applySettingsPanel.add(cancelButton);
+				
 				ColoredJPanel checkboxPanel = new ColoredJPanel();
 				checkboxPanel.add(themesLabel);
 				checkboxPanel.add(colorThemesBox);
 				checkboxPanel.add(fameSizesLabel);
-				checkboxPanel.add(frameSizesBox);				
-
-				container.add(settingsPanel, BorderLayout.CENTER);
-				container.add(checkboxPanel, BorderLayout.SOUTH);
+				checkboxPanel.add(frameSizesBox);
+				
+				container.add(settingsPanel, BorderLayout.NORTH);
+				container.add(checkboxPanel, BorderLayout.CENTER);
+				container.add(applySettingsPanel, BorderLayout.SOUTH);
 
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);

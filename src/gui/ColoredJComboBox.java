@@ -24,8 +24,8 @@ public ColoredJComboBox(){
    /**
     * Add an array items to this combo box.
     * Each item is an array of two String elements:
-    * - first element is vehicle name.
-    * - second element is path of an image file for country flag.
+    * - first element is the name.
+    * - second element is path of an image file.
     * @param items
     */
    @SuppressWarnings("unchecked")

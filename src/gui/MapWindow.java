@@ -120,7 +120,6 @@ public class MapWindow {
         						 {"Car", "resources/car.png"}};
         vehicleBox.addItems(vehicleList);
         vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
-		
         
         ColoredJComboBox routeBox = new ColoredJComboBox();
         routeBox.setPreferredSize(new Dimension(120, 30));
