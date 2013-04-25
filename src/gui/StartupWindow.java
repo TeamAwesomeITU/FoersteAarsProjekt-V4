@@ -24,29 +24,30 @@ public class StartupWindow{
 	 */
 	public StartupWindow(){
 		createStartupScreen();
-		
+		long s = System.currentTimeMillis();
 		
 		long startTime = System.currentTimeMillis();
-		System.out.println("Making QuadTree");
+		//System.out.println("Making QuadTree");
 		loadingBar.setString("Making QuadTree");
 		QuadTree.getEntireQuadTree();
 		long endTime = System.currentTimeMillis();
-		System.out.println("QuadTree creation takes " + (endTime - startTime) + " milliseconds");
+		//System.out.println("QuadTree creation takes " + (endTime - startTime) + " milliseconds");
 
 		long startTime2 = System.currentTimeMillis();
-		System.out.println("Making NodeMap");
-		loadingBar.setString("Making NodeMap");
+		//System.out.println("Making NodeArray");
+		loadingBar.setString("Making NodeArray");
 		DataHolding.getNodeArray();
 		long endTime2 = System.currentTimeMillis();
-		System.out.println("NodeMap creation takes " + (endTime2 - startTime2) + " milliseconds");
+		//System.out.println("NodeArray creation takes " + (endTime2 - startTime2) + " milliseconds");
 		
 		long startTime3 = System.currentTimeMillis();
-		System.out.println("Making EdgeMap");
-		loadingBar.setString("Making EdgeMap");
+		//System.out.println("Making EdgeArray");
+		loadingBar.setString("Making EdgeArray");
 		DataHolding.getEdgeArray();
 		long endTime3 = System.currentTimeMillis();
-		System.out.println("EdgeSet creation takes " + (endTime3 - startTime3) + " milliseconds");
-		
+		//System.out.println("EdgeArray creation takes " + (endTime3 - startTime3) + " milliseconds");
+		long t = System.currentTimeMillis();
+		System.out.println("Startup " + (t-s));
 		MainGui.menuBoolean = true;		
 		
 		/*
