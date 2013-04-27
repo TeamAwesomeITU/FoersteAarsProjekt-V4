@@ -51,7 +51,6 @@ public class MapPanel extends JPanel {
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
 		//markOgKasperTester();
 		makeLinesForMap();
-		makeCoastLineForMap();
 		setBorderForPanel();
 		addMouseListener(mapMouseZoomAndPan);
 		addMouseMotionListener(mapMouseZoomAndPan);
@@ -72,57 +71,7 @@ public class MapPanel extends JPanel {
 			area = new AreaToDraw();
 		edgesToDraw = FindRelevantEdges.findEdgesToDraw(area);
 		coordConverter = new CoordinateConverter((int)mapWidth, (int)mapHeight, area);
-
-		/*
-		String file = ("resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz_convertedJCOORD.txt");
-
-		ArrayList<EdgeLine> list = new ArrayList<EdgeLine>();
-
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			String line1 = reader.readLine();
-			String line2 = reader.readLine();
-
-			while(line1 != null && line2 != null)
-			{
-				String[] coordFrom = line1.split("\\s+");
-				String[] coordTo = line2.split("\\s+");
-				double coordFromX = coordConverter.UTMToPixelCoordX(Double.parseDouble(coordFrom[0]));
-				double coordFromY = coordConverter.UTMToPixelCoordY(Double.parseDouble(coordFrom[1]));
-				double coordToX = coordConverter.UTMToPixelCoordX(Double.parseDouble(coordTo[0]));
-				double coordToY = coordConverter.UTMToPixelCoordY(Double.parseDouble(coordTo[1]));
-
-				double deltaX = Double.parseDouble(coordFrom[0])-Double.parseDouble(coordTo[0]);
-				double deltaY = Double.parseDouble(coordFrom[1])-Double.parseDouble(coordTo[1]);
-				double distanceBetweenPoints = Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
-
-
-				//If the points are not unreasonably far away from each other, and lie within the area, then make a new line
-					if(distanceBetweenPoints < 4000)
-						list.add(new EdgeLine(coordFromX, coordFromY, coordToX, coordToY, 100));
-
-				line2 = line1;
-				line1 = reader.readLine();
-			}
-
-			EdgeLine[] newLinesOfEdges = new EdgeLine[edgesToDraw.length + list.size()];
-			for(int i = 0; i < newLinesOfEdges.length; i++)
-			{
-				if(i < edgesToDraw.length)
-					newLinesOfEdges[i] = edgesToDraw[i];
-				else
-					newLinesOfEdges[i] = list.get(i-edgesToDraw.length);
-			}
-
-			edgesToDraw = newLinesOfEdges;
-
-			reader.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-
-		}
-*/
+		makeCoastLineForMap();
 	}
 	
 	private void makeCoastLineForMap()
@@ -138,18 +87,32 @@ public class MapPanel extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		//Makes sure the inner coastlines gets drawn
+		g2.setXORMode(getBackground());
+		
+		//Drawing coastline
+		for (GeneralPath path : coastLineToDraw) 
+		{
+			g2.setColor(Color.lightGray);
+			g2.fill(path);
+		}
+		
+		//Cancels setXORMode()
+		g2.setPaintMode();
+		
+		//Drawing roads
 		Line2D line = new Line2D.Double();
 		for (Edge edge : edgesToDraw) 
 		{
 			line.setLine(edge.getLine2DToDraw(coordConverter));
-			int roadType = edge.getRoadType();
-						
+			int roadType = edge.getRoadType();						
 			g2.setColor(RoadType.getColor(roadType));
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
-			g2.draw(line); 
-			
-		}
+			g2.draw(line); 			
+		}		
+		
 		if(pathTo != null) 
 		{
 			Stack<Edge> drawPath = pathTo;
@@ -163,8 +126,6 @@ public class MapPanel extends JPanel {
 			}
 		}
 		setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
-		
-		//HER SKAL COASTLINE TEGNES
 
 		if (mapMouseZoomAndPan.getRect() == null) {
 			return; 

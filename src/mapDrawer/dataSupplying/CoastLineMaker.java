@@ -5,7 +5,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 
 import mapDrawer.AreaToDraw;
@@ -71,13 +70,20 @@ public class CoastLineMaker {
 		for(Polygon polygon : relevantPolygonSet)
 		{
 			GeneralPath path = new GeneralPath();
-			LinkedList<double[]> polygonCoordList = polygon.getCoordsList();			
+			LinkedList<double[]> polygonCoordList = polygon.getCoordsList();
+			
+			double[] coords = polygonCoordList.get(0);
+			double xCoord = coordConverter.UTMToPixelCoordX(coords[0]);				
+			double yCoord = coordConverter.UTMToPixelCoordY(coords[1]);	
+			
+			path.moveTo(xCoord, yCoord);
 
-			for(double[] coords : polygonCoordList)	
-			{
-				double xCoord = coordConverter.UTMToPixelCoordX(coords[0]);				
-				double yCoord = coordConverter.UTMToPixelCoordY(coords[1]);				
-				path.moveTo(xCoord, yCoord);
+			for (int i = 1; i < polygonCoordList.size(); i++)
+			{				
+				coords = polygonCoordList.get(i);
+				xCoord = coordConverter.UTMToPixelCoordX(coords[0]);				
+				yCoord = coordConverter.UTMToPixelCoordY(coords[1]);	
+				path.lineTo(xCoord, yCoord);
 			}
 			
 			path.closePath();
@@ -209,7 +215,5 @@ public class CoastLineMaker {
 		getCoastLineToDraw(200, 200, new AreaToDraw())[0].getBounds();
 		long endTime1 = System.currentTimeMillis();
 		System.out.println("Retrieving polygons to draw for the entire map of Denmark takes " + (endTime1 - startTime1) + " milliseconds");		
-		
-		
 	}
 }

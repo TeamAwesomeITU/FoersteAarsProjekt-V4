@@ -170,7 +170,9 @@ public class City {
 	
 	public static void main(String[] args) {
 		
-		System.out.println(allCitiesList.size());
+		System.out.println("Number of cities in file: " + allCitiesList.size());
+		
+		/*
 		for(City city : allCitiesList)
 		{
 			System.out.println("Cityname: " + city.getCityName());
@@ -179,6 +181,7 @@ public class City {
 				System.out.print(iterator.next() + ", ");
 			System.out.println("");
 		}
+		*/
 		
 		System.out.println(getCityByPostalNumber(1100).getCityName());
 		System.out.println(getCityByPostalNumber(9990).getCityName());	

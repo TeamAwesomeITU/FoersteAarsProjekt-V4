@@ -79,6 +79,31 @@ public class Edge {
 	//Road ID to use with turn restrictions
 	private final int toTurn;
 	
+	/**
+	 * 
+	 * @param fromNode The ID of the Node, the Edge goes from
+	 * @param toNode The ID of the Node, the Edge goes to
+	 * @param length The length of the Edge in meters
+	 * @param iD The ID of the Edge
+	 * @param roadType The Edge's road type
+	 * @param roadName The road name of the Edge
+	 * @param fromLeftNumber The first number of the house numbers on the left side of the Edge
+	 * @param toLeftNumber The last number of the house numbers on the left side of the Edge
+	 * @param fromRightNumber The first number of the house numbers on the right side of the Edge
+	 * @param toRightNumber The last number of the house numbers on the right side of the Edge
+	 * @param fromLeftLetter The lowest letter of the house letters on the left side of the Edge
+	 * @param toLeftLetter The highest letter of the house letters on the left side of the Edge
+	 * @param fromRightLetter The lowest letter of the house letters on the right side of the Edge
+	 * @param toRightLetter The highest letter of the house letters on the right side of the Edge
+	 * @param postalNumberLeft The postal number of the left side of the Edge
+	 * @param postalNumberRight The postal number of the right side of the Edge
+	 * @param highWayTurnoff The ID of the highway turnoff
+	 * @param driveTime The time it takes to pass the road, in minutes
+	 * @param oneWay tf = one way in the direction To-From, ft = one way in the direction From-To,	n = No driving allowed,	<blank> = No restrictions
+	 * @param tjekID //TODO wtf goes here?
+	 * @param fromTurn //TODO wtf goes here?
+	 * @param toTurn //TODO wtf goes here?
+	 */
 	public Edge(int fromNode, int toNode, double length, int iD, int roadType, String roadName, int fromLeftNumber,
 			int toLeftNumber, int fromRightNumber, int toRightNumber, String fromLeftLetter, String toLeftLetter, String fromRightLetter,
 			String toRightLetter, int postalNumberLeft, int postalNumberRight, int highWayTurnoff, double driveTime, String oneWay, int tjekID,
@@ -286,7 +311,7 @@ public class Edge {
 	}
 	
 	/**
-	 * 
+	 * Returns a graphic Line2D representation of the Edge
 	 * @param coordconverter The CoordConverter with which the coordinates should be converted
 	 * @return A Line2D representation of the Edge
 	 */
