@@ -68,9 +68,9 @@ public class CoastLineMaker {
 		int indexToInsertPolygon = 0;
 
 		for(Polygon polygon : relevantPolygonSet)
-		{
-			GeneralPath path = new GeneralPath();
+		{			
 			LinkedList<double[]> polygonCoordList = polygon.getCoordsList();
+			GeneralPath path = new GeneralPath(GeneralPath.WIND_EVEN_ODD,polygonCoordList.size());			
 			
 			double[] coords = polygonCoordList.get(0);
 			double xCoord = coordConverter.UTMToPixelCoordX(coords[0]);				
@@ -86,7 +86,7 @@ public class CoastLineMaker {
 				path.lineTo(xCoord, yCoord);
 			}
 			
-			path.closePath();
+			//path.closePath();
 			polygonsArray[indexToInsertPolygon++] = path;
 		}
 
