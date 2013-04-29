@@ -1,7 +1,10 @@
 package gui;
 
+import java.awt.Color;
+
 import javax.swing.BorderFactory;
 import javax.swing.JProgressBar;
+import javax.swing.plaf.basic.BasicProgressBarUI;
 
 @SuppressWarnings("serial")
 public class ColoredJProgressBar extends JProgressBar {
@@ -15,6 +18,11 @@ public class ColoredJProgressBar extends JProgressBar {
 		setIndeterminate(true);
 		setBackground(ColorTheme.BACKGROUND_COLOR);
 		setForeground(ColorTheme.BUTTON_CLICKED_COLOR);
+		setUI(new BasicProgressBarUI(){
+			protected Color getSelectionBackground(){ return ColorTheme.BACKGROUND_COLOR;}
+			protected Color getSelectionForeground(){ return ColorTheme.BACKGROUND_COLOR;}
+		});
+		
 		setStringPainted(true);
 		setBorder(BorderFactory.createEmptyBorder());
 	}
