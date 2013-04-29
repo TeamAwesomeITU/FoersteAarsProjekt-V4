@@ -34,6 +34,7 @@ public class MapPanel extends JPanel {
 	private MapMouseZoomAndPan mapMouseZoomAndPan;
 	private AreaToDraw area;
 	private ArrayList<Edge> edgesToDraw; 
+	private Line2D[] line2DsToDraw;
 	private GeneralPath[] coastLineToDraw;
 	private CoordinateConverter coordConverter;
 	private double mapHeight, mapWidth;
@@ -102,11 +103,16 @@ public class MapPanel extends JPanel {
 		//Cancels setXORMode()
 		g2.setPaintMode();
 		
+		line2DsToDraw = new Line2D.Double[edgesToDraw.size()];
+		
+		int indexToInsert = 0;
+		
 		//Drawing roads
 		Line2D line = new Line2D.Double();
 		for (Edge edge : edgesToDraw) 
 		{
 			line.setLine(edge.getLine2DToDraw(coordConverter));
+			line2DsToDraw[indexToInsert++] = line;
 			int roadType = edge.getRoadType();						
 			g2.setColor(RoadType.getColor(roadType));
 			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
