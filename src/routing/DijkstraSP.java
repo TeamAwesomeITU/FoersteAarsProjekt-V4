@@ -10,10 +10,10 @@ public class DijkstraSP
 	private int[] edgeTo; //contains edgeIDs on the edge towards the node i on edgeTo[i].
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
-	int s;
+	int s, counter = 0;
 	
 	public DijkstraSP(EdgeWeightedDigraph graph, String roadName) {
-		s = 443901;
+		s = -1;
 		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
 		{
 			if (DataHolding.getEdge(i).getRoadName().equals(roadName)) 
@@ -31,18 +31,22 @@ public class DijkstraSP
 		distTo[s] = 0.0;
 
 		pq.insert(s, 0.0);
+		System.out.println("Starting relaxation");
 		while (!pq.isEmpty())
 			relax(graph, pq.delMin());
 	}
 
-	private void relax(EdgeWeightedDigraph graph, int v) {
+	private void relax(EdgeWeightedDigraph graph, int n) {
 		Edge currentEdge;
-		for(Integer e : graph.adj(v)) 
+		for(Integer e : graph.adj(n)) 
 		{
 			currentEdge = DataHolding.getEdge(e);
-			int w = currentEdge.getToNode();
-			if (distTo[w] > distTo[v] + currentEdge.getDriveTime()) {
-				distTo[w] = distTo[v] + currentEdge.getDriveTime();
+			int w = currentEdge.getToNode()-1;
+			if(w == n)
+				w = currentEdge.getFromNode()-1;
+			if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
+			{
+				distTo[w] = distTo[n] + currentEdge.getDriveTime();
 				edgeTo[w] = e;
 				if (pq.contains(w)) pq.changeKey(w, distTo[w]);
 				else pq.insert(w, distTo[w]);
@@ -50,36 +54,42 @@ public class DijkstraSP
 		}
 	}
 
-	public double distTo(int v) { 
-		return distTo[v]; 
+	public double distTo(int n) { 
+		return distTo[n]; 
 	}
 
-	public boolean hasPathTo(int v) { 
-		return distTo[v] < Double.POSITIVE_INFINITY; 
+	public boolean hasPathTo(int n) { 
+		return distTo[n] < Double.POSITIVE_INFINITY; 
 	}
 
 	public Iterable<Edge> pathTo(String roadName) {
-		int v = 441723; 
+		int n = -1; 
 		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
 		{
 			if (DataHolding.getEdge(i).getRoadName().equals(roadName)) 
 			{
-				v = DataHolding.getEdge(i).getToNode();
+				n = DataHolding.getEdge(i).getToNode()-1;
 				break;
 			}
 		}
-		if (!hasPathTo(v)) 
+		if (!hasPathTo(n)) 
 			return null;
 		System.out.println("finding route");
 		Stack<Edge> path = new Stack<Edge>();
-		int i = 0;
-		for (Edge e = DataHolding.getEdge(edgeTo[v]); e != null; e = DataHolding.getEdge(e.getFromNode())) {
+		int newNode = -1;
+		for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(newNode)) {
+			if (n+1 == e.getFromNode())
+				newNode = e.getToNode();
+			else {
+				newNode = e.getFromNode();
+			}
 			if (e.getFromNode() == s) 
 			{
 				path.push(e);
 				System.out.println("Succes!");
 				break;
 			}
+			System.out.println(e.getiD());
 			path.push(e);
 		}
 		return path;
