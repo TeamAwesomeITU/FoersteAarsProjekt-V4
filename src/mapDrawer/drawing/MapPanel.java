@@ -65,6 +65,10 @@ public class MapPanel extends JPanel {
 		addMouseMotionListener(mapMouseZoomAndPan);
 		setFocusable(true);
 	}
+	
+	public MapMouseZoomAndPan getMapMouseZoomAndPan(){
+		return mapMouseZoomAndPan;
+	}
 
 	
 	public void markOgKasperTester() {

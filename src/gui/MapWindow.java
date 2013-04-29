@@ -169,7 +169,7 @@ public class MapWindow {
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
-		mapPanel.setComponentPopupMenu(new MapPopUp());
+		mapPanel.setComponentPopupMenu(new MapPopUp(mapPanel));
 		MapKeyPan.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
 
 		centerColoredJPanel.add(mapPanel);
@@ -361,21 +361,21 @@ public class MapWindow {
 		 * @Override the mouseMoved method
 		 */
 		public void mouseMoved(MouseEvent e) {
-			if (MainGui.coordinatesBoolean) {
-				mapAreaToDraw = mapPanel.getArea();
-				coordConverter = new CoordinateConverter((int)Math.round(getWidthForMap()), (int)Math.round(getHeightForMap()), mapAreaToDraw);
-				double xCord = coordConverter.pixelToUTMCoordX(e.getX());
-				double yCord = coordConverter.pixelToUTMCoordY(e.getY());
+			mapAreaToDraw = mapPanel.getArea();
+			coordConverter = new CoordinateConverter((int)Math.round(getWidthForMap()), (int)Math.round(getHeightForMap()), mapAreaToDraw);
+			double xCord = coordConverter.pixelToUTMCoordX(e.getX());
+			double yCord = coordConverter.pixelToUTMCoordY(e.getY());
 
-				String xString = String.format("%.2f", xCord);
-				String yString = String.format("%.2f", yCord);
-				Edge edge = mapPanel.getHitEdge(xCord, yCord);
-				String roadName = "";
-				if(edge != null)
-					roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
-				
+			String xString = String.format("%.2f", xCord);
+			String yString = String.format("%.2f", yCord);
+			Edge edge = mapPanel.getHitEdge(xCord, yCord);
+			String roadName = "";
+			if(edge != null)
+				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+			if (MainGui.coordinatesBoolean) 				
 				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", Roadname: " + roadName);
-			}
+			else 
+				mapPanel.setToolTipText(roadName);
 		}
 	}
 	/**
