@@ -1,6 +1,7 @@
 package mapDrawer.drawing;
 
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
 import mapDrawer.RoadType;
 import mapDrawer.dataSupplying.City;
@@ -320,7 +321,19 @@ public class Edge {
 		Node fromNode = DataHolding.getNode(getFromNode());
 		Node toNode = DataHolding.getNode(getToNode());
 		
-		return new Line2D.Double(coordconverter.UTMToPixelCoordX(fromNode.getXCoord()), coordconverter.UTMToPixelCoordY(fromNode.getYCoord()), coordconverter.UTMToPixelCoordX(toNode.getXCoord()), coordconverter.UTMToPixelCoordY(toNode.getYCoord()));
+		return new Line2D.Double(coordconverter.UTMToPixelCoordX(fromNode.getXCoord()),
+				coordconverter.UTMToPixelCoordY(fromNode.getYCoord()), coordconverter.UTMToPixelCoordX(toNode.getXCoord()),
+				coordconverter.UTMToPixelCoordY(toNode.getYCoord()));
+	}
+	
+	
+	//TODO lad vær med at lave en line2d for hver Edge - lav i stedet en intersectmetode i edge?
+	public boolean intersects(Rectangle2D rectangle2d)
+	{
+		Node fromNode = DataHolding.getNode(getFromNode());
+		Node toNode = DataHolding.getNode(getToNode());
+		Line2D line2d = new Line2D.Double(fromNode.getXCoord(), fromNode.getYCoord(), toNode.getXCoord(), toNode.getYCoord());		
+		return line2d.intersects(rectangle2d);
 	}
 	
 
