@@ -18,7 +18,7 @@ public class DijkstraSP
 		{
 			if (DataHolding.getEdge(i).getRoadName().equals(roadName)) 
 			{
-				s = DataHolding.getEdge(i).getToNode();
+				s = DataHolding.getEdge(i).getToNode()-1;
 				break;
 			}
 		}
@@ -26,24 +26,27 @@ public class DijkstraSP
 		distTo = new double[graph.nodes()];
 		pq = new IndexMinPQ<Double>(graph.nodes());
 		
-		for (int v = 0; v < graph.nodes(); v++)
-			distTo[v] = Double.POSITIVE_INFINITY;
+		for (int n = 0; n < graph.nodes(); n++)
+			distTo[n] = Double.POSITIVE_INFINITY;
 		distTo[s] = 0.0;
 
 		pq.insert(s, 0.0);
 		System.out.println("Starting relaxation");
 		while (!pq.isEmpty())
 			relax(graph, pq.delMin());
+		System.out.println("Relaxation done");
 	}
 
 	private void relax(EdgeWeightedDigraph graph, int n) {
 		Edge currentEdge;
+		int w = -1;
 		for(Integer e : graph.adj(n)) 
 		{
 			currentEdge = DataHolding.getEdge(e);
-			int w = currentEdge.getToNode()-1;
+			w = currentEdge.getToNode()-1;
 			if(w == n)
 				w = currentEdge.getFromNode()-1;
+			
 			if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
 			{
 				distTo[w] = distTo[n] + currentEdge.getDriveTime();
@@ -74,22 +77,20 @@ public class DijkstraSP
 		}
 		if (!hasPathTo(n)) 
 			return null;
-		System.out.println("finding route");
+		System.out.println("Finding route!");
 		Stack<Edge> path = new Stack<Edge>();
-		int newNode = -1;
-		for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(newNode)) {
+		for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
 			if (n+1 == e.getFromNode())
-				newNode = e.getToNode();
+				n = e.getToNode()-1;
 			else {
-				newNode = e.getFromNode();
+				n = e.getFromNode()-1;
 			}
-			if (e.getFromNode() == s) 
+			if (n == s) 
 			{
 				path.push(e);
-				System.out.println("Succes!");
+				System.out.println("Succes! Route found.");
 				break;
 			}
-			System.out.println(e.getiD());
 			path.push(e);
 		}
 		return path;
