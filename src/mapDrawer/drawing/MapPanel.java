@@ -109,12 +109,15 @@ public class MapPanel extends JPanel {
 		
 		//Drawing roads
 		Line2D line = new Line2D.Double();
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		for (Edge edge : edgesToDraw) 
 		{
 			line.setLine(edge.getLine2DToDraw(coordConverter));
 			int roadType = edge.getRoadType();						
 			g2.setColor(RoadType.getColor(roadType));
 			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
+
 			g2.draw(line); 			
 		}		
 		
@@ -125,7 +128,6 @@ public class MapPanel extends JPanel {
 			{
 				g2.setColor(Color.PINK);
 				line.setLine(drawPath.pop().getLine2DToDraw(coordConverter));
-				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g2.setStroke(new BasicStroke(1000));
 				g2.draw(line); 
 			}
