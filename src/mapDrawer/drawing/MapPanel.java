@@ -58,7 +58,7 @@ public class MapPanel extends JPanel {
 		mapHeight = height;
 		mapWidth = width;
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
-		//markOgKasperTester();
+		markOgKasperTester();
 		makeLinesForMap();
 		setBorderForPanel();
 		addMouseListener(mapMouseZoomAndPan);
@@ -68,8 +68,8 @@ public class MapPanel extends JPanel {
 
 	
 	public void markOgKasperTester() {
-		DijkstraSP dip = new DijkstraSP(new EdgeWeightedDigraph(675902), "Rued Langgaards Vej");
-		pathTo = (Stack<Edge>) dip.pathTo("Røde Mellemvej");
+		DijkstraSP dip = new DijkstraSP(new EdgeWeightedDigraph(675902), "Aavej");
+		pathTo = (Stack<Edge>) dip.pathTo("Følfodvej");
 	}
 	/**
 	 * Draws the lines for the map. 
@@ -129,6 +129,7 @@ public class MapPanel extends JPanel {
 			g2.setColor(RoadType.getColor(roadType));
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.draw(line); 			
 		}		
 		
@@ -137,10 +138,10 @@ public class MapPanel extends JPanel {
 			Stack<Edge> drawPath = pathTo;
 			while(!drawPath.empty()) 
 			{
-				g2.setColor(Color.PINK);
+				g2.setColor(Color.YELLOW);
 				line.setLine(drawPath.pop().getLine2DToDraw(coordConverter));
-				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g2.setStroke(new BasicStroke(1000));
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				g2.draw(line); 
 			}
 		}
