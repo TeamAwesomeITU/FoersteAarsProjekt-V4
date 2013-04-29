@@ -39,6 +39,7 @@ public class MapWindow {
 	private JTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
+	private static String coordinatesString;
 
 	/**
 	 * A constructor for making the window with an empty search query
@@ -313,6 +314,10 @@ public class MapWindow {
 	public JFrame getJFrame() {
 		return MainGui.frame;
 	}
+	
+	public static String getCoordinatesString(){
+		return coordinatesString;
+	}
 
 	//---------------------------------Listeners from here-----------------------------//
 
@@ -369,7 +374,9 @@ public class MapWindow {
 				String xString = String.format("%.2f", xCord);
 				String yString = String.format("%.2f", yCord);
 				
-				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString);
+				coordinatesString = "X: " +  xString +" Y: " + yString;
+				
+				mapPanel.setToolTipText(coordinatesString);
 				//X_CORD.setText(xString);
 				//Y_CORD.setText(yString);
 			} else {
