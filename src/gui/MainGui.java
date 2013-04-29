@@ -106,6 +106,8 @@ public class MainGui {
 
 	/**
 	 * Makes the menu and adds shortcuts to it. This is the standard menu for all future windows.
+	 * It contains alot of anonymous inner classes. These are used mostly by the settings menu, 
+	 * which can alter much of the appearance of the gui.
 	 */
 	public static void makeMenu(){
 		final int SHORT_CUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();

@@ -168,6 +168,7 @@ public class MapWindow {
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
+		mapPanel.setComponentPopupMenu(new MapPopUp());
 		MapKeyPan.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
 
 		centerColoredJPanel.add(mapPanel);

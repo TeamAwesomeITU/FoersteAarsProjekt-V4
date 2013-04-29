@@ -5,7 +5,9 @@ import javax.swing.JComponent;
 import javax.swing.plaf.ComboBoxUI;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
-
+/**
+ * Used to make the arrow of the combobox the same theme as the rest of the combobox.
+ */
 public class ColoredArrowUI extends BasicComboBoxUI {
 	public static ComboBoxUI createUI(JComponent component){
 		return new ColoredArrowUI();
