@@ -133,8 +133,8 @@ public class CoastLineMaker {
 				{				 
 					double xCoord = Double.parseDouble(lineParts[0]);
 					double yCoord = Double.parseDouble(lineParts[1]);
-					if(xCoord > AreaToDraw.getSmallestXOfEntireMap() && xCoord < AreaToDraw.getLargestXOfEntireMap() &&
-							yCoord > AreaToDraw.getSmallestYOfEntireMap() && yCoord < AreaToDraw.getLargestYOfEntireMap())					
+					if(xCoord >= AreaToDraw.getSmallestXOfEntireMap() && xCoord <= AreaToDraw.getLargestXOfEntireMap() &&
+							yCoord >= AreaToDraw.getSmallestYOfEntireMap() && yCoord <= AreaToDraw.getLargestYOfEntireMap())					
 						singlePolygonCoords.add(new double[]{xCoord, yCoord});				
 
 				}

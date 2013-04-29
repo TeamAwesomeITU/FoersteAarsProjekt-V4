@@ -23,9 +23,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
@@ -115,11 +113,10 @@ public class MainGui {
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		menuBar.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
-		menuBar.setBorder(BorderFactory.createEtchedBorder());
+		menuBar.setBorder(BorderFactory.createEmptyBorder());
 
-		JMenu fileMenu = new JMenu("File");
-		JMenuItem quitItem = new JMenuItem("Quit");
-		quitItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
+		ColoredJMenu fileMenu = new ColoredJMenu("File");
+		ColoredJMenuItem quitItem = new ColoredJMenuItem("Quit");
 		quitItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
@@ -127,9 +124,8 @@ public class MainGui {
 		});
 		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, SHORT_CUT_MASK));
 
-		JMenuItem settingsItem = new JMenuItem("Settings");
+		ColoredJMenuItem settingsItem = new ColoredJMenuItem("Settings");
 		settingsItem.setEnabled(menuBoolean);
-		settingsItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
 		settingsItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				readSettingsFile();				
@@ -287,17 +283,15 @@ public class MainGui {
 		fileMenu.add(settingsItem);
 		fileMenu.add(quitItem);
 
-		JMenu helpMenu = new JMenu("Help");
-		JMenuItem controlsItem = new JMenuItem("Contols");
-		controlsItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
+		ColoredJMenu helpMenu = new ColoredJMenu("Help");
+		ColoredJMenuItem controlsItem = new ColoredJMenuItem("Contols");
 		controlsItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(frame, "Zooming: Use the scrollwheel or SHIFT + Left Mouse Button to use a rectangle zoomer. To go a zoomlevel out use Right Mouse button.\n"
 						+ "Panning: Use the arrows buttons or W, S, A or D or drag the map with Left Mouse Button");
 			}
 		});
-		JMenuItem aboutItem = new JMenuItem("About");
-		aboutItem.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);;
+		ColoredJMenuItem aboutItem = new ColoredJMenuItem("About");
 		aboutItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(frame, "Welcome to T-A-M maps. Please enter an address" +
@@ -393,6 +387,14 @@ public class MainGui {
 						dragonBoolean = false;
 				}else updateSettingsFile();
 				
+				if(fileStream.ready()){
+					String coastlinesString = fileStream.readLine().trim();
+					if(coastlinesString.equals("true"))
+						coastlinesWanted = true;
+					else if(coastlinesString.equals("false"))
+						coastlinesWanted = false;
+				}else updateSettingsFile();
+				
 			}
 			else
 				updateSettingsFile();
@@ -439,6 +441,11 @@ public class MainGui {
 				fileWriter.write("Dualscreenright\n");
 			
 			if(dragonBoolean)
+				fileWriter.write("true\n");
+			else
+				fileWriter.write("false\n");
+			
+			if(coastlinesWanted)
 				fileWriter.write("true\n");
 			else
 				fileWriter.write("false\n");
