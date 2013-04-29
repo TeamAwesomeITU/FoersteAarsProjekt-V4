@@ -10,6 +10,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -21,10 +22,12 @@ import mapDrawer.AreaToDraw;
 import mapDrawer.RoadType;
 import mapDrawer.dataSupplying.CoastLineMaker;
 import mapDrawer.dataSupplying.CoordinateConverter;
+import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.FindRelevantEdges;
 import mapDrawer.drawing.mutators.MapMouseZoomAndPan;
 import routing.DijkstraSP;
 import routing.EdgeWeightedDigraph;
+import sun.awt.image.OffScreenImage;
 
 @SuppressWarnings("serial")
 /**
@@ -94,7 +97,6 @@ public class MapPanel extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		//Only do this, if coastlines should be drawn
 		if(MainGui.coastlinesWanted){
@@ -125,6 +127,7 @@ public class MapPanel extends JPanel {
 			iDHashMap.put(indexToInsert, edge.getiD());
 			int roadType = edge.getRoadType();						
 			g2.setColor(RoadType.getColor(roadType));
+			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
 			g2.draw(line); 			
 		}		
@@ -215,5 +218,21 @@ public class MapPanel extends JPanel {
 	 */
 	public double getMapHeight() {
 		return mapHeight;
+	}
+	
+	public Edge getHitEdge(double mouseX, double mouseY)
+	{
+		double squareSideLength = area.getWidth()/100;
+		Rectangle2D square = new Rectangle2D.Double(mouseX-(squareSideLength/2), mouseY-(squareSideLength/2), squareSideLength, squareSideLength); //noget med en størrelse relativ til det vist område);
+		String foundAdress = "";
+		System.out.println(square.getMinX() + " " + square.getMaxX() + " " + square.getMinY() + " " + square.getMaxY());
+		
+		for(Edge edge : edgesToDraw)
+			if(edge.intersects(square))
+			{
+				return edge;
+			}
+		
+		return null;
 	}
 }
