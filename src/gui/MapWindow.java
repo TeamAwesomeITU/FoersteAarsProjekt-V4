@@ -19,7 +19,6 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,8 +38,7 @@ public class MapWindow {
 
 	private JTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
-						  eastColoredJPanel = makeCoordinateJPanel(), southColoredJPanel = MainGui.makeFooter();
-	private JLabel X_CORD, Y_CORD;
+						  eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 
 	/**
 	 * A constructor for making the window with an empty search query
@@ -83,7 +81,6 @@ public class MapWindow {
 	 * Makes the toolbar for the search input
 	 * @return the toolbar to be inserted later.
 	 */
-	@SuppressWarnings("unchecked")
 	public ColoredJPanel makeToolBar(){
 		ColoredJPanel toolBar = new ColoredJPanel();
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
@@ -147,25 +144,12 @@ public class MapWindow {
 	 * makes the coordinates panel to display the coordinates
 	 * @return the coordinates panel to be inserted later.
 	 */
-	public ColoredJPanel makeCoordinateJPanel(){
-		ColoredJPanel coordPanel = new ColoredJPanel();
-		coordPanel.setLayout(new GridLayout(2, 2, 5, 3));
-
-		JLabel xCordJLabel = new JLabel("X-CORD");
-		xCordJLabel.setForeground(ColorTheme.TEXT_COLOR);
-		JLabel yCordJLabel = new JLabel("Y-CORD");
-		yCordJLabel.setForeground(ColorTheme.TEXT_COLOR);
-
-		X_CORD = new JLabel();
-		Y_CORD = new JLabel();
-
-		coordPanel.add(xCordJLabel);
-		coordPanel.add(yCordJLabel);
-		coordPanel.add(X_CORD);
-		coordPanel.add(Y_CORD);
+	public ColoredJPanel makeEastJPanel(){
+		ColoredJPanel JPanel = new ColoredJPanel();
+		JPanel.setLayout(new GridLayout(2, 2, 5, 3));
 
 		ColoredJPanel flow = new ColoredJPanel();
-		flow.add(coordPanel);
+		flow.add(JPanel);
 
 		return flow;
 	}
@@ -184,6 +168,7 @@ public class MapWindow {
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
+		mapPanel.setComponentPopupMenu(new MapPopUp());
 		MapKeyPan.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
 
 		centerColoredJPanel.add(mapPanel);
@@ -377,18 +362,19 @@ public class MapWindow {
 		public void mouseMoved(MouseEvent e) {
 			if (MainGui.coordinatesBoolean) {
 				mapAreaToDraw = mapPanel.getArea();
-				coordConverter = new CoordinateConverter((int)Math.round(getCenterColoredJPanel().getWidth()*0.98), (int)Math.round(centerColoredJPanel.getHeight()*0.98), mapAreaToDraw);
+				coordConverter = new CoordinateConverter((int)Math.round(getWidthForMap()), (int)Math.round(getHeightForMap()), mapAreaToDraw);
 				double xCord = coordConverter.pixelToUTMCoordX(e.getX());
 				double yCord = coordConverter.pixelToUTMCoordY(e.getY());
 
 				String xString = String.format("%.2f", xCord);
 				String yString = String.format("%.2f", yCord);
 				
-				X_CORD.setText(xString);
-				Y_CORD.setText(yString);
+				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString);
+				//X_CORD.setText(xString);
+				//Y_CORD.setText(yString);
 			} else {
-				X_CORD.setText("");
-				Y_CORD.setText("");
+				//X_CORD.setText("");
+				//Y_CORD.setText("");
 			}
 		}
 	}

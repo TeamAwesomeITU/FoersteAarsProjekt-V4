@@ -38,6 +38,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class MainGui {
 
 	private static MainGui instance;
+	
+	public static boolean coastlinesWanted = false;
 
 	public static boolean undecoratedBoolean = false;
 
@@ -104,6 +106,8 @@ public class MainGui {
 
 	/**
 	 * Makes the menu and adds shortcuts to it. This is the standard menu for all future windows.
+	 * It contains alot of anonymous inner classes. These are used mostly by the settings menu, 
+	 * which can alter much of the appearance of the gui.
 	 */
 	public static void makeMenu(){
 		final int SHORT_CUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -159,6 +163,15 @@ public class MainGui {
 					public void itemStateChanged(ItemEvent e) {
 						if(e.getStateChange() == ItemEvent.DESELECTED)	coordinatesBoolean = false;
 						if(e.getStateChange() == ItemEvent.SELECTED)	coordinatesBoolean = true;
+					}
+				});
+				
+				final ColoredJCheckBox coastlines = new ColoredJCheckBox("Coastlines");
+				coastlines.setSelected(coastlinesWanted);
+				coastlines.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						if(e.getStateChange() == ItemEvent.DESELECTED) 	coastlinesWanted = false;
+						if(e.getStateChange() == ItemEvent.SELECTED) 	coastlinesWanted = true;
 					}
 				});
 				
@@ -263,6 +276,7 @@ public class MainGui {
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);
 				settingsPanel.add(dragon);
+				settingsPanel.add(coastlines);
 				settingsFrame.pack();
 				settingsFrame.setLocationRelativeTo(null);	
 				settingsFrame.setVisible(true);
