@@ -201,7 +201,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 
 		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException
 				| InvalidAreaProportionsException e1) {
-			//e1.printStackTrace();
+			e1.printStackTrace();
 			newArea = currentArea;
 		}	
 		

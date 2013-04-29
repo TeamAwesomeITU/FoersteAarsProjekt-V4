@@ -29,8 +29,8 @@ public class RunConverter {
 			UTMRef UTMCoords = latLngCoords.toUTMRef();
 
 			//If the coords are within the wanted map of Denmark
-			if(UTMCoords.getEasting() > AreaToDraw.getSmallestXOfEntireMap() && UTMCoords.getEasting() < AreaToDraw.getLargestXOfEntireMap() && 
-					UTMCoords.getNorthing() > AreaToDraw.getSmallestYOfEntireMap() && UTMCoords.getNorthing() < AreaToDraw.getLargestYOfEntireMap())
+			//if(UTMCoords.getEasting() > AreaToDraw.getSmallestXOfEntireMap() && UTMCoords.getEasting() < AreaToDraw.getLargestXOfEntireMap() && 
+			//		UTMCoords.getNorthing() > AreaToDraw.getSmallestYOfEntireMap() && UTMCoords.getNorthing() < AreaToDraw.getLargestYOfEntireMap())
 				list.add(UTMCoords.getEasting() + " " + UTMCoords.getNorthing()); 
 		}
 
@@ -63,8 +63,8 @@ public class RunConverter {
 				UTMRef UTMCoords = latLngCoords.toUTMRef();
 
 				//If the coords are within the wanted map of Denmark
-				if(UTMCoords.getEasting() > AreaToDraw.getSmallestXOfEntireMap() && UTMCoords.getEasting() < AreaToDraw.getLargestXOfEntireMap() && 
-						UTMCoords.getNorthing() > AreaToDraw.getSmallestYOfEntireMap() && UTMCoords.getNorthing() < AreaToDraw.getLargestYOfEntireMap())
+				//if(UTMCoords.getEasting() > AreaToDraw.getSmallestXOfEntireMap() && UTMCoords.getEasting() < AreaToDraw.getLargestXOfEntireMap() && 
+				//		UTMCoords.getNorthing() > AreaToDraw.getSmallestYOfEntireMap() && UTMCoords.getNorthing() < AreaToDraw.getLargestYOfEntireMap())
 				{
 					list.add(UTMCoords.getEasting() + " " + UTMCoords.getNorthing()); //arr[lineNumber++] = lineX + " " + lineY;
 					previousLineAdded = line;
@@ -99,7 +99,7 @@ public class RunConverter {
 		for(String string : list)
 			System.out.println(string);
 
-		FileOutputStream m_fos = new FileOutputStream(file + "_convertedJCOORD.txt");
+		FileOutputStream m_fos = new FileOutputStream(file + "_convertedJCOORDWAAAAYToBig.txt");
 		Writer out = new OutputStreamWriter(m_fos, "UTF-8");
 		//To get the new line, i.e. "enter", so that a new line will be created with each String
 		String newLineSeperator = System.getProperty("line.separator");

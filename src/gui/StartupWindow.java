@@ -22,7 +22,6 @@ public class StartupWindow{
 	 * The constructor for startupwindow.
 	 * It makes the screen
 	 */
-	@SuppressWarnings("unused")
 	public StartupWindow(){
 		createStartupScreen();
 		long s = System.currentTimeMillis();
