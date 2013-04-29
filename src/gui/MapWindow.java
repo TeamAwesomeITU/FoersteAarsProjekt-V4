@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 
 import mapDrawer.AreaToDraw;
 import mapDrawer.dataSupplying.CoordinateConverter;
+import mapDrawer.drawing.Edge;
 import mapDrawer.drawing.MapPanel;
 import mapDrawer.drawing.mutators.MapKeyPan;
 import mapDrawer.drawing.mutators.MapMouseWheelZoom;
@@ -39,7 +40,6 @@ public class MapWindow {
 	private JTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
-	private static String coordinatesString;
 
 	/**
 	 * A constructor for making the window with an empty search query
@@ -314,10 +314,6 @@ public class MapWindow {
 	public JFrame getJFrame() {
 		return MainGui.frame;
 	}
-	
-	public static String getCoordinatesString(){
-		return coordinatesString;
-	}
 
 	//---------------------------------Listeners from here-----------------------------//
 
@@ -373,15 +369,12 @@ public class MapWindow {
 
 				String xString = String.format("%.2f", xCord);
 				String yString = String.format("%.2f", yCord);
+				Edge edge = mapPanel.getHitEdge(xCord, yCord);
+				String roadName = "";
+				if(edge != null)
+					roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
 				
-				coordinatesString = "X: " +  xString +" Y: " + yString;
-				
-				mapPanel.setToolTipText(coordinatesString);
-				//X_CORD.setText(xString);
-				//Y_CORD.setText(yString);
-			} else {
-				//X_CORD.setText("");
-				//Y_CORD.setText("");
+				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", Roadname: " + roadName);
 			}
 		}
 	}

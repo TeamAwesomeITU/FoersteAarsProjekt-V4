@@ -33,7 +33,7 @@ public class EdgeWeightedDigraph {
 				addEdge(edge.getFromNode(), edge.getiD());
 			}
 			
-			//To here from there
+			//From there to here
 			else if(edge.getOneWay().equals("tf")) 
 			{
 				addEdge(edge.getToNode(), edge.getiD());
