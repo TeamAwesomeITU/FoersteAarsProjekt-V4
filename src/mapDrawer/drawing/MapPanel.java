@@ -1,5 +1,7 @@
 package mapDrawer.drawing;
 
+import gui.MainGui;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -71,7 +73,8 @@ public class MapPanel extends JPanel {
 			area = new AreaToDraw();
 		edgesToDraw = FindRelevantEdges.findEdgesToDraw(area);
 		coordConverter = new CoordinateConverter((int)mapWidth, (int)mapHeight, area);
-		makeCoastLineForMap();
+		if(MainGui.coastlinesWanted)
+			makeCoastLineForMap();
 	}
 	
 	private void makeCoastLineForMap()
@@ -89,18 +92,20 @@ public class MapPanel extends JPanel {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
-		//Makes sure the inner coastlines gets drawn
-		g2.setXORMode(getBackground());
-		
-		//Drawing coastline
-		for (GeneralPath path : coastLineToDraw) 
-		{
-			g2.setColor(Color.lightGray);
-			g2.fill(path);
+		if(MainGui.coastlinesWanted){
+			//Makes sure the inner coastlines gets drawn
+			g2.setXORMode(getBackground());
+
+			//Drawing coastline
+			for (GeneralPath path : coastLineToDraw) 
+			{
+				g2.setColor(Color.lightGray);
+				g2.fill(path);
+			}
+
+			//Cancels setXORMode()
+			g2.setPaintMode();
 		}
-		
-		//Cancels setXORMode()
-		g2.setPaintMode();
 		
 		//Drawing roads
 		Line2D line = new Line2D.Double();

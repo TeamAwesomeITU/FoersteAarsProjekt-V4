@@ -38,6 +38,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class MainGui {
 
 	private static MainGui instance;
+	
+	public static boolean coastlinesWanted = false;
 
 	public static boolean undecoratedBoolean = false;
 
@@ -162,6 +164,15 @@ public class MainGui {
 					}
 				});
 				
+				final ColoredJCheckBox coastlines = new ColoredJCheckBox("Coastlines");
+				coastlines.setSelected(coastlinesWanted);
+				coastlines.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						if(e.getStateChange() == ItemEvent.DESELECTED) 	coastlinesWanted = false;
+						if(e.getStateChange() == ItemEvent.SELECTED) 	coastlinesWanted = true;
+					}
+				});
+				
 				ColoredJComboBox colorThemesBox = new ColoredJComboBox();
 				colorThemesBox.setPreferredSize(new Dimension(120, 30));
 				colorThemesBox.setEditable(true);
@@ -263,6 +274,7 @@ public class MainGui {
 				settingsPanel.add(undecorated);
 				settingsPanel.add(coordinates);
 				settingsPanel.add(dragon);
+				settingsPanel.add(coastlines);
 				settingsFrame.pack();
 				settingsFrame.setLocationRelativeTo(null);	
 				settingsFrame.setVisible(true);
