@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 
 import mapDrawer.drawing.MapPanel;
 import mapDrawer.drawing.mutators.MapMouseZoomAndPan;
@@ -37,6 +38,7 @@ class MapPopUp extends JPopupMenu {
     	zoomOutItem.addActionListener(new ZoomOutActionListener());
     	
         add(coordsCopyItem);
+        add(new JSeparator());
         add(zoomInItem);
         add(zoomOutItem);
     }
@@ -49,7 +51,7 @@ class MapPopUp extends JPopupMenu {
     class CopyCoordsActionListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			CoordsClipboard textTransfer = new CoordsClipboard();
-			//textTransfer.setClipboardContents(MapWindow.getCoordinatesString());
+			//textTransfer.setClipboardContents(mapWindow.getCoordinatesString());
 		}
     	
     }

@@ -1,7 +1,6 @@
 package gui;
 
 import javax.swing.JMenu;
-import javax.swing.UIManager;
 
 @SuppressWarnings("serial")
 public class ColoredJMenu extends JMenu {
