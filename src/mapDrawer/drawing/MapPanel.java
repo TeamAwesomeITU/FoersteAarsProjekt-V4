@@ -40,7 +40,7 @@ public class MapPanel extends JPanel {
 	private AreaToDraw area;
 	private ArrayList<Edge> edgesToDraw; 
 	private Line2D[] line2DsToDraw;
-	
+
 	//HashMap, where the value is the ID of the drawn line, and the key is the value of it's corresponding Edge
 	private HashMap<Integer, Integer> iDHashMap;
 	private GeneralPath[] coastLineToDraw;
@@ -66,10 +66,10 @@ public class MapPanel extends JPanel {
 		setFocusable(true);
 	}
 
-	
+
 	public void markOgKasperTester() {
-		DijkstraSP dip = new DijkstraSP(new EdgeWeightedDigraph(675902), "Aavej");
-		pathTo = (Stack<Edge>) dip.pathTo("Følfodvej");
+		DijkstraSP dip = new DijkstraSP(new EdgeWeightedDigraph(675902), "Følfodvej");
+		pathTo = (Stack<Edge>) dip.pathTo("Aavej");
 	}
 	/**
 	 * Draws the lines for the map. 
@@ -83,12 +83,12 @@ public class MapPanel extends JPanel {
 		if(MainGui.coastlinesWanted)
 			makeCoastLineForMap();
 	}
-	
+
 	private void makeCoastLineForMap()
 	{
 		coastLineToDraw = CoastLineMaker.getCoastLineToDraw((int)mapWidth, (int)mapHeight, area);
 	}
-	
+
 	/**
 	 * Draws all the lines for the map. Also, draws the rectangle used by the user
 	 * to see where you are about to zoom.
@@ -97,7 +97,7 @@ public class MapPanel extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
-		
+
 		//Only do this, if coastlines should be drawn
 		if(MainGui.coastlinesWanted){
 			//Makes sure the inner coastlines gets drawn
@@ -113,11 +113,11 @@ public class MapPanel extends JPanel {
 			//Cancels setXORMode()
 			g2.setPaintMode();
 		}
-		
+
 		line2DsToDraw = new Line2D.Double[edgesToDraw.size()];
 		int indexToInsert = 0;
 		iDHashMap = new HashMap<>();
-		
+
 		//Drawing roads
 		Line2D line = new Line2D.Double();
 		for (Edge edge : edgesToDraw) 
@@ -129,19 +129,18 @@ public class MapPanel extends JPanel {
 			g2.setColor(RoadType.getColor(roadType));
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.draw(line); 			
 		}		
-		
+
 		if(pathTo != null) 
 		{
 			Stack<Edge> drawPath = pathTo;
 			while(!drawPath.empty()) 
 			{
-				g2.setColor(Color.YELLOW);
+				g2.setColor(Color.PINK);
 				line.setLine(drawPath.pop().getLine2DToDraw(coordConverter));
-				g2.setStroke(new BasicStroke(1000));
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setStroke(new BasicStroke(1000));
 				g2.draw(line); 
 			}
 		}
@@ -156,17 +155,17 @@ public class MapPanel extends JPanel {
 			g2.draw(mapMouseZoomAndPan.getRect());
 		} 
 	}
-	
+
 	/**
 	 * Repaints the map to the new AreaToDraw.
 	 */
-	
+
 	public void repaintMap(AreaToDraw area) {
 		this.area = area;
 		makeLinesForMap();
 		repaint();
 	}
-	
+
 	/**
 	 * Repaints the map with same AreaToDraw. Should be used if the window has been resized.
 	 */
@@ -181,7 +180,7 @@ public class MapPanel extends JPanel {
 	public AreaToDraw getArea() {
 		return area;
 	}
-	
+
 	/**
 	 * Sets the width of the MapPanel. Is used when resizing.
 	 * @param width is the width-to-be.
@@ -220,20 +219,20 @@ public class MapPanel extends JPanel {
 	public double getMapHeight() {
 		return mapHeight;
 	}
-	
+
 	public Edge getHitEdge(double mouseX, double mouseY)
 	{
 		double squareSideLength = area.getWidth()/100;
 		Rectangle2D square = new Rectangle2D.Double(mouseX-(squareSideLength/2), mouseY-(squareSideLength/2), squareSideLength, squareSideLength); //noget med en størrelse relativ til det vist område);
 		String foundAdress = "";
 		System.out.println(square.getMinX() + " " + square.getMaxX() + " " + square.getMinY() + " " + square.getMaxY());
-		
+
 		for(Edge edge : edgesToDraw)
 			if(edge.intersects(square))
 			{
 				return edge;
 			}
-		
+
 		return null;
 	}
 }
