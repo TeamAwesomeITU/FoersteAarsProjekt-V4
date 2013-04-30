@@ -58,7 +58,7 @@ public class MapPanel extends JPanel {
 		mapHeight = height;
 		mapWidth = width;
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
-		markOgKasperTester();
+		//markOgKasperTester();
 		makeLinesForMap();
 		setBorderForPanel();
 		addMouseListener(mapMouseZoomAndPan);
@@ -225,18 +225,19 @@ public class MapPanel extends JPanel {
 		return mapHeight;
 	}
 	
+	/**
+	 * Returns an Edge, which lies near the given mouse coordinates.
+	 * @param mouseX The x coordinate of the mouse
+	 * @param mouseY The y coordinate of the mouse
+	 * @return An Edge, which lies near the given mouse coordinates.
+	 */
 	public Edge getHitEdge(double mouseX, double mouseY)
 	{
 		double squareSideLength = area.getWidth()/100;
-		Rectangle2D square = new Rectangle2D.Double(mouseX-(squareSideLength/2), mouseY-(squareSideLength/2), squareSideLength, squareSideLength); //noget med en størrelse relativ til det vist område);
-		String foundAdress = "";
-		System.out.println(square.getMinX() + " " + square.getMaxX() + " " + square.getMinY() + " " + square.getMaxY());
-		
+		Rectangle2D square = new Rectangle2D.Double(mouseX-(squareSideLength/2), mouseY-(squareSideLength/2), squareSideLength, squareSideLength);		
 		for(Edge edge : edgesToDraw)
 			if(edge.intersects(square))
-			{
 				return edge;
-			}
 		
 		return null;
 	}
