@@ -2,12 +2,24 @@ package gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import mapDrawer.drawing.MapPanel;
+import mapDrawer.drawing.mutators.MapMouseZoomAndPan;
+
 @SuppressWarnings("serial")
 class MapPopUp extends JPopupMenu {
+	private MapPanel mapPanel;
+    public MapPopUp(MapPanel mapPanel){
+    	addItems();
+    	stylize();
+    	this.mapPanel = mapPanel;
+    }
+    
     public MapPopUp(){
     	addItems();
     	stylize();
@@ -37,7 +49,7 @@ class MapPopUp extends JPopupMenu {
     class CopyCoordsActionListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			CoordsClipboard textTransfer = new CoordsClipboard();
-			textTransfer.setClipboardContents(MapWindow.getCoordinatesString());
+			//textTransfer.setClipboardContents(MapWindow.getCoordinatesString());
 		}
     	
     }
@@ -50,6 +62,8 @@ class MapPopUp extends JPopupMenu {
     
     class ZoomOutActionListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
+			MapMouseZoomAndPan mapMouseZoomAndPan = mapPanel.getMapMouseZoomAndPan();
+			mapMouseZoomAndPan.zoomOut();
 		}
     	
     }
