@@ -95,7 +95,14 @@ public class City {
 		if(postalNumber == 0)
 			return "CITY POSTAL NUMBER DOES NOT BELONG TO A CITY";
 		else
-			return cityHashMap.get(postalNumber).getCityName();
+		{
+			if(cityHashMap.get(postalNumber).getCityName() == null)
+				System.out.println("Could not find postal number: " + postalNumber);
+			String cityName = cityHashMap.get(postalNumber).getCityName();
+
+		
+			return cityName;
+		}
 	}
 	
 	/**
