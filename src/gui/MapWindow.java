@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -37,11 +38,9 @@ import mapDrawer.drawing.mutators.MapPanelResize;
  */
 public class MapWindow {
 
-	private JTextField toSearchQuery, fromSearchQuery;
+	public static JTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
-	private String coordinatesString;
-
 	/**
 	 * A constructor for making the window with an empty search query
 	 */
@@ -169,6 +168,7 @@ public class MapWindow {
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
+		mapPanel.addMouseListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
 		mapPanel.setComponentPopupMenu(new MapPopUp(mapPanel));
 		MapKeyPan.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
@@ -316,9 +316,6 @@ public class MapWindow {
 		return MainGui.frame;
 	}
 	
-	public String getCoordinatesString() {
-		return coordinatesString;
-	}
 
 	//---------------------------------Listeners from here-----------------------------//
 
@@ -351,7 +348,7 @@ public class MapWindow {
 	/**
 	 * The listener for the coordinates
 	 */
-	class CoordinatesMouseMotionListener extends MouseAdapter{
+	class CoordinatesMouseMotionListener extends MouseAdapter {
 
 		private MapPanel mapPanel;
 		private AreaToDraw mapAreaToDraw;
@@ -359,6 +356,24 @@ public class MapWindow {
 
 		public CoordinatesMouseMotionListener(MapPanel mapPanel){
 			this.mapPanel = mapPanel;
+			makeCoordinatesConverter();
+		}
+		
+		public double getXCoord(MouseEvent e){
+			makeCoordinatesConverter();
+			double xCord = coordConverter.pixelToUTMCoordX(e.getX());				
+			return xCord;
+		}
+		
+		public double getYCoord(MouseEvent e){
+			makeCoordinatesConverter();
+			double yCord = coordConverter.pixelToUTMCoordY(e.getY());			
+			return yCord;
+		}
+		
+		public void makeCoordinatesConverter(){
+			mapAreaToDraw = mapPanel.getArea();
+			coordConverter = new CoordinateConverter((int)Math.round(getWidthForMap()), (int)Math.round(getHeightForMap()), mapAreaToDraw);
 		}
 
 		/**
@@ -366,14 +381,10 @@ public class MapWindow {
 		 * @Override the mouseMoved method
 		 */
 		public void mouseMoved(MouseEvent e) {
-			mapAreaToDraw = mapPanel.getArea();
-			coordConverter = new CoordinateConverter((int)Math.round(getWidthForMap()), (int)Math.round(getHeightForMap()), mapAreaToDraw);
-			double xCord = coordConverter.pixelToUTMCoordX(e.getX());
-			double yCord = coordConverter.pixelToUTMCoordY(e.getY());
-
-			String xString = String.format("%.2f", xCord);
-			String yString = String.format("%.2f", yCord);			
-			Edge edge = mapPanel.getHitEdge(xCord, yCord);
+			Edge edge = mapPanel.getHitEdge(getXCoord(e), getYCoord(e));
+			String yString = String.format("%.2f", getYCoord(e));
+			String xString = String.format("%.2f", getXCoord(e));
+			
 			String roadName = "";
 			if(edge != null)
 				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
@@ -382,6 +393,26 @@ public class MapWindow {
 			else 
 				mapPanel.setToolTipText(roadName);
 		}
+		
+		public void mousePressed(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON3){
+				if(MainGui.coordinatesBoolean){
+					String yString = String.format("%.2f", getYCoord(e));
+					String xString = String.format("%.2f", getXCoord(e));
+
+					MainGui.coordinatesString = "X: " + xString + " Y: " + yString;
+				}
+				Edge edge = mapPanel.getHitEdge(getXCoord(e), getYCoord(e));
+				if(edge != null)
+					MainGui.locationString = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+			}
+			
+		}
+		
+		public void mouseClicked(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
 	}
 	/**
 	 * Flips the from and to address

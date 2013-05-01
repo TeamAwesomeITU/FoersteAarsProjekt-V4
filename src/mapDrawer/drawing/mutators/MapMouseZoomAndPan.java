@@ -42,6 +42,10 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 		this.mp = mp;
 		stack = new MapStack<AreaToDraw>();
 	}
+	
+	public void setSetRect(int x, int y){
+		
+	}
 
 	/**
 	 * Registers when mouse is pressed.
@@ -102,44 +106,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			zoomOut();
 		}
 		else if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
-			AreaToDraw area = mp.getArea();
-			stack.push(area);
-			CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), area);
-			
-			//SWITCHING STARTY AND ENDY - WHAT DA FUCK
-			double temp = startY;
-			startY = endY;
-			endY = temp;
-			
-			if(startX < 0)
-				startX = 0;
-			if(startY < 0)
-				startY = 0;			
-			if(endX > mp.getWidth())
-				endX = mp.getWidth();
-			if(endY > mp.getHeight())
-				endY = mp.getHeight();
-			
-			double startXCoord = coordConverter.pixelToUTMCoordX((int) startX);
-			double startYCoord = coordConverter.pixelToUTMCoordY((int) startY);
-
-			double endXCoord = coordConverter.pixelToUTMCoordX((int) endX);
-			double endYCoord = coordConverter.pixelToUTMCoordY((int) endY);
-
-			try {
-				System.out.println("Relation-calculation: startXCoord: " + startXCoord + ", endXCoord: " + endXCoord + ", startYCoord: " + startYCoord + ", endYCoord: " + endYCoord);	
-				area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord, true);	
-				System.out.println("W/H of zoomed area: " + area.getWidth()/area.getHeight());
-				rect = null;
-				mp.repaintMap(area);
-			}
-
-			catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
-				JOptionPane.showMessageDialog(mp, "The selected area is not within the map, please try again.");
-				System.out.println("ERROR: " + e1.getMessage());					
-				rect = null;
-				mp.repaint();
-			}
+			zoomIn();
 		}
 	}
 	
@@ -230,6 +197,47 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 	{
 		AreaToDraw area = stack.pop();
 		mp.repaintMap(area);
+	}
+	
+	public void zoomIn(){
+		AreaToDraw area = mp.getArea();
+		stack.push(area);
+		CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), area);
+		
+		//SWITCHING STARTY AND ENDY - WHAT DA FUCK
+		double temp = startY;
+		startY = endY;
+		endY = temp;
+		
+		if(startX < 0)
+			startX = 0;
+		if(startY < 0)
+			startY = 0;			
+		if(endX > mp.getWidth())
+			endX = mp.getWidth();
+		if(endY > mp.getHeight())
+			endY = mp.getHeight();
+		
+		double startXCoord = coordConverter.pixelToUTMCoordX((int) startX);
+		double startYCoord = coordConverter.pixelToUTMCoordY((int) startY);
+
+		double endXCoord = coordConverter.pixelToUTMCoordX((int) endX);
+		double endYCoord = coordConverter.pixelToUTMCoordY((int) endY);
+
+		try {
+			System.out.println("Relation-calculation: startXCoord: " + startXCoord + ", endXCoord: " + endXCoord + ", startYCoord: " + startYCoord + ", endYCoord: " + endYCoord);	
+			area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord, true);	
+			System.out.println("W/H of zoomed area: " + area.getWidth()/area.getHeight());
+			rect = null;
+			mp.repaintMap(area);
+		}
+
+		catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
+			JOptionPane.showMessageDialog(mp, "The selected area is not within the map, please try again.");
+			System.out.println("ERROR: " + e1.getMessage());					
+			rect = null;
+			mp.repaint();
+		}
 	}
 	
 	/**
