@@ -138,13 +138,16 @@ public class MapPanel extends JPanel {
 
 		if(pathTo != null) 
 		{
-			Stack<Edge> drawPath = pathTo;
+			Stack<Edge> drawPath = (Stack<Edge>) pathTo.clone();
+			Edge edgeToDraw;
 			while(!drawPath.empty()) 
 			{
-				g2.setColor(Color.PINK);
-				line.setLine(drawPath.pop().getLine2DToDraw(coordConverter));
+				edgeToDraw = drawPath.pop();
+				int roadType = edgeToDraw.getRoadType();
+				g2.setColor(Color.YELLOW);
+				line.setLine(edgeToDraw.getLine2DToDraw(coordConverter));
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2.setStroke(new BasicStroke(1000));
+				g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
 				g2.draw(line); 
 			}
 		}
