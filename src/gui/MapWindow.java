@@ -14,7 +14,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -26,13 +25,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import mapDrawer.AreaToDraw;
-import mapDrawer.dataSupplying.CoordinateConverter;
-import mapDrawer.drawing.Edge;
-import mapDrawer.drawing.MapPanel;
-import mapDrawer.drawing.mutators.MapKeyPan;
-import mapDrawer.drawing.mutators.MapMouseWheelZoom;
-import mapDrawer.drawing.mutators.MapPanelResize;
+import mapCreationAndFunctions.AreaToDraw;
+import mapCreationAndFunctions.MapKeyPan;
+import mapCreationAndFunctions.MapMouseWheelZoom;
+import mapCreationAndFunctions.MapPanel;
+import mapCreationAndFunctions.MapPanelResize;
+import mapCreationAndFunctions.data.CoordinateConverter;
+import mapCreationAndFunctions.data.Edge;
 /**
  * This class holds the window with the map of denmark.
  */
