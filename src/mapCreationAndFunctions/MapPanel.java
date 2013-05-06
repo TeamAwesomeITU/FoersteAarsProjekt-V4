@@ -70,8 +70,8 @@ public class MapPanel extends JPanel {
 
 
 	public void markOgKasperTester() {
-		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), "Følfodvej", "car");
-		pathTo = (Stack<Edge>) dip.pathTo("Aavej");
+		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), "Aavej", "car");
+		pathTo = (Stack<Edge>) dip.pathTo("FÃ¸lfodvej");
 	}
 	/**
 	 * Draws the lines for the map. 

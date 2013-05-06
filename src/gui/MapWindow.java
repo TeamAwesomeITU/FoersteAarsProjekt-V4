@@ -32,7 +32,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import mapCreationAndFunctions.AreaToDraw;
-import mapCreationAndFunctions.MapKeyPan;
 import mapCreationAndFunctions.MapMouseWheelZoom;
 import mapCreationAndFunctions.MapPanel;
 import mapCreationAndFunctions.MapPanelResize;
@@ -175,7 +174,6 @@ public class MapWindow {
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
-		MapKeyPan.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
 
 		centerColoredJPanel.add(mapPanel);
 		MainGui.contentPane.add(centerColoredJPanel, BorderLayout.CENTER);
@@ -391,7 +389,7 @@ public class MapWindow {
 			
 			String roadName = "";
 			if(edge != null)
-				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName() + " edgeID: "+ edge.getiD();
 			if (MainGui.coordinatesBoolean) 				
 				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", " + "Roadname: " + roadName);
 			else 
