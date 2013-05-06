@@ -2,8 +2,10 @@ package mapCreationAndFunctions.data;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import navigation.EdgeWeightedDigraph;
 
@@ -38,7 +40,7 @@ public class DataHolding {
 		try {				
 			Edge[] edgeArray = new Edge[numberOfEdges];
 			File file = new File("XML/edge.txt");
-			BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
 			//To skip the first line
 			reader.readLine();
@@ -108,7 +110,7 @@ public class DataHolding {
 			long startTime = System.currentTimeMillis();
 			Node[] nodeArray = new Node[numberOfNodes];
 			File file = new File("XML/kdv_node_unload.txt_modified.txt");
-			BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
 			//To skip the first line
 			reader.readLine();
