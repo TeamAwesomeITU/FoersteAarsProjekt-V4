@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 
-import mapDrawer.drawing.Edge;
+import mapCreationAndFunctions.data.Edge;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;

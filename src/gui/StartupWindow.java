@@ -8,8 +8,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import mapDrawer.dataSupplying.DataHolding;
-import mapDrawer.dataSupplying.QuadTree;
+import mapCreationAndFunctions.data.DataHolding;
+import mapCreationAndFunctions.data.QuadTree;
 
 /**
  * This class makes the first window the user sees. It is
