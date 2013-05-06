@@ -1,18 +1,11 @@
 package gui;
 
-import inputHandler.Main;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
-
-import mapDrawer.drawing.MapPanel;
-import mapDrawer.drawing.mutators.MapMouseZoomAndPan;
+import mapCreationAndFunctions.MapMouseZoomAndPan;
+import mapCreationAndFunctions.MapPanel;
 
 @SuppressWarnings("serial")
 class MapPopUp extends JPopupMenu {
