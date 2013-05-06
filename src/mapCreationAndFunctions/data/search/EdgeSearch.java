@@ -11,15 +11,15 @@ import mapCreationAndFunctions.data.Edge;
  */
 public class EdgeSearch  {
 
-	private static TernarySearchTrieEdge edgeSearchTrie = createEdgeSearchTrie();
+	private static TernarySearchTrie edgeSearchTrie = createEdgeSearchTrie();
 
 	/**
 	 * Creates a ternary search tree 
 	 * @return the created ternary search tree.
 	 */
-	private static TernarySearchTrieEdge createEdgeSearchTrie()
+	private static TernarySearchTrie createEdgeSearchTrie()
 	{
-		TernarySearchTrieEdge tst = new TernarySearchTrieEdge();
+		TernarySearchTrie tst = new TernarySearchTrie();
 
 		//Excludes Edges with no name
 		for(Edge edge : DataHolding.getEdgeArray())
@@ -56,7 +56,7 @@ public class EdgeSearch  {
 		Iterable<String> roadNames = edgeSearchTrie.prefixMatch(edgeToFind);
 		Iterator<String> roadNameIterator = roadNames.iterator();
 		ArrayList<Edge> roadList = new ArrayList<>();
-		
+
 		while(roadNameIterator.hasNext())
 		{
 			String roadName = roadNameIterator.next();
@@ -64,7 +64,7 @@ public class EdgeSearch  {
 			for(Edge edge : edges)
 				roadList.add(edge);
 		}
-			
+
 		return roadList.toArray(new Edge[roadList.size()]);
 	}
 

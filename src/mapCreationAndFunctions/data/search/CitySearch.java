@@ -1,45 +1,55 @@
 package mapCreationAndFunctions.data.search;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import mapCreationAndFunctions.data.City;
+import mapCreationAndFunctions.data.Edge;
 
 /**
  * Enables searching for Cities by name 
  */
 public class CitySearch  {
 
-	private static TernarySearchTrieCity citySearchTrie = createCitySearchTrie();
+	private static TernarySearchTrie citySearchTrie = createCitySearchTrie();
 
-	private static TernarySearchTrieCity createCitySearchTrie()
+	private static TernarySearchTrie createCitySearchTrie()
 	{
-		TernarySearchTrieCity tst = new TernarySearchTrieCity();
+		TernarySearchTrie tst = new TernarySearchTrie();
 
 		for(City city : City.getAllCities())
-				tst.put(city.getCityName(), city.getCityPostalNumbers());
+			tst.put(city.getCityName(), city.getCityID());
 
 		return tst;
 	}
 
-	public static City searchForCityName(String edgeToFind)
+	public static City[] searchForCityName(String cityToFind)
 	{
-		HashSet<Integer> postalNumbers = citySearchTrie.get(edgeToFind);
-		if(postalNumbers == null)
-			return null;
-		return City.getCityByPostalNumber(postalNumbers.iterator().next());
+		ArrayList<Integer> listOfFoundEdges = citySearchTrie.get(cityToFind);
+
+		City[] arrayOfFoundCities = new City[listOfFoundEdges.size()];
+
+		for (int i = 0; i < arrayOfFoundCities.length; i++)
+			arrayOfFoundCities[i] = City.getCityByID(listOfFoundEdges.get(i)); 
+
+		return arrayOfFoundCities;
 	}
 
-	public static City[] getCityNameSuggestions(String edgeToFind)
+	public static City[] getCityNameSuggestions(String cityToFind)
 	{
-		Iterable<String> cityNames = citySearchTrie.prefixMatch(edgeToFind);
-		Iterator<String> cityNameIterator = cityNames.iterator();
-		ArrayList<City> citiesList = new ArrayList<>();
+		Iterable<String> cityNames = citySearchTrie.prefixMatch(cityToFind);
+		Iterator<String> cityNamesIterator = cityNames.iterator();
+		ArrayList<City> cityList = new ArrayList<>();
 		
-		while(cityNameIterator.hasNext())
-			citiesList.add(City.getCityByCityName(cityNameIterator.next()));
-			
-		return citiesList.toArray(new City[citiesList.size()]);
+		while(cityNamesIterator.hasNext())
+		{
+			String cityName = cityNamesIterator.next();
+			System.out.println("Trying to find city: " + cityName);
+			City city = City.getCityByCityName(cityName);
+			if(!(city == null))
+			cityList.add(City.getCityByCityName(cityName));
+		}
+
+		return cityList.toArray(new City[cityList.size()]);
 	}
 }
