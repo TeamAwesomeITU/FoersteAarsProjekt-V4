@@ -48,6 +48,8 @@ public class MainGui {
 	public static boolean isDefaultCursor;
 	
 	public static boolean dragonBoolean = false;
+	
+	public static String locationString, coordinatesString;
 
 	public static JFrame frame;
 
