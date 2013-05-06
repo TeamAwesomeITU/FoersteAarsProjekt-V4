@@ -178,6 +178,13 @@ public class City {
 		}		
 	}
 	
+	public static ArrayList<City> getAllCities()
+	{
+		if(initilalized == false)
+			createCities();
+		return allCitiesList;
+	}
+	
 	public static void main(String[] args) {
 		
 		System.out.println("Number of cities in file: " + allCitiesList.size());
