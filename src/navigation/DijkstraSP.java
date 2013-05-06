@@ -43,50 +43,50 @@ public class DijkstraSP
 		pq.insert(s, 0.0);
 		System.out.println("Starting relaxation");
 		while (!pq.isEmpty())
-			relax(pq.delMin());
+			prepareForRelax(pq.delMin());
 		System.out.println("Relaxation done");
 	}
 
-	private void relax(int n) {
+	private void prepareForRelax(int n) {
 		Edge currentEdge;
-		int w = -1;
 		for(Integer e : graph.adj(n)) 
 		{
 			currentEdge = DataHolding.getEdge(e);
-			if (!setOfNonViableEdges.contains(currentEdge.getRoadType())) 
-				if(setOfNonViableRoadTypes != null && setOfNonViableRoadTypes.contains(currentEdge.getOneWay())) 
-				{
-					//This is rather stupid, but works for now.
-				}
-				else 
-				{
-					w = currentEdge.getToNode()-1;
-					if(w == n)
-						w = currentEdge.getFromNode()-1;
-					if (type.equals("driveTime")) 
-					{
-						if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
-						{
-							distTo[w] = distTo[n] + currentEdge.getDriveTime();
-							edgeTo[w] = e;
-							if (pq.contains(w)) pq.changeKey(w, distTo[w]);
-							else pq.insert(w, distTo[w]);
-						}
-					}
-					else if(type.equals("shortestPath"))
-					{
-						if (distTo[w] > distTo[n] + currentEdge.getLength()) 
-						{
-							distTo[w] = distTo[n] + currentEdge.getLength();
-							edgeTo[w] = e;
-							if (pq.contains(w)) pq.changeKey(w, distTo[w]);
-							else pq.insert(w, distTo[w]);
-						}
-					}
-				}
+			if(!setOfNonViableEdges.contains(currentEdge.getRoadType())) {
+				if(currentEdge.getRoadType() == 1)
+					relax(n, currentEdge);
+				else if(!setOfNonViableRoadTypes.contains(currentEdge.getOneWay()))
+					relax(n, currentEdge);
+			}
 		}
 	}
 
+	private void relax(int n, Edge currentEdge) {
+		int w = -1;
+		w = currentEdge.getToNode()-1;
+		if(w == n)
+			w = currentEdge.getFromNode()-1;
+		if (type.equals("driveTime")) 
+		{
+			if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
+			{
+				distTo[w] = distTo[n] + currentEdge.getDriveTime();
+				edgeTo[w] = currentEdge.getiD();
+				if (pq.contains(w)) pq.changeKey(w, distTo[w]);
+				else pq.insert(w, distTo[w]);
+			}
+		}
+		else if(type.equals("shortestPath"))
+		{
+			if (distTo[w] > distTo[n] + currentEdge.getLength()) 
+			{
+				distTo[w] = distTo[n] + currentEdge.getLength();
+				edgeTo[w] = currentEdge.getiD();
+				if (pq.contains(w)) pq.changeKey(w, distTo[w]);
+				else pq.insert(w, distTo[w]);
+			}
+		}
+	}
 	public double distTo(int n) { 
 		return distTo[n]; 
 	}
@@ -136,7 +136,8 @@ public class DijkstraSP
 		case "car": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{8,11,28}));
 		setOfNonViableRoadTypes = new HashSet<String>(Arrays.asList(new String[]{"tf", "n"})); break;
 
-		case "walk": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,3,4,21,22,23,24,31,32,33,34,41,42,43,44})); break;
+		case "walk": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,3,4,21,22,23,24,31,32,33,34,41,42,43,44})); 
+		setOfNonViableRoadTypes = new HashSet<String>();
 		default:
 			break;
 		}
