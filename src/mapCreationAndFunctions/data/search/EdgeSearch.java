@@ -1,19 +1,22 @@
 package mapCreationAndFunctions.data.search;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Iterator;
 
-import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 
-
+/**
+ * Enables searching for Edges by road name, or by road name and postal number
+ */
 public class EdgeSearch  {
 
 	private static TernarySearchTrieEdge edgeSearchTrie = createEdgeSearchTrie();
 
+	/**
+	 * Creates a ternary search tree 
+	 * @return the created ternary search tree.
+	 */
 	private static TernarySearchTrieEdge createEdgeSearchTrie()
 	{
 		TernarySearchTrieEdge tst = new TernarySearchTrieEdge();
@@ -26,6 +29,11 @@ public class EdgeSearch  {
 		return tst;
 	}
 
+	/**
+	 * Searches for the specified road name
+	 * @param edgeToFind
+	 * @return An array of all the Edges with the given road name.
+	 */
 	public static Edge[] searchForRoadName(String edgeToFind)
 	{
 		ArrayList<Integer> listOfFoundEdges = edgeSearchTrie.get(edgeToFind);
@@ -38,7 +46,11 @@ public class EdgeSearch  {
 		return arrayOfFoundEdges;
 	}
 
-	/*
+	/**
+	 * Searches for road names, that starts with the given string. Uses a really fucking stupid way to obtain suggestions - but it works, and its speed is acceptable.
+	 * @param edgeToFind The name of the Edge to find
+	 * @return An array of all the Edges, that starts with the given String
+	 */
 	public static Edge[] getRoadNameSuggestions(String edgeToFind)
 	{
 		Iterable<String> roadNames = edgeSearchTrie.prefixMatch(edgeToFind);
@@ -46,17 +58,21 @@ public class EdgeSearch  {
 		ArrayList<Edge> roadList = new ArrayList<>();
 		
 		while(roadNameIterator.hasNext())
-			roadList.add(roadNameIterator.next()));
+		{
+			String roadName = roadNameIterator.next();
+			Edge[] edges = searchForRoadName(roadName);
+			for(Edge edge : edges)
+				roadList.add(edge);
+		}
 			
 		return roadList.toArray(new Edge[roadList.size()]);
 	}
-	*/
 
 	/**
-	 * Assumes that a city only has a single road by the given name
-	 * @param edgeToFind
-	 * @param postalNumber
-	 * @return
+	 * Returns the Edge with the given road name, inside a specified city. Assumes that a city only has a single road by the given name.
+	 * @param edgeToFind The name of the road
+	 * @param postalNumber The postal number, which the road belongs to
+	 * @return The wanted Edge - null, if no match could be found
 	 */
 	public static Edge searchForRoadNameInCity(String edgeToFind, int postalNumber)
 	{
@@ -70,22 +86,4 @@ public class EdgeSearch  {
 
 		return null;
 	}	
-
-	public static void main( String[] args )
-	{
-		double startTime = System.currentTimeMillis();
-		Edge[] foundEdges = searchForRoadName("Nørregade");
-		double endTime = System.currentTimeMillis();
-		
-		System.out.println("Search took: " + (endTime-startTime) + "miliseconds");
-
-		//Edge edge = searchForRoadNameInCity("Nørregade", 4600);
-
-
-		//System.out.println(edge.getRoadName());
-		
-		for(Edge edge : foundEdges)
-			System.out.println(edge.getiD());
-		
-	}
 }

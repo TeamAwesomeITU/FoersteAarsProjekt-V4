@@ -6,6 +6,9 @@ import java.util.Iterator;
 
 import mapCreationAndFunctions.data.City;
 
+/**
+ * Enables searching for Cities by name 
+ */
 public class CitySearch  {
 
 	private static TernarySearchTrieCity citySearchTrie = createCitySearchTrie();
@@ -14,7 +17,6 @@ public class CitySearch  {
 	{
 		TernarySearchTrieCity tst = new TernarySearchTrieCity();
 
-		//Excludes Edges with no name
 		for(City city : City.getAllCities())
 				tst.put(city.getCityName(), city.getCityPostalNumbers());
 
@@ -39,20 +41,5 @@ public class CitySearch  {
 			citiesList.add(City.getCityByCityName(cityNameIterator.next()));
 			
 		return citiesList.toArray(new City[citiesList.size()]);
-	}
-
-	public static void main( String[] args )
-	{
-		double startTime = System.currentTimeMillis();
-		City foundCity = searchForCityName("Køge");
-		double endTime = System.currentTimeMillis();		
-		System.out.println("Search took: " + (endTime-startTime) + "miliseconds");
-		//System.out.println(foundCity.getCityName());
-		
-		City[] citiesList = getCityNameSuggestions("Køb");
-		
-		for(City city : citiesList)
-			System.out.println(city.getCityName());
-		
 	}
 }
