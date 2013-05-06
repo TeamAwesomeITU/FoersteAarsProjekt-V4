@@ -1,5 +1,6 @@
 package gui;
 
+
 import javax.swing.JCheckBox;
 /**
  * This is our own implementation of the JCheckBox.
@@ -11,7 +12,7 @@ public class ColoredJCheckBox extends JCheckBox {
 	 * Calls the super constructor. 
 	 * @param text Sets the text of the checkbox.
 	 */
-	ColoredJCheckBox(String text){
+	public ColoredJCheckBox(String text){
 		super();
 		super.setBackground(ColorTheme.BACKGROUND_COLOR);
 		super.setText(text);
