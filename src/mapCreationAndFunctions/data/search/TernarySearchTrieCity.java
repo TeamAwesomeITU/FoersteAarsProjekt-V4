@@ -5,12 +5,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Copied from the book "Algorithms - Fourth Edition" by Robert Sedgewick and Kevin Wayne, 2011
- * Modified to contain an ArrayList<Integer>, instead of a single value.
+ * Modified to contain an HashSet<Integer>, instead of a single value.
  */
-public class TernarySearchTrie
+public class TernarySearchTrieCity
 {
 	private int N;       // size
 	private TrieNode root;   // root of TST
@@ -19,7 +20,7 @@ public class TernarySearchTrie
 	{
 		private char c;                 // character
 		private TrieNode left, mid, right;  // left, middle, and right subtries
-		private ArrayList<Integer> val = new ArrayList<>();              // ArrayList<Integer> associated with string
+		private HashSet<Integer> set;              // HashSet<Integer> associated with string
 	}
 
 	public int size()
@@ -28,12 +29,12 @@ public class TernarySearchTrie
 	public boolean contains(String key)
 	{ return get(key) != null; }
 
-	public ArrayList<Integer> get(String key) {
+	public HashSet<Integer> get(String key) {
 		if (key == null) throw new NullPointerException();
 		if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
 		TrieNode x = get(root, key, 0);
 		if (x == null) return null;
-		return (ArrayList<Integer>) x.val;
+		return x.set;
 	}
 
 	private TrieNode get(TrieNode x, String key, int d) {
@@ -47,21 +48,21 @@ public class TernarySearchTrie
 		else                           return x;
 	}
 
-	public void put(String s, int val) {
+	public void put(String s, HashSet<Integer> set) {
 		if (!contains(s)) N++;
-		root = put(root, s, val, 0);
+		root = put(root, s, set, 0);
 	}
 
-	private TrieNode put(TrieNode x, String s, int val, int d) {
+	private TrieNode put(TrieNode x, String s, HashSet<Integer> set, int d) {
 		char c = s.charAt(d);
 		if (x == null) {
 			x = new TrieNode();
 			x.c = c;
 		}
-		if      (c < x.c)             x.left  = put(x.left,  s, val, d);
-		else if (c > x.c)             x.right = put(x.right, s, val, d);
-		else if (d < s.length() - 1)  x.mid   = put(x.mid,   s, val, d+1);
-		else                          x.val.add(val);
+		if      (c < x.c)             x.left  = put(x.left,  s, set, d);
+		else if (c > x.c)             x.right = put(x.right, s, set, d);
+		else if (d < s.length() - 1)  x.mid   = put(x.mid,   s, set, d+1);
+		else                          x.set = set;
 		return x;
 	}
 
@@ -76,7 +77,7 @@ public class TernarySearchTrie
 			else if (c > x.c) x = x.right;
 			else {
 				i++;
-				if (x.val != null) length = i;
+				if (x.set != null) length = i;
 				x = x.mid;
 			}
 		}
@@ -93,7 +94,7 @@ public class TernarySearchTrie
 		Queue<String> queue = new Queue<String>();
 		TrieNode x = get(root, prefix, 0);
 		if (x == null) return queue;
-		if (x.val != null) queue.enqueue(prefix);
+		if (x.set != null) queue.enqueue(prefix);
 		collect(x.mid, prefix, queue);
 		return queue;
 	}
@@ -101,7 +102,7 @@ public class TernarySearchTrie
 	private void collect(TrieNode x, String prefix, Queue<String> queue) {
 		if (x == null) return;
 		collect(x.left,  prefix,       queue);
-		if (x.val != null) queue.enqueue(prefix + x.c);
+		if (x.set != null) queue.enqueue(prefix + x.c);
 		collect(x.mid,   prefix + x.c, queue);
 		collect(x.right, prefix,       queue);
 	}
@@ -117,33 +118,9 @@ public class TernarySearchTrie
 		char c = pat.charAt(i);
 		if (c == '.' || c < x.c) collect(x.left, prefix, i, pat, q);
 		if (c == '.' || c == x.c) {
-			if (i == pat.length() - 1 && x.val != null) q.enqueue(prefix + x.c);
+			if (i == pat.length() - 1 && x.set != null) q.enqueue(prefix + x.c);
 			if (i < pat.length() - 1) collect(x.mid, prefix + x.c, i+1, pat, q);
 		}
 		if (c == '.' || c > x.c) collect(x.right, prefix, i, pat, q);
-	}
-
-	public static void main(String[] args) throws IOException {
-		TernarySearchTrie st = new TernarySearchTrie();
-		
-		File file = new File("resources/shellsSTTEST.txt");
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		
-		String[] words = reader.readLine().split("\\s+");
-		reader.close();
-		
-		int i = 0;
-		
-		for(String word : words)
-			st.put(word, i++);
-
-		// print results
-		for (String key : st.keys()) {
-			ArrayList<Integer> list = st.get(key);
-			for (int j = 0; j < list.size(); j++) {
-				System.out.println(key + " " + list.get(j));
-			}
-			
-		}
 	}
 }

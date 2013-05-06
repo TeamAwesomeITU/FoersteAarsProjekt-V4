@@ -3,46 +3,89 @@ package mapCreationAndFunctions.data.search;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 
+import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 
 
 public class EdgeSearch  {
 
-	private static TernarySearchTrie edgeSearchTrie = createEdgeSearchTrie();
-	
-	private static TernarySearchTrie createEdgeSearchTrie()
+	private static TernarySearchTrieEdge edgeSearchTrie = createEdgeSearchTrie();
+
+	private static TernarySearchTrieEdge createEdgeSearchTrie()
 	{
-		TernarySearchTrie tst = new TernarySearchTrie();
-		
+		TernarySearchTrieEdge tst = new TernarySearchTrieEdge();
+
+		//Excludes Edges with no name
 		for(Edge edge : DataHolding.getEdgeArray())
-			tst.put(edge.getRoadName(), edge.getiD());
-		
+			if(!edge.getRoadName().isEmpty())
+				tst.put(edge.getRoadName(), edge.getiD());
+
 		return tst;
 	}
-	
-	private static Edge[] createEdgeArrayByRoadName(Edge[] arr)
-	{
-	}	
-	
-	private static Edge[] createEdgeArrayByRoadTypeCategory(Edge[] arr)
-	{
-	}
-	
-	//Returner kun den første Edge - dvs. hvis der er flere forekomster af navnet, finder den kun den første!! Smider desuden IndexOutOfBounds-exception, hvis vejen ikke kan findes
+
 	public static Edge[] searchForRoadName(String edgeToFind)
 	{
+		ArrayList<Integer> listOfFoundEdges = edgeSearchTrie.get(edgeToFind);
+
+		Edge[] arrayOfFoundEdges = new Edge[listOfFoundEdges.size()];
+
+		for (int i = 0; i < arrayOfFoundEdges.length; i++)
+			arrayOfFoundEdges[i] = DataHolding.getEdge(listOfFoundEdges.get(i)); 
+
+		return arrayOfFoundEdges;
 	}
-	
-	
-	//Returner kun den første Edge - dvs. hvis der er flere forekomster af navnet, finder den kun den første!!
+
+	/*
+	public static Edge[] getRoadNameSuggestions(String edgeToFind)
+	{
+		Iterable<String> roadNames = edgeSearchTrie.prefixMatch(edgeToFind);
+		Iterator<String> roadNameIterator = roadNames.iterator();
+		ArrayList<Edge> roadList = new ArrayList<>();
+		
+		while(roadNameIterator.hasNext())
+			roadList.add(roadNameIterator.next()));
+			
+		return roadList.toArray(new Edge[roadList.size()]);
+	}
+	*/
+
+	/**
+	 * Assumes that a city only has a single road by the given name
+	 * @param edgeToFind
+	 * @param postalNumber
+	 * @return
+	 */
 	public static Edge searchForRoadNameInCity(String edgeToFind, int postalNumber)
 	{
+		ArrayList<Integer> listOfFoundEdges = edgeSearchTrie.get(edgeToFind);
+		for(Integer ID : listOfFoundEdges)
+		{
+			Edge foundEdge = DataHolding.getEdge(ID);
+			if(foundEdge.getPostalNumberLeft() == postalNumber || foundEdge.getPostalNumberRight() == postalNumber)
+				return foundEdge;
+		}
+
+		return null;
 	}	
-	
+
 	public static void main( String[] args )
 	{
-		System.out.println(edgeSearchTrie.get("Nørregade"));
+		double startTime = System.currentTimeMillis();
+		Edge[] foundEdges = searchForRoadName("Nørregade");
+		double endTime = System.currentTimeMillis();
+		
+		System.out.println("Search took: " + (endTime-startTime) + "miliseconds");
+
+		//Edge edge = searchForRoadNameInCity("Nørregade", 4600);
+
+
+		//System.out.println(edge.getRoadName());
+		
+		for(Edge edge : foundEdges)
+			System.out.println(edge.getiD());
+		
 	}
 }
