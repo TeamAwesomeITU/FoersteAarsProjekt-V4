@@ -6,5 +6,6 @@
 	<classpathentry exported="true" kind="lib" path="src/ximpleware_2.11_java/vtd-xml.jar"/>
 	<classpathentry exported="true" kind="lib" path="resources"/>
 	<classpathentry exported="true" kind="lib" path="XML"/>
+	<classpathentry kind="lib" path="C:/Users/Umagar/Dropbox/Privat Workspace/FoersteAarsProjekt-V4/swingx-0.8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

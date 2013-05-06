@@ -25,17 +25,22 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ListDataListener;
 
+import org.jdesktop.swingx.autocomplete.Configurator;
+
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
 import mapCreationAndFunctions.MapPanel;
 import mapCreationAndFunctions.MapPanelResize;
+import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.CoordinateConverter;
 import mapCreationAndFunctions.data.Edge;
+import mapCreationAndFunctions.data.search.CitySearch;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -130,11 +135,17 @@ public class MapWindow {
         routeBox.addItems(routeList);
         routeBox.setUI(ColoredArrowUI.createUI(routeBox));
         
-        String[] patterns = {"", "nørregade", "nørreport", "Nørregade"};
+        String[] patterns = {"", "nÃ¸rregade", "nÃ¸rreport", "NÃ¸rregade"};
 		JComboBox<String> testBox = new JComboBox<String>(patterns);
 		testBox.setPreferredSize(new Dimension(120, 30));
-		testBox.setEditable(true);
+		testBox.setEditable(false);
 		testBox.addKeyListener(new SearchKeyListener());
+		Configurator.enableAutoCompletion(testBox);
+		
+		//JList list = new JList<>(patterns);
+		//Configurator.enableAutoCompletion(list, fromSearchQuery);
+		
+        //fromSearchQuery.addKeyListener(new SearchKeyListener());
 
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
@@ -328,27 +339,28 @@ public class MapWindow {
 	//---------------------------------Listeners from here-----------------------------//
 
 	class SearchKeyListener implements KeyListener{
-		String query;
-		@Override
-		public void keyPressed(KeyEvent e) {
-			query += e.toString();
-			System.out.println(query);
-			
-		}
+    	String query = "";
+    	
+        public void keyReleased(KeyEvent e) {
 
-		@Override
-		public void keyReleased(KeyEvent e) {
-			query += e.toString();
-			System.out.println(query);
-			
-		}
+          }
 
-		@Override
-		public void keyTyped(KeyEvent e) {
-			query += e.toString();
-			System.out.println(query);
-		}
-		
+          public void keyTyped(KeyEvent e) {
+          }
+
+          public void keyPressed(KeyEvent e) {
+        	  System.out.println(e.getKeyCode());
+        	  JComboBox cb = (JComboBox)e.getSource();
+        	  String search = (String) cb.getSelectedItem();
+        	  if(search != null)
+        		  query = search.trim();
+        	  if(query.length() >= 2){
+        		  City[] citiesList = CitySearch.getCityNameSuggestions(query);
+        		  for(City city : citiesList)
+        			  System.out.println(city.getCityName());
+        	  }
+          }
+
 	}
 	
 	/**
