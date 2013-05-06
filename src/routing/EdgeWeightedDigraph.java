@@ -8,6 +8,10 @@ public class EdgeWeightedDigraph {
 	private int edges; // number of edges
 	private Bag<Integer>[] adj; // adjacency lists
 
+	/**
+	 * Creates the directed graphs with edge weights.
+	 * @param N Number of nodes/vertices
+	 */
 	@SuppressWarnings("unchecked")
 	public EdgeWeightedDigraph(int N) {
 		long s = System.currentTimeMillis();
@@ -25,29 +29,34 @@ public class EdgeWeightedDigraph {
 			if(edge.getOneWay().equals("")) 
 			{
 				addEdge(edge.getFromNode(), edge.getiD());
-				addEdge(edge.getToNode(), edge.getiD());
-			}
+				addEdge(edge.getToNode(), edge.getiD());}
 			//From here to there
-			else if(edge.getOneWay().equals("ft")) 
-			{
-				addEdge(edge.getFromNode(), edge.getiD());
-			}
+			else if(edge.getOneWay().equals("ft")) {
+				addEdge(edge.getFromNode(), edge.getiD());}
 			
 			//From there to here
-			else if(edge.getOneWay().equals("tf")) 
-			{
-				addEdge(edge.getToNode(), edge.getiD());
-			}
-			
+			else if(edge.getOneWay().equals("tf")) {
+				addEdge(edge.getToNode(), edge.getiD());}
 		}
-
 		long t = System.currentTimeMillis();
 		System.out.println("Creation adj " + (t-s) + " wtf?");
 	}
 
+	/**
+	 * @return the nodes field
+	 */
 	public int nodes() { return nodes; }
+	 /**
+	  * @return the edges field
+	  */
 	public int edges() { return edges; }
 
+	/**
+	 * Adds edge references in the adjacency list at the index corresponding to the 
+	 * node ID. 
+	 * @param nodeID
+	 * @param edgeID
+	 */
 	public void addEdge(int nodeID, int edgeID) {
 		adj[nodeID-1].add(edgeID);
 		edges++;

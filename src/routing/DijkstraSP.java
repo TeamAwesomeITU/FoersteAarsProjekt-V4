@@ -33,10 +33,15 @@ public class DijkstraSP
 		pq.insert(s, 0.0);
 		System.out.println("Starting relaxation");
 		while (!pq.isEmpty())
-			relax(graph, pq.delMin());
+			relax(graph, pq.delMin()); //
 		System.out.println("Relaxation done");
 	}
 
+	/**
+	 * Relaxes a vertex
+	 * @param graph A directed edge weighted graph
+	 * @param n	This is actually a node. Used as an index (dem variables)
+	 */
 	private void relax(EdgeWeightedDigraph graph, int n) {
 		Edge currentEdge;
 		int w = -1;
