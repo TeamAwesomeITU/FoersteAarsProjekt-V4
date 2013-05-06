@@ -20,6 +20,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -29,9 +30,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
-
-import org.jdesktop.swingx.autocomplete.Configurator;
 
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
@@ -41,6 +41,7 @@ import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.CoordinateConverter;
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.data.search.CitySearch;
+import mapCreationAndFunctions.data.search.EdgeSearch;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -135,12 +136,14 @@ public class MapWindow {
         routeBox.addItems(routeList);
         routeBox.setUI(ColoredArrowUI.createUI(routeBox));
         
-        String[] patterns = {"", "nørregade", "nørreport", "Nørregade"};
-		JComboBox<String> testBox = new JComboBox<String>(patterns);
+        String[] patterns = calculateResults("Nørregade");
+		JList<String> testBox = new JList<String>(patterns);
 		testBox.setPreferredSize(new Dimension(120, 30));
-		testBox.setEditable(false);
+		testBox.setModel(new DefaultListModel<String>());
+		
+		//testBox.setEditable(false);
 		testBox.addKeyListener(new SearchKeyListener());
-		Configurator.enableAutoCompletion(testBox);
+		//Configurator.enableAutoCompletion(testBox);
 		
 		//JList list = new JList<>(patterns);
 		//Configurator.enableAutoCompletion(list, fromSearchQuery);
@@ -333,6 +336,15 @@ public class MapWindow {
 	 */
 	public JFrame getJFrame() {
 		return MainGui.frame;
+	}
+	
+	private String[] calculateResults(String stringToSearch)
+	{
+		Edge[] foundEdges = EdgeSearch.getRoadNameSuggestions(stringToSearch);
+		String[] edgesAsStrings = new String[foundEdges.length];
+		for(int i = 0; i < foundEdges.length; i++)
+			edgesAsStrings[i] = foundEdges[i].getRoadName() + " - " + foundEdges[i].getPostalNumberLeft();		
+		return edgesAsStrings;
 	}
 	
 
