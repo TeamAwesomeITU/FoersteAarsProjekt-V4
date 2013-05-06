@@ -1,6 +1,9 @@
 package gui;
 
 
+import gui.customJUnits.ColoredJPanel;
+import gui.customJUnits.ColoredJProgressBar;
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 

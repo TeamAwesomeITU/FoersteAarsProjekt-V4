@@ -1,4 +1,8 @@
-package gui;
+package gui.settingsAndPopUp;
+
+import gui.MainGui;
+import gui.MapWindow;
+import gui.customJUnits.ColoredJMenuItem;
 
 import java.awt.Point;
 import java.awt.event.ActionEvent;

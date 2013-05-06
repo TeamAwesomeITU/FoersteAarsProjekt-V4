@@ -1,7 +1,8 @@
 package mapCreationAndFunctions;
 
 import gui.MainGui;
-import gui.MapPopUp;
+import gui.settingsAndPopUp.MapPopUp;
+
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
