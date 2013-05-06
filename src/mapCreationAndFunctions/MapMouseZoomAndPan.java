@@ -1,7 +1,7 @@
 package mapCreationAndFunctions;
 
 import gui.MainGui;
-
+import gui.MapPopUp;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
@@ -29,7 +29,6 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 	private Rectangle rect = null;
 	private MapPanel mp = null;
 	private MapStack<AreaToDraw> stack; 
-	private double bigX, bigY,smallX,smallY;
 	private AreaToDraw currentArea;
 	private AreaToDraw newArea;
 
@@ -73,7 +72,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			if(endX > mp.getWidth()) endX = mp.getWidth(); if(endY > mp.getHeight()) endY = mp.getHeight();
 
 			double rectWidth = Math.abs(endX);
-			double rectHeight = Math.abs(endY);//Math.abs((rectWidth*AreaToDraw.getHeightOfEntireMap())/AreaToDraw.getWidthOfEntireMap());    
+			double rectHeight = Math.abs(endY); 
 
 			startX = Math.min(mousePressedAt.x, e.getPoint().x);
 
@@ -101,8 +100,12 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 	 */
 	public void mouseReleased(MouseEvent e) {
 		MainGui.setMainHand();
-		if(SwingUtilities.isRightMouseButton(e)) { 	
+		if(SwingUtilities.isRightMouseButton(e) && e.isShiftDown()) { 	
 			zoomOut();
+		}
+		else if(SwingUtilities.isRightMouseButton(e) && !e.isShiftDown()) {
+			MapPopUp mpu = new MapPopUp(mp, e);
+			mpu.show(e.getComponent(), e.getX(), e.getY());
 		}
 		else if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
 			zoomIn();
@@ -119,49 +122,49 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 		setHand();
 		Point mouseMovedTo = e.getPoint();
 		currentArea = mp.getArea();
-		smallX = 0;
-		bigX = mp.getMapWidth();
-		smallY = 0;
-		bigY = mp.getMapHeight();
+		startX = 0;
+		endX = mp.getMapWidth();
+		startY = 0;
+		endY = mp.getMapHeight();
 		CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), currentArea);
-		smallX = coordConverter.pixelToUTMCoordX((int)smallX);
-		bigX = coordConverter.pixelToUTMCoordX((int)bigX);
-		smallY = coordConverter.pixelToUTMCoordY((int)smallY);
-		bigY = coordConverter.pixelToUTMCoordY((int)bigY);
-		double temp = bigY; bigY = smallY; smallY = temp;
+		startX = coordConverter.pixelToUTMCoordX((int)startX);
+		endX = coordConverter.pixelToUTMCoordX((int)endX);
+		startY = coordConverter.pixelToUTMCoordY((int)startY);
+		endY = coordConverter.pixelToUTMCoordY((int)endY);
+		double temp = endY; endY = startY; startY = temp;
 
 		if(mouseMovedTo.x > mousePressedAt.x)
 		{
 			double tempX = coordConverter.pixelToUTMCoordX(mouseMovedTo.x) - coordConverter.pixelToUTMCoordX(mousePressedAt.x);
-			smallX -= tempX;
-			bigX -= tempX;
+			startX -= tempX;
+			endX -= tempX;
 			//bevæger os til højre
 		}
 		else if(mouseMovedTo.x < mousePressedAt.x)
 		{
 			double tempX = coordConverter.pixelToUTMCoordX(mousePressedAt.x) - coordConverter.pixelToUTMCoordX(mouseMovedTo.x);
-			smallX += tempX;
-			bigX += tempX;
+			startX += tempX;
+			endX += tempX;
 			//bevæger os til venstre
 		}
 
 		if(mouseMovedTo.y < mousePressedAt.y)
 		{	
 			double tempY = coordConverter.pixelToUTMCoordY(mouseMovedTo.y) - coordConverter.pixelToUTMCoordY(mousePressedAt.y);
-			smallY -= tempY;
-			bigY -= tempY;
+			startY -= tempY;
+			endY -= tempY;
 			//bevæger os ned ad
 		}
 		else if(mouseMovedTo.y > mousePressedAt.y)
 		{
 			double tempY = coordConverter.pixelToUTMCoordY(mousePressedAt.y) - coordConverter.pixelToUTMCoordY(mouseMovedTo.y);
-			smallY += tempY;
-			bigY += tempY;
+			startY += tempY;
+			endY += tempY;
 			//bevæger os op ad	
 		}
 		
 		try {
-			newArea = new AreaToDraw(smallX, bigX, smallY, bigY, true);
+			newArea = new AreaToDraw(startX, endX, startY, endY, true);
 			mp.repaintMap(newArea);
 			mousePressed(e);
 
@@ -198,7 +201,8 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 		mp.repaintMap(area);
 	}
 	
-	public void zoomIn(){
+	public void zoomIn() 
+	{
 		AreaToDraw area = mp.getArea();
 		stack.push(area);
 		CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), area);
@@ -238,6 +242,41 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			mp.repaint();
 		}
 	}
+	
+	public void zoomInFromPopUpMenu(Point p) {				
+			CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), mp.getArea());
+			startX = 0; endX = mp.getMapWidth(); startY = 0; endY = mp.getMapHeight();
+			double zoomX = ((coordConverter.pixelToUTMCoordX((int)endX) - coordConverter.pixelToUTMCoordX((int)startX))/100);
+			double zoomY = ((coordConverter.pixelToUTMCoordY((int)endY) - coordConverter.pixelToUTMCoordY((int)startY))/100);
+			startX = coordConverter.pixelToUTMCoordX((int)p.getX()) - (zoomX*25);
+			endX = coordConverter.pixelToUTMCoordX((int)p.getX()) + (zoomX*25);
+			startY = coordConverter.pixelToUTMCoordY((int)p.getY()) + (zoomY*25);
+			endY = coordConverter.pixelToUTMCoordY((int)p.getY()) - (zoomY*25);
+			if(endX > AreaToDraw.getLargestXOfEntireMap()) {
+				System.out.println("endX");
+				endX = AreaToDraw.getLargestXOfEntireMap();
+			}
+			if(startX < AreaToDraw.getSmallestXOfEntireMap()) {
+				System.out.println("startX");
+				startX = AreaToDraw.getSmallestXOfEntireMap();
+			}
+			if(endY > AreaToDraw.getLargestYOfEntireMap()) {
+				System.out.println("endY");
+				endY = AreaToDraw.getLargestYOfEntireMap();
+			}
+			if(startY < AreaToDraw.getSmallestYOfEntireMap()) {
+				System.out.println("startY");
+				startY = AreaToDraw.getSmallestYOfEntireMap();
+			}
+			
+			try {
+				newArea = new AreaToDraw(startX, endX, startY, endY, true);
+  		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
+  			System.out.println(e1.getClass() + ": " + e1.getMessage());
+  			newArea = currentArea;
+		}
+		mp.repaintMap(newArea);
+		}
 	
 	/**
 	 * Sets the cursor as a dragging hand.
