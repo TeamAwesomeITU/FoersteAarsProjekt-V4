@@ -87,13 +87,13 @@ public class MapWindow {
 
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
-		fromSearchQuery = new JTextField();
+		fromSearchQuery = new CustomJTextField();
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
 		fromSearchQuery.setPreferredSize(new Dimension(200, 20));
 
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(ColorTheme.TEXT_COLOR);
-		toSearchQuery = new JTextField();
+		toSearchQuery = new CustomJTextField();
 		toSearchQuery.addKeyListener(new EnterKeyListener());
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
