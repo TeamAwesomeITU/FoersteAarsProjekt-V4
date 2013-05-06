@@ -1,4 +1,4 @@
-package gui;
+package gui.settingsAndPopUp;
 
 import java.awt.Color;
 /**
