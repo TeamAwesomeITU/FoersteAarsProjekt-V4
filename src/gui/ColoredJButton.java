@@ -1,7 +1,10 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -40,8 +43,38 @@ public class ColoredJButton extends JButton {
 		setBackground(ColorTheme.DARK_COLOR);
 		//Sets the color of the text
 		setForeground(ColorTheme.TEXT_COLOR);
+		addFocusListener(new HighlightFocusListener(this));
 		
 		setCursor(new Cursor(Cursor.HAND_CURSOR));
-		setBorder(BorderFactory.createEtchedBorder());
+		setBorder(BorderFactory.createRaisedSoftBevelBorder());
+	}
+	
+	public void inFocusColor(){
+		UIManager.put("Button.highlight", Color.black);
+	}
+	
+	public void outOfFocusColor(){
+		UIManager.put("Button.highlight", Color.white);
+	}
+	
+	class HighlightFocusListener implements FocusListener{
+		
+		private ColoredJButton field;
+		
+		public HighlightFocusListener(ColoredJButton field){
+			this.field = field;
+		}
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			field.inFocusColor();
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			field.outOfFocusColor();
+		}
+		
 	}
 }
