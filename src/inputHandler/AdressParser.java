@@ -29,7 +29,7 @@ public class AdressParser {
 	private	String pLetter = "[A-ZÆØÅa-zæøå]";
 	private String pInput =  "[^A-ZÆØÅÄÖa-zæøåéèöäüâ0-9,\\-.´:)/(& ]{1,100}";
 	private	String numberLetter = ""; // Gemmer vejnummeret med tal og bogstav.
-	private String a = "";
+	private String addressAfterDeletion = "";
 
 	private String[] roadNamesArray;	
 
@@ -75,17 +75,17 @@ public class AdressParser {
 		}
 
 		else {			
-			a = s;
+			addressAfterDeletion = s;
 			findRoadName(s);
 			//Only checks for roadnumber, roadletter and floornumber, if a valid adress is found
 			if(adressArray[0] != null)												/* 2 */
 			{
-				findFloorNumber(a);
-				findRoadNumber(a);
-				findRoadLetter(a);				
+				findFloorNumber(addressAfterDeletion);
+				findRoadNumber(addressAfterDeletion);
+				findRoadLetter(addressAfterDeletion);				
 			}
-			findPostCode(a);
-			findCityName(a);
+			findPostCode(addressAfterDeletion);
+			findCityName(addressAfterDeletion);
 		}
 
 		return adressArray;			     					
@@ -117,7 +117,7 @@ public class AdressParser {
 		String roadName = binSearch.search(input, roadNamesArray);
 		adressArray[0] = roadName;
 		if(roadName != null)
-			a = a.replace(roadName,"");
+			addressAfterDeletion = addressAfterDeletion.replace(roadName,"");
 	}
 
 	/**	This method uses the matcher to find the number and eventual letter of a building. 
@@ -133,7 +133,7 @@ public class AdressParser {
 
 			//Finder tallet i numberLetter og gemmer det på index 1 i arrayet.
 			if(tal.find()){																	/* 10 */				
-				a = a.replace(tal.group(), "");
+				addressAfterDeletion = addressAfterDeletion.replace(tal.group(), "");
 				System.out.println("Bygningstal: " + tal.group());
 				adressArray[1] = tal.group().trim();
 			}
@@ -148,7 +148,7 @@ public class AdressParser {
 		//Benytter numberLetter og finder bogstavet som den gemmer på index 2 i arrayet.
 		Matcher buildingLetter = match(pLetter, numberLetter);	
 		if(buildingLetter.find()) {								   				   					/* 11 */
-			a = a.replace(buildingLetter.group(), "");
+			addressAfterDeletion = addressAfterDeletion.replace(buildingLetter.group(), "");
 			System.out.println("Bogstav: " + buildingLetter.group());
 			adressArray[2] = buildingLetter.group().trim(); 
 		}				
@@ -165,7 +165,7 @@ public class AdressParser {
 		if(floor.find()) {																		/* 12 */
 			floorTemp = floor.group();
 			match(pTal, floorTemp);
-			a = a.replace(floorTemp, "");
+			addressAfterDeletion = addressAfterDeletion.replace(floorTemp, "");
 			Matcher tal = match(pTal, floorTemp);		
 			tal.find();																	
 			System.out.println(tal.group() + ". etage");
@@ -184,7 +184,7 @@ public class AdressParser {
 		Matcher postcode = match(pPost, s);	
 		if(postcode.find()) {																	/* 13 */
 			System.out.println("Postnummer: " + postcode.group());
-			a = a.replace(postcode.group(),"");
+			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"");
 			adressArray[4] = postcode.group().trim(); 
 		}
 	}
