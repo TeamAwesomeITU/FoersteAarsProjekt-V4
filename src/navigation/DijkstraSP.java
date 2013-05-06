@@ -1,5 +1,7 @@
 package navigation;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Stack;
 
 import mapCreationAndFunctions.data.DataHolding;
@@ -10,10 +12,15 @@ public class DijkstraSP
 	private int[] edgeTo; //contains edgeIDs on the edge towards the node i on edgeTo[i].
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
-	int s, counter = 0, type;
+	private int s;
+	private String type;
+	private HashSet<Integer> setOfNonViableEdges;
 	private EdgeWeightedDigraph graph;
 
-	public DijkstraSP(EdgeWeightedDigraph graph, String roadName) {
+	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation) {
+		setOfNonViableEdges = TransportType(meansOfTransportation);
+		if(setOfNonViableEdges == null) 
+			throw new NullPointerException("setOfNonViableEdges is empty");
 		this.graph = graph;
 		s = -1;
 		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
@@ -40,44 +47,35 @@ public class DijkstraSP
 	}
 
 	private void relax(int n) {
-		if (type == 1 || type == 2) 
-			car(n);
-		if (type == 11 || type == 12) {
-			
-		}
-		if (type == 21 || type == 22) {
-			
-		}
-	}
-
-	private void car(int n) 
-	{
 		Edge currentEdge;
 		int w = -1;
 		for(Integer e : graph.adj(n)) 
 		{
 			currentEdge = DataHolding.getEdge(e);
-			w = currentEdge.getToNode()-1;
-			if(w == n)
-				w = currentEdge.getFromNode()-1;
-			if (type == 1) 
+			if (!setOfNonViableEdges.contains(currentEdge.getRoadType())) 
 			{
-				if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
+				w = currentEdge.getToNode()-1;
+				if(w == n)
+					w = currentEdge.getFromNode()-1;
+				if (type.equals("driveTime")) 
 				{
-					distTo[w] = distTo[n] + currentEdge.getDriveTime();
-					edgeTo[w] = e;
-					if (pq.contains(w)) pq.changeKey(w, distTo[w]);
-					else pq.insert(w, distTo[w]);
+					if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
+					{
+						distTo[w] = distTo[n] + currentEdge.getDriveTime();
+						edgeTo[w] = e;
+						if (pq.contains(w)) pq.changeKey(w, distTo[w]);
+						else pq.insert(w, distTo[w]);
+					}
 				}
-			}
-			else 
-			{
-				if (distTo[w] > distTo[n] + currentEdge.getLength()) 
+				else if(type.equals("shortestPath"))
 				{
-					distTo[w] = distTo[n] + currentEdge.getLength();
-					edgeTo[w] = e;
-					if (pq.contains(w)) pq.changeKey(w, distTo[w]);
-					else pq.insert(w, distTo[w]);
+					if (distTo[w] > distTo[n] + currentEdge.getLength()) 
+					{
+						distTo[w] = distTo[n] + currentEdge.getLength();
+						edgeTo[w] = e;
+						if (pq.contains(w)) pq.changeKey(w, distTo[w]);
+						else pq.insert(w, distTo[w]);
+					}
 				}
 			}
 		}
@@ -120,5 +118,15 @@ public class DijkstraSP
 			path.push(e);
 		}
 		return path;
+	}
+
+	private HashSet<Integer> TransportType(String meansOfTransportation) {
+		switch (meansOfTransportation) {
+		case "bicycle": return new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,21,22,23,3,31,32,33,41,42,43}));
+		case "car": return new HashSet<Integer>(Arrays.asList(new Integer[]{8,11,28}));
+		case "walk": return new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,3,4,21,22,23,24,31,32,33,34,41,42,43,44}));
+		default:
+			return null;
+		}
 	}
 }

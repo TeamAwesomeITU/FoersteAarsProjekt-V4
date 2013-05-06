@@ -26,7 +26,7 @@ public class EdgeWeightedDigraph {
 			edge = DataHolding.getEdgeArray()[i];
 			
 			//Both ways
-			if(edge.getOneWay().equals("")) 
+			if(edge.getOneWay().equals("") || edge.getOneWay().equals("n")) 
 			{
 				addEdge(edge.getFromNode(), edge.getiD());
 				addEdge(edge.getToNode(), edge.getiD());}
