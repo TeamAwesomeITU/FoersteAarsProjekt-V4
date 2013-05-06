@@ -119,7 +119,7 @@ public class DataHolding {
 			String[] lineParts = null;
 			Integer KDV = 0; 
 			String[] references = null;
-			
+			int counter = 1;
 			while((line = reader.readLine()) != null)
 			{
 				lineParts = line.split("\\,");
@@ -129,9 +129,12 @@ public class DataHolding {
 				references = lineParts[3].split("\\s");
 				int[] edgeIDs = new int[references.length];
 
-				for(int i = 0; i < references.length; i++){				
-					edgeIDs[i] = Integer.parseInt(references[i]);
+				for(int i = 0; i < references.length; i++){	
+					int currentEdgeID = Integer.parseInt(references[i]);
+					edgeIDs[i] = currentEdgeID;
+					graph.addEdge(counter, currentEdgeID);
 				}
+				counter++;
 
 				nodeArray[KDV-1] = new Node(KDV, Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2]), edgeIDs);
 			}
@@ -217,5 +220,8 @@ public class DataHolding {
 			initializeNodeArray();
 		}
 	}
-
+	
+	public static EdgeWeightedDigraph getGraph() {
+		return graph;
+	}
 }
