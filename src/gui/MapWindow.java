@@ -1,5 +1,11 @@
 package gui;
 
+import gui.customJUnits.ColoredArrowUI;
+import gui.customJUnits.ColoredJButton;
+import gui.customJUnits.ColoredJComboBox;
+import gui.customJUnits.ColoredJPanel;
+import gui.customJUnits.CustomJTextField;
+import gui.settingsAndPopUp.ColorTheme;
 import inputHandler.AdressParser;
 import inputHandler.exceptions.MalformedAdressException;
 
@@ -169,7 +175,6 @@ public class MapWindow {
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
-		mapPanel.setComponentPopupMenu(new MapPopUp(mapPanel));
 		MapKeyPan.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
 
 		centerColoredJPanel.add(mapPanel);
