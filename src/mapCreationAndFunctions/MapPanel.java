@@ -19,11 +19,11 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import navigation.DijkstraSP;
-import navigation.EdgeWeightedDigraph;
 
 
 import mapCreationAndFunctions.data.CoastLineMaker;
 import mapCreationAndFunctions.data.CoordinateConverter;
+import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.data.FindRelevantEdges;
 
@@ -56,7 +56,7 @@ public class MapPanel extends JPanel {
 		mapHeight = height;
 		mapWidth = width;
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
-		//markOgKasperTester();
+		markOgKasperTester();
 		makeLinesForMap();
 		setBorderForPanel();
 		addMouseListener(mapMouseZoomAndPan);
@@ -70,7 +70,7 @@ public class MapPanel extends JPanel {
 
 
 	public void markOgKasperTester() {
-		DijkstraSP dip = new DijkstraSP(new EdgeWeightedDigraph(675902), "Følfodvej", "bicycle");
+		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), "Følfodvej", "car");
 		pathTo = (Stack<Edge>) dip.pathTo("Aavej");
 	}
 	/**
