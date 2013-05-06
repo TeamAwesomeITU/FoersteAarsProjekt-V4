@@ -33,7 +33,6 @@ public class City {
 	private static int cityIDcount = 1;
 		
 	//TODO Fucking bad programming - this boolean only exists to ensure the creation of the other fields - FIX!
-	@SuppressWarnings("unused")
 	private static boolean initilalized = createCities();
 	
 	
@@ -155,7 +154,7 @@ public class City {
 
 			while((line = reader.readLine()) != null)
 			{
-				//TODO Hvis nogen har en idé til en regex, der kun splitter op til første space -så skriv den her og erstat den der for i = 2 løkke med noget andet, flottere
+				//TODO Hvis nogen har en idï¿½ til en regex, der kun splitter op til fï¿½rste space -sï¿½ skriv den her og erstat den der for i = 2 lï¿½kke med noget andet, flottere
 				lineParts = line.split("\\s");
 				postalNumber = Integer.parseInt(lineParts[0]);
 				cityName = lineParts[1];
@@ -192,22 +191,5 @@ public class City {
 		if(initilalized == false)
 			createCities();
 		return allCitiesList;
-	}
-	
-	public static void main(String[] args) {
-		
-		System.out.println("Number of cities in file: " + allCitiesList.size());
-		
-		
-		for(City city : allCitiesList)
-		{
-			System.out.println(city.getCityID());
-		}
-		
-		
-		System.out.println(getCityByPostalNumber(1100).getCityName());
-		System.out.println(getCityByPostalNumber(9990).getCityName());	
-		
-		
 	}
 }
