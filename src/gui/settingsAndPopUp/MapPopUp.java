@@ -1,24 +1,28 @@
-package gui;
+package gui.settingsAndPopUp;
 
+import gui.MainGui;
+import gui.MapWindow;
+import gui.customJUnits.ColoredJMenuItem;
+
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import mapCreationAndFunctions.MapMouseZoomAndPan;
 import mapCreationAndFunctions.MapPanel;
 
 @SuppressWarnings("serial")
-class MapPopUp extends JPopupMenu {
+public class MapPopUp extends JPopupMenu {
 	private MapPanel mapPanel;
-    public MapPopUp(MapPanel mapPanel){
+	private Point p;
+    public MapPopUp(MapPanel mapPanel, MouseEvent e){
     	addItems();
     	stylize();
     	this.mapPanel = mapPanel;
-    }
-    
-    public MapPopUp(){
-    	addItems();
-    	stylize();
+    	p = e.getPoint();
     }
     
     private void addItems(){
@@ -76,7 +80,7 @@ class MapPopUp extends JPopupMenu {
     class ZoomInActionListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 			MapMouseZoomAndPan mapMouseZoomAndPan = mapPanel.getMapMouseZoomAndPan();
-			mapMouseZoomAndPan.zoomIn();
+			mapMouseZoomAndPan.zoomInFromPopUpMenu(p);
 		}
     	
     }

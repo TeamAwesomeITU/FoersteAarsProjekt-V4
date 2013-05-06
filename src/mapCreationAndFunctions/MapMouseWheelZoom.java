@@ -134,7 +134,6 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 				System.out.println("smallY");
 				smallY = currentArea.getSmallestYOfEntireMap();
 			}
-		}
+		}	
 	}
-
 }

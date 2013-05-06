@@ -1,5 +1,7 @@
 package gui;
 
+import gui.customJUnits.*;
+import gui.settingsAndPopUp.*;
 import inputHandler.AdressParser;
 import inputHandler.exceptions.MalformedAdressException;
 
@@ -17,13 +19,16 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.ListDataListener;
 
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapKeyPan;
@@ -125,10 +130,17 @@ public class MapWindow {
         						 {"Shortest", ""}};
         routeBox.addItems(routeList);
         routeBox.setUI(ColoredArrowUI.createUI(routeBox));
+        
+        String[] patterns = {"", "nørregade", "nørreport", "Nørregade"};
+		JComboBox<String> testBox = new JComboBox<String>(patterns);
+		testBox.setPreferredSize(new Dimension(120, 30));
+		testBox.setEditable(true);
+		testBox.addKeyListener(new SearchKeyListener());
 
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
-		toolBar.add(fromSearchQuery);
+		toolBar.add(testBox);
+		//toolBar.add(fromSearchQuery);
 		toolBar.add(toHeader);
 		toolBar.add(toSearchQuery);
 		toolBar.add(buttonPanel);
@@ -169,7 +181,6 @@ public class MapWindow {
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
-		mapPanel.setComponentPopupMenu(new MapPopUp(mapPanel));
 		MapKeyPan.addKeyBinding(mapPanel, toSearchQuery, fromSearchQuery);
 
 		centerColoredJPanel.add(mapPanel);
@@ -318,6 +329,30 @@ public class MapWindow {
 
 	//---------------------------------Listeners from here-----------------------------//
 
+	class SearchKeyListener implements KeyListener{
+		String query;
+		@Override
+		public void keyPressed(KeyEvent e) {
+			query += e.toString();
+			System.out.println(query);
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			query += e.toString();
+			System.out.println(query);
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			query += e.toString();
+			System.out.println(query);
+		}
+		
+	}
+	
 	/**
 	 * Not yet implemented!
 	 */

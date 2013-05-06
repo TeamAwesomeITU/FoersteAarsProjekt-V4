@@ -1,4 +1,4 @@
-package gui;
+package gui.settingsAndPopUp;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;

@@ -1,4 +1,7 @@
-package gui;
+package gui.customJUnits;
+
+import gui.settingsAndPopUp.ColorTheme;
+
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
