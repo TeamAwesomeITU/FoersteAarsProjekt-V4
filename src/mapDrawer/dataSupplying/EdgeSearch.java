@@ -59,12 +59,26 @@ public class EdgeSearch  {
 	}
 	
 	//Returner kun den første Edge - dvs. hvis der er flere forekomster af navnet, finder den kun den første!! Smider desuden IndexOutOfBounds-exception, hvis vejen ikke kan findes
-	public static Edge searchForRoadName(String edgeToFind)
+	public static Edge[] searchForRoadName(String edgeToFind)
 	{
 		//FANGER KUN VEJNAVNET, HVIS DET ER STAVET HELT KORREKT - KOMBINER DENNE KLASSE MED BINARYSEARCHSTRINGINARRAY
-		int resultAt = Arrays.binarySearch(edgeArrayByRoadName, edgeToFind);
-		return(edgeArrayByRoadName[resultAt]);
+		int resultAt = Arrays.binarySearch(edgeArrayByRoadName, edgeToFind, ROADNAME_ORDER);
+		ArrayList<Edge> listOfResults = new ArrayList<Edge>();
+		boolean foundAllResults = false;
+		
+		//As long as all results have not been found and the binary search actually have found a result.
+		while(!foundAllResults && resultAt >= 0)
+		{
+			Edge edge = edgeArrayByRoadName[resultAt++];
+			if(edgeToFind.equals(edge.getRoadName()))
+				listOfResults.add(edge);
+			else
+				foundAllResults = true;
+		}
+			
+		return listOfResults.toArray(new Edge[listOfResults.size()]);
 	}
+	
 	
 	//Returner kun den første Edge - dvs. hvis der er flere forekomster af navnet, finder den kun den første!!
 	public static Edge searchForRoadNameInCity(String edgeToFind, int postalNumber)
@@ -72,24 +86,14 @@ public class EdgeSearch  {
 		//FANGER KUN VEJNAVNET, HVIS DET ER STAVET HELT KORREKT - KOMBINER DENNE KLASSE MED BINARYSEARCHSTRINGINARRAY
 		int resultAt = Arrays.binarySearch(edgeArrayByRoadName, edgeToFind);
 		return(edgeArrayByRoadName[resultAt]);
-	}
+	}	
 	
-	
-	public static void main( String[] args ) {
+	public static void main( String[] args )
+	{
 		
-		
-		int wantedPrintNumber = 10;
-		
-		Edge[] edgesByName = edgeArrayByRoadName;
-		
-		for (int i = 0; i < edgesByName.length; i++) {
-			System.out.println(edgesByName[i].getRoadName());
-		}
-		
-		Edge[] edgesByRoadTypeCat = edgeArrayByRoadTypeCategory;
-		
-		for (int i = 0; i < wantedPrintNumber; i++) {
-			System.out.println(edgesByRoadTypeCat[i].getRoadTypeCategory());
-		}
+		Edge[] foundEdges = searchForRoadName("Nørregade");
+		for (Edge edge : foundEdges)
+			System.out.println(edge.getRoadName());
+
 	}
 }
