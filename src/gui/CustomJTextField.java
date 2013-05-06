@@ -1,13 +1,12 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
+@SuppressWarnings("serial")
 public class CustomJTextField extends JTextField {
 	
 	public CustomJTextField(){
@@ -22,11 +21,11 @@ public class CustomJTextField extends JTextField {
 	}
 	
 	public void inFocusColor(){
-		UIManager.put("TextField.highlight", Color.black);
+		setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, ColorTheme.BUTTON_CLICKED_COLOR));
 	}
 	
 	public void outOfFocusColor(){
-		UIManager.put("TextField.highlight", Color.white);
+		setBorder(BorderFactory.createRaisedSoftBevelBorder());
 	}
 	
 	class HighlightFocusListener implements FocusListener{
@@ -40,7 +39,6 @@ public class CustomJTextField extends JTextField {
 		@Override
 		public void focusGained(FocusEvent e) {
 			field.inFocusColor();
-			
 		}
 
 		@Override
