@@ -1,9 +1,7 @@
 package gui;
 
 import gui.customJUnits.*;
-import gui.settingsAndPopUp.ColorTheme;
-import gui.settingsAndPopUp.ScreenSize;
-
+import gui.settingsAndPopUp.*;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Cursor;
