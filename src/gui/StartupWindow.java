@@ -1,12 +1,12 @@
 package gui;
 
 
-import gui.customJUnits.ColoredJPanel;
-import gui.customJUnits.ColoredJProgressBar;
+import gui.customJUnits.*;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -98,6 +98,7 @@ public class StartupWindow{
 		loadingPanel.setLayout(new GridLayout(0, 1, 3, 1));
 
 		JLabel logo = new JLabel();
+		//ClassLoader classLoader = ImageIO.read(getClass().getResource("resources/Logo.png"));
 		logo.setIcon(new ImageIcon("resources/Logo.png"));
 		logo.setBorder(BorderFactory.createEmptyBorder());
 
