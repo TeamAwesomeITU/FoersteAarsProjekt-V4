@@ -20,6 +20,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -47,6 +48,8 @@ import mapCreationAndFunctions.data.search.CitySearch;
 public class MapWindow {
 
 	public static JTextField toSearchQuery, fromSearchQuery;
+	public static JList<String> searchList;
+	public static DefaultListModel listModel;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	/**
@@ -134,23 +137,10 @@ public class MapWindow {
         						 {"Shortest", ""}};
         routeBox.addItems(routeList);
         routeBox.setUI(ColoredArrowUI.createUI(routeBox));
-        
-        String[] patterns = {"", "nørregade", "nørreport", "Nørregade"};
-		JComboBox<String> testBox = new JComboBox<String>(patterns);
-		testBox.setPreferredSize(new Dimension(120, 30));
-		testBox.setEditable(false);
-		testBox.addKeyListener(new SearchKeyListener());
-		Configurator.enableAutoCompletion(testBox);
-		
-		//JList list = new JList<>(patterns);
-		//Configurator.enableAutoCompletion(list, fromSearchQuery);
-		
-        //fromSearchQuery.addKeyListener(new SearchKeyListener());
 
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
-		toolBar.add(testBox);
-		//toolBar.add(fromSearchQuery);
+		toolBar.add(fromSearchQuery);
 		toolBar.add(toHeader);
 		toolBar.add(toSearchQuery);
 		toolBar.add(buttonPanel);
@@ -338,29 +328,43 @@ public class MapWindow {
 
 	//---------------------------------Listeners from here-----------------------------//
 
-	class SearchKeyListener implements KeyListener{
-    	String query = "";
-    	
-        public void keyReleased(KeyEvent e) {
+	/**
+	 * If the user is in the search text field, then by pressing enter
+	 * is the same as clicking the find route button
+	 */
+	class EnterKeyListener implements KeyListener{
+		
+		String query = "";
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode() == 10){
+				findRoute();
+			}
+				listModel = new DefaultListModel();
+				searchList = new JList<>(listModel);
+				fromSearchQuery.add(searchList);
+		}
 
-          }
+		@Override
+		public void keyReleased(KeyEvent e) {
+		}
 
-          public void keyTyped(KeyEvent e) {
-          }
-
-          public void keyPressed(KeyEvent e) {
-        	  System.out.println(e.getKeyCode());
-        	  JComboBox cb = (JComboBox)e.getSource();
-        	  String search = (String) cb.getSelectedItem();
-        	  if(search != null)
-        		  query = search.trim();
-        	  if(query.length() >= 2){
-        		  City[] citiesList = CitySearch.getCityNameSuggestions(query);
-        		  for(City city : citiesList)
-        			  System.out.println(city.getCityName());
-        	  }
-          }
-
+		@SuppressWarnings("unchecked")
+		@Override
+		public void keyTyped(KeyEvent e) {
+			JTextField textField = (JTextField)e.getSource();
+			String search = (String) textField.getText().trim();
+			if(search != null){
+				query = search;
+				if(query.length() >= 2){
+					City[] citiesList = CitySearch.getCityNameSuggestions(query);
+					for(City city : citiesList){
+						listModel.addElement(city.getCityName());
+						System.out.println(city.getCityName());
+					}
+				}
+			}
+		}
 	}
 	
 	/**
@@ -468,27 +472,6 @@ public class MapWindow {
 			String tempFrom = fromSearchQuery.getText();
 			fromSearchQuery.setText(toSearchQuery.getText());
 			toSearchQuery.setText(tempFrom);			
-		}
-	}
-	/**
-	 * If the user is in the search text field, then by pressing enter
-	 * is the same as clicking the find route button
-	 */
-	class EnterKeyListener implements KeyListener{
-
-		@Override
-		public void keyPressed(KeyEvent arg0) {
-			if(arg0.getKeyCode() == 10){
-				findRoute();
-			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent arg0) {
-		}
-
-		@Override
-		public void keyTyped(KeyEvent arg0) {
 		}
 	}
 	/**
