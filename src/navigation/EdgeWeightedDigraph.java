@@ -1,5 +1,7 @@
 package navigation;
 
+import navigation.data.Bag;
+
 public class EdgeWeightedDigraph {
 	private final int nodes; // number of nodes
 	private int edges; // number of edges

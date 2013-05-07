@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Stack;
 
+import navigation.data.IndexMinPQ;
+
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 
@@ -66,7 +68,7 @@ public class DijkstraSP
 		w = currentEdge.getToNode()-1;
 		if(w == n)
 			w = currentEdge.getFromNode()-1;
-		if (type.equals("driveTime")) 
+		if (type.trim().equals("Fastest")) 
 		{
 			if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
 			{
@@ -76,7 +78,7 @@ public class DijkstraSP
 				else pq.insert(w, distTo[w]);
 			}
 		}
-		else if(type.equals("shortestPath"))
+		else if(type.trim().equals("Shortest"))
 		{
 			if (distTo[w] > distTo[n] + currentEdge.getLength()) 
 			{
