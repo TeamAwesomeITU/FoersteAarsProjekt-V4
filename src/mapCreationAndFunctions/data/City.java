@@ -141,8 +141,6 @@ public class City {
 	private static boolean createCities()
 	{
 		try {				
-			//ArrayList<City> allCitiesList = new ArrayList<City>();
-
 			File file = new File(cityFileName);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
