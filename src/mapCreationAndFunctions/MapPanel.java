@@ -18,6 +18,8 @@ import java.util.Stack;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import sun.java2d.pipe.RenderingEngine;
+
 import navigation.DijkstraSP;
 
 
@@ -39,6 +41,8 @@ public class MapPanel extends JPanel {
 	private ArrayList<Edge> edgesToDraw; 
 	private Line2D[] line2DsToDraw;
 
+	private RenderingHints graphicsSettingMap = new RenderingHints(null);
+	
 	//HashMap, where the value is the ID of the drawn line, and the key is the value of it's corresponding Edge
 	private HashMap<Integer, Integer> iDHashMap;
 	private GeneralPath[] coastLineToDraw;
@@ -55,6 +59,11 @@ public class MapPanel extends JPanel {
 	public MapPanel(double width, double height) {
 		mapHeight = height;
 		mapWidth = width;
+		Color SteelBlue = new Color(70, 130, 180);
+		Color CornFlower = new Color(160, 228, 253);
+		Color RoyalBlue = new Color(65, 105, 225);
+		
+		setBackground(CornFlower);
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
 		markOgKasperTester();
 		makeLinesForMap();
@@ -99,16 +108,16 @@ public class MapPanel extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
-
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		//Only do this, if coastlines should be drawn
 		if(MainGui.coastlinesWanted){
 			//Makes sure the inner coastlines gets drawn
 			g2.setXORMode(getBackground());
-
+			Color landMass = new Color(255,255,210);
 			//Drawing coastline
 			for (GeneralPath path : coastLineToDraw) 
 			{
-				g2.setColor(Color.lightGray);
+				g2.setColor(landMass);
 				g2.fill(path);
 			}
 
@@ -127,9 +136,8 @@ public class MapPanel extends JPanel {
 			line.setLine(edge.getLine2DToDraw(coordConverter));
 			line2DsToDraw[indexToInsert++] = line;
 			iDHashMap.put(indexToInsert, edge.getiD());
-			int roadType = edge.getRoadType();						
+			int roadType = edge.getRoadType();	
 			g2.setColor(RoadType.getColor(roadType));
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
 			g2.draw(line); 			
 		}		
@@ -141,12 +149,11 @@ public class MapPanel extends JPanel {
 			Edge edgeToDraw;
 			while(!drawPath.empty()) 
 			{
+
 				edgeToDraw = drawPath.pop();
-				int roadType = edgeToDraw.getRoadType();
-				g2.setColor(Color.YELLOW);
+				g2.setColor(Color.ORANGE);
 				line.setLine(edgeToDraw.getLine2DToDraw(coordConverter));
-				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
+				g2.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 				g2.draw(line); 
 			}
 		}
