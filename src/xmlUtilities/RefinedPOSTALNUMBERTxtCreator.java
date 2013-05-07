@@ -6,9 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;

@@ -16,10 +16,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,16 +30,15 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.event.ListDataListener;
+import navigation.DijkstraSP;
 
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
 import mapCreationAndFunctions.MapPanel;
 import mapCreationAndFunctions.MapPanelResize;
-import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.CoordinateConverter;
+import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.data.search.CitySearch;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -47,9 +46,11 @@ public class MapWindow {
 
 	public static JTextField toSearchQuery, fromSearchQuery;
 	public static JList<String> searchList;
-	public static DefaultListModel listModel;
+	public static DefaultListModel<String> listModel;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
+	private MapPanel mapPanel;
+	private String VehicleType = "Bike", RouteType = "Fastest";
 	/**
 	 * A constructor for making the window with an empty search query
 	 */
@@ -124,9 +125,11 @@ public class MapWindow {
 		vehicleBox.setPreferredSize(new Dimension(120, 30));
 		vehicleBox.setEditable(true);
         String[][] vehicleList = {{"Bike", "resources/bicycle.png"},
-        						 {"Car", "resources/car.png"}};
+        						 {"Car", "resources/car.png"},
+        						 {"Walk", "resources/walk.png"}};
         vehicleBox.addItems(vehicleList);
         vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
+        vehicleBox.addActionListener(new VehicleTypeActionListener());
         
         ColoredJComboBox routeBox = new ColoredJComboBox();
         routeBox.setPreferredSize(new Dimension(120, 30));
@@ -135,6 +138,20 @@ public class MapWindow {
         						 {"Shortest", ""}};
         routeBox.addItems(routeList);
         routeBox.setUI(ColoredArrowUI.createUI(routeBox));
+        routeBox.addActionListener(new RouteTypeActionListener());
+        
+		/*listModel = new DefaultListModel();
+		listModel.addElement("nørregade");
+		listModel.addElement("Nørreport");
+		listModel.addElement("nørre");
+		
+		searchList = new JList<>(listModel);
+		searchList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		searchList.setLayoutOrientation(JList.VERTICAL);
+		searchList.setVisibleRowCount(5);
+		JScrollPane listScroller = new JScrollPane(searchList);
+		listScroller.setPreferredSize(new Dimension(250, 80));
+		toolBar.add(searchList);*/
 
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
@@ -173,7 +190,7 @@ public class MapWindow {
 		centerColoredJPanel = new ColoredJPanel();
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
 
-		MapPanel mapPanel = new MapPanel((int)Math.round(width), (int)Math.round(height));
+		mapPanel = new MapPanel((int)Math.round(width), (int)Math.round(height));
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
@@ -262,9 +279,9 @@ public class MapWindow {
 				for(int i = 0; adressParser.getAdressArray().length > i; i++){
 					toArray[i] = adressParser.getAdressArray()[i];
 				}
-
-				JOptionPane.showMessageDialog(MainGui.frame, "From: " + fromArray[0] 
-												+ "\nTo: " + toArray[0]);
+				DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), fromArray[0], VehicleType, RouteType);
+				mapPanel.setPathTo((Stack<Edge>) dip.pathTo(toArray[0]));
+				mapPanel.repaintMap();
 			} catch (MalformedAdressException e1) {
 				final JFrame zoidbergFrame = new JFrame("Malformed Address");
 				
@@ -338,9 +355,8 @@ public class MapWindow {
 			if(e.getKeyCode() == 10){
 				findRoute();
 			}
-				listModel = new DefaultListModel();
-				searchList = new JList<>(listModel);
-				fromSearchQuery.add(searchList);
+			
+
 		}
 
 		@Override
@@ -350,7 +366,7 @@ public class MapWindow {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void keyTyped(KeyEvent e) {
-			JTextField textField = (JTextField)e.getSource();
+			/*JTextField textField = (JTextField)e.getSource();
 			String search = (String) textField.getText().trim();
 			if(search != null){
 				query = search;
@@ -361,7 +377,7 @@ public class MapWindow {
 						System.out.println(city.getCityName());
 					}
 				}
-			}
+			}*/
 		}
 	}
 	
@@ -369,13 +385,18 @@ public class MapWindow {
 	 * Not yet implemented!
 	 */
 	class RouteTypeActionListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
 		
+		@SuppressWarnings("rawtypes")
+		public void actionPerformed(ActionEvent e) {
+			try {
+				JComboBox cb = (JComboBox)e.getSource();
+				String type = (String) cb.getSelectedItem();
+				RouteType = type.trim();
+			} catch (ClassCastException e2) {
+				return;
+			}
+
+		}
 	}
 	
 	/**
@@ -383,11 +404,17 @@ public class MapWindow {
 	 */
 	class VehicleTypeActionListener implements ActionListener{
 
+		@SuppressWarnings("rawtypes")
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			try {
+				JComboBox cb = (JComboBox)e.getSource();
+				String type = (String) cb.getSelectedItem();
+				VehicleType = type.trim();
+			} catch (ClassCastException e2) {
+				return;
+			}
 		}
-		
 	}
 	
 	

@@ -11,6 +11,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import mapCreationAndFunctions.search.QuadTree;
+
 
 @SuppressWarnings({"serial" ,"unused"})
 @Deprecated

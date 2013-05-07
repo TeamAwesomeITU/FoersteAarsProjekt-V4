@@ -1,32 +1,9 @@
-package navigation;
+package navigation.data;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-/**
- *  The <tt>IndexMinPQ</tt> class represents an indexed priority queue of generic keys.
- *  It supports the usual <em>insert</em> and <em>delete-the-minimum</em>
- *  operations, along with <em>delete</em> and <em>change-the-key</em> 
- *  methods. In order to let the client refer to items on the priority queue,
- *  an integer between 0 and NMAX-1 is associated with each key&mdash;the client
- *  uses this integer to specify which key to delete or change.
- *  It also supports methods for peeking at the minimum key,
- *  testing if the priority queue is empty, and iterating through
- *  the keys.
- *  <p>
- *  The <em>insert</em>, <em>delete-the-minimum</em>, <em>delete</em>,
- *  <em>change-key</em>, <em>decrease-key</em>, and <em>increase-key</em>
- *  operations take logarithmic time.
- *  The <em>is-empty</em>, <em>size</em>, <em>min-index</em>, <em>min-key</em>, and <em>key-of</em>
- *  operations take constant time.
- *  Construction takes time proportional to the specified capacity.
- *  <p>
- *  This implementation uses a binary heap along with an array to associate
- *  keys with integers in the given range.
- *  <p>
- *  For additional documentation, see <a href="http://algs4.cs.princeton.edu/24pq">Section 2.4</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- */
+
 public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer> {
     private int NMAX;        // maximum number of elements on PQ
     private int N;           // number of elements on PQ
@@ -42,9 +19,9 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
 	public IndexMinPQ(int NMAX) {
         if (NMAX < 0) throw new IllegalArgumentException();
         this.NMAX = NMAX;
-        keys = (Key[]) new Comparable[NMAX + 1];    // make this of length NMAX??
+        keys = (Key[]) new Comparable[NMAX + 1];    
         pq   = new int[NMAX + 1];
-        qp   = new int[NMAX + 1];                   // make this of length NMAX??
+        qp   = new int[NMAX + 1];                   
         for (int i = 0; i <= NMAX; i++) qp[i] = -1;
     }
 
@@ -85,24 +62,6 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
     }
 
    /**
-     * Return the index associated with a minimal key.
-     * @throws java.util.NoSuchElementException if priority queue is empty.
-     */
-    public int minIndex() { 
-        if (N == 0) throw new NoSuchElementException("Priority queue underflow");
-        return pq[1];        
-    }
-
-   /**
-     * Return a minimal key.
-     * @throws java.util.NoSuchElementException if priority queue is empty.
-     */
-    public Key minKey() { 
-        if (N == 0) throw new NoSuchElementException("Priority queue underflow");
-        return keys[pq[1]];        
-    }
-
-   /**
      * Delete a minimal key and return its associated index.
      * @throws java.util.NoSuchElementException if priority queue is empty.
      */
@@ -131,15 +90,6 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
    /**
      * Change the key associated with index i to the specified value.
      * @throws java.lang.IndexOutOfBoundsException unless 0 &le; i < NMAX
-     * @deprecated Replaced by changeKey()
-     */
-    @Deprecated public void change(int i, Key key) {
-        changeKey(i, key);
-    }
-
-   /**
-     * Change the key associated with index i to the specified value.
-     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; i < NMAX
      * @throws java.util.NoSuchElementException no key is associated with index i
      */
     public void changeKey(int i, Key key) {
@@ -150,33 +100,6 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
         sink(qp[i]);
     }
 
-   /**
-     * Decrease the key associated with index i to the specified value.
-     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; i < NMAX
-     * @throws java.lang.IllegalArgumentException if key &ge; key associated with index i
-     * @throws java.util.NoSuchElementException no key is associated with index i
-     */
-    public void decreaseKey(int i, Key key) {
-        if (i < 0 || i >= NMAX) throw new IndexOutOfBoundsException();
-        if (!contains(i)) throw new NoSuchElementException("index is not in the priority queue");
-        if (keys[i].compareTo(key) <= 0) throw new IllegalArgumentException("Calling decreaseKey() with given argument would not strictly decrease the key");
-        keys[i] = key;
-        swim(qp[i]);
-    }
-
-   /**
-     * Increase the key associated with index i to the specified value.
-     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; i < NMAX
-     * @throws java.lang.IllegalArgumentException if key &le; key associated with index i
-     * @throws java.util.NoSuchElementException no key is associated with index i
-     */
-    public void increaseKey(int i, Key key) {
-        if (i < 0 || i >= NMAX) throw new IndexOutOfBoundsException();
-        if (!contains(i)) throw new NoSuchElementException("index is not in the priority queue");
-        if (keys[i].compareTo(key) >= 0) throw new IllegalArgumentException("Calling increaseKey() with given argument would not strictly increase the key");
-        keys[i] = key;
-        sink(qp[i]);
-    }
 
    /**
      * Delete the key associated with index i.

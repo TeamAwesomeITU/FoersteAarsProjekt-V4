@@ -53,8 +53,6 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 	public void mousePressed(MouseEvent e) {
 		mousePressedAt = e.getPoint();
 		mp.requestFocusInWindow();
-		if(!e.isShiftDown() && SwingUtilities.isLeftMouseButton(e))
-			setHand();
 	}
 
 	/**
@@ -139,14 +137,14 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			double tempX = coordConverter.pixelToUTMCoordX(mouseMovedTo.x) - coordConverter.pixelToUTMCoordX(mousePressedAt.x);
 			startX -= tempX;
 			endX -= tempX;
-			//bevæger os til højre
+			//bevÃ¦ger os til hÃ¸jre
 		}
 		else if(mouseMovedTo.x < mousePressedAt.x)
 		{
 			double tempX = coordConverter.pixelToUTMCoordX(mousePressedAt.x) - coordConverter.pixelToUTMCoordX(mouseMovedTo.x);
 			startX += tempX;
 			endX += tempX;
-			//bevæger os til venstre
+			//bevÃ¦ger os til venstre
 		}
 
 		if(mouseMovedTo.y < mousePressedAt.y)
@@ -154,14 +152,14 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			double tempY = coordConverter.pixelToUTMCoordY(mouseMovedTo.y) - coordConverter.pixelToUTMCoordY(mousePressedAt.y);
 			startY -= tempY;
 			endY -= tempY;
-			//bevæger os ned ad
+			//bevÃ¦ger os ned ad
 		}
 		else if(mouseMovedTo.y > mousePressedAt.y)
 		{
 			double tempY = coordConverter.pixelToUTMCoordY(mousePressedAt.y) - coordConverter.pixelToUTMCoordY(mouseMovedTo.y);
 			startY += tempY;
 			endY += tempY;
-			//bevæger os op ad	
+			//bevÃ¦ger os op ad	
 		}
 		
 		try {
