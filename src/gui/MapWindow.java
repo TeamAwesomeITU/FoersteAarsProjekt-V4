@@ -134,6 +134,7 @@ public class MapWindow {
         						 {"Car", "resources/car.png"}};
         vehicleBox.addItems(vehicleList);
         vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
+        vehicleBox.addActionListener(new VehicleTypeActionListener());
         
         ColoredJComboBox routeBox = new ColoredJComboBox();
         routeBox.setPreferredSize(new Dimension(120, 30));
@@ -142,6 +143,20 @@ public class MapWindow {
         						 {"Shortest", ""}};
         routeBox.addItems(routeList);
         routeBox.setUI(ColoredArrowUI.createUI(routeBox));
+        routeBox.addActionListener(new RouteTypeActionListener());
+        
+		/*listModel = new DefaultListModel();
+		listModel.addElement("nørregade");
+		listModel.addElement("Nørreport");
+		listModel.addElement("nørre");
+		
+		searchList = new JList<>(listModel);
+		searchList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		searchList.setLayoutOrientation(JList.VERTICAL);
+		searchList.setVisibleRowCount(5);
+		JScrollPane listScroller = new JScrollPane(searchList);
+		listScroller.setPreferredSize(new Dimension(250, 80));
+		toolBar.add(searchList);*/
 
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
@@ -346,18 +361,7 @@ public class MapWindow {
 				findRoute();
 			}
 			
-			listModel = new DefaultListModel();
-			listModel.addElement("nørregade");
-			listModel.addElement("Nørreport");
-			listModel.addElement("nørre");
-			
-			searchList = new JList<>(listModel);
-			searchList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-			searchList.setLayoutOrientation(JList.VERTICAL);
-			searchList.setVisibleRowCount(5);
-			JScrollPane listScroller = new JScrollPane(searchList);
-			listScroller.setPreferredSize(new Dimension(250, 80));
-			fromSearchQuery.add(searchList);
+
 		}
 
 		@Override
@@ -386,13 +390,24 @@ public class MapWindow {
 	 * Not yet implemented!
 	 */
 	class RouteTypeActionListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
 		
+		public void actionPerformed(ActionEvent e) {
+			try {
+				JComboBox cb = (JComboBox)e.getSource();
+				String routeType = (String) cb.getSelectedItem();
+				if(routeType.equals("Fastest")){
+					System.out.println("Taste my lightning suckers!");
+				}
+				
+				if(routeType.equals("Shortest")){
+				System.out.println("Ha futte! Gaaaay!");
+				}
+				
+			} catch (ClassCastException e2) {
+				return;
+			}
+
+		}
 	}
 	
 	/**
@@ -400,11 +415,24 @@ public class MapWindow {
 	 */
 	class VehicleTypeActionListener implements ActionListener{
 
+		@SuppressWarnings("rawtypes")
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			try {
+				JComboBox cb = (JComboBox)e.getSource();
+				String vehicleType = (String) cb.getSelectedItem();
+				if(vehicleType.equals("Bike")){
+					System.out.println("I want to ride my bicycle. I want to ride my BIKE!");
+				}
+				
+				if(vehicleType.equals("Car")){
+				System.out.println("Cars all over");
+				}
+				
+			} catch (ClassCastException e2) {
+				return;
+			}
 		}
-		
 	}
 	
 	
