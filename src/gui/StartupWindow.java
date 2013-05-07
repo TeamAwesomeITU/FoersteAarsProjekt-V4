@@ -6,7 +6,6 @@ import gui.customJUnits.*;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;

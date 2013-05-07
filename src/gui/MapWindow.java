@@ -20,7 +20,6 @@ import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,22 +29,16 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListDataListener;
-
 import navigation.DijkstraSP;
 
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
 import mapCreationAndFunctions.MapPanel;
 import mapCreationAndFunctions.MapPanelResize;
-import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.CoordinateConverter;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.data.search.CitySearch;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -392,6 +385,7 @@ public class MapWindow {
 	 */
 	class RouteTypeActionListener implements ActionListener{
 		
+		@SuppressWarnings("rawtypes")
 		public void actionPerformed(ActionEvent e) {
 			try {
 				JComboBox cb = (JComboBox)e.getSource();
