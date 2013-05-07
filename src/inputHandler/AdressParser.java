@@ -57,26 +57,26 @@ public class AdressParser {
 	 * 	If it does not it places the address in index 0 as the name of the road. If it does 
 	 * 	the else-statment will try to find and place the parts of the address in their proper
 	 * 	places. 
-	 * @param s Is a String that is supposed to be the entire address written on a single line. 
-	 * @return the array containen information regarding the address
+	 * @param address Is a String that is supposed to be the entire address written on a single line. 
+	 * @return the array containing information regarding the address
 	 * @throws MalformedAdressException
 	 */
-	public String[] parseAdress(String s) throws MalformedAdressException {
+	public String[] parseAdress(String address) throws MalformedAdressException {
 		//Is the input valid?			
-		s = s.toLowerCase();
-		Matcher validInput = match(pInput, s);
-		if (validInput.find() || s.trim().isEmpty() || s == null){								/* 1 */
+		address = address.toLowerCase();
+		Matcher validInput = match(pInput, address);
+		if (validInput.find() || address.trim().isEmpty() || address == null){								/* 1 */
 			throw new MalformedAdressException("MALFORMED ADRESS");
 		}
-
-		if(match("\\d|\\,|\\bi\\b", s).find() == false){											/* 2 */
-			adressArray[0] = s.trim();
-			System.out.println(s);
+		
+		if(match("\\d|\\,|\\bi\\b", address).find() == false){											/* 2 */
+			adressArray[0] = address.trim();
+			System.out.println(address);
 		}
 
 		else {			
-			addressAfterDeletion = s;
-			findRoadName(s);
+			addressAfterDeletion = address;
+			findRoadName(address);
 			//Only checks for roadnumber, roadletter and floornumber, if a valid adress is found
 			if(adressArray[0] != null)												/* 2 */
 			{
@@ -131,7 +131,7 @@ public class AdressParser {
 			numberLetter = buildingNr.group();
 			Matcher tal = match(pTal, numberLetter);
 
-			//Finder tallet i numberLetter og gemmer det på index 1 i arrayet.
+			//Finder tallet i numberLetter og gemmer det p� index 1 i arrayet.
 			if(tal.find()){																	/* 10 */				
 				addressAfterDeletion = addressAfterDeletion.replace(tal.group(), "");
 				System.out.println("Bygningstal: " + tal.group());
@@ -145,7 +145,7 @@ public class AdressParser {
 	 * @param s	Address string
 	 */
 	private void findRoadLetter(String s) {
-		//Benytter numberLetter og finder bogstavet som den gemmer på index 2 i arrayet.
+		//Benytter numberLetter og finder bogstavet som den gemmer p� index 2 i arrayet.
 		Matcher buildingLetter = match(pLetter, numberLetter);	
 		if(buildingLetter.find()) {								   				   					/* 11 */
 			addressAfterDeletion = addressAfterDeletion.replace(buildingLetter.group(), "");
@@ -158,7 +158,7 @@ public class AdressParser {
 	 * @param s Address string
 	 */
 	private void findFloorNumber(String s) {
-		// Bruger pattern pFloor til at finde etagen/sal/plan og gemm det på index 3.
+		// Bruger pattern pFloor til at finde etagen/sal/plan og gemm det p� index 3.
 		String floorTemp = "";
 
 		Matcher floor = match(pFloor, s);			
@@ -180,7 +180,7 @@ public class AdressParser {
 	 * @param s Address string
 	 */
 	private void findPostCode(String s) {
-		// Bruger pattern pPost til at finde postnummeret og gemme det på index 4 i arrayet.
+		// Bruger pattern pPost til at finde postnummeret og gemme det p� index 4 i arrayet.
 		Matcher postcode = match(pPost, s);	
 		if(postcode.find()) {																	/* 13 */
 			System.out.println("Postnummer: " + postcode.group());
@@ -214,3 +214,4 @@ public class AdressParser {
 		return adressArray;
 	}
 }
+
