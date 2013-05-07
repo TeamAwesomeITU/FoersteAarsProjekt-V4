@@ -6,7 +6,7 @@ import javax.swing.AbstractListModel;
 import javax.swing.JTextField;
 
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.data.search.EdgeSearch;
+import mapCreationAndFunctions.search.EdgeSearch;
 
 @SuppressWarnings("serial")
 public class SearchResultsList extends AbstractListModel<String> {

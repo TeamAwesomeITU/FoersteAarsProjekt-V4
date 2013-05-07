@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import mapCreationAndFunctions.data.DataHolding;
-import mapCreationAndFunctions.data.QuadTree;
+import mapCreationAndFunctions.search.QuadTree;
 
 /**
  * This class makes the first window the user sees. It is

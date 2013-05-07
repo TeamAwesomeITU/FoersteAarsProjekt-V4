@@ -22,7 +22,7 @@ import mapCreationAndFunctions.data.CoastLineMaker;
 import mapCreationAndFunctions.data.CoordinateConverter;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.data.FindRelevantEdges;
+import mapCreationAndFunctions.search.FindRelevantEdges;
 
 @SuppressWarnings("serial")
 /**
