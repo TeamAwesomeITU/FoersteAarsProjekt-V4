@@ -3,14 +3,11 @@ package mapCreationAndFunctions.data;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import javax.imageio.stream.FileImageInputStream;
 
 public class City {
 	
@@ -28,9 +25,14 @@ public class City {
 	
 	//A HashSet of all the postal numbers which belong to the city
 	private HashSet<Integer> postalNumbers = new HashSet<Integer>();
+	
+	//The ID of the City
+	private int cityID;
+	
+	//The ID count of the cities;
+	private static int cityIDcount = 1;
 		
 	//TODO Fucking bad programming - this boolean only exists to ensure the creation of the other fields - FIX!
-	@SuppressWarnings("unused")
 	private static boolean initilalized = createCities();
 	
 	
@@ -42,6 +44,7 @@ public class City {
 	private City(String cityName, Integer postalNumber)
 	{
 		this.cityName = cityName;
+		this.cityID = cityIDcount++;
 		postalNumbers.add(postalNumber);
 	}
 	
@@ -72,6 +75,13 @@ public class City {
 	 */
 	public HashSet<Integer> getCityPostalNumbers()
 	{ return this.postalNumbers; }
+	
+	/**
+	 * Returns the ID of the City
+	 * @return the ID of the City
+	 */
+	public int getCityID()
+	{ return this.cityID; }
 	
 	/**
 	 * Adds a postal number to the City's current postal numbers
@@ -109,7 +119,7 @@ public class City {
 	}
 	
 	/**
-	 * Finds the City with the given name - HAVE TO SPELL THE CITY NAME 100% RIGHT IN ORDER FOR THIS TO WORK
+	 * Finds the City with the given name
 	 * @param cityName the wanted City's name
 	 * @return the City with the corresponding name - if no City could be found, null is returned
 	 */
@@ -118,13 +128,11 @@ public class City {
 		for(City city : allCitiesList)
 			if(city.getCityName().equals(cityName))
 				return city;
-		
 		return null;
-		/* TODO Implementer binarySearch for swag's skyld - ellers lad vær
-		int resultAt = Arrays.binarySearch(allCitiesListArray, cityName);
-		return allCitiesListArray[resultAt];
-		*/
 	}
+	
+	public static City getCityByID(int ID)
+	{ return allCitiesList.get(ID-1); }
 	
 	/**
 	 * Creates all of the Cities
@@ -133,8 +141,6 @@ public class City {
 	private static boolean createCities()
 	{
 		try {				
-			//ArrayList<City> allCitiesList = new ArrayList<City>();
-
 			File file = new File(cityFileName);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
@@ -146,7 +152,7 @@ public class City {
 
 			while((line = reader.readLine()) != null)
 			{
-				//TODO Hvis nogen har en idé til en regex, der kun splitter op til første space -så skriv den her og erstat den der for i = 2 løkke med noget andet, flottere
+				//TODO Hvis nogen har en idï¿½ til en regex, der kun splitter op til fï¿½rste space -sï¿½ skriv den her og erstat den der for i = 2 lï¿½kke med noget andet, flottere
 				lineParts = line.split("\\s");
 				postalNumber = Integer.parseInt(lineParts[0]);
 				cityName = lineParts[1];
@@ -183,24 +189,5 @@ public class City {
 		if(initilalized == false)
 			createCities();
 		return allCitiesList;
-	}
-	
-	public static void main(String[] args) {
-		
-		System.out.println("Number of cities in file: " + allCitiesList.size());
-		
-		/*
-		for(City city : allCitiesList)
-		{
-			System.out.println("Cityname: " + city.getCityName());
-			Iterator<Integer> iterator = city.getCityPostalNumbers().iterator();
-			while(iterator.hasNext())
-				System.out.print(iterator.next() + ", ");
-			System.out.println("");
-		}
-		*/
-		
-		System.out.println(getCityByPostalNumber(1100).getCityName());
-		System.out.println(getCityByPostalNumber(9990).getCityName());	
 	}
 }

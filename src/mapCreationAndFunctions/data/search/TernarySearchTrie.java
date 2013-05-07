@@ -1,17 +1,12 @@
 package mapCreationAndFunctions.data.search;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  * Copied from the book "Algorithms - Fourth Edition" by Robert Sedgewick and Kevin Wayne, 2011
- * Modified to contain an HashSet<Integer>, instead of a single value.
+ * Modified to contain an ArrayList<Integer>, instead of a single value.
  */
-public class TernarySearchTrieCity
+public class TernarySearchTrie
 {
 	private int N;       // size
 	private TrieNode root;   // root of TST
@@ -20,7 +15,7 @@ public class TernarySearchTrieCity
 	{
 		private char c;                 // character
 		private TrieNode left, mid, right;  // left, middle, and right subtries
-		private HashSet<Integer> set;              // HashSet<Integer> associated with string
+		private ArrayList<Integer> val = new ArrayList<>();              // ArrayList<Integer> associated with string
 	}
 
 	public int size()
@@ -29,12 +24,12 @@ public class TernarySearchTrieCity
 	public boolean contains(String key)
 	{ return get(key) != null; }
 
-	public HashSet<Integer> get(String key) {
+	public ArrayList<Integer> get(String key) {
 		if (key == null) throw new NullPointerException();
 		if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
 		TrieNode x = get(root, key, 0);
 		if (x == null) return null;
-		return x.set;
+		return (ArrayList<Integer>) x.val;
 	}
 
 	private TrieNode get(TrieNode x, String key, int d) {
@@ -48,21 +43,21 @@ public class TernarySearchTrieCity
 		else                           return x;
 	}
 
-	public void put(String s, HashSet<Integer> set) {
+	public void put(String s, int val) {
 		if (!contains(s)) N++;
-		root = put(root, s, set, 0);
+		root = put(root, s, val, 0);
 	}
 
-	private TrieNode put(TrieNode x, String s, HashSet<Integer> set, int d) {
+	private TrieNode put(TrieNode x, String s, int val, int d) {
 		char c = s.charAt(d);
 		if (x == null) {
 			x = new TrieNode();
 			x.c = c;
 		}
-		if      (c < x.c)             x.left  = put(x.left,  s, set, d);
-		else if (c > x.c)             x.right = put(x.right, s, set, d);
-		else if (d < s.length() - 1)  x.mid   = put(x.mid,   s, set, d+1);
-		else                          x.set = set;
+		if      (c < x.c)             x.left  = put(x.left,  s, val, d);
+		else if (c > x.c)             x.right = put(x.right, s, val, d);
+		else if (d < s.length() - 1)  x.mid   = put(x.mid,   s, val, d+1);
+		else                          x.val.add(val);
 		return x;
 	}
 
@@ -77,7 +72,7 @@ public class TernarySearchTrieCity
 			else if (c > x.c) x = x.right;
 			else {
 				i++;
-				if (x.set != null) length = i;
+				if (x.val != null) length = i;
 				x = x.mid;
 			}
 		}
@@ -94,7 +89,7 @@ public class TernarySearchTrieCity
 		Queue<String> queue = new Queue<String>();
 		TrieNode x = get(root, prefix, 0);
 		if (x == null) return queue;
-		if (x.set != null) queue.enqueue(prefix);
+		if (x.val != null) queue.enqueue(prefix);
 		collect(x.mid, prefix, queue);
 		return queue;
 	}
@@ -102,7 +97,7 @@ public class TernarySearchTrieCity
 	private void collect(TrieNode x, String prefix, Queue<String> queue) {
 		if (x == null) return;
 		collect(x.left,  prefix,       queue);
-		if (x.set != null) queue.enqueue(prefix + x.c);
+		if (x.val != null) queue.enqueue(prefix + x.c);
 		collect(x.mid,   prefix + x.c, queue);
 		collect(x.right, prefix,       queue);
 	}
@@ -118,7 +113,7 @@ public class TernarySearchTrieCity
 		char c = pat.charAt(i);
 		if (c == '.' || c < x.c) collect(x.left, prefix, i, pat, q);
 		if (c == '.' || c == x.c) {
-			if (i == pat.length() - 1 && x.set != null) q.enqueue(prefix + x.c);
+			if (i == pat.length() - 1 && x.val != null) q.enqueue(prefix + x.c);
 			if (i < pat.length() - 1) collect(x.mid, prefix + x.c, i+1, pat, q);
 		}
 		if (c == '.' || c > x.c) collect(x.right, prefix, i, pat, q);
