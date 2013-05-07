@@ -29,7 +29,9 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListDataListener;
 
 import mapCreationAndFunctions.AreaToDraw;
@@ -47,7 +49,7 @@ public class MapWindow {
 
 	public static JTextField toSearchQuery, fromSearchQuery;
 	public static JList<String> searchList;
-	public static DefaultListModel listModel;
+	public static DefaultListModel<String> listModel;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	/**
@@ -338,9 +340,19 @@ public class MapWindow {
 			if(e.getKeyCode() == 10){
 				findRoute();
 			}
-				listModel = new DefaultListModel();
-				searchList = new JList<>(listModel);
-				fromSearchQuery.add(searchList);
+			
+			listModel = new DefaultListModel();
+			listModel.addElement("nørregade");
+			listModel.addElement("Nørreport");
+			listModel.addElement("nørre");
+			
+			searchList = new JList<>(listModel);
+			searchList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			searchList.setLayoutOrientation(JList.VERTICAL);
+			searchList.setVisibleRowCount(5);
+			JScrollPane listScroller = new JScrollPane(searchList);
+			listScroller.setPreferredSize(new Dimension(250, 80));
+			fromSearchQuery.add(searchList);
 		}
 
 		@Override
