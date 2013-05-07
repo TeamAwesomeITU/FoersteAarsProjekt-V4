@@ -32,8 +32,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ListDataListener;
 
-import org.jdesktop.swingx.autocomplete.Configurator;
-
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
 import mapCreationAndFunctions.MapPanel;
