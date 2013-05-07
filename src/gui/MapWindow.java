@@ -57,6 +57,7 @@ public class MapWindow {
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
+	private String VehicleType = "Bike", RouteType = "Fastest";
 	/**
 	 * A constructor for making the window with an empty search query
 	 */
@@ -284,7 +285,7 @@ public class MapWindow {
 				for(int i = 0; adressParser.getAdressArray().length > i; i++){
 					toArray[i] = adressParser.getAdressArray()[i];
 				}
-				DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), fromArray[0], "car");
+				DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), fromArray[0], VehicleType, RouteType);
 				mapPanel.setPathTo((Stack<Edge>) dip.pathTo(toArray[0]));
 				mapPanel.repaintMap();
 			} catch (MalformedAdressException e1) {
@@ -371,7 +372,7 @@ public class MapWindow {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void keyTyped(KeyEvent e) {
-			JTextField textField = (JTextField)e.getSource();
+			/*JTextField textField = (JTextField)e.getSource();
 			String search = (String) textField.getText().trim();
 			if(search != null){
 				query = search;
@@ -382,7 +383,7 @@ public class MapWindow {
 						System.out.println(city.getCityName());
 					}
 				}
-			}
+			}*/
 		}
 	}
 	
@@ -394,15 +395,8 @@ public class MapWindow {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				JComboBox cb = (JComboBox)e.getSource();
-				String routeType = (String) cb.getSelectedItem();
-				if(routeType.equals("Fastest")){
-					System.out.println("Taste my lightning suckers!");
-				}
-				
-				if(routeType.equals("Shortest")){
-				System.out.println("Ha futte! Gaaaay!");
-				}
-				
+				String type = (String) cb.getSelectedItem();
+				RouteType = type.trim();
 			} catch (ClassCastException e2) {
 				return;
 			}
@@ -420,15 +414,8 @@ public class MapWindow {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				JComboBox cb = (JComboBox)e.getSource();
-				String vehicleType = (String) cb.getSelectedItem();
-				if(vehicleType.equals("Bike")){
-					System.out.println("I want to ride my bicycle. I want to ride my BIKE!");
-				}
-				
-				if(vehicleType.equals("Car")){
-				System.out.println("Cars all over");
-				}
-				
+				String type = (String) cb.getSelectedItem();
+				VehicleType = type.trim();
 			} catch (ClassCastException e2) {
 				return;
 			}

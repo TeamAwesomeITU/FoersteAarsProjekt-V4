@@ -15,13 +15,14 @@ public class DijkstraSP
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
 	private int s;
-	private String type = "driveTime";
+	private String routeType = "Fastest";
 	private HashSet<Integer> setOfNonViableEdges;
 	private HashSet<String> setOfNonViableRoadTypes;
 	private EdgeWeightedDigraph graph;
 
-	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation) {
+	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
+		this.routeType = routeType;
 		if(setOfNonViableEdges == null) 
 			throw new NullPointerException("setOfNonViableEdges is empty");
 		this.graph = graph;
@@ -68,7 +69,7 @@ public class DijkstraSP
 		w = currentEdge.getToNode()-1;
 		if(w == n)
 			w = currentEdge.getFromNode()-1;
-		if (type.trim().equals("Fastest")) 
+		if (routeType.trim().equals("Fastest")) 
 		{
 			if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
 			{
@@ -78,7 +79,7 @@ public class DijkstraSP
 				else pq.insert(w, distTo[w]);
 			}
 		}
-		else if(type.trim().equals("Shortest"))
+		else if(routeType.trim().equals("Shortest"))
 		{
 			if (distTo[w] > distTo[n] + currentEdge.getLength()) 
 			{
@@ -132,13 +133,13 @@ public class DijkstraSP
 
 	private void TransportType(String meansOfTransportation) {
 		switch (meansOfTransportation) {
-		case "bicycle": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,21,22,23,3,31,32,33,41,42,43}));
+		case "Bike": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,21,22,23,3,31,32,33,41,42,43}));
 		setOfNonViableRoadTypes = new HashSet<String>(Arrays.asList(new String[]{"tf"})); break;
 
-		case "car": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{8,11,28}));
+		case "Car": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{8,11,28}));
 		setOfNonViableRoadTypes = new HashSet<String>(Arrays.asList(new String[]{"tf", "n"})); break;
 
-		case "walk": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,3,4,21,22,23,24,31,32,33,34,41,42,43,44})); 
+		case "Walk": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,3,4,21,22,23,24,31,32,33,34,41,42,43,44})); 
 		setOfNonViableRoadTypes = new HashSet<String>();
 		default:
 			break;
