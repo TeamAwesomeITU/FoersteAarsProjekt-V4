@@ -18,16 +18,10 @@ import java.util.Stack;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import sun.java2d.pipe.RenderingEngine;
-
-import navigation.DijkstraSP;
-
-
 import mapCreationAndFunctions.data.CoastLineMaker;
 import mapCreationAndFunctions.data.CoordinateConverter;
-import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.data.FindRelevantEdges;
+import mapCreationAndFunctions.search.FindRelevantEdges;
 
 @SuppressWarnings("serial")
 /**
@@ -41,8 +35,6 @@ public class MapPanel extends JPanel {
 	private ArrayList<Edge> edgesToDraw; 
 	private Line2D[] line2DsToDraw;
 
-	private RenderingHints graphicsSettingMap = new RenderingHints(null);
-	
 	//HashMap, where the value is the ID of the drawn line, and the key is the value of it's corresponding Edge
 	private HashMap<Integer, Integer> iDHashMap;
 	private GeneralPath[] coastLineToDraw;
@@ -59,13 +51,10 @@ public class MapPanel extends JPanel {
 	public MapPanel(double width, double height) {
 		mapHeight = height;
 		mapWidth = width;
-		Color SteelBlue = new Color(70, 130, 180);
-		Color CornFlower = new Color(160, 228, 253);
-		Color RoyalBlue = new Color(65, 105, 225);
+		Color waterColor = new Color(160, 228, 253);
 		
-		setBackground(CornFlower);
+		setBackground(waterColor);
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
-		markOgKasperTester();
 		makeLinesForMap();
 		setBorderForPanel();
 		addMouseListener(mapMouseZoomAndPan);
@@ -77,11 +66,6 @@ public class MapPanel extends JPanel {
 		return mapMouseZoomAndPan;
 	}
 
-
-	public void markOgKasperTester() {
-		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), "Aavej", "car");
-		pathTo = (Stack<Edge>) dip.pathTo("Følfodvej");
-	}
 	/**
 	 * Draws the lines for the map. 
 	 * Saves all the edges and converts the coordinates and saves them in an array. 
@@ -216,6 +200,10 @@ public class MapPanel extends JPanel {
 	private void setBorderForPanel() {
 		setBorder(new LineBorder(Color.black));
 
+	}
+	
+	public void setPathTo(Stack<Edge> pathTo) {
+		this.pathTo = pathTo;
 	}
 
 
