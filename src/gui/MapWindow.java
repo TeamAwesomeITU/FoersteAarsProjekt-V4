@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -34,12 +35,15 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListDataListener;
 
+import navigation.DijkstraSP;
+
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
 import mapCreationAndFunctions.MapPanel;
 import mapCreationAndFunctions.MapPanelResize;
 import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.CoordinateConverter;
+import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.data.search.CitySearch;
 /**
@@ -52,6 +56,7 @@ public class MapWindow {
 	public static DefaultListModel<String> listModel;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 						  eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
+	private MapPanel mapPanel;
 	/**
 	 * A constructor for making the window with an empty search query
 	 */
@@ -175,7 +180,7 @@ public class MapWindow {
 		centerColoredJPanel = new ColoredJPanel();
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
 
-		MapPanel mapPanel = new MapPanel((int)Math.round(width), (int)Math.round(height));
+		mapPanel = new MapPanel((int)Math.round(width), (int)Math.round(height));
 		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
 		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
@@ -264,9 +269,9 @@ public class MapWindow {
 				for(int i = 0; adressParser.getAdressArray().length > i; i++){
 					toArray[i] = adressParser.getAdressArray()[i];
 				}
-
-				JOptionPane.showMessageDialog(MainGui.frame, "From: " + fromArray[0] 
-												+ "\nTo: " + toArray[0]);
+				DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), fromArray[0], "car");
+				mapPanel.setPathTo((Stack<Edge>) dip.pathTo(toArray[0]));
+				mapPanel.repaintMap();
 			} catch (MalformedAdressException e1) {
 				final JFrame zoidbergFrame = new JFrame("Malformed Address");
 				

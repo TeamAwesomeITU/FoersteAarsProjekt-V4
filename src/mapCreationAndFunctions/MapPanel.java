@@ -18,9 +18,6 @@ import java.util.Stack;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import navigation.DijkstraSP;
-
-
 import mapCreationAndFunctions.data.CoastLineMaker;
 import mapCreationAndFunctions.data.CoordinateConverter;
 import mapCreationAndFunctions.data.DataHolding;
