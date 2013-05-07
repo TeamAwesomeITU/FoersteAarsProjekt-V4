@@ -1,7 +1,5 @@
 package navigation;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Stack;
 
 import mapCreationAndFunctions.data.DataHolding;
@@ -12,17 +10,9 @@ public class DijkstraSP
 	private int[] edgeTo; //contains edgeIDs on the edge towards the node i on edgeTo[i].
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
-	private int s;
-	private String type = "driveTime";
-	private HashSet<Integer> setOfNonViableEdges;
-	private HashSet<String> setOfNonViableRoadTypes;
-	private EdgeWeightedDigraph graph;
-
-	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation) {
-		TransportType(meansOfTransportation);
-		if(setOfNonViableEdges == null) 
-			throw new NullPointerException("setOfNonViableEdges is empty");
-		this.graph = graph;
+	int s, counter = 0;
+	
+	public DijkstraSP(EdgeWeightedDigraph graph, String roadName) {
 		s = -1;
 		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
 		{
@@ -35,7 +25,7 @@ public class DijkstraSP
 		edgeTo = new int[graph.nodes()];
 		distTo = new double[graph.nodes()];
 		pq = new IndexMinPQ<Double>(graph.nodes());
-
+		
 		for (int n = 0; n < graph.nodes(); n++)
 			distTo[n] = Double.POSITIVE_INFINITY;
 		distTo[s] = 0.0;
@@ -43,47 +33,32 @@ public class DijkstraSP
 		pq.insert(s, 0.0);
 		System.out.println("Starting relaxation");
 		while (!pq.isEmpty())
-			relax(pq.delMin());
+			relax(graph, pq.delMin()); //
 		System.out.println("Relaxation done");
-	}
+	} 
 
-	private void relax(int n) {
+	/**
+	 * Relaxes a vertex
+	 * @param graph A directed edge weighted graph
+	 * @param n	This is actually a node. Used as an index (dem variables)
+	 */
+	private void relax(EdgeWeightedDigraph graph, int n) {
 		Edge currentEdge;
 		int w = -1;
 		for(Integer e : graph.adj(n)) 
 		{
 			currentEdge = DataHolding.getEdge(e);
-			if (!setOfNonViableEdges.contains(currentEdge.getRoadType())) 
-				if(setOfNonViableRoadTypes != null && setOfNonViableRoadTypes.contains(currentEdge.getOneWay())) 
-				{
-					//This is rather stupid, but works for now.
-				}
-				else 
-				{
-					w = currentEdge.getToNode()-1;
-					if(w == n)
-						w = currentEdge.getFromNode()-1;
-					if (type.equals("driveTime")) 
-					{
-						if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
-						{
-							distTo[w] = distTo[n] + currentEdge.getDriveTime();
-							edgeTo[w] = e;
-							if (pq.contains(w)) pq.changeKey(w, distTo[w]);
-							else pq.insert(w, distTo[w]);
-						}
-					}
-					else if(type.equals("shortestPath"))
-					{
-						if (distTo[w] > distTo[n] + currentEdge.getLength()) 
-						{
-							distTo[w] = distTo[n] + currentEdge.getLength();
-							edgeTo[w] = e;
-							if (pq.contains(w)) pq.changeKey(w, distTo[w]);
-							else pq.insert(w, distTo[w]);
-						}
-					}
-				}
+			w = currentEdge.getToNode()-1;
+			if(w == n)
+				w = currentEdge.getFromNode()-1;
+			
+			if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
+			{
+				distTo[w] = distTo[n] + currentEdge.getDriveTime();
+				edgeTo[w] = e;
+				if (pq.contains(w)) pq.changeKey(w, distTo[w]);
+				else pq.insert(w, distTo[w]);
+			}
 		}
 	}
 
@@ -105,10 +80,8 @@ public class DijkstraSP
 				break;
 			}
 		}
-		if (!hasPathTo(n)) { 
-			System.out.println("nej");
+		if (!hasPathTo(n)) 
 			return null;
-		}
 		System.out.println("Finding route!");
 		Stack<Edge> path = new Stack<Edge>();
 		for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
@@ -126,19 +99,5 @@ public class DijkstraSP
 			path.push(e);
 		}
 		return path;
-	}
-
-	private void TransportType(String meansOfTransportation) {
-		switch (meansOfTransportation) {
-		case "bicycle": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,21,22,23,3,31,32,33,41,42,43}));
-		setOfNonViableRoadTypes = new HashSet<String>(Arrays.asList(new String[]{"tf"})); break;
-
-		case "car": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{8,11,28}));
-		setOfNonViableRoadTypes = new HashSet<String>(Arrays.asList(new String[]{"tf", "n"})); break;
-
-		case "walk": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,3,4,21,22,23,24,31,32,33,34,41,42,43,44})); break;
-		default:
-			break;
-		}
 	}
 }
