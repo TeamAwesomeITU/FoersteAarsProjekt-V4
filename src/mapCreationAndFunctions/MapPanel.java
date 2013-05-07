@@ -56,7 +56,6 @@ public class MapPanel extends JPanel {
 		mapHeight = height;
 		mapWidth = width;
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
-		markOgKasperTester();
 		makeLinesForMap();
 		setBorderForPanel();
 		addMouseListener(mapMouseZoomAndPan);
@@ -68,11 +67,6 @@ public class MapPanel extends JPanel {
 		return mapMouseZoomAndPan;
 	}
 
-
-	public void markOgKasperTester() {
-		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), "Aavej", "car");
-		pathTo = (Stack<Edge>) dip.pathTo("Følfodvej");
-	}
 	/**
 	 * Draws the lines for the map. 
 	 * Saves all the edges and converts the coordinates and saves them in an array. 
@@ -187,6 +181,9 @@ public class MapPanel extends JPanel {
 		return area;
 	}
 
+	public void setPathTo(Stack<Edge> pathTo) {
+		this.pathTo = pathTo;
+	}
 	/**
 	 * Sets the width of the MapPanel. Is used when resizing.
 	 * @param width is the width-to-be.
