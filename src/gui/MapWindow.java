@@ -125,7 +125,8 @@ public class MapWindow {
 		vehicleBox.setPreferredSize(new Dimension(120, 30));
 		vehicleBox.setEditable(true);
         String[][] vehicleList = {{"Bike", "resources/bicycle.png"},
-        						 {"Car", "resources/car.png"}};
+        						 {"Car", "resources/car.png"},
+        						 {"Walk", "resources/walk.png"}};
         vehicleBox.addItems(vehicleList);
         vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
         vehicleBox.addActionListener(new VehicleTypeActionListener());
