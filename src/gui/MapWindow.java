@@ -143,6 +143,7 @@ public class MapWindow {
         						 {"Shortest", ""}};
         routeBox.addItems(routeList);
         routeBox.setUI(ColoredArrowUI.createUI(routeBox));
+        routeBox.addActionListener(new RouteTypeActionListener());
         
 		/*listModel = new DefaultListModel();
 		listModel.addElement("nørregade");
@@ -391,7 +392,20 @@ public class MapWindow {
 	class RouteTypeActionListener implements ActionListener{
 		
 		public void actionPerformed(ActionEvent e) {
-
+			try {
+				JComboBox cb = (JComboBox)e.getSource();
+				String routeType = (String) cb.getSelectedItem();
+				if(routeType.equals("Fastest")){
+					System.out.println("Taste my lightning suckers!");
+				}
+				
+				if(routeType.equals("Shortest")){
+				System.out.println("Ha futte! Gaaaay!");
+				}
+				
+			} catch (ClassCastException e2) {
+				return;
+			}
 
 		}
 	}
@@ -406,12 +420,12 @@ public class MapWindow {
 		public void actionPerformed(ActionEvent e) {
 			try {
 				JComboBox cb = (JComboBox)e.getSource();
-				String vehicletype = (String) cb.getSelectedItem();
-				if(vehicletype.equals("Bike")){
+				String vehicleType = (String) cb.getSelectedItem();
+				if(vehicleType.equals("Bike")){
 					System.out.println("I want to ride my bicycle. I want to ride my BIKE!");
 				}
 				
-				if(vehicletype.equals("Car")){
+				if(vehicleType.equals("Car")){
 				System.out.println("Cars all over");
 				}
 				
