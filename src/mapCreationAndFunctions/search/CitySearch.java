@@ -24,6 +24,8 @@ public class CitySearch  {
 
 	public static City[] searchForCityName(String cityToFind)
 	{
+		//Makes sure that the input's first char is upper case
+		cityToFind = cityToFind.substring(0,1).toUpperCase() + cityToFind.substring(1,cityToFind.length());
 		ArrayList<Integer> listOfFoundCities = citySearchTrie.get(cityToFind);
 
 		City[] arrayOfFoundCities = new City[listOfFoundCities.size()];
@@ -41,6 +43,8 @@ public class CitySearch  {
 	 */
 	public static City[] getCityNameSuggestions(String cityToFind)
 	{
+		//Makes sure that the input's first char is upper case
+		cityToFind = cityToFind.substring(0,1).toUpperCase() + cityToFind.substring(1,cityToFind.length());
 		Iterable<String> cityNames = citySearchTrie.prefixMatch(cityToFind);
 		Iterator<String> cityNamesIterator = cityNames.iterator();
 		ArrayList<City> cityList = new ArrayList<>();
@@ -58,7 +62,7 @@ public class CitySearch  {
 	}
 	
 	public static void main(String[] args) {
-		City[] citylist = getCityNameSuggestions("København");
+		City[] citylist = getCityNameSuggestions("københavn");
 		for(City city : citylist)
 			System.out.println(city.getCityName());
 	}

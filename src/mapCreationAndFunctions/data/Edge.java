@@ -331,7 +331,7 @@ public class Edge {
 	}
 	
 	
-	//TODO lad v�r med at lave en line2d for hver Edge - lav i stedet en intersectmetode i edge?
+	//TODO lad vær med at lave en line2d for hver Edge - lav i stedet en intersectmetode i edge?
 	public boolean intersects(Rectangle2D rectangle2d)
 	{
 		return getLine2DUnconverted().intersects(rectangle2d);

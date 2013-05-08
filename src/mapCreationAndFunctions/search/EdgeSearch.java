@@ -36,6 +36,8 @@ public class EdgeSearch  {
 	 */
 	public static Edge[] searchForRoadName(String edgeToFind)
 	{
+		//Makes sure that the input's first char is upper case
+		edgeToFind = edgeToFind.substring(0,1).toUpperCase() + edgeToFind.substring(1,edgeToFind.length());
 		ArrayList<Integer> listOfFoundEdges = edgeSearchTrie.get(edgeToFind);
 
 		Edge[] arrayOfFoundEdges = new Edge[listOfFoundEdges.size()];
@@ -53,6 +55,8 @@ public class EdgeSearch  {
 	 */
 	public static Edge[] getRoadNameSuggestions(String edgeToFind)
 	{
+		//Makes sure that the input's first char is upper case
+		edgeToFind = edgeToFind.substring(0,1).toUpperCase() + edgeToFind.substring(1,edgeToFind.length());
 		Iterable<String> roadNames = edgeSearchTrie.prefixMatch(edgeToFind);
 		Iterator<String> roadNameIterator = roadNames.iterator();
 		ArrayList<Edge> roadList = new ArrayList<>();
@@ -76,6 +80,9 @@ public class EdgeSearch  {
 	 */
 	public static Edge searchForRoadNameInCity(String edgeToFind, int postalNumber)
 	{
+		//Makes sure that the input's first char is upper case
+		edgeToFind = edgeToFind.substring(0,1).toUpperCase() + edgeToFind.substring(1,edgeToFind.length());
+		
 		ArrayList<Integer> listOfFoundEdges = edgeSearchTrie.get(edgeToFind);
 		for(Integer ID : listOfFoundEdges)
 		{
@@ -86,4 +93,10 @@ public class EdgeSearch  {
 
 		return null;
 	}	
+	
+	public static void main(String[] args)
+	{
+		for(Edge edge : getRoadNameSuggestions("nør"))
+			System.out.println(edge.getRoadName());
+	}
 }
