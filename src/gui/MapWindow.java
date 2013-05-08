@@ -29,16 +29,22 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JWindow;
+import javax.swing.ListSelectionModel;
+
 import navigation.DijkstraSP;
 
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
 import mapCreationAndFunctions.MapPanel;
 import mapCreationAndFunctions.MapPanelResize;
+import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.CoordinateConverter;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
+import mapCreationAndFunctions.search.CitySearch;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -126,7 +132,7 @@ public class MapWindow {
 		vehicleBox.setEditable(true);
         String[][] vehicleList = {{"Bike", "resources/bicycle.png"},
         						 {"Car", "resources/car.png"},
-        						 {"Walk", "resources/walk.png"}};
+        						 {"Walk", "resources/walk2.png"}};
         vehicleBox.addItems(vehicleList);
         vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
         vehicleBox.addActionListener(new VehicleTypeActionListener());
@@ -140,10 +146,7 @@ public class MapWindow {
         routeBox.setUI(ColoredArrowUI.createUI(routeBox));
         routeBox.addActionListener(new RouteTypeActionListener());
         
-		/*listModel = new DefaultListModel();
-		listModel.addElement("nørregade");
-		listModel.addElement("Nørreport");
-		listModel.addElement("nørre");
+		listModel = new DefaultListModel();
 		
 		searchList = new JList<>(listModel);
 		searchList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -151,7 +154,6 @@ public class MapWindow {
 		searchList.setVisibleRowCount(5);
 		JScrollPane listScroller = new JScrollPane(searchList);
 		listScroller.setPreferredSize(new Dimension(250, 80));
-		toolBar.add(searchList);*/
 
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
@@ -350,34 +352,48 @@ public class MapWindow {
 	class EnterKeyListener implements KeyListener{
 		
 		String query = "";
+		JWindow listWindow;
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(e.getKeyCode() == 10){
 				findRoute();
 			}
+			if(listWindow != null)
+				listWindow.dispose();
 			
 
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
+			listWindow = new JWindow();
+			Container contentPane = listWindow.getContentPane();
+			listWindow.setLocationRelativeTo(fromSearchQuery);
+			listWindow.setPreferredSize(new Dimension(250, 80));
+			
+			contentPane.add(searchList);
+			listWindow.setVisible(true);
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
 		public void keyTyped(KeyEvent e) {
-			/*JTextField textField = (JTextField)e.getSource();
+			JTextField textField = (JTextField)e.getSource();
 			String search = (String) textField.getText().trim();
 			if(search != null){
+				listModel.removeAllElements();
 				query = search;
 				if(query.length() >= 2){
+
 					City[] citiesList = CitySearch.getCityNameSuggestions(query);
 					for(City city : citiesList){
 						listModel.addElement(city.getCityName());
-						System.out.println(city.getCityName());
 					}
+					//if(listWindow != null)
+					listWindow.pack();
 				}
-			}*/
+			}
+
 		}
 	}
 	

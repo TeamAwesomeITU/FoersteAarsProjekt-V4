@@ -25,6 +25,7 @@ public class DijkstraSP
 
 	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
+		
 		this.routeType = routeType;
 		if(setOfNonViableEdges == null) 
 			throw new NullPointerException("setOfNonViableEdges is empty");

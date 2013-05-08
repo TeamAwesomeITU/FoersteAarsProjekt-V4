@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class AdressParser {
 
-	private	String[] adressArray = new String[6];
+	private static	String[] adressArray = new String[6];
 	private	String pBuilding = "(\\b\\d{1,3}[A-ZÆØÅa-zæøå]?\\b )|" +
 			"\\b\\d{1,3}[^.]\\b}|" +
 			"(\\b\\d{1,3}[A-ZÆØÅa-zæøå,]?\\b|" +
@@ -87,7 +87,7 @@ public class AdressParser {
 			findPostCode(addressAfterDeletion);
 			findCityName(addressAfterDeletion);
 		}
-
+		
 		return adressArray;			     					
 	}
 
@@ -210,8 +210,10 @@ public class AdressParser {
 		}
 	}
 
-	public String[] getAdressArray(){
+	public static String[] getAdressArray(){
 		return adressArray;
 	}
+	
+	
 }
 
