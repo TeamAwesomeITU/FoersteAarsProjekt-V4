@@ -1,5 +1,7 @@
 package navigation;
 
+import inputHandler.Zoidberg;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Stack;
@@ -19,6 +21,7 @@ public class DijkstraSP
 	private HashSet<Integer> setOfNonViableEdges;
 	private HashSet<String> setOfNonViableRoadTypes;
 	private EdgeWeightedDigraph graph;
+	private boolean badInput = false;
 
 	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
@@ -35,19 +38,27 @@ public class DijkstraSP
 				break;
 			}
 		}
-		edgeTo = new int[graph.nodes()];
-		distTo = new double[graph.nodes()];
-		pq = new IndexMinPQ<Double>(graph.nodes());
+		if(s != -1) 
+		{
+			edgeTo = new int[graph.nodes()];
+			distTo = new double[graph.nodes()];
+			pq = new IndexMinPQ<Double>(graph.nodes());
 
-		for (int n = 0; n < graph.nodes(); n++)
-			distTo[n] = Double.POSITIVE_INFINITY;
-		distTo[s] = 0.0;
+			for (int n = 0; n < graph.nodes(); n++)
+				distTo[n] = Double.POSITIVE_INFINITY;
+			distTo[s] = 0.0;
 
-		pq.insert(s, 0.0);
-		System.out.println("Starting relaxation");
-		while (!pq.isEmpty())
-			prepareForRelax(pq.delMin());
-		System.out.println("Relaxation done");
+			pq.insert(s, 0.0);
+			System.out.println("Starting relaxation");
+			while (!pq.isEmpty())
+				prepareForRelax(pq.delMin());
+			System.out.println("Relaxation done");
+		}
+		else 
+		{
+			badInput = true;
+			Zoidberg.badInputMessages();
+		}
 	}
 
 	private void prepareForRelax(int n) {
@@ -94,41 +105,53 @@ public class DijkstraSP
 		return distTo[n]; 
 	}
 
-	public boolean hasPathTo(int n) { 
+	private boolean hasPathTo(int n) { 
 		return distTo[n] < Double.POSITIVE_INFINITY; 
 	}
 
 	public Iterable<Edge> pathTo(String roadName) {
-		int n = -1; 
-		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
-		{
-			if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName)) 
-			{
-				n = DataHolding.getEdge(i).getToNode()-1;
-				break;
-			}
-		}
-		if (!hasPathTo(n)) { 
-			System.out.println("nej");
+		if(badInput == true) 
 			return null;
-		}
-		System.out.println("Finding route!");
-		Stack<Edge> path = new Stack<Edge>();
-		for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
-			if (n+1 == e.getFromNode())
-				n = e.getToNode()-1;
-			else {
-				n = e.getFromNode()-1;
-			}
-			if (n == s) 
+
+		else {
+			int n = -1; 
+			for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
 			{
-				path.push(e);
-				System.out.println("Succes! Route found.");
-				break;
+				if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName)) 
+				{
+					n = DataHolding.getEdge(i).getToNode()-1;
+					break;
+				}
 			}
-			path.push(e);
+			if(n != -1) 
+			{
+				if (!hasPathTo(n)) { 
+					System.out.println("nej");
+					return null;
+				}
+				System.out.println("Finding route!");
+				Stack<Edge> path = new Stack<Edge>();
+				for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
+					if (n+1 == e.getFromNode())
+						n = e.getToNode()-1;
+					else {
+						n = e.getFromNode()-1;
+					}
+					if (n == s) 
+					{
+						path.push(e);
+						System.out.println("Succes! Route found.");
+						break;
+					}
+					path.push(e);
+				}
+				return path;
+			}
+			else {
+				Zoidberg.badInputMessages();
+				return null;
+			}
 		}
-		return path;
 	}
 
 	private void TransportType(String meansOfTransportation) {
