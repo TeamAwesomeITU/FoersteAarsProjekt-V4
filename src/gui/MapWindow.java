@@ -282,8 +282,10 @@ public class MapWindow {
 					toArray[i] = adressParser.getAdressArray()[i];
 				}
 				DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), fromArray[0], VehicleType, RouteType);
+				if(dip.isBadInput() == false) {
 				mapPanel.setPathTo((Stack<Edge>) dip.pathTo(toArray[0]));
 				mapPanel.repaintMap();
+				}
 			} catch (MalformedAdressException e1) {
 				final JFrame zoidbergFrame = new JFrame("Malformed Address");
 				

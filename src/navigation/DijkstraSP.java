@@ -25,7 +25,7 @@ public class DijkstraSP
 
 	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
-		
+
 		this.routeType = routeType;
 		if(setOfNonViableEdges == null) 
 			throw new NullPointerException("setOfNonViableEdges is empty");
@@ -102,56 +102,44 @@ public class DijkstraSP
 			}
 		}
 	}
-	public double distTo(int n) { 
-		return distTo[n]; 
-	}
-
-	private boolean hasPathTo(int n) { 
-		return distTo[n] < Double.POSITIVE_INFINITY; 
-	}
 
 	public Iterable<Edge> pathTo(String roadName) {
-		if(badInput == true) 
-			return null;
-
-		else {
-			int n = -1; 
-			for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
+		int n = -1; 
+		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
+		{
+			if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName)) 
 			{
-				if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName)) 
-				{
-					n = DataHolding.getEdge(i).getToNode()-1;
-					break;
-				}
+				n = DataHolding.getEdge(i).getToNode()-1;
+				break;
 			}
-			if(n != -1) 
-			{
-				if (!hasPathTo(n)) { 
-					System.out.println("nej");
-					return null;
-				}
-				System.out.println("Finding route!");
-				Stack<Edge> path = new Stack<Edge>();
-				for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
-					if (n+1 == e.getFromNode())
-						n = e.getToNode()-1;
-					else {
-						n = e.getFromNode()-1;
-					}
-					if (n == s) 
-					{
-						path.push(e);
-						System.out.println("Succes! Route found.");
-						break;
-					}
-					path.push(e);
-				}
-				return path;
-			}
-			else {
-				Zoidberg.badInputMessages();
+		}
+		if(n != -1) 
+		{
+			if (!hasPathTo(n)) { 
+				System.out.println("nej");
 				return null;
 			}
+			System.out.println("Finding route!");
+			Stack<Edge> path = new Stack<Edge>();
+			for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
+				if (n+1 == e.getFromNode())
+					n = e.getToNode()-1;
+				else {
+					n = e.getFromNode()-1;
+				}
+				if (n == s) 
+				{
+					path.push(e);
+					System.out.println("Succes! Route found.");
+					break;
+				}
+				path.push(e);
+			}
+			return path;
+		}
+		else {
+			Zoidberg.badInputMessages();
+			return null;
 		}
 	}
 
@@ -168,5 +156,17 @@ public class DijkstraSP
 		default:
 			break;
 		}
+	}
+	
+	public double distTo(int n) { 
+		return distTo[n]; 
+	}
+
+	private boolean hasPathTo(int n) { 
+		return distTo[n] < Double.POSITIVE_INFINITY; 
+	}
+	
+	public boolean isBadInput() {
+		return badInput;
 	}
 }
