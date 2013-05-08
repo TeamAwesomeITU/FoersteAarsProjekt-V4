@@ -56,4 +56,10 @@ public class CitySearch  {
 
 		return cityList.toArray(new City[cityList.size()]);
 	}
+	
+	public static void main(String[] args) {
+		City[] citylist = getCityNameSuggestions("København");
+		for(City city : citylist)
+			System.out.println(city.getCityName());
+	}
 }
