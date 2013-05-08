@@ -5,6 +5,7 @@ import java.util.Arrays;
 /**
  * Performs a binary search in an array of Strings
  */
+@Deprecated
 public class BinarySearchStringInArray
 {
 	/**

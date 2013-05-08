@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
+import mapCreationAndFunctions.data.Node;
 
 /**
  * Enables searching for Edges by road name, or by road name and postal number
@@ -98,5 +99,13 @@ public class EdgeSearch  {
 	{
 		for(Edge edge : getRoadNameSuggestions("nør"))
 			System.out.println(edge.getRoadName());
+		
+		for(Edge edge : getRoadNameSuggestions("10"))
+			System.out.println(edge.getRoadName());
+		
+		int nodeID = searchForRoadName("10390061")[0].getToNode();
+		System.out.println(nodeID);
+		Node node = DataHolding.getNode(nodeID);
+		System.out.println("X: " + node.getXCoord() + ", Y: " + node.getYCoord());
 	}
 }

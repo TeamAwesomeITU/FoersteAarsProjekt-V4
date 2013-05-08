@@ -17,7 +17,7 @@ import java.util.HashSet;
 public class City {
 	
 	//The path to the file from which to create Cities
-	private static String cityFileName = "XML/postalNumbersAndCityNames_refined.txt";
+	private static String cityFileName = "XML/postalNumbersAndCityNames_uneditedWithSwedish_refined.txt";
 	
 	//A HashMap where the postal number is the key, and the corresponding City is the value
 	private static HashMap<Integer, City> cityHashMap = new HashMap<Integer, City>();
