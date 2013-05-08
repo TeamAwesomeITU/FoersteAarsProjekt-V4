@@ -9,6 +9,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+/**
+ * This class is implemented to be able to deal with many different cities with many different postal numbers.
+ * Each individual City object contains the name of the city as a String, and a HashSet<Integer>, which holds all of the postal numbers that belongs to the city.
+ *
+ */
 public class City {
 	
 	//The path to the file from which to create Cities

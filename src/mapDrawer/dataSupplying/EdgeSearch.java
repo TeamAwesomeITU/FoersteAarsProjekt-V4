@@ -31,10 +31,10 @@ public class EdgeSearch  {
 		}		
 	};
 	
-	private static Edge[] edgeArrayByRoadName = createEdgeArrayByRoadName(DataHolding.getEdgeArray());
-	private static Edge[] edgeArrayByRoadTypeCategory = createEdgeArrayByRoadTypeCategory(DataHolding.getEdgeArray());
+	private static Edge[] edgeArraySortedByRoadName = createedgeArraySortedByRoadName(DataHolding.getEdgeArray());
+	private static Edge[] edgeArrayBySortedRoadTypeCategory = createedgeArrayBySortedRoadTypeCategory(DataHolding.getEdgeArray());
 	
-	private static Edge[] createEdgeArrayByRoadName(Edge[] arr)
+	private static Edge[] createedgeArraySortedByRoadName(Edge[] arr)
 	{
 		Edge[] newArr = arr.clone();
 		Arrays.sort(newArr, ROADNAME_ORDER);
@@ -51,7 +51,7 @@ public class EdgeSearch  {
 		return actualRoadsWithNames.toArray(new Edge[actualRoadsWithNames.size()]);
 	}	
 	
-	private static Edge[] createEdgeArrayByRoadTypeCategory(Edge[] arr)
+	private static Edge[] createedgeArrayBySortedRoadTypeCategory(Edge[] arr)
 	{
 		Edge[] newArr = arr.clone();
 		Arrays.sort(newArr, ROADTYPECATEGORY_ORDER);
@@ -62,16 +62,16 @@ public class EdgeSearch  {
 	public static Edge searchForRoadName(String edgeToFind)
 	{
 		//FANGER KUN VEJNAVNET, HVIS DET ER STAVET HELT KORREKT - KOMBINER DENNE KLASSE MED BINARYSEARCHSTRINGINARRAY
-		int resultAt = Arrays.binarySearch(edgeArrayByRoadName, edgeToFind);
-		return(edgeArrayByRoadName[resultAt]);
+		int resultAt = Arrays.binarySearch(edgeArraySortedByRoadName, edgeToFind);
+		return(edgeArraySortedByRoadName[resultAt]);
 	}
 	
 	//Returner kun den første Edge - dvs. hvis der er flere forekomster af navnet, finder den kun den første!!
 	public static Edge searchForRoadNameInCity(String edgeToFind, int postalNumber)
 	{
 		//FANGER KUN VEJNAVNET, HVIS DET ER STAVET HELT KORREKT - KOMBINER DENNE KLASSE MED BINARYSEARCHSTRINGINARRAY
-		int resultAt = Arrays.binarySearch(edgeArrayByRoadName, edgeToFind);
-		return(edgeArrayByRoadName[resultAt]);
+		int resultAt = Arrays.binarySearch(edgeArraySortedByRoadName, edgeToFind);
+		return(edgeArraySortedByRoadName[resultAt]);
 	}
 	
 	
@@ -80,13 +80,13 @@ public class EdgeSearch  {
 		
 		int wantedPrintNumber = 10;
 		
-		Edge[] edgesByName = edgeArrayByRoadName;
+		Edge[] edgesByName = edgeArraySortedByRoadName;
 		
 		for (int i = 0; i < edgesByName.length; i++) {
 			System.out.println(edgesByName[i].getRoadName());
 		}
 		
-		Edge[] edgesByRoadTypeCat = edgeArrayByRoadTypeCategory;
+		Edge[] edgesByRoadTypeCat = edgeArrayBySortedRoadTypeCategory;
 		
 		for (int i = 0; i < wantedPrintNumber; i++) {
 			System.out.println(edgesByRoadTypeCat[i].getRoadTypeCategory());

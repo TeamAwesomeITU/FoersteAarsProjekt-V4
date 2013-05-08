@@ -12,7 +12,6 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Stack;
 
 import javax.swing.JPanel;
@@ -22,12 +21,10 @@ import mapDrawer.AreaToDraw;
 import mapDrawer.RoadType;
 import mapDrawer.dataSupplying.CoastLineMaker;
 import mapDrawer.dataSupplying.CoordinateConverter;
-import mapDrawer.dataSupplying.DataHolding;
 import mapDrawer.dataSupplying.FindRelevantEdges;
 import mapDrawer.drawing.mutators.MapMouseZoomAndPan;
 import routing.DijkstraSP;
 import routing.EdgeWeightedDigraph;
-import sun.awt.image.OffScreenImage;
 
 @SuppressWarnings("serial")
 /**
@@ -39,10 +36,6 @@ public class MapPanel extends JPanel {
 	private MapMouseZoomAndPan mapMouseZoomAndPan;
 	private AreaToDraw area;
 	private ArrayList<Edge> edgesToDraw; 
-	private Line2D[] line2DsToDraw;
-	
-	//HashMap, where the value is the ID of the drawn line, and the key is the value of it's corresponding Edge
-	private HashMap<Integer, Integer> iDHashMap;
 	private GeneralPath[] coastLineToDraw;
 	private CoordinateConverter coordConverter;
 	private double mapHeight, mapWidth;
@@ -118,17 +111,11 @@ public class MapPanel extends JPanel {
 			g2.setPaintMode();
 		}
 		
-		line2DsToDraw = new Line2D.Double[edgesToDraw.size()];
-		int indexToInsert = 0;
-		iDHashMap = new HashMap<>();
-		
 		//Drawing roads
 		Line2D line = new Line2D.Double();
 		for (Edge edge : edgesToDraw) 
 		{
 			line.setLine(edge.getLine2DToDraw(coordConverter));
-			line2DsToDraw[indexToInsert++] = line;
-			iDHashMap.put(indexToInsert, edge.getiD());
 			int roadType = edge.getRoadType();						
 			g2.setColor(RoadType.getColor(roadType));
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -140,6 +127,7 @@ public class MapPanel extends JPanel {
 		if(pathTo != null) 
 		{
 			Stack<Edge> drawPath = pathTo;
+			System.out.println("Size of found path: " + drawPath.size());
 			while(!drawPath.empty()) 
 			{
 				g2.setColor(Color.YELLOW);
@@ -225,11 +213,16 @@ public class MapPanel extends JPanel {
 		return mapHeight;
 	}
 	
+	/**
+	 * 
+	 * @param mouseX
+	 * @param mouseY
+	 * @return
+	 */
 	public Edge getHitEdge(double mouseX, double mouseY)
 	{
 		double squareSideLength = area.getWidth()/100;
-		Rectangle2D square = new Rectangle2D.Double(mouseX-(squareSideLength/2), mouseY-(squareSideLength/2), squareSideLength, squareSideLength); //noget med en størrelse relativ til det vist område);
-		String foundAdress = "";
+		Rectangle2D square = new Rectangle2D.Double(mouseX-(squareSideLength/2), mouseY-(squareSideLength/2), squareSideLength, squareSideLength);
 		System.out.println(square.getMinX() + " " + square.getMaxX() + " " + square.getMinY() + " " + square.getMaxY());
 		
 		for(Edge edge : edgesToDraw)
