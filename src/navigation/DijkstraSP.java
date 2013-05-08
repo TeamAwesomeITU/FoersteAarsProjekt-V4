@@ -1,5 +1,7 @@
 package navigation;
 
+import inputHandler.AdressParser;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Stack;
@@ -22,6 +24,12 @@ public class DijkstraSP
 
 	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
+		String[] AddressMatches = AdressParser.getAdressArray();
+		
+		for(String string: AddressMatches) {
+			System.out.println(string);
+		}
+		
 		this.routeType = routeType;
 		if(setOfNonViableEdges == null) 
 			throw new NullPointerException("setOfNonViableEdges is empty");
