@@ -8,8 +8,6 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 
-import mapDrawer.AreaToDraw;
-
 public class RunConverter {
 
 	@SuppressWarnings("unused")

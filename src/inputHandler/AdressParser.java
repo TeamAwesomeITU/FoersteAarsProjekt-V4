@@ -18,18 +18,18 @@ import java.util.regex.Pattern;
  */
 public class AdressParser {
 
-	private	String[] adressArray = new String[6];
-	private	String pBuilding = "(\\b\\d{1,3}[A-ZÆØÅa-zæøå]?\\b )|" +
+	private static	String[] adressArray = new String[6];
+	private	String pBuilding = "(\\b\\d{1,3}[A-ZÃ†Ã˜Ã…a-zÃ¦Ã¸Ã¥]?\\b )|" +
 			"\\b\\d{1,3}[^.]\\b}|" +
-			"(\\b\\d{1,3}[A-ZÆØÅa-zæøå,]?\\b|" +
+			"(\\b\\d{1,3}[A-ZÃ†Ã˜Ã…a-zÃ¦Ã¸Ã¥,]?\\b|" +
 			"\\b\\d{1,3}[,]?\\b)";
 	private	String pTal = "(\\d{1,3})";
 	private	String pFloor = "(\\b\\d{1,2}\\.)";	
 	private	String pPost = "(\\b\\d{4})"; 			
-	private	String pLetter = "[A-ZÆØÅa-zæøå]";
-	private String pInput =  "[^A-ZÆØÅÄÖa-zæøåéèöäüâ0-9,\\-.´:)/(& ]{1,100}";
+	private	String pLetter = "[A-ZÃ†Ã˜Ã…a-zÃ¦Ã¸Ã¥]";
+	private String pInput =  "[^A-ZÃ†Ã˜Ã…Ã„Ã–a-zÃ¦Ã¸Ã¥Ã©Ã¨Ã¶Ã¤Ã¼Ã¢0-9,\\-.Â´:)/(& ]{1,100}";
 	private	String numberLetter = ""; // Gemmer vejnummeret med tal og bogstav.
-	private String a = "";
+	private String addressAfterDeletion = "";
 
 	private String[] roadNamesArray;	
 
@@ -57,37 +57,37 @@ public class AdressParser {
 	 * 	If it does not it places the address in index 0 as the name of the road. If it does 
 	 * 	the else-statment will try to find and place the parts of the address in their proper
 	 * 	places. 
-	 * @param s Is a String that is supposed to be the entire address written on a single line. 
-	 * @return the array containen information regarding the address
+	 * @param address Is a String that is supposed to be the entire address written on a single line. 
+	 * @return the array containing information regarding the address
 	 * @throws MalformedAdressException
 	 */
-	public String[] parseAdress(String s) throws MalformedAdressException {
+	public String[] parseAdress(String address) throws MalformedAdressException {
 		//Is the input valid?			
-		s = s.toLowerCase();
-		Matcher validInput = match(pInput, s);
-		if (validInput.find() || s.trim().isEmpty() || s == null){								/* 1 */
+		address = address.toLowerCase();
+		Matcher validInput = match(pInput, address);
+		if (validInput.find() || address.trim().isEmpty() || address == null){								/* 1 */
 			throw new MalformedAdressException("MALFORMED ADRESS");
 		}
 		
-		if(match("\\d|\\,|\\bi\\b", s).find() == false){											/* 2 */
-			adressArray[0] = s.trim();
-			System.out.println(s);
+		if(match("\\d|\\,|\\bi\\b", address).find() == false){											/* 2 */
+			adressArray[0] = address.trim();
+			System.out.println(address);
 		}
 
 		else {			
-			a = s;
-			findRoadName(s);
+			addressAfterDeletion = address;
+			findRoadName(address);
 			//Only checks for roadnumber, roadletter and floornumber, if a valid adress is found
 			if(adressArray[0] != null)												/* 2 */
 			{
-				findFloorNumber(a);
-				findRoadNumber(a);
-				findRoadLetter(a);				
+				findFloorNumber(addressAfterDeletion);
+				findRoadNumber(addressAfterDeletion);
+				findRoadLetter(addressAfterDeletion);				
 			}
-			findPostCode(a);
-			findCityName(a);
+			findPostCode(addressAfterDeletion);
+			findCityName(addressAfterDeletion);
 		}
-
+		
 		return adressArray;			     					
 	}
 
@@ -117,7 +117,7 @@ public class AdressParser {
 		String roadName = binSearch.search(input, roadNamesArray);
 		adressArray[0] = roadName;
 		if(roadName != null)
-			a = a.replace(roadName,"");
+			addressAfterDeletion = addressAfterDeletion.replace(roadName,"");
 	}
 
 	/**	This method uses the matcher to find the number and eventual letter of a building. 
@@ -131,9 +131,9 @@ public class AdressParser {
 			numberLetter = buildingNr.group();
 			Matcher tal = match(pTal, numberLetter);
 
-			//Finder tallet i numberLetter og gemmer det på index 1 i arrayet.
+			//Finder tallet i numberLetter og gemmer det pï¿½ index 1 i arrayet.
 			if(tal.find()){																	/* 10 */				
-				a = a.replace(tal.group(), "");
+				addressAfterDeletion = addressAfterDeletion.replace(tal.group(), "");
 				System.out.println("Bygningstal: " + tal.group());
 				adressArray[1] = tal.group().trim();
 			}
@@ -145,10 +145,10 @@ public class AdressParser {
 	 * @param s	Address string
 	 */
 	private void findRoadLetter(String s) {
-		//Benytter numberLetter og finder bogstavet som den gemmer på index 2 i arrayet.
+		//Benytter numberLetter og finder bogstavet som den gemmer pï¿½ index 2 i arrayet.
 		Matcher buildingLetter = match(pLetter, numberLetter);	
 		if(buildingLetter.find()) {								   				   					/* 11 */
-			a = a.replace(buildingLetter.group(), "");
+			addressAfterDeletion = addressAfterDeletion.replace(buildingLetter.group(), "");
 			System.out.println("Bogstav: " + buildingLetter.group());
 			adressArray[2] = buildingLetter.group().trim(); 
 		}				
@@ -158,14 +158,14 @@ public class AdressParser {
 	 * @param s Address string
 	 */
 	private void findFloorNumber(String s) {
-		// Bruger pattern pFloor til at finde etagen/sal/plan og gemm det på index 3.
+		// Bruger pattern pFloor til at finde etagen/sal/plan og gemm det pï¿½ index 3.
 		String floorTemp = "";
 
 		Matcher floor = match(pFloor, s);			
 		if(floor.find()) {																		/* 12 */
 			floorTemp = floor.group();
 			match(pTal, floorTemp);
-			a = a.replace(floorTemp, "");
+			addressAfterDeletion = addressAfterDeletion.replace(floorTemp, "");
 			Matcher tal = match(pTal, floorTemp);		
 			tal.find();																	
 			System.out.println(tal.group() + ". etage");
@@ -180,11 +180,11 @@ public class AdressParser {
 	 * @param s Address string
 	 */
 	private void findPostCode(String s) {
-		// Bruger pattern pPost til at finde postnummeret og gemme det på index 4 i arrayet.
+		// Bruger pattern pPost til at finde postnummeret og gemme det pï¿½ index 4 i arrayet.
 		Matcher postcode = match(pPost, s);	
 		if(postcode.find()) {																	/* 13 */
 			System.out.println("Postnummer: " + postcode.group());
-			a = a.replace(postcode.group(),"");
+			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"");
 			adressArray[4] = postcode.group().trim(); 
 		}
 	}
@@ -210,8 +210,10 @@ public class AdressParser {
 		}
 	}
 
-	public String[] getAdressArray(){
+	public static String[] getAdressArray(){
 		return adressArray;
 	}
+	
+	
 }
 

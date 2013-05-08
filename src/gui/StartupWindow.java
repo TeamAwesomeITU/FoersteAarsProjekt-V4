@@ -1,5 +1,8 @@
 package gui;
 
+
+import gui.customJUnits.*;
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
@@ -8,8 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import mapDrawer.dataSupplying.DataHolding;
-import mapDrawer.dataSupplying.QuadTree;
+import mapCreationAndFunctions.data.DataHolding;
+import mapCreationAndFunctions.search.QuadTree;
 
 /**
  * This class makes the first window the user sees. It is
@@ -94,6 +97,7 @@ public class StartupWindow{
 		loadingPanel.setLayout(new GridLayout(0, 1, 3, 1));
 
 		JLabel logo = new JLabel();
+		//ClassLoader classLoader = ImageIO.read(getClass().getResource("resources/Logo.png"));
 		logo.setIcon(new ImageIcon("resources/Logo.png"));
 		logo.setBorder(BorderFactory.createEmptyBorder());
 

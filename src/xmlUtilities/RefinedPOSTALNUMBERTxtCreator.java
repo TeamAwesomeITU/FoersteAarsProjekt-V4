@@ -6,12 +6,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 
-import mapDrawer.dataSupplying.DataHolding;
-import mapDrawer.drawing.Edge;
+import mapCreationAndFunctions.data.DataHolding;
+import mapCreationAndFunctions.data.Edge;
 
 /**
  * Creates a new version of the postal number file. This new version only contains postal numbers, that can actually be found in the edges file.

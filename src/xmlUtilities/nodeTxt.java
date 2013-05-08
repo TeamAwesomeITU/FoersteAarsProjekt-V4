@@ -3,12 +3,11 @@ package xmlUtilities;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
-
-import mapDrawer.drawing.Edge;
+import java.io.OutputStreamWriter;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -81,13 +80,13 @@ public class nodeTxt {
 
 	}
 	
+	@SuppressWarnings("unused")
 	private static void makeEdgeTxtFromTXT()
 	{
 		try {				
-			HashSet<Edge> edgeSet = new HashSet<Edge>();
-			
 			BufferedReader reader = new BufferedReader(new FileReader("XML/kdv_unload_1.txt"));
-			BufferedWriter writer = new BufferedWriter(new FileWriter("XML/edge.txt"));
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
+				    new FileOutputStream("XML/testEdge.txt"), "UTF-8"));
 			
 			//To skip the first line
 			reader.readLine();
