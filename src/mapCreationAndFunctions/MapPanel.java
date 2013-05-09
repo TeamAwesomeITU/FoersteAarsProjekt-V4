@@ -1,6 +1,7 @@
 package mapCreationAndFunctions;
 
 import gui.MainGui;
+import gui.settingsAndPopUp.ColorTheme;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -48,6 +49,8 @@ public class MapPanel extends JPanel {
 		mapWidth = width;
 		
 		Color waterColor = new Color(160, 228, 253);
+		if(MainGui.colorFollowTheme)
+			waterColor = ColorTheme.BUTTON_CLICKED_COLOR;
 		setBackground(waterColor);
 		
 		makeLinesForMap();
