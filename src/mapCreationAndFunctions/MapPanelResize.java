@@ -35,9 +35,10 @@ public class MapPanelResize extends ComponentAdapter {
 			mp = (MapPanel)component;
 		jf = mw.getJFrame();
 		this.mw = mw;
+		resize();
 		recalculateTimer.setRepeats(false);
 	}
-	
+
 	/**
 	 * If the MapWindow is being resized this is called. Makes sure that the map is not 
 	 * resized constantly while you're dragging the MapWindow bigger/smaller.
@@ -53,30 +54,34 @@ public class MapPanelResize extends ComponentAdapter {
 			}
 		}
 	}
-	
+
+	public void resize() {
+		if(isResizing == true) {
+			double newWidth = mw.getWidthForMap();
+			mp.setMapWidth(Math.round(newWidth)); 
+			double newHeight = (newWidth*mp.getArea().getHeight())/mp.getArea().getWidth();
+			mp.setMapHeight(Math.round(newHeight));
+			mp.repaintMap();
+			isResizing = false;
+		}
+	}
+
 	/**
 	 * Is used for handling the resize of the map within the MapPanel.
 	 *
 	 */
 	private class MapActionListener implements ActionListener {
-		
+
 		public MapActionListener() {
-			
+
 		}
 
 		/**
 		 * In case of a resize event, the map is resized to fit the new width and height.
 		 */
 		public void actionPerformed(ActionEvent e) {
-				if(isResizing == true) {
-					double newWidth = mw.getWidthForMap();
-					mp.setMapWidth(Math.round(newWidth)); 
-					double newHeight = (newWidth*mp.getArea().getHeight())/mp.getArea().getWidth();
-					mp.setMapHeight(Math.round(newHeight));
-					mp.repaintMap();
-					isResizing = false;
-			}
+			resize();
 		}
-		
+
 	}
 }
