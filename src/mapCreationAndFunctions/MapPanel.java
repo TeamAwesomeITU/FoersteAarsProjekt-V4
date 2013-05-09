@@ -47,21 +47,29 @@ public class MapPanel extends JPanel {
 	public MapPanel(double width, double height) {
 		mapHeight = height;
 		mapWidth = width;
-		
-		Color waterColor = new Color(160, 228, 253);
-		if(MainGui.colorFollowTheme)
-			waterColor = ColorTheme.BUTTON_CLICKED_COLOR;
+
+		Color waterColor = new Color(160, 228, 253);;
+		if(MainGui.colorFollowTheme){
+			if(ColorTheme.springTheme)
+				waterColor = ColorTheme.BUTTON_CLICKED_COLOR;
+			if(ColorTheme.summerTheme || ColorTheme.autumnTheme)
+				waterColor = ColorTheme.BACKGROUND_COLOR;
+			if(ColorTheme.winterTheme)
+				waterColor = ColorTheme.TEXT_COLOR;
+		}
+		if(!MainGui.coastlinesWanted)
+			waterColor = new Color(255,255,210);
 		setBackground(waterColor);
-		
+
 		makeLinesForMap();
 		setBorderForPanel();
 		mapMouseZoomAndPan = new MapMouseZoomAndPan(this);
 		addMouseListener(mapMouseZoomAndPan);
 		addMouseMotionListener(mapMouseZoomAndPan);
 		setFocusable(true);
-		
+
 	}
-	
+
 	public MapMouseZoomAndPan getMapMouseZoomAndPan(){
 		return mapMouseZoomAndPan;
 	}
@@ -97,7 +105,13 @@ public class MapPanel extends JPanel {
 		if(MainGui.coastlinesWanted){
 			//Makes sure the inner coastlines gets drawn
 			g2.setXORMode(getBackground());
-			Color landMass = new Color(255,255,210);
+			Color landMass; 
+			if(MainGui.colorFollowTheme){
+				landMass = ColorTheme.DARK_COLOR;
+				if(ColorTheme.autumnTheme)
+					landMass = ColorTheme.BUTTON_CLICKED_COLOR;
+			} else
+				landMass = new Color(255,255,210);
 			//Drawing coastline
 			for (GeneralPath path : coastLineToDraw) 
 			{
@@ -192,10 +206,10 @@ public class MapPanel extends JPanel {
 	 * Creates a border around the MapPanel.
 	 */
 	private void setBorderForPanel() {
-		setBorder(new LineBorder(Color.black));
+		setBorder(new LineBorder(ColorTheme.DARK_COLOR));
 
 	}
-	
+
 	public void setPathTo(Stack<Edge> pathTo) {
 		this.pathTo = pathTo;
 	}
@@ -214,7 +228,7 @@ public class MapPanel extends JPanel {
 	public double getMapHeight() {
 		return mapHeight;
 	}
-	
+
 	/**
 	 * Returns an Edge, which lies near the given mouse coordinates.
 	 * @param mouseX The x coordinate of the mouse
@@ -228,7 +242,7 @@ public class MapPanel extends JPanel {
 		for(Edge edge : edgesToDraw)
 			if(edge.intersects(square))
 				return edge;
-		
+
 		return null;
 	}
 }

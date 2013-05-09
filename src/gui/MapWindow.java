@@ -290,20 +290,13 @@ public class MapWindow {
 	class EnterKeyListener implements KeyListener{
 
 		String query;
-		
+
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == 10){
-				findRoute();
-			}
-			if(e.getKeyCode() == 8 || !checkKeyEvent(e)){
-				if(query.length() <= 1){
-					listModel.removeAllElements();
-					if(listWindow != null)
-						listWindow.dispose();
+			if(checkKeyEvent(e)){
+				if(e.getKeyCode() == 10){
+					findRoute();
 				}
-			}
-			else{
 				listModel.removeAllElements();
 			}
 		}
@@ -335,7 +328,7 @@ public class MapWindow {
 					ColoredJScrollPane scrollPane = new ColoredJScrollPane(listPanel);
 					makeMatchingResult();
 					listPanel.add(searchList);
-					
+
 					contentPane.add(scrollPane);
 
 					listWindow.pack();
