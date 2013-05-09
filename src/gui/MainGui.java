@@ -318,7 +318,7 @@ public class MainGui {
 	public static ColoredJPanel makeFooter(){
 		ColoredJPanel footer = new ColoredJPanel();
 		footer.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
-		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4");
+		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4.1 - dey tuk our djerps!");
 		footer.add(footerText);
 		return footer;
 	}

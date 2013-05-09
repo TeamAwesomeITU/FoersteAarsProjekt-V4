@@ -53,11 +53,34 @@ public class RefinedPOSTALNUMBERTxtCreator {
 
 			while((line = reader.readLine()) != null)
 			{
-				String[] lineParts = line.split("\\s+");
+				String[] lineParts = line.split("\\s");
+				lineParts[lineParts.length-1] = lineParts[lineParts.length-1].split("\\s+")[0];
 				int postalNumber =  Integer.parseInt(lineParts[0]);
 
-				if(existingPostalNumbers.contains(postalNumber)){
-					writer.write(lineParts[0] + " " + lineParts[1]);
+				//If the postal number is one of the postal numbers found in our original data file, we want it
+				if(existingPostalNumbers.contains(postalNumber))
+				{
+					int shouldBreakAt = -1;
+					for (int i = 0; i < lineParts.length; i++) {
+						if(lineParts[i].contains("Skåne")){
+							shouldBreakAt = i;
+							break;
+						}
+					}
+					
+					String lineToWrite = "";					
+					if(shouldBreakAt != -1)
+					{
+						
+						for (int i = 0; i < shouldBreakAt; i++) {
+							lineToWrite += (lineParts[i] + " ");
+						}
+						writer.write(lineToWrite.trim());
+					}
+					
+					else
+						writer.write(line);
+					
 					writer.newLine();
 				}
 			}	    	
@@ -68,8 +91,9 @@ public class RefinedPOSTALNUMBERTxtCreator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
-	
+
 	public static void main( String[] args ) {
 		createRefinedTXT();
 	}

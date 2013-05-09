@@ -17,15 +17,14 @@ public class CitySearch  {
 		TernarySearchTrie tst = new TernarySearchTrie();
 
 		for(City city : City.getAllCities())
-			tst.put(city.getCityName(), city.getCityID());
+			tst.put(city.getCityName().toLowerCase(), city.getCityID());
 
 		return tst;
 	}
 
 	public static City[] searchForCityName(String cityToFind)
 	{
-		//Makes sure that the input's first char is upper case
-		cityToFind = cityToFind.substring(0,1).toUpperCase() + cityToFind.substring(1,cityToFind.length());
+		cityToFind = cityToFind.toLowerCase();
 		ArrayList<Integer> listOfFoundCities = citySearchTrie.get(cityToFind);
 
 		City[] arrayOfFoundCities = new City[listOfFoundCities.size()];
@@ -41,10 +40,9 @@ public class CitySearch  {
 	 * @param cityToFind The name of the City to find
 	 * @return An array of all the Cities, that starts with the given String
 	 */
-	public static City[] getCityNameSuggestions(String cityToFind)
+	public static City[] searchForCityNameSuggestions(String cityToFind)
 	{
-		//Makes sure that the input's first char is upper case
-		cityToFind = cityToFind.substring(0,1).toUpperCase() + cityToFind.substring(1,cityToFind.length());
+		cityToFind = cityToFind.toLowerCase();
 		Iterable<String> cityNames = citySearchTrie.prefixMatch(cityToFind);
 		Iterator<String> cityNamesIterator = cityNames.iterator();
 		ArrayList<City> cityList = new ArrayList<>();
@@ -52,7 +50,6 @@ public class CitySearch  {
 		while(cityNamesIterator.hasNext())
 		{
 			String cityName = cityNamesIterator.next();
-			System.out.println("Trying to find city: " + cityName);
 			City city = City.getCityByCityName(cityName);
 			if(!(city == null))
 				cityList.add(city);
@@ -62,8 +59,10 @@ public class CitySearch  {
 	}
 	
 	public static void main(String[] args) {
-		City[] citylist = getCityNameSuggestions("københavn");
+		City[] citylist = searchForCityNameSuggestions("k");
 		for(City city : citylist)
 			System.out.println(city.getCityName());
+		
+		System.out.println(searchForCityName("KØGE")[0].getCityName());
 	}
 }

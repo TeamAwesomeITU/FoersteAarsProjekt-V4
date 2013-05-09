@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Copied from the book "Algorithms - Fourth Edition" by Robert Sedgewick and Kevin Wayne, 2011
- * Modified to contain an ArrayList<Integer>, instead of a single value.
+ * Contains multiple modifications, for example it now contains an ArrayList<Integer>, instead of a single value.
  */
 public class TernarySearchTrie
 {
@@ -26,7 +26,7 @@ public class TernarySearchTrie
 
 	public ArrayList<Integer> get(String key) {
 		if (key == null) throw new NullPointerException();
-		if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
+		if (key.trim().isEmpty()) throw new IllegalArgumentException("Key cannot be empty");
 		TrieNode x = get(root, key, 0);
 		if (x == null) return null;
 		return (ArrayList<Integer>) x.val;
@@ -34,7 +34,7 @@ public class TernarySearchTrie
 
 	private TrieNode get(TrieNode x, String key, int d) {
 		if (key == null) throw new NullPointerException();
-		if (key.length() == 0) throw new IllegalArgumentException("key must have length >= 1");
+		if (key.length() == 0) throw new IllegalArgumentException("Key must have length >= 1");
 		if (x == null) return null;
 		char c = key.charAt(d);
 		if      (c < x.c)              return get(x.left,  key, d);

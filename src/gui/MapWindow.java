@@ -356,6 +356,7 @@ public class MapWindow {
 		}
 
 		public void makeMatchingResult(){
+			/*
 			listModel.addElement("mark");
 			listModel.addElement("kasper askjd kjasdk ahsd kasjdk asd jasdæ aæjkd");
 			listModel.addElement("Tobias");
@@ -369,16 +370,18 @@ public class MapWindow {
 			listModel.addElement("mark");
 			listModel.addElement("mark");
 			listModel.addElement("mark");
+			*/
 
-			/*	Edge[] edgesList = EdgeSearch.getRoadNameSuggestions(query);
+			System.out.println("query: " + query);
+			Edge[] edgesList = EdgeSearch.searchForRoadNameSuggestions(query);
 			for(Edge edge : edgesList)
-				listModel.addElement(edge.getRoadName());*/
+				listModel.addElement(edge.getRoadName());
 
-			/*City[] citiesList = CitySearch.getCityNameSuggestions(query);
+			City[] citiesList = CitySearch.searchForCityNameSuggestions(query);
 			for(City city : citiesList){
 				listModel.addElement(city.getCityName());
 				System.out.println(city.getCityName());
-			}*/
+			}
 
 		}
 
