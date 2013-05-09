@@ -51,6 +51,8 @@ public class MainGui {
 	
 	public static boolean dragonBoolean = false;
 	
+	public static boolean colorFollowTheme = false;
+	
 	public static String locationString, coordinatesString;
 
 	public static JFrame frame;
@@ -175,6 +177,15 @@ public class MainGui {
 					}
 				});
 				
+				final ColoredJCheckBox colorFollow = new ColoredJCheckBox("Map Colors Follow Theme");
+				colorFollow.setSelected(colorFollowTheme);
+				colorFollow.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						if(e.getStateChange() == ItemEvent.DESELECTED) 	colorFollowTheme = false;
+						if(e.getStateChange() == ItemEvent.SELECTED) 	colorFollowTheme = true;
+					}
+				});
+				
 				ColoredJComboBox colorThemesBox = new ColoredJComboBox();
 				colorThemesBox.setPreferredSize(new Dimension(120, 30));
 				colorThemesBox.setEditable(true);
@@ -277,6 +288,7 @@ public class MainGui {
 				settingsPanel.add(coordinates);
 				settingsPanel.add(dragon);
 				settingsPanel.add(coastlines);
+				settingsPanel.add(colorFollow);
 				settingsFrame.pack();
 				settingsFrame.setLocationRelativeTo(null);	
 				settingsFrame.setVisible(true);
@@ -399,6 +411,14 @@ public class MainGui {
 						coastlinesWanted = false;
 				}else updateSettingsFile();
 				
+				if(fileStream.ready()){
+					String followString = fileStream.readLine().trim();
+					if(followString.equals("Follow"))
+						colorFollowTheme = true;
+					else if(followString.equals("Unfollow"))
+						colorFollowTheme = false;
+				}else updateSettingsFile();
+				
 			}
 			else
 				updateSettingsFile();
@@ -453,6 +473,11 @@ public class MainGui {
 				fileWriter.write("true\n");
 			else
 				fileWriter.write("false\n");
+			
+			if(colorFollowTheme)
+				fileWriter.write("Follow\n");
+			else
+				fileWriter.write("Unfollow\n");
 						
 			
 			fileWriter.close();
