@@ -54,13 +54,14 @@ public class EdgeSearch  {
 	 */
 	public static Edge[] searchForRoadNameSuggestions(String edgeToFind)
 	{
+		edgeToFind = edgeToFind.toLowerCase();
 		Iterable<String> roadNames = edgeSearchTrie.prefixMatch(edgeToFind);
 		Iterator<String> roadNameIterator = roadNames.iterator();
 		ArrayList<Edge> roadList = new ArrayList<>();
 
 		while(roadNameIterator.hasNext())
 		{
-			String roadName = roadNameIterator.next();
+			String roadName = roadNameIterator.next().toLowerCase();
 			Edge[] edges = searchForRoadName(roadName);
 			for(Edge edge : edges)
 				roadList.add(edge);
@@ -259,6 +260,11 @@ public class EdgeSearch  {
 		
 		System.out.println('E' > letterChar);
 		System.out.println('A' < letterChar);
+		
+		Edge[] foundEdges3 = searchForRoadNameSuggestions("nørregade");
+		System.out.println(foundEdges3.length);
+		for(Edge edge : foundEdges3)
+			System.out.println(edge.toStringNumberAndLetterInfo());
 
 	}
 }

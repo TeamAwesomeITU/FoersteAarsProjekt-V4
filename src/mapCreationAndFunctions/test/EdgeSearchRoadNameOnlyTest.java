@@ -15,7 +15,7 @@ public class EdgeSearchRoadNameOnlyTest {
 		assertEquals(expectedFinds, edgesFound.length);
 		
 		for(Edge edge : edgesFound)
-			assertEquals(edge.getRoadName(), edgeToFind);
+			assertEquals(edge.getRoadName().toLowerCase(), edgeToFind.toLowerCase());
 	}
 	
 	public void testNumberOfFoundRoadNamesSuggestions(String edgeToFind, int expectedFinds)
@@ -24,7 +24,7 @@ public class EdgeSearchRoadNameOnlyTest {
 		assertEquals(expectedFinds, edgesFound.length);
 		
 		for(Edge edge : edgesFound)
-			assertEquals(edge.getRoadName(), edgeToFind);
+			assertEquals(edge.getRoadName().toLowerCase(), edgeToFind.toLowerCase());
 	}
 	
 	@Test
@@ -37,9 +37,45 @@ public class EdgeSearchRoadNameOnlyTest {
 	}
 	
 	@Test
+	public void testRoadnameNoWhitespacesNumberSuggestions()
+	{
+		String edgeToFind = "Nørregade";
+		//Number found by manual search
+		int expectedFinds = 1122;
+		testNumberOfFoundRoadNamesSuggestions(edgeToFind, expectedFinds);
+	}
+	
+	@Test
+	public void testRoadNameNoWhitespaceNumberLowerCase()
+	{
+		String edgeToFind = "nørregade";
+		//Number found by manual search
+		int expectedFinds = 1117;
+		testNumberOfFoundRoadNames(edgeToFind, expectedFinds);
+	}
+	
+	@Test
+	public void testRoadNameNoWhitespaceNumberLowerCaseSuggestions()
+	{
+		String edgeToFind = "nørregade";
+		//Number found by manual search
+		int expectedFinds = 1122;
+		testNumberOfFoundRoadNamesSuggestions(edgeToFind, expectedFinds);
+	}
+	
+	@Test
 	public void testRoadNameSingleWhitespaceNumber()
 	{
 		String edgeToFind = "Kongens Vænge";
+		//Number found by manual search
+		int expectedFinds = 48;
+		testNumberOfFoundRoadNames(edgeToFind, expectedFinds);
+	}
+	
+	@Test
+	public void testRoadNameSingleWhitespaceNumberLowerCase()
+	{
+		String edgeToFind = "kongens vænge";
 		//Number found by manual search
 		int expectedFinds = 48;
 		testNumberOfFoundRoadNames(edgeToFind, expectedFinds);
