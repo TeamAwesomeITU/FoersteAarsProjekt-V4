@@ -15,6 +15,7 @@ import java.io.Writer;
 /**
  * Converts a .txt-file to a String[] or vice versa
  */
+@Deprecated
 public class TxtToFromStringArray {
 
 	/**

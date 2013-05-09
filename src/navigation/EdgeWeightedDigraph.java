@@ -1,5 +1,7 @@
 package navigation;
 
+import navigation.data.Bag;
+
 public class EdgeWeightedDigraph {
 	private final int nodes; // number of nodes
 	private int edges; // number of edges
@@ -7,7 +9,7 @@ public class EdgeWeightedDigraph {
 
 	/**
 	 * Creates the directed graphs with edge weights.
-	 * @param N Number of nodes/vertices
+	 * @param N Number of nodes
 	 */
 	@SuppressWarnings("unchecked")
 	public EdgeWeightedDigraph(int N) {
@@ -19,13 +21,17 @@ public class EdgeWeightedDigraph {
 	}
 
 	/**
-	 * @return the nodes field
+	 * @return the number of nodes
 	 */
-	public int nodes() { return nodes; }
-	 /**
-	  * @return the edges field
-	  */
-	public int edges() { return edges; }
+	public int nodes() { 
+		return nodes; 
+	}
+	/**
+	 * @return the number of edges
+	 */
+	public int edges() { 
+		return edges; 
+	}
 
 	/**
 	 * Adds edge references in the adjacency list at the index corresponding to the 

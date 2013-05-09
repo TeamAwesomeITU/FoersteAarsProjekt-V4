@@ -9,10 +9,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * This class is implemented to be able to deal with many different cities with many different postal numbers.
+ * Each individual City object contains the name of the city as a String, and a HashSet<Integer>, which holds all of the postal numbers that belongs to the city.
+ *
+ */
 public class City {
 	
 	//The path to the file from which to create Cities
-	private static String cityFileName = "XML/postalNumbersAndCityNames_refined.txt";
+	private static String cityFileName = "XML/postalNumbersAndCityNames_uneditedWithSwedish_refined.txt";
 	
 	//A HashMap where the postal number is the key, and the corresponding City is the value
 	private static HashMap<Integer, City> cityHashMap = new HashMap<Integer, City>();

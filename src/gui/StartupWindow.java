@@ -6,14 +6,13 @@ import gui.customJUnits.*;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import mapCreationAndFunctions.data.DataHolding;
-import mapCreationAndFunctions.data.QuadTree;
+import mapCreationAndFunctions.search.QuadTree;
 
 /**
  * This class makes the first window the user sees. It is

@@ -6,9 +6,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
@@ -19,7 +17,7 @@ import mapCreationAndFunctions.data.Edge;
  */
 public class RefinedPOSTALNUMBERTxtCreator {
 
-	private static String postalFileName = "XML/postalNumbersAndCityNames_unedited.txt";
+	private static String postalFileName = "XML/postalNumbersAndCityNames_uneditedWithSwedish.txt";
 
 	private static void createRefinedTXT()
 	{
@@ -49,10 +47,7 @@ public class RefinedPOSTALNUMBERTxtCreator {
 			File file = new File(postalFileName);
 
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-			BufferedWriter writer = new BufferedWriter(new FileWriter(postalFileName + "_refined.txt"));
-
-			//Skips the first line of the file
-			reader.readLine();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(postalFileName.replaceAll(".txt", "") + "_refined.txt"));
 
 			String line;
 
@@ -62,7 +57,7 @@ public class RefinedPOSTALNUMBERTxtCreator {
 				int postalNumber =  Integer.parseInt(lineParts[0]);
 
 				if(existingPostalNumbers.contains(postalNumber)){
-					writer.write(line);
+					writer.write(lineParts[0] + " " + lineParts[1]);
 					writer.newLine();
 				}
 			}	    	
