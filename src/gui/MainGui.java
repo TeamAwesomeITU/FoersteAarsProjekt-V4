@@ -168,21 +168,30 @@ public class MainGui {
 					}
 				});
 				
-				final ColoredJCheckBox coastlines = new ColoredJCheckBox("Coastlines");
-				coastlines.setSelected(coastlinesWanted);
-				coastlines.addItemListener(new ItemListener() {
-					public void itemStateChanged(ItemEvent e) {
-						if(e.getStateChange() == ItemEvent.DESELECTED) 	coastlinesWanted = false;
-						if(e.getStateChange() == ItemEvent.SELECTED) 	coastlinesWanted = true;
-					}
-				});
-				
 				final ColoredJCheckBox colorFollow = new ColoredJCheckBox("Map Colors Follow Theme");
 				colorFollow.setSelected(colorFollowTheme);
+				colorFollow.setEnabled(coastlinesWanted);
 				colorFollow.addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent e) {
 						if(e.getStateChange() == ItemEvent.DESELECTED) 	colorFollowTheme = false;
 						if(e.getStateChange() == ItemEvent.SELECTED) 	colorFollowTheme = true;
+					}
+				});
+				
+				final ColoredJCheckBox coastlines = new ColoredJCheckBox("Coastlines");
+				coastlines.setSelected(coastlinesWanted);
+				coastlines.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						if(e.getStateChange() == ItemEvent.DESELECTED){ 	
+							coastlinesWanted = false;
+							colorFollowTheme = false;
+						}
+						if(e.getStateChange() == ItemEvent.SELECTED){
+							coastlinesWanted = true;
+							colorFollowTheme = true;
+						}
+						colorFollow.setSelected(colorFollowTheme);
+						colorFollow.setEnabled(coastlinesWanted);
 					}
 				});
 				
