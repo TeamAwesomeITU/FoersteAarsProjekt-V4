@@ -78,8 +78,8 @@ public class MapWindow {
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		MainGui.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainGui.frame.pack();
-		MapPanelResize mcp = new MapPanelResize(this);
-		MainGui.frame.addComponentListener(mcp);
+		MapPanelResize mcr = new MapPanelResize(this);
+		MainGui.frame.addComponentListener(mcr);
 	}
 
 	/**
@@ -189,8 +189,6 @@ public class MapWindow {
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
 
 		mapPanel = new MapPanel((int)Math.round(width), (int)Math.round(height));
-		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
-		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
