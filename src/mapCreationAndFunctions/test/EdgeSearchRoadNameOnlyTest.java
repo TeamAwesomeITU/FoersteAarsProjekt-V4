@@ -15,6 +15,7 @@ public class EdgeSearchRoadNameOnlyTest {
 		assertEquals(expectedFinds, edgesFound.length);
 		
 		for(Edge edge : edgesFound)
+			//Test if the found Edge's road name is equal to what we are searching for
 			assertEquals(edge.getRoadName().toLowerCase(), edgeToFind.toLowerCase());
 	}
 	
@@ -24,7 +25,8 @@ public class EdgeSearchRoadNameOnlyTest {
 		assertEquals(expectedFinds, edgesFound.length);
 		
 		for(Edge edge : edgesFound)
-			assertEquals(edge.getRoadName().toLowerCase(), edgeToFind.toLowerCase());
+			//Test if the found Edge's road name actually contains what we are searching for
+			assertTrue(edge.getRoadName().toLowerCase().contains(edgeToFind.toLowerCase()));
 	}
 	
 	@Test
