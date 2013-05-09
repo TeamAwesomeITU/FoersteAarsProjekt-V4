@@ -360,7 +360,7 @@ public class MapWindow {
 
 		public void makeMatchingResult(){
 			HashSet<String> listSet = new HashSet<>();
-			Edge[] edgesList = EdgeSearch.getRoadNameSuggestions(query);
+			Edge[] edgesList = EdgeSearch.searchForRoadNameSuggestions(query);
 			for(Edge edge : edgesList){
 				String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
 				listSet.add(hit);
