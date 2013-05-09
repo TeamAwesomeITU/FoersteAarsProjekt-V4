@@ -70,7 +70,7 @@ public class EdgeSearch  {
 	}
 
 	/**
-	 * Returns the Edge with the given road name, inside a specified city. Assumes that a city only has a single road by the given name.
+	 * Returns the Edge with the given road name, inside a specified city.
 	 * @param edgeToFind The name of the road
 	 * @param postalNumber The postal number, which the road belongs to
 	 * @return The wanted Edge - null, if no match could be found
@@ -91,13 +91,13 @@ public class EdgeSearch  {
 		return foundEdges.toArray(new Edge[foundEdges.size()]);
 	}	
 
-	/*
-	public static Edge[] searchForRoadNameNumber(String roadName, int number) 
-	{
-
-	}
+	/**
+	 * Searches for Edges with a specific roadname, number and an optional letter. If no search on a letter is wanted, enter an empty String as the letter parameter,
+	 * @param roadName The name of the road
+	 * @param number The number of the specific address
+	 * @param letter An optional letter of the specific address - if no search on a letter is wanted, enter an empty String as the letter parameter,
+	 * @return All of the Edges that fits the search criterias.
 	 */
-
 	public static Edge[] searchForRoadNameNumberAndLetter(String roadName, int number, String letter)
 	{
 		roadName = roadName.toLowerCase();
@@ -183,36 +183,82 @@ public class EdgeSearch  {
 	private static boolean isRoadLetterWithinLeftSideOfEdge(Edge edge, String letter)
 	{
 		System.out.println("Noget med road letter left side");
-		if(edge.getFromLeftLetter().isEmpty() && edge.getToLeftLetter().isEmpty())
+		String fromLetter = edge.getFromLeftLetter();
+		String toLetter = edge.getToLeftLetter();
+		char letterChar = letter.charAt(0);	
+		
+		//If no letters are found on this side of the road
+		if(fromLetter.isEmpty() && toLetter.isEmpty())
 			return false;
-
-		char letterChar = letter.charAt(0);		
-		return (edge.getFromLeftLetter().toCharArray()[0] <= letterChar && edge.getToLeftLetter().toCharArray()[0] >= letterChar );
+		
+		//If the char should be checked within an interval
+		else if(!fromLetter.isEmpty() && !toLetter.isEmpty())
+			return (fromLetter.charAt(0) >= letterChar && toLetter.charAt(0) <= letterChar );
+		
+		else
+		{
+			if(!fromLetter.isEmpty())
+				return (fromLetter.charAt(0) >= letterChar);
+			else
+				return (toLetter.charAt(0) <= letterChar);
+		}
 	}
 
 	private static boolean isRoadLetterWithinRightSideOfEdge(Edge edge, String letter)
 	{
 		System.out.println("Noget med road letter right side");
-		if(edge.getFromRightLetter().isEmpty() && edge.getToRightLetter().isEmpty())
+		String fromLetter = edge.getFromRightLetter();
+		String toLetter = edge.getToRightLetter();
+		char letterChar = letter.charAt(0);	
+		
+		if(fromLetter.isEmpty() && toLetter.isEmpty())
 			return false;
-
-		char letterChar = letter.charAt(0);		
-		return (edge.getFromRightLetter().toCharArray()[0] <= letterChar && edge.getToRightLetter().toCharArray()[0] >= letterChar );
+		
+		//If the char should be checked within an interval
+		else if(!fromLetter.isEmpty() && !toLetter.isEmpty())
+			return (fromLetter.charAt(0) >= letterChar && toLetter.charAt(0) <= letterChar );
+		
+		else
+		{
+			if(!fromLetter.isEmpty())
+				return (fromLetter.charAt(0) >= letterChar);
+			else
+				return (toLetter.charAt(0) <= letterChar);
+		}
 	}
 
 
 	public static void main(String[] args)
 	{		
-		Edge[] foundEdges = searchForRoadName("Ammitsbølvej");
+		
+		Edge[] foundEdges = searchForRoadNameInCity("Nørre Boulevard", 4600);
 		System.out.println(foundEdges.length);
 		for(Edge edge : foundEdges)
 			System.out.println(edge.toStringNumberAndLetterInfo());
-
-		for(Edge edge : searchForRoadNameNumberAndLetter("Ammitsbølvej", 96, "A"))
-		{
-			System.out.println("edge found!");
+		
+		Edge[] foundEdges2 = searchForRoadNameInCity("Stadionvej", 6650);
+		System.out.println(foundEdges2.length);
+		for(Edge edge : foundEdges2)
 			System.out.println(edge.toStringNumberAndLetterInfo());
-		}
+		
+		System.out.println('A' < 'B');
+		System.out.println('A' < 'Æ');
+		System.out.println('A' < 'Ø');
+		System.out.println('A' < 'Å');
+		System.out.println('Æ' < 'Ø');
+		System.out.println('Æ' < 'Å');
+		System.out.println('Ø' < 'Å');
+		
+		char letterChar = 'A';
+		char letterChar2 = 'Ø';
+		char letterChar3 = 'Å';
+		
+		System.out.println(letterChar + 0);
+		System.out.println(letterChar2 + 0);
+		System.out.println(letterChar3 + 0);
+		
+		System.out.println('E' > letterChar);
+		System.out.println('A' < letterChar);
 
 	}
 }
