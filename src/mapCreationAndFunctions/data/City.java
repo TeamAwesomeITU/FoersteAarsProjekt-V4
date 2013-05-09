@@ -17,7 +17,7 @@ import java.util.HashSet;
 public class City {
 	
 	//The path to the file from which to create Cities
-	private static String cityFileName = "XML/postalNumbersAndCityNames_uneditedWithSwedish_refined.txt";
+	private static String cityFileName = "XML/postalNumbersAndCityNamesFINAL.txt";
 	
 	//A HashMap where the postal number is the key, and the corresponding City is the value
 	private static HashMap<Integer, City> cityHashMap = new HashMap<Integer, City>();
@@ -62,7 +62,7 @@ public class City {
 	{ 
 		boolean exists = false;
 		for(City city : allCitiesList)
-			if(city.getCityName().equals(cityName))
+			if(city.getCityName().equalsIgnoreCase(cityName))
 				exists = true;
 		return exists;
 	}
@@ -131,7 +131,7 @@ public class City {
 	public static City getCityByCityName(String cityName)
 	{
 		for(City city : allCitiesList)
-			if(city.getCityName().equals(cityName))
+			if(city.getCityName().equalsIgnoreCase(cityName))
 				return city;
 		return null;
 	}
