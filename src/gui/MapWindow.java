@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
 import java.util.Stack;
 
 import javax.swing.BorderFactory;
@@ -297,7 +298,7 @@ public class MapWindow {
 			if(e.getKeyCode() == 10){
 				findRoute();
 			}
-			if(e.getKeyCode() == 8){
+			if(e.getKeyCode() == 8 || !checkKeyEvent(e)){
 				if(query.length() <= 1){
 					listModel.removeAllElements();
 					if(listWindow != null)
@@ -340,11 +341,15 @@ public class MapWindow {
 					contentPane.add(scrollPane);
 
 					listWindow.pack();
-					listWindow.setVisible(true);
+					if(listModel.getSize() == 0)
+						listWindow.setVisible(false);
+					else
+						listWindow.setVisible(true);
 				}
 				if(query.length() < 2 && listWindow != null)
 					listWindow.dispose();
 			}
+			else return;
 			if(e.getKeyCode() == 8 && listWindow != null)
 				listWindow.dispose();
 		}
@@ -356,23 +361,15 @@ public class MapWindow {
 		}
 
 		public void makeMatchingResult(){
-			listModel.addElement("mark");
-			listModel.addElement("kasper askjd kjasdk ahsd kasjdk asd jasdæ aæjkd");
-			listModel.addElement("Tobias");
-			listModel.addElement("Futte");
-			listModel.addElement("Jesper");
-			listModel.addElement("mark");
-			listModel.addElement("mark");
-			listModel.addElement("mark");
-			listModel.addElement("mark");
-			listModel.addElement("mark");
-			listModel.addElement("mark");
-			listModel.addElement("mark");
-			listModel.addElement("mark");
-
-			/*	Edge[] edgesList = EdgeSearch.getRoadNameSuggestions(query);
-			for(Edge edge : edgesList)
-				listModel.addElement(edge.getRoadName());*/
+			HashSet<String> listSet = new HashSet<>();
+			Edge[] edgesList = EdgeSearch.getRoadNameSuggestions(query);
+			for(Edge edge : edgesList){
+				String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+				listSet.add(hit);
+			}
+			for(String searchResult : listSet){
+				listModel.addElement(searchResult);
+			}
 
 			/*City[] citiesList = CitySearch.getCityNameSuggestions(query);
 			for(City city : citiesList){
