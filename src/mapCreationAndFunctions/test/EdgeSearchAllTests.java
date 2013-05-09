@@ -5,7 +5,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ EdgeSearchRoadNameOnlyTest.class })
+@SuiteClasses({ EdgeSearchRoadNameAndNumberLetter.class,
+		EdgeSearchRoadNameOnlyTest.class })
 public class EdgeSearchAllTests {
 
 }

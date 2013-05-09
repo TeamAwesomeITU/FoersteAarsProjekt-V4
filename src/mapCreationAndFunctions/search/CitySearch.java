@@ -12,6 +12,10 @@ public class CitySearch  {
 
 	private static TernarySearchTrie citySearchTrie = createCitySearchTrie();
 
+	/**
+	 * Creates a TernarySearchTrie from data from the City class
+	 * @return a TernarySearchTrie of Cities.
+	 */
 	private static TernarySearchTrie createCitySearchTrie()
 	{
 		TernarySearchTrie tst = new TernarySearchTrie();
@@ -22,6 +26,11 @@ public class CitySearch  {
 		return tst;
 	}
 
+	/**
+	 * Searches for Cities with the given
+	 * @param cityToFind The name of the wanted City
+	 * @return An array of all found Cities
+	 */
 	public static City[] searchForCityName(String cityToFind)
 	{
 		cityToFind = cityToFind.toLowerCase();
