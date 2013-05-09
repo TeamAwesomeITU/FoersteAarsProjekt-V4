@@ -18,14 +18,13 @@ import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
  */
 public class MapMouseWheelZoom implements MouseWheelListener {
 
-	private Timer recalculateTimer = new Timer(0, new ZoomWheelActionListener());
+	private Timer recalculateTimer = new Timer(50, new ZoomWheelActionListener());
 	private double zoomWay = 0;
 	private MapPanel mp;
 	private double smallX, bigX, smallY, bigY;
 	private Point mouseLocation;
 	private AreaToDraw currentArea, newArea;
 	
-	//TODO Fix Jespers AreaToDraw så det her virker!
 	public MapMouseWheelZoom(MapPanel mp) {
 		recalculateTimer.setRepeats(false);
 		this.mp = mp;
@@ -39,11 +38,10 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 		else {
 			recalculateTimer.start();
 			zoomWay += e.getWheelRotation();
+			mouseLocation = e.getPoint();
 		}
-		mouseLocation = e.getPoint();
-		
-		
 	}
+	
 	/**
 	 * Handles the actual zoom in/out.
 	 */
@@ -84,10 +82,10 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 		@SuppressWarnings("static-access")
 		private void zoomingOut(double zoomX, double zoomY, CoordinateConverter coordConverter) {
 			//ZOOM OUT
-			smallX = coordConverter.pixelToUTMCoordX((int)smallX) - (zoomX*15);
-			bigX = coordConverter.pixelToUTMCoordX((int)bigX) + (zoomX*15);
-			smallY = coordConverter.pixelToUTMCoordY((int)smallY) - (zoomY*15);
-			bigY = coordConverter.pixelToUTMCoordY((int)bigY) + (zoomY*15);
+			smallX = coordConverter.pixelToUTMCoordX((int)smallX) - (zoomX*20);
+			bigX = coordConverter.pixelToUTMCoordX((int)bigX) + (zoomX*20);
+			smallY = coordConverter.pixelToUTMCoordY((int)smallY) - (zoomY*20);
+			bigY = coordConverter.pixelToUTMCoordY((int)bigY) + (zoomY*20);
 			double temp = bigY; bigY = smallY; smallY = temp;
 			if(bigX > currentArea.getLargestXOfEntireMap()) {
 				bigX = currentArea.getLargestXOfEntireMap();
@@ -114,10 +112,10 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 		 */
 		@SuppressWarnings("static-access")
 		private void zoomingIn(CoordinateConverter coordConverter, double xCoord, double yCoord, double zoomX, double zoomY) {				
-			smallX = coordConverter.pixelToUTMCoordX((int)xCoord) - (zoomX*25);
-			bigX = coordConverter.pixelToUTMCoordX((int)xCoord) + (zoomX*25);
-			smallY = coordConverter.pixelToUTMCoordY((int)yCoord) + (zoomY*25);
-			bigY = coordConverter.pixelToUTMCoordY((int)yCoord) - (zoomY*25);
+			smallX = coordConverter.pixelToUTMCoordX((int)xCoord) - (zoomX*15);
+			bigX = coordConverter.pixelToUTMCoordX((int)xCoord) + (zoomX*15);
+			smallY = coordConverter.pixelToUTMCoordY((int)yCoord) + (zoomY*15);
+			bigY = coordConverter.pixelToUTMCoordY((int)yCoord) - (zoomY*15);
 			if(bigX > currentArea.getLargestXOfEntireMap()) {
 				System.out.println("bigX");
 				bigX = currentArea.getLargestXOfEntireMap();

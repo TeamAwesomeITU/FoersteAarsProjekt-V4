@@ -367,4 +367,11 @@ public class Edge {
         }
         return p;
     }
+    
+    public String toStringNumberAndLetterInfo()
+    {
+    	return this.getRoadName() + ": " + "fromNumberLeft: " + this.getFromLeftNumber() + ", toNumberLeft: " + this.getToLeftNumber() + ", fromNumberRight: " +
+    			this.getFromRightNumber() + ", toNumberRight: " + this.getToRightNumber() + ", fromLetterLeft: " + this.getFromLeftLetter() + ", toLetterLeft: " + this.getToLeftLetter() 
+    			+ ", fromLetterRight: " + this.getFromRightLetter() + ", toLetterRight: " + this.getToRightLetter() ;
+    }
 }

@@ -104,43 +104,47 @@ public class DijkstraSP
 	}
 
 	public Iterable<Edge> pathTo(String roadName) {
-		int n = -1; 
-		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
+		if(badInput == false) 
 		{
-			if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName)) 
+			int n = -1; 
+			for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
 			{
-				n = DataHolding.getEdge(i).getToNode()-1;
-				break;
-			}
-		}
-		if(n != -1) 
-		{
-			if (!hasPathTo(n)) { 
-				System.out.println("nej");
-				return null;
-			}
-			System.out.println("Finding route!");
-			Stack<Edge> path = new Stack<Edge>();
-			for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
-				if (n+1 == e.getFromNode())
-					n = e.getToNode()-1;
-				else {
-					n = e.getFromNode()-1;
-				}
-				if (n == s) 
+				if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName)) 
 				{
-					path.push(e);
-					System.out.println("Succes! Route found.");
+					n = DataHolding.getEdge(i).getToNode()-1;
 					break;
 				}
-				path.push(e);
 			}
-			return path;
+			if(n != -1) 
+			{
+				if (!hasPathTo(n)) { 
+					System.out.println("nej");
+					return null;
+				}
+				System.out.println("Finding route!");
+				Stack<Edge> path = new Stack<Edge>();
+				for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
+					if (n+1 == e.getFromNode())
+						n = e.getToNode()-1;
+					else {
+						n = e.getFromNode()-1;
+					}
+					if (n == s) 
+					{
+						path.push(e);
+						System.out.println("Succes! Route found.");
+						break;
+					}
+					path.push(e);
+				}
+				return path;
+			}
+			else {
+				Zoidberg.badInputMessages();
+				return null;
+			}
 		}
-		else {
-			Zoidberg.badInputMessages();
-			return null;
-		}
+		return null;
 	}
 
 	private void TransportType(String meansOfTransportation) {
@@ -157,7 +161,7 @@ public class DijkstraSP
 			break;
 		}
 	}
-	
+
 	public double distTo(int n) { 
 		return distTo[n]; 
 	}
@@ -165,7 +169,7 @@ public class DijkstraSP
 	private boolean hasPathTo(int n) { 
 		return distTo[n] < Double.POSITIVE_INFINITY; 
 	}
-	
+
 	public boolean isBadInput() {
 		return badInput;
 	}
