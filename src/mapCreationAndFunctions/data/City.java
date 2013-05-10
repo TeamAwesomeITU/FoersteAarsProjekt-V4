@@ -114,7 +114,7 @@ public class City {
 			return "CITY POSTAL NUMBER DOES NOT BELONG TO A CITY";
 		else
 		{
-			if(cityHashMap.get(postalNumber).getCityName() == null)
+			if(cityHashMap.get(postalNumber) == null)
 				System.out.println("Could not find postal number: " + postalNumber);
 			String cityName = cityHashMap.get(postalNumber).getCityName();
 

@@ -257,7 +257,8 @@ public class EdgeSearch  {
 		for(Edge edge : foundEdges3)
 			System.out.println(edge.toString() + " " + edge.getiD());
 		
-		Edge[] foundEdges4 = searchForRoadSuggestions("Næstvedvej", 24, "E");
+		//FEJL HER I HVORDAN DEN SAMMENLIGNER BOGSTAVER - BURDE KUN FINDE NOGET, HVIS LETTEREN VAR A
+		Edge[] foundEdges4 = searchForRoadSuggestions("Næstvedvej", 24, "I");
 		System.out.println(foundEdges4.length);
 		
 		for(Edge edge : foundEdges4)
