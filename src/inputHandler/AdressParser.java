@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 @Deprecated
 public class AdressParser {
 
-	private static	String[] adressArray = new String[6];
+	private	String[] adressArray = new String[6];
 	private	String pBuilding = "(\\b\\d{1,3}[A-ZÆØÅa-zæøå]?\\b )|" +
 			"\\b\\d{1,3}[^.]\\b}|" +
 			"(\\b\\d{1,3}[A-ZÆØÅa-zæøå,]?\\b|" +
@@ -211,7 +211,7 @@ public class AdressParser {
 		}
 	}
 
-	public static String[] getAdressArray(){
+	public String[] getAdressArray(){
 		return adressArray;
 	}
 	
