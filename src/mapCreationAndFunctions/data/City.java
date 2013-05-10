@@ -195,4 +195,9 @@ public class City {
 			createCities();
 		return allCitiesList;
 	}
+	@Override
+	public String toString() {
+		return this.cityName;
+	}
+	
 }

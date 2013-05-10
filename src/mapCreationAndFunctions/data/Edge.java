@@ -371,14 +371,14 @@ public class Edge {
 	@Override
 	public String toString()
 	{
-		String unevenNumber, evenNumber, postAndCity;
+		String unevenNumber, evenNumber, postAndCity = "";
 
 		if(this.fromLeftNumber == 0 && this.toLeftNumber == 0) { unevenNumber = "";}
-		else{unevenNumber = "(" + (this.fromLeftNumber + "-" +  this.toLeftNumber) + ")"; }
+		else{unevenNumber = "(" + (this.fromLeftNumber + "-" +  this.toLeftNumber) + ") "; }
 
 		if(this.fromRightNumber == 0 && this.toRightNumber == 0) { evenNumber = ""; }
-		else{evenNumber = "(" + (this.fromRightNumber + "-" +  this.toRightNumber) + ")"; }
-
+		else{evenNumber = "(" + (this.fromRightNumber + "-" +  this.toRightNumber) + ") "; }
+		if(this.postalNumberLeft != 0 && this.postalNumberRight != 0) {
 		if(this.postalNumberLeft == this.postalNumberRight) { 
 			postAndCity = this.postalNumberRight+ " " + City.getCityNameByPostalNumber(this.postalNumberRight); }
 		else{
@@ -387,7 +387,8 @@ public class Edge {
 					City.getCityNameByPostalNumber(this.postalNumberRight) + 
 					"/" + 
 					City.getCityNameByPostalNumber(this.postalNumberRight); }
-		return this.roadName +" "+ unevenNumber +" "+ evenNumber+ " " + postAndCity;
+		}
+		return this.roadName + " " + unevenNumber + evenNumber + postAndCity;
 	}
 
 	public String toStringNumberAndLetterInfo()
