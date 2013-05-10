@@ -23,7 +23,7 @@ public class DijkstraSP
 	private EdgeWeightedDigraph graph;
 	private boolean badInput = false;
 
-	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation, String routeType) {
+	public DijkstraSP(EdgeWeightedDigraph graph, int fromRoadName, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
 
 		this.routeType = routeType;
@@ -31,14 +31,8 @@ public class DijkstraSP
 			throw new NullPointerException("setOfNonViableEdges is empty");
 		this.graph = graph;
 		s = -1;
-		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
-		{
-			if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName.trim().toLowerCase())) 
-			{
-				s = DataHolding.getEdge(i).getToNode()-1;
-				break;
-			}
-		}
+		s = DataHolding.getEdge(fromRoadName).getToNode()-1;
+
 		if(s != -1) 
 		{
 			edgeTo = new int[graph.nodes()];
@@ -103,18 +97,12 @@ public class DijkstraSP
 		}
 	}
 
-	public Iterable<Edge> pathTo(String roadName) {
+	public Iterable<Edge> pathTo(int toRoadName) {
 		if(badInput == false) 
 		{
 			int n = -1; 
-			for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
-			{
-				if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName.trim().toLowerCase())) 
-				{
-					n = DataHolding.getEdge(i).getToNode()-1;
-					break;
-				}
-			}
+			n = DataHolding.getEdge(toRoadName).getToNode()-1;
+			
 			if(n != -1) 
 			{
 				if (!hasPathTo(n)) { 
