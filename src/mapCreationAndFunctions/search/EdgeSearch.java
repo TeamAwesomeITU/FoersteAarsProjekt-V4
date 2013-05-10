@@ -1,5 +1,7 @@
 package mapCreationAndFunctions.search;
 
+import inputHandler.exceptions.MalformedAdressException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -48,26 +50,95 @@ public class EdgeSearch  {
 	}
 
 	/**
-	 * Searches for road names, that starts with the given string. Uses a really fucking stupid way to obtain suggestions - but it works, and its speed is acceptable.
-	 * @param edgeToFind The name of the Edge to find
-	 * @return An array of all the Edges, that starts with the given String
+	 * Searches for Edges with a specific roadname, an optional number and an optional letter. If no search on a letter is wanted, enter an empty String as the letter parameter,
+	 * @param roadName The name of the road
+	 * @param number TODO
+	 * @param letter An optional letter of the specific address - if no search on a letter is wanted, enter -1 as the integer
+	 * @param letter An optional letter of the specific address - if no search on a letter is wanted, enter an empty String as the letter parameter
+	 * @return All of the Edges that fits the search criterias.
+	 * @throws MalformedAdressException 
 	 */
-	public static Edge[] searchForRoadNameSuggestions(String edgeToFind)
+	public static Edge[] searchForRoadSuggestions(String roadName, int number, String letter) throws MalformedAdressException
 	{
-		edgeToFind = edgeToFind.toLowerCase();
-		Iterable<String> roadNames = edgeSearchTrie.prefixMatch(edgeToFind);
-		Iterator<String> roadNameIterator = roadNames.iterator();
-		ArrayList<Edge> roadList = new ArrayList<>();
+		if(roadName.isEmpty())
+			throw new MalformedAdressException("No roadname was entered");
+		if(number == -1 && !letter.isEmpty())
+			throw new MalformedAdressException("A road letter cannot be entered without having a road number");
+		if(number == 0)
+			throw new MalformedAdressException("A road number cannot be 0");
 
-		while(roadNameIterator.hasNext())
+		roadName = roadName.toLowerCase();
+		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
+		Iterable<String> possibleEdges = edgeSearchTrie.prefixMatch(roadName);
+		Iterator<String> iterator = possibleEdges.iterator();
+
+		boolean betweenNumbersRight;
+		boolean betweenNumbersLeft; 
+		int edgeNumber = 1;
+
+		while(iterator.hasNext())
 		{
-			String roadName = roadNameIterator.next().toLowerCase();
-			Edge[] edges = searchForRoadName(roadName);
+			Edge[] edges = searchForRoadName(iterator.next().toLowerCase());
+			System.out.println(edgeNumber++);
+
 			for(Edge edge : edges)
-				roadList.add(edge);
+			{
+				//If the search should only include road name
+				if(number == -1)
+					foundEdges.add(edge);
+				
+				//If the search should include road number
+				else
+				{
+					betweenNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, number);
+					betweenNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, number);
+
+					System.out.println(betweenNumbersLeft + " " + betweenNumbersRight);
+
+					//If the given number is NOT in the Edge's interval
+					if(!betweenNumbersRight && !betweenNumbersLeft )
+						System.out.println("This edge is NOT in ANY of the correct intervals");
+
+					//If the Edge only has correct numbers on the right side's interval
+					else if(betweenNumbersRight && !betweenNumbersLeft )
+					{
+						System.out.println("This edge is in the correct interval of the right side!");
+						if(letter.isEmpty())
+							foundEdges.add(edge);
+
+						else
+							if(isRoadLetterWithinRightSideOfEdge(edge, letter))
+								foundEdges.add(edge);
+					}
+
+					//If the Edge only has correct numbers on the left side's interval
+					else if(betweenNumbersLeft && !betweenNumbersRight )
+					{
+						System.out.println("This edge is in the correct interval of the left side!");
+						if(letter.isEmpty())
+							foundEdges.add(edge);
+
+						else
+							if(isRoadLetterWithinLeftSideOfEdge(edge, letter))
+								foundEdges.add(edge);
+					}
+
+					//Both sides of the Edge have the number in their intervals
+					else
+					{
+						System.out.println("This edge is in the correct interval of both sides!");
+						if(letter.isEmpty())
+							foundEdges.add(edge);
+
+						else
+							if(isRoadLetterWithinLeftSideOfEdge(edge, letter) || isRoadLetterWithinRightSideOfEdge(edge, letter))
+								foundEdges.add(edge);
+					}
+				}
+			}
 		}
 
-		return roadList.toArray(new Edge[roadList.size()]);
+		return foundEdges.toArray(new Edge[foundEdges.size()]);
 	}
 
 	/**
@@ -99,69 +170,6 @@ public class EdgeSearch  {
 	 * @param letter An optional letter of the specific address - if no search on a letter is wanted, enter an empty String as the letter parameter,
 	 * @return All of the Edges that fits the search criterias.
 	 */
-	public static Edge[] searchForRoadNameNumberAndLetter(String roadName, int number, String letter)
-	{
-		roadName = roadName.toLowerCase();
-		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
-		Edge[] possibleEdges = searchForRoadName(roadName);
-		System.out.println(possibleEdges.length);
-
-		boolean betweenNumbersRight;
-		boolean betweenNumbersLeft; 
-		int edgeNumber = 1;
-
-		for(Edge edge : possibleEdges)
-		{
-			System.out.println(edgeNumber++);
-			
-			betweenNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, number);
-			betweenNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, number);
-			
-			System.out.println(betweenNumbersLeft + " " + betweenNumbersRight);
-
-			//If the given number is NOT in the Edge's interval
-			if(!betweenNumbersRight && !betweenNumbersLeft )
-				System.out.println("This edge is NOT in ANY of the correct intervals");
-
-			//If the Edge only has correct numbers on the right side's interval
-			else if(betweenNumbersRight && !betweenNumbersLeft )
-			{
-				System.out.println("This edge is in the correct interval of the right side!");
-				if(letter.isEmpty())
-					foundEdges.add(edge);
-
-				else
-					if(isRoadLetterWithinRightSideOfEdge(edge, letter))
-						foundEdges.add(edge);
-			}
-
-			//If the Edge only has correct numbers on the left side's interval
-			else if(betweenNumbersLeft && !betweenNumbersRight )
-			{
-				System.out.println("This edge is in the correct interval of the left side!");
-				if(letter.isEmpty())
-					foundEdges.add(edge);
-
-				else
-					if(isRoadLetterWithinLeftSideOfEdge(edge, letter))
-						foundEdges.add(edge);
-			}
-
-			//Both sides of the Edge have the number in their intervals
-			else
-			{
-				System.out.println("This edge is in the correct interval of both sides!");
-				if(letter.isEmpty())
-					foundEdges.add(edge);
-
-				else
-					if(isRoadLetterWithinLeftSideOfEdge(edge, letter) || isRoadLetterWithinRightSideOfEdge(edge, letter))
-						foundEdges.add(edge);
-			}
-		}
-
-		return foundEdges.toArray(new Edge[foundEdges.size()]);
-	}
 
 	private static boolean isRoadNumberWithinLeftSideOfEdge(Edge edge, int number)
 	{ 
@@ -187,15 +195,15 @@ public class EdgeSearch  {
 		String fromLetter = edge.getFromLeftLetter();
 		String toLetter = edge.getToLeftLetter();
 		char letterChar = letter.charAt(0);	
-		
+
 		//If no letters are found on this side of the road
 		if(fromLetter.isEmpty() && toLetter.isEmpty())
 			return false;
-		
+
 		//If the char should be checked within an interval
 		else if(!fromLetter.isEmpty() && !toLetter.isEmpty())
 			return (fromLetter.charAt(0) >= letterChar && toLetter.charAt(0) <= letterChar );
-		
+
 		else
 		{
 			if(!fromLetter.isEmpty())
@@ -211,14 +219,14 @@ public class EdgeSearch  {
 		String fromLetter = edge.getFromRightLetter();
 		String toLetter = edge.getToRightLetter();
 		char letterChar = letter.charAt(0);	
-		
+
 		if(fromLetter.isEmpty() && toLetter.isEmpty())
 			return false;
-		
+
 		//If the char should be checked within an interval
 		else if(!fromLetter.isEmpty() && !toLetter.isEmpty())
 			return (fromLetter.charAt(0) >= letterChar && toLetter.charAt(0) <= letterChar );
-		
+
 		else
 		{
 			if(!fromLetter.isEmpty())
@@ -229,36 +237,20 @@ public class EdgeSearch  {
 	}
 
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws MalformedAdressException
 	{		
-		
-		Edge[] foundEdges = searchForRoadNameInCity("Nørre Boulevard", 4600);
+		Edge[] foundEdges = searchForRoadSuggestions("Nørregade", 2, "");
 		System.out.println(foundEdges.length);
+		/*
 		for(Edge edge : foundEdges)
-			System.out.println(edge.toStringNumberAndLetterInfo());
+			System.out.println(edge.getRoadName());
+		*/
 		
-		Edge[] foundEdges2 = searchForRoadNameInCity("Stadionvej", 6650);
+		Edge[] foundEdges2 = searchForRoadSuggestions("Nørregade", -1, "");
 		System.out.println(foundEdges2.length);
+		/*
 		for(Edge edge : foundEdges2)
-			System.out.println(edge.toStringNumberAndLetterInfo());
-		
-		System.out.println('A' < 'B');
-		System.out.println('A' < 'Æ');
-		System.out.println('A' < 'Ø');
-		System.out.println('A' < 'Å');
-		System.out.println('Æ' < 'Ø');
-		System.out.println('Æ' < 'Å');
-		System.out.println('Ø' < 'Å');
-		
-		char letterChar = 'A';
-		char letterChar2 = 'Ø';
-		char letterChar3 = 'Å';
-		
-		System.out.println(letterChar + 0);
-		System.out.println(letterChar2 + 0);
-		System.out.println(letterChar3 + 0);
-		
-		System.out.println('E' > letterChar);
-		System.out.println('A' < letterChar);
+			System.out.println(edge.getRoadName());
+			*/
 	}
 }

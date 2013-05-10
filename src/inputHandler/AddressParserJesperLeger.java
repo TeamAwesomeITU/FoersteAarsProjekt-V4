@@ -40,21 +40,21 @@ public class AddressParserJesperLeger {
 		originalInput = input.trim().toLowerCase();
 	}
 	
-	public String[] getSuggestions()
+	public String[] getSuggestions() throws MalformedAdressException
 	{
 		ArrayList<String> suggestionsList = new ArrayList<>();
 		
 		if(!isEdgeLocked)
 		{
 			//LAV EN searchForRoadNameSuggestions og en searchForRoadName DER TAGER HØJDE FOR ALT
-			Edge[] possibleEdges = EdgeSearch.searchForRoadNameSuggestions(modifiedInput);
+			Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(modifiedInput, -1, "");
 			
-			//If no matches could be found
+			//If no matches could be found it must mean that the user are no longer entering an input, which could be a road name.
 			if(possibleEdges.length == 0 )
 			{
 				possibleEdges = lastSuggestedRoads; //If no suggestions available, use the last available suggestions
-				suggestedRoadsFoundByString = modifiedInput;
-				isEdgeLocked = true;
+				suggestedRoadsFoundByString = modifiedInput; //Save the String, which the roads were found by
+				isEdgeLocked = true; //Lock the Edge
 			}
 			
 			//If there is a single 100% match
@@ -66,7 +66,8 @@ public class AddressParserJesperLeger {
 			}
 				
 			//If more than one matches are found
-			else {
+			else
+			{
 				lastSuggestedRoads = possibleEdges;
 			}
 			
@@ -74,6 +75,11 @@ public class AddressParserJesperLeger {
 				suggestionsList.add(edge.toString());
 		}
 		//1. get suggestions road name - check length. If length > 1, fill list with suggestions.
+		
+		else {
+			for(Edge edge : lastSuggestedRoads)
+				suggestionsList.add(edge.toString());
+		}
 		
 		if(!isCityLocked)
 		{
@@ -85,6 +91,10 @@ public class AddressParserJesperLeger {
 				possibleCities = CitySearch.searchForCityNameSuggestions(modifiedInput);
 		}
 		
+		else {
+			for(City city : lastSuggestedCities)
+				suggestionsList.add(city.toString());
+		}
 		
 		
 		
@@ -110,7 +120,7 @@ public class AddressParserJesperLeger {
 		
 		String input = originalInput;
 		
-		Edge[] possibleEdges = EdgeSearch.searchForRoadNameSuggestions(input);
+		Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(input, -1, "");
 
 		if(possibleEdges.length > 0)
 			System.out.println("It could be a road name!");
