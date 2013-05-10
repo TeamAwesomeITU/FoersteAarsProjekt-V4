@@ -15,6 +15,7 @@ import java.io.Writer;
 /*
  * @author http://tripoverit.blogspot.dk/2007/04/javas-utf-8-and-unicode-writing-is.html
  */
+@Deprecated
 public class UnicodeUtil {
 
 	public static byte[] convert(byte[] bytes, String encout) throws Exception {

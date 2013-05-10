@@ -1,9 +1,7 @@
 package navigation;
 
-import inputHandler.AdressParser;
-import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.Zoidberg;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Stack;
@@ -18,45 +16,45 @@ public class DijkstraSP
 	private int[] edgeTo; //contains edgeIDs on the edge towards the node i on edgeTo[i].
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
-	private int from;
+	private int s;
 	private String routeType = "Fastest";
 	private HashSet<Integer> setOfNonViableEdges;
 	private HashSet<String> setOfNonViableRoadTypes;
 	private EdgeWeightedDigraph graph;
+	private boolean badInput = false;
 
-	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation, String routeType) {
+	public DijkstraSP(EdgeWeightedDigraph graph, int fromRoadName, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
 
 		this.routeType = routeType;
 		if(setOfNonViableEdges == null) 
 			throw new NullPointerException("setOfNonViableEdges is empty");
 		this.graph = graph;
+		s = -1;
+		s = DataHolding.getEdge(fromRoadName).getToNode()-1;
 
-		from = compareAddress(roadName);
-		if(from != -1) 
+		if(s != -1) 
 		{
-			from = DataHolding.getEdge(from).getToNode()-1;
-
 			edgeTo = new int[graph.nodes()];
 			distTo = new double[graph.nodes()];
 			pq = new IndexMinPQ<Double>(graph.nodes());
 
 			for (int n = 0; n < graph.nodes(); n++)
 				distTo[n] = Double.POSITIVE_INFINITY;
-			distTo[from] = 0.0;
+			distTo[s] = 0.0;
 
-			pq.insert(from, 0.0);
+			pq.insert(s, 0.0);
 			System.out.println("Starting relaxation");
 			while (!pq.isEmpty())
 				prepareForRelax(pq.delMin());
 			System.out.println("Relaxation done");
 		}
-		
-		else
-			System.out.println("Du er en idiot, din from findes ikke.");
+		else 
+		{
+			badInput = true;
+			Zoidberg.badInputMessages();
+		}
 	}
-
-	
 
 	private void prepareForRelax(int n) {
 		Edge currentEdge;
@@ -98,43 +96,43 @@ public class DijkstraSP
 			}
 		}
 	}
-	public double distTo(int n) { 
 
-		return distTo[n]; 
-	}
-
-	public boolean hasPathTo(int n) { 
-		return distTo[n] < Double.POSITIVE_INFINITY; 
-	}
-
-	public Iterable<Edge> pathTo(String roadName) {
-		int to = compareAddress(roadName); 
-		if(to != -1) {
-			to = DataHolding.getEdge(to).getToNode()-1;
-		if (!hasPathTo(to)) { 
-			System.out.println("nej");
-			return null;
-		}
-		System.out.println("Finding route!");
-		Stack<Edge> path = new Stack<Edge>();
-		for (Edge e = DataHolding.getEdge(edgeTo[to]); e != null; e = DataHolding.getEdge(edgeTo[to])) {
-			if (to+1 == e.getFromNode())
-				to = e.getToNode()-1;
-			else {
-				to = e.getFromNode()-1;
-			}
-			if (to == from) 
+	public Iterable<Edge> pathTo(int toRoadName) {
+		if(badInput == false) 
+		{
+			int n = -1; 
+			n = DataHolding.getEdge(toRoadName).getToNode()-1;
+			
+			if(n != -1) 
 			{
-				path.push(e);
-				System.out.println("Succes! Route found.");
-				break;
+				if (!hasPathTo(n)) { 
+					System.out.println("nej");
+					return null;
+				}
+				System.out.println("Finding route!");
+				Stack<Edge> path = new Stack<Edge>();
+				for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
+					if (n+1 == e.getFromNode())
+						n = e.getToNode()-1;
+					else {
+						n = e.getFromNode()-1;
+					}
+					if (n == s) 
+					{
+						path.push(e);
+						System.out.println("Succes! Route found.");
+						break;
+					}
+					path.push(e);
+				}
+				return path;
 			}
-			path.push(e);
+			else {
+				Zoidberg.badInputMessages();
+				return null;
+			}
 		}
-		return path;
-		
-		} else
-			return null;
+		return null;
 	}
 
 	private void TransportType(String meansOfTransportation) {
@@ -150,5 +148,17 @@ public class DijkstraSP
 		default:
 			break;
 		}
+	}
+
+	public double distTo(int n) { 
+		return distTo[n]; 
+	}
+
+	private boolean hasPathTo(int n) { 
+		return distTo[n] < Double.POSITIVE_INFINITY; 
+	}
+
+	public boolean isBadInput() {
+		return badInput;
 	}
 }

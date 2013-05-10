@@ -9,24 +9,20 @@ import java.io.InputStreamReader;
 import mapCreationAndFunctions.search.QuadTree;
 import navigation.EdgeWeightedDigraph;
 
-
-
 @SuppressWarnings("unused")
 public class DataHolding {
 
 	private static int numberOfNodes = 675902;
-	private static int numberOfEdges = 812301;
+	private static int numberOfEdges = 812301;	
+
+	private static EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numberOfNodes);
 
 	/*A HashMap of the coordinates of all nodes in the entire map - the node's ID is the key
 	This is made at startup so the program can access it at will. */
-	private static Node[] nodeArray;
+	private static Node[] nodeArray = makeNodeArrayFromTXT();
 	/*A set of all edges. When at 100% zoom all edges from this are drawn. When closer less are drawn.
 	This is made at startup so the program can access it at will. */
-	private static Edge[] allEdgesByIDArray;
-	
-	private static Edge[] edgesByName;
-
-	private static EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numberOfNodes);
+	private static Edge[] allEdgesByIDArray = makeEdgeArrayFromTXT();
 
 	//At some point, the nodeArray and QuadTree should be created in parallel, as they use the same resource-file in the same way - will decrease startup time
 	private static QuadTree qTree;
@@ -156,7 +152,6 @@ public class DataHolding {
 	 */
 	public static Node[] getNodeArray()
 	{
-		initializeNodeArray();
 		return nodeArray;
 	}
 
@@ -166,7 +161,6 @@ public class DataHolding {
 	 */
 	public static Edge[] getEdgeArray()
 	{
-		initializeEdgeArray();
 		return allEdgesByIDArray;
 	}
 
@@ -185,41 +179,6 @@ public class DataHolding {
 	 */
 	public static Edge getEdge(int edgeID)
 	{ return allEdgesByIDArray[edgeID-1]; }
-
-	private static void initializeNodeArray()
-	{
-		if(nodeArray == null)
-			nodeArray = makeNodeArrayFromTXT();
-		else
-			return;
-	}
-
-	private static void initializeEdgeArray()
-	{
-		if(allEdgesByIDArray == null)
-			allEdgesByIDArray = makeEdgeArrayFromTXT();
-		else
-			return;
-	}
-
-
-	public static class EdgeMapCreation implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			initializeEdgeArray();
-		}		
-	}
-
-	public static class NodeMapCreation implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			initializeNodeArray();
-		}
-	}
 	
 	public static EdgeWeightedDigraph getGraph() {
 		return graph;

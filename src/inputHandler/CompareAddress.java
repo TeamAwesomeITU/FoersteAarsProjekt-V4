@@ -5,6 +5,8 @@ import inputHandler.exceptions.MalformedAdressException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import java_cup.internal_error;
+
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 
@@ -24,7 +26,7 @@ public class CompareAddress {
 		long s = System.currentTimeMillis();
 		new CompareAddress(testArray);
 		long t = System.currentTimeMillis();
-		System.out.println(t-s);
+		System.out.println("At finde en mulig adress tager " + (t-s));
 	}
 
 
@@ -45,7 +47,10 @@ public class CompareAddress {
 	public void compareEntireAdress(){
 		Edge edge;
 		int relevance = 0;
-		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) {
+		int length = DataHolding.getEdgeArray().length;
+		long s = System.currentTimeMillis();
+		
+		for(int i = 1; i < length; i++) {
 			edge = DataHolding.getEdge(i);
 
 			if(compareRoad(edge)==true) {
@@ -71,14 +76,16 @@ public class CompareAddress {
 					System.out.println(edge.getiD());
 				}
 				else if(relevance>1) {
-					System.out.println(relevance);
-					System.out.println(edge.getiD());
-					System.out.println(edge.getPostalNumberLeft());
+					//System.out.println(relevance);
+					//System.out.println(edge.getiD());
+					//System.out.println(edge.getPostalNumberLeft());
 				}
 				
 			}
 			relevance = 0;
 		} 
+		long t = System.currentTimeMillis();
+		System.out.println("wtf " + (t-s));
 	}
 	//possibleAdress.add(edge.getiD());
 

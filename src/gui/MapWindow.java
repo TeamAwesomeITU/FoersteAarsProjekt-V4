@@ -2,37 +2,37 @@ package gui;
 
 import gui.customJUnits.*;
 import gui.settingsAndPopUp.*;
-import inputHandler.AdressParser;
-import inputHandler.exceptions.MalformedAdressException;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
 import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
-import javax.swing.ListSelectionModel;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.plaf.ColorUIResource;
 
 import navigation.DijkstraSP;
 
@@ -45,6 +45,7 @@ import mapCreationAndFunctions.data.CoordinateConverter;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.search.CitySearch;
+import mapCreationAndFunctions.search.EdgeSearch;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -54,9 +55,10 @@ public class MapWindow {
 	public static JList<String> searchList;
 	public static DefaultListModel<String> listModel;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
-						  eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
+			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
 	private String VehicleType = "Bike", RouteType = "Fastest";
+	public static JWindow listWindow;
 	/**
 	 * A constructor for making the window with an empty search query
 	 */
@@ -69,7 +71,7 @@ public class MapWindow {
 	 */
 	public void createMapScreen(){
 		fillContentPane();
-		
+
 		MainGui.frame.pack();
 		fromSearchQuery.requestFocusInWindow();
 		double widthOfFrame = widthForMap();
@@ -77,8 +79,8 @@ public class MapWindow {
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
 		MainGui.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MainGui.frame.pack();
-		MapPanelResize mcp = new MapPanelResize(this);
-		MainGui.frame.addComponentListener(mcp);
+		MapPanelResize mcr = new MapPanelResize(this);
+		MainGui.frame.addComponentListener(mcr);
 	}
 
 	/**
@@ -98,6 +100,7 @@ public class MapWindow {
 	 * Makes the toolbar for the search input
 	 * @return the toolbar to be inserted later.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ColoredJPanel makeToolBar(){
 		ColoredJPanel toolBar = new ColoredJPanel();
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
@@ -115,7 +118,7 @@ public class MapWindow {
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
-		
+
 		ColoredJPanel buttonPanel = new ColoredJPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		buttonPanel.add(findRouteButton);
@@ -126,34 +129,28 @@ public class MapWindow {
 		reverseButton.setContentAreaFilled(false);
 		reverseButton.setToolTipText("Click to reverse from and to");
 		reverseButton.addActionListener(new ReverseActionListener());
-		
+
 		ColoredJComboBox vehicleBox = new ColoredJComboBox();
 		vehicleBox.setPreferredSize(new Dimension(120, 30));
 		vehicleBox.setEditable(true);
-        String[][] vehicleList = {{"Bike", "resources/bicycle.png"},
-        						 {"Car", "resources/car.png"},
-        						 {"Walk", "resources/walk2.png"}};
-        vehicleBox.addItems(vehicleList);
-        vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
-        vehicleBox.addActionListener(new VehicleTypeActionListener());
-        
-        ColoredJComboBox routeBox = new ColoredJComboBox();
-        routeBox.setPreferredSize(new Dimension(120, 30));
-        routeBox.setEditable(true);
-        String[][] routeList = {{"Fastest", ""},
-        						 {"Shortest", ""}};
-        routeBox.addItems(routeList);
-        routeBox.setUI(ColoredArrowUI.createUI(routeBox));
-        routeBox.addActionListener(new RouteTypeActionListener());
-        
+		String[][] vehicleList = {{"Bike", "resources/bicycle.png"},
+				{"Car", "resources/car.png"},
+				{"Walk", "resources/walk2.png"}};
+		vehicleBox.addItems(vehicleList);
+		vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
+		vehicleBox.addActionListener(new VehicleTypeActionListener());
+
+		ColoredJComboBox routeBox = new ColoredJComboBox();
+		routeBox.setPreferredSize(new Dimension(120, 30));
+		routeBox.setEditable(true);
+		String[][] routeList = {{"Fastest", ""},
+				{"Shortest", ""}};
+		routeBox.addItems(routeList);
+		routeBox.setUI(ColoredArrowUI.createUI(routeBox));
+		routeBox.addActionListener(new RouteTypeActionListener());
+
 		listModel = new DefaultListModel();
-		
-		searchList = new JList<>(listModel);
-		searchList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		searchList.setLayoutOrientation(JList.VERTICAL);
-		searchList.setVisibleRowCount(5);
-		JScrollPane listScroller = new JScrollPane(searchList);
-		listScroller.setPreferredSize(new Dimension(250, 80));
+		searchList = new SearchList(listModel);
 
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
@@ -193,8 +190,6 @@ public class MapWindow {
 		centerColoredJPanel.setLayout(new BoxLayout(centerColoredJPanel, BoxLayout.PAGE_AXIS));
 
 		mapPanel = new MapPanel((int)Math.round(width), (int)Math.round(height));
-		mapPanel.setMinimumSize(new Dimension((int)width, (int)height));
-		mapPanel.setMaximumSize(new Dimension((int)width, (int)height));
 		mapPanel.addMouseMotionListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseListener(new CoordinatesMouseMotionListener(mapPanel));
 		mapPanel.addMouseWheelListener(new MapMouseWheelZoom(mapPanel));
@@ -264,70 +259,14 @@ public class MapWindow {
 	/**
 	 * NOT DONE
 	 */
+	//TODO fix med jespers halløj
 	public void findRoute(){
-		if(fromSearchQuery.getText().trim().length() != 0 || 
+		/*if(fromSearchQuery.getText().trim().length() != 0 || 
 				toSearchQuery.getText().trim().length() != 0){
-			AdressParser adressParser = new AdressParser();
-			try {
-				adressParser.parseAdress(fromSearchQuery.getText());
-				String[] fromArray = new String[6];
-				for(int i = 0; adressParser.getAdressArray().length > i; i++){
-					fromArray[i] = adressParser.getAdressArray()[i];
-				}
-
-				adressParser.parseAdress(toSearchQuery.getText());
-
-				String[] toArray = adressParser.getAdressArray();
-				for(int i = 0; adressParser.getAdressArray().length > i; i++){
-					toArray[i] = adressParser.getAdressArray()[i];
-				}
-				DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), fromArray[0], VehicleType, RouteType);
-				mapPanel.setPathTo((Stack<Edge>) dip.pathTo(toArray[0]));
-				mapPanel.repaintMap();
-			} catch (MalformedAdressException e1) {
-				final JFrame zoidbergFrame = new JFrame("Malformed Address");
-				
-				Container contentPane = zoidbergFrame.getContentPane();
-				contentPane.setLayout(new GridLayout(0, 1, 0, 5));
-				
-				JPanel zoidbergPanel = new JPanel();
-				zoidbergPanel.setLayout(new FlowLayout());
-				
-				JLabel zoidbergLabel = new JLabel(new ImageIcon("resources/WhyNotZoidberg.png"));
-				JButton okayButton = new JButton(new ImageIcon("resources/okay.png"));
-				okayButton.setToolTipText("Click me!");
-				okayButton.addKeyListener(new KeyListener() {
-					public void keyPressed(KeyEvent arg0) {
-						if(arg0.getKeyCode() == 10){
-							zoidbergFrame.dispose();
-							toSearchQuery.setText("");
-							fromSearchQuery.setText("");							
-						}
-					}
-					public void keyTyped(KeyEvent arg0) {}	public void keyReleased(KeyEvent arg0) {}
-				});
-				okayButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						zoidbergFrame.dispose();
-						toSearchQuery.setText("");
-						fromSearchQuery.setText("");
-					}
-				});
-				okayButton.setBorder(BorderFactory.createEmptyBorder());
-				
-				zoidbergPanel.add(zoidbergLabel);
-				zoidbergPanel.add(okayButton);
-
-				contentPane.add(zoidbergPanel);
-				
-				zoidbergFrame.pack();
-				zoidbergFrame.setLocationRelativeTo(null);
-				zoidbergFrame.setVisible(true);
-			}
-		}
-		else {
-			JOptionPane.showMessageDialog(MainGui.frame, "You have to enter an address");
-		}
+			DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), fromSearchQuery.getText(), VehicleType, RouteType);
+			mapPanel.setPathTo((Stack<Edge>) dip.pathTo(toSearchQuery.getText()));
+			mapPanel.repaintMap();
+		}*/
 	}
 	/**
 	 * @return the center panel witch hold the map
@@ -341,7 +280,7 @@ public class MapWindow {
 	public JFrame getJFrame() {
 		return MainGui.frame;
 	}
-	
+
 
 	//---------------------------------Listeners from here-----------------------------//
 
@@ -350,58 +289,127 @@ public class MapWindow {
 	 * is the same as clicking the find route button
 	 */
 	class EnterKeyListener implements KeyListener{
-		
-		String query = "";
-		JWindow listWindow;
+
+		String query;
+
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == 10){
-				findRoute();
+			if(checkKeyEvent(e)){
+				if(e.getKeyCode() == 10){
+					findRoute();
+				}
+				listModel.removeAllElements();
 			}
-			if(listWindow != null)
-				listWindow.dispose();
-			
-
 		}
 
-		@Override
 		public void keyReleased(KeyEvent e) {
-			listWindow = new JWindow();
-			Container contentPane = listWindow.getContentPane();
-			listWindow.setLocationRelativeTo(fromSearchQuery);
-			listWindow.setPreferredSize(new Dimension(250, 80));
-			
-			contentPane.add(searchList);
-			listWindow.setVisible(true);
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		public void keyTyped(KeyEvent e) {
 			JTextField textField = (JTextField)e.getSource();
 			String search = (String) textField.getText().trim();
-			if(search != null){
-				listModel.removeAllElements();
-				query = search;
-				if(query.length() >= 2){
+			query = search;
 
-					City[] citiesList = CitySearch.getCityNameSuggestions(query);
-					for(City city : citiesList){
-						listModel.addElement(city.getCityName());
+
+			if(checkKeyEvent(e)){
+				if(query.length() >= 2){
+					if(listWindow != null)
+						listWindow.dispose();
+					listWindow = new JWindow();
+					Container contentPane = listWindow.getContentPane();
+					if(fromSearchQuery.hasFocus()){
+						Point location = fromSearchQuery.getLocationOnScreen();
+						listWindow.setLocation(new Point((int)location.getX(), ((int)location.getY()+32)));
 					}
-					//if(listWindow != null)
+					if(toSearchQuery.hasFocus()){
+						Point location = toSearchQuery.getLocationOnScreen();
+						listWindow.setLocation(new Point((int)location.getX(), ((int)location.getY()+32)));
+					}
+					listWindow.setPreferredSize(new Dimension(200, 80));
+
+					ColoredJPanel listPanel = new ColoredJPanel();
+					listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+					ColoredJScrollPane scrollPane = new ColoredJScrollPane(listPanel);
+					makeMatchingResult();
+					listPanel.add(searchList);
+
+					contentPane.add(scrollPane);
+
 					listWindow.pack();
+					if(listModel.getSize() == 0)
+						listWindow.setVisible(false);
+					else
+						listWindow.setVisible(true);
 				}
+				if(query.length() < 2 && listWindow != null)
+					listWindow.dispose();
+			}
+			else return;
+			if(e.getKeyCode() == 8 && listWindow != null)
+				listWindow.dispose();
+		}
+
+		public void keyTyped(KeyEvent e) {
+			if(!checkKeyEvent(e)){
+				makeMatchingResult();
+			}
+		}
+
+		public void makeMatchingResult(){
+			HashSet<String> listSet = new HashSet<>();
+			Edge[] edgesList = EdgeSearch.searchForRoadNameSuggestions(query);
+			for(Edge edge : edgesList){
+				String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+				listSet.add(hit);
+			}
+			for(String searchResult : listSet){
+				listModel.addElement(searchResult);
 			}
 
+			/*City[] citiesList = CitySearch.getCityNameSuggestions(query);
+			for(City city : citiesList){
+				listModel.addElement(city.getCityName());
+				System.out.println(city.getCityName());
+			}*/
+
+		}
+
+		private boolean checkKeyEvent(KeyEvent e){
+			boolean check = true;
+
+			int keyEvent = e.getKeyCode();
+			switch (keyEvent) {
+			case 8:	check = false;
+			case 16: check = false;
+			case 17: check = false;
+			case 18: check = false;
+			case 37: check = false;
+			case 38: check = false;
+			case 39: check = false;
+			case 40: check = false;
+			case 112: check = false;
+			case 113: check = false;
+			case 114: check = false;
+			case 115: check = false;
+			case 116: check = false;
+			case 117: check = false;
+			case 118: check = false;
+			case 119: check = false;
+			case 120: check = false;
+			case 121: check = false;
+			case 122: check = false;
+			case 123: check = false;
+			case 124: check = false;
+			break;
+			default:
+				break;
+			}
+			return check;
 		}
 	}
-	
+
 	/**
 	 * Not yet implemented!
 	 */
 	class RouteTypeActionListener implements ActionListener{
-		
+
 		@SuppressWarnings("rawtypes")
 		public void actionPerformed(ActionEvent e) {
 			try {
@@ -414,7 +422,7 @@ public class MapWindow {
 
 		}
 	}
-	
+
 	/**
 	 * Not yet implemented!
 	 */
@@ -432,8 +440,8 @@ public class MapWindow {
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * The listener for the coordinates
 	 */
@@ -447,19 +455,19 @@ public class MapWindow {
 			this.mapPanel = mapPanel;
 			makeCoordinatesConverter();
 		}
-		
+
 		public double getXCoord(MouseEvent e){
 			makeCoordinatesConverter();
 			double xCord = coordConverter.pixelToUTMCoordX(e.getX());				
 			return xCord;
 		}
-		
+
 		public double getYCoord(MouseEvent e){
 			makeCoordinatesConverter();
 			double yCord = coordConverter.pixelToUTMCoordY(e.getY());			
 			return yCord;
 		}
-		
+
 		public void makeCoordinatesConverter(){
 			mapAreaToDraw = mapPanel.getArea();
 			coordConverter = new CoordinateConverter((int)Math.round(getWidthForMap()), (int)Math.round(getHeightForMap()), mapAreaToDraw);
@@ -473,7 +481,12 @@ public class MapWindow {
 			Edge edge = mapPanel.getHitEdge(getXCoord(e), getYCoord(e));
 			String yString = String.format("%.2f", getYCoord(e));
 			String xString = String.format("%.2f", getXCoord(e));
-			
+
+			UIManager.put("ToolTip.background", new ColorUIResource(ColorTheme.BACKGROUND_COLOR));
+			Border border = BorderFactory.createLineBorder(ColorTheme.BUTTON_CLICKED_COLOR);
+			UIManager.put("ToolTip.border", border);
+			ToolTipManager.sharedInstance().setDismissDelay(15000);  
+
 			String roadName = "";
 			if(edge != null)
 				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName() + " edgeID: "+ edge.getiD();
@@ -482,7 +495,7 @@ public class MapWindow {
 			else 
 				mapPanel.setToolTipText(roadName);
 		}
-		
+
 		public void mousePressed(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON3){
 				if(MainGui.coordinatesBoolean){
@@ -495,9 +508,9 @@ public class MapWindow {
 				if(edge != null)
 					MainGui.locationString = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
 			}
-			
+
 		}
-		
+
 		public void mouseClicked(MouseEvent e) {}
 		public void mouseEntered(MouseEvent e) {}
 		public void mouseExited(MouseEvent e) {}

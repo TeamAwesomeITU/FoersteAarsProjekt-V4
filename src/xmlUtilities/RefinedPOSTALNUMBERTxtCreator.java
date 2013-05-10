@@ -17,7 +17,7 @@ import mapCreationAndFunctions.data.Edge;
  */
 public class RefinedPOSTALNUMBERTxtCreator {
 
-	private static String postalFileName = "XML/postalNumbersAndCityNames_unedited.txt";
+	private static String postalFileName = "XML/postalNumbersAndCityNames_uneditedWithSwedish.txt";
 
 	private static void createRefinedTXT()
 	{
@@ -47,20 +47,40 @@ public class RefinedPOSTALNUMBERTxtCreator {
 			File file = new File(postalFileName);
 
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-			BufferedWriter writer = new BufferedWriter(new FileWriter(postalFileName + "_refined.txt"));
-
-			//Skips the first line of the file
-			reader.readLine();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(postalFileName.replaceAll(".txt", "") + "_refined.txt"));
 
 			String line;
 
 			while((line = reader.readLine()) != null)
 			{
-				String[] lineParts = line.split("\\s+");
+				String[] lineParts = line.split("\\s");
+				lineParts[lineParts.length-1] = lineParts[lineParts.length-1].split("\\s+")[0];
 				int postalNumber =  Integer.parseInt(lineParts[0]);
 
-				if(existingPostalNumbers.contains(postalNumber)){
-					writer.write(line);
+				//If the postal number is one of the postal numbers found in our original data file, we want it
+				if(existingPostalNumbers.contains(postalNumber))
+				{
+					int shouldBreakAt = -1;
+					for (int i = 0; i < lineParts.length; i++) {
+						if(lineParts[i].contains("Skåne")){
+							shouldBreakAt = i;
+							break;
+						}
+					}
+					
+					String lineToWrite = "";					
+					if(shouldBreakAt != -1)
+					{
+						
+						for (int i = 0; i < shouldBreakAt; i++) {
+							lineToWrite += (lineParts[i] + " ");
+						}
+						writer.write(lineToWrite.trim());
+					}
+					
+					else
+						writer.write(line);
+					
 					writer.newLine();
 				}
 			}	    	
@@ -71,8 +91,9 @@ public class RefinedPOSTALNUMBERTxtCreator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
-	
+
 	public static void main( String[] args ) {
 		createRefinedTXT();
 	}

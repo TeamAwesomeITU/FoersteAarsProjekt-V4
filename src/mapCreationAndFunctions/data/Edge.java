@@ -331,7 +331,7 @@ public class Edge {
 	}
 	
 	
-	//TODO lad v�r med at lave en line2d for hver Edge - lav i stedet en intersectmetode i edge?
+	//TODO lad vær med at lave en line2d for hver Edge - lav i stedet en intersectmetode i edge?
 	public boolean intersects(Rectangle2D rectangle2d)
 	{
 		return getLine2DUnconverted().intersects(rectangle2d);
@@ -366,5 +366,18 @@ public class Edge {
 
         }
         return p;
+    }
+    
+    @Override
+    public String toString()
+    {
+    	return "";
+    }
+    
+    public String toStringNumberAndLetterInfo()
+    {
+    	return this.getRoadName() + ": " + "fromNumberLeft: " + this.getFromLeftNumber() + ", toNumberLeft: " + this.getToLeftNumber() + ", fromNumberRight: " +
+    			this.getFromRightNumber() + ", toNumberRight: " + this.getToRightNumber() + ", fromLetterLeft: " + this.getFromLeftLetter() + ", toLetterLeft: " + this.getToLeftLetter() 
+    			+ ", fromLetterRight: " + this.getFromRightLetter() + ", toLetterRight: " + this.getToRightLetter() ;
     }
 }

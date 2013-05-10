@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
  * this class. It is checked in the textfield containing all the
  * road names. If it finds a match it returns it as an array of strings.
  */
+@Deprecated
 public class AdressParser {
 
 	private	String[] adressArray = new String[6];

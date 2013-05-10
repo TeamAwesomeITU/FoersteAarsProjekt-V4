@@ -2,7 +2,9 @@ package gui;
 
 import gui.customJUnits.*;
 import gui.settingsAndPopUp.*;
+
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -14,6 +16,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,6 +27,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,6 +36,8 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 /**
  * This is our main gui class. It holds methods that is common for all
@@ -38,19 +46,21 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class MainGui {
 
 	private static MainGui instance;
-	
+
 	public static boolean coastlinesWanted = false;
 
 	public static boolean undecoratedBoolean = false;
 
 	public static boolean coordinatesBoolean = false;
-	
+
 	public static boolean menuBoolean = false;
-	
+
 	public static boolean isDefaultCursor;
-	
+
 	public static boolean dragonBoolean = false;
-	
+
+	public static boolean colorFollowTheme = false;
+
 	public static String locationString, coordinatesString;
 
 	public static JFrame frame;
@@ -98,7 +108,7 @@ public class MainGui {
 	public static void makeFrameAndContentPane(){
 		frame = new JFrame("Team Awesome Maps");
 		frame.setUndecorated(MainGui.undecoratedBoolean);
-		
+
 		changeScreenSize();
 		frame.setPreferredSize(ScreenSize.screenSize);
 
@@ -147,7 +157,7 @@ public class MainGui {
 						if(e.getStateChange() == ItemEvent.DESELECTED)	undecoratedBoolean = false;
 						if(e.getStateChange() == ItemEvent.SELECTED)	undecoratedBoolean = true;
 					}});
-				
+
 				final ColoredJCheckBox dragon = new ColoredJCheckBox("Dragon");
 				dragon.setSelected(dragonBoolean);
 				dragon.addItemListener(new ItemListener(){
@@ -165,25 +175,43 @@ public class MainGui {
 						if(e.getStateChange() == ItemEvent.SELECTED)	coordinatesBoolean = true;
 					}
 				});
-				
+
+				final ColoredJCheckBox colorFollow = new ColoredJCheckBox("Map Colors Follow Theme");
+				colorFollow.setSelected(colorFollowTheme);
+				colorFollow.setEnabled(coastlinesWanted);
+				colorFollow.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						if(e.getStateChange() == ItemEvent.DESELECTED) 	colorFollowTheme = false;
+						if(e.getStateChange() == ItemEvent.SELECTED) 	colorFollowTheme = true;
+					}
+				});
+
 				final ColoredJCheckBox coastlines = new ColoredJCheckBox("Coastlines");
 				coastlines.setSelected(coastlinesWanted);
 				coastlines.addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent e) {
-						if(e.getStateChange() == ItemEvent.DESELECTED) 	coastlinesWanted = false;
-						if(e.getStateChange() == ItemEvent.SELECTED) 	coastlinesWanted = true;
+						if(e.getStateChange() == ItemEvent.DESELECTED){ 	
+							coastlinesWanted = false;
+							colorFollowTheme = false;
+						}
+						if(e.getStateChange() == ItemEvent.SELECTED){
+							coastlinesWanted = true;
+							colorFollowTheme = true;
+						}
+						colorFollow.setSelected(colorFollowTheme);
+						colorFollow.setEnabled(coastlinesWanted);
 					}
 				});
-				
+
 				ColoredJComboBox colorThemesBox = new ColoredJComboBox();
 				colorThemesBox.setPreferredSize(new Dimension(120, 30));
 				colorThemesBox.setEditable(true);
-		        String[][] themes = {{"Summer", "resources/SummerLogo.png"},
-		        					{"Winter", "resources/WinterLogo.png"},
-		        					{"Spring", "resources/SpringLogo.png"},
-		        					{"Autumn", "resources/AutumnLogo.png"}};
-		        colorThemesBox.addItems(themes);
-		        colorThemesBox.setUI(ColoredArrowUI.createUI(colorThemesBox));
+				String[][] themes = {{"Summer", "resources/SummerLogo.png"},
+						{"Winter", "resources/WinterLogo.png"},
+						{"Spring", "resources/SpringLogo.png"},
+						{"Autumn", "resources/AutumnLogo.png"}};
+				colorThemesBox.addItems(themes);
+				colorThemesBox.setUI(ColoredArrowUI.createUI(colorThemesBox));
 
 				JLabel themesLabel = new JLabel("Themes:");
 				if(ColorTheme.autumnTheme) colorThemesBox.setSelectedIndex(3);
@@ -210,13 +238,13 @@ public class MainGui {
 				ColoredJComboBox frameSizesBox = new ColoredJComboBox();
 				frameSizesBox.setPreferredSize(new Dimension(120, 30));
 				frameSizesBox.setEditable(true);
-		        String[][] frameSizes = {{"Fullscreen", ""}, {"Medium", ""},
-		        					{"Small", ""}, {"Dualscreen LEFT", ""},
-		        					{"Dualscreen RIGHT", ""}};
-		        frameSizesBox.addItems(frameSizes);
-		        frameSizesBox.setUI(ColoredArrowUI.createUI(frameSizesBox));
+				String[][] frameSizes = {{"Fullscreen", ""}, {"Medium", ""},
+						{"Small", ""}, {"Dualscreen LEFT", ""},
+						{"Dualscreen RIGHT", ""}};
+				frameSizesBox.addItems(frameSizes);
+				frameSizesBox.setUI(ColoredArrowUI.createUI(frameSizesBox));
 				JLabel fameSizesLabel = new JLabel("Frame Size:");
-				
+
 				if(ScreenSize.fullScreen) frameSizesBox.setSelectedIndex(0);
 				else if(ScreenSize.mediumScreen) frameSizesBox.setSelectedIndex(1);
 				else if(ScreenSize.smallScreen) frameSizesBox.setSelectedIndex(2);
@@ -250,7 +278,7 @@ public class MainGui {
 						settingsFrame.dispose();
 						updateSettingsFile();
 					}
-					
+
 				});
 				ColoredJButton cancelButton = new ColoredJButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
@@ -258,17 +286,17 @@ public class MainGui {
 						settingsFrame.dispose();
 					}
 				});
-				
+
 				ColoredJPanel applySettingsPanel = new ColoredJPanel();
 				applySettingsPanel.add(applyButton);
 				applySettingsPanel.add(cancelButton);
-				
+
 				ColoredJPanel checkboxPanel = new ColoredJPanel();
 				checkboxPanel.add(themesLabel);
 				checkboxPanel.add(colorThemesBox);
 				checkboxPanel.add(fameSizesLabel);
 				checkboxPanel.add(frameSizesBox);
-				
+
 				container.add(settingsPanel, BorderLayout.NORTH);
 				container.add(checkboxPanel, BorderLayout.CENTER);
 				container.add(applySettingsPanel, BorderLayout.SOUTH);
@@ -277,12 +305,13 @@ public class MainGui {
 				settingsPanel.add(coordinates);
 				settingsPanel.add(dragon);
 				settingsPanel.add(coastlines);
+				settingsPanel.add(colorFollow);
 				settingsFrame.pack();
 				settingsFrame.setLocationRelativeTo(null);	
 				settingsFrame.setVisible(true);
 			}
 		});
-		
+
 		settingsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, SHORT_CUT_MASK));
 		fileMenu.add(settingsItem);
 		fileMenu.add(quitItem);
@@ -302,13 +331,51 @@ public class MainGui {
 						" to get on your way.");		
 			}
 		});
-		
+
 		aboutItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, SHORT_CUT_MASK));
 		helpMenu.add(aboutItem);
 		helpMenu.add(controlsItem);
 
+
+		ColoredJMenu exitMenu = new ColoredJMenu("X");
+		exitMenu.setForeground(Color.red);
+		exitMenu.setVisible(undecoratedBoolean);
+		exitMenu.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				System.exit(0);
+			}
+		}); 
+
+		ColoredJMenu changeScreenSizeMenu = new ColoredJMenu("□");
+		changeScreenSizeMenu.setVisible(undecoratedBoolean);
+		changeScreenSizeMenu.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if(ScreenSize.fullScreen)
+					ScreenSize.setMediumScreen();
+				else
+					ScreenSize.setFullScreen();
+				changeScreenSize();
+			}
+		});
+		
+		ColoredJMenu minimizeMenu = new ColoredJMenu("_");
+		minimizeMenu.setVisible(undecoratedBoolean);
+		minimizeMenu.addMouseListener(new MouseAdapter() {
+			@SuppressWarnings("static-access")
+			public void mouseClicked(MouseEvent e) {
+				if(frame.getState() == frame.ICONIFIED)
+					frame.setState(frame.NORMAL);
+				else if(frame.getState() == frame.NORMAL)
+					frame.setState(frame.ICONIFIED);
+			}
+		});
+
 		menuBar.add(fileMenu);
-		menuBar.add(helpMenu);		
+		menuBar.add(helpMenu);
+		menuBar.add(Box.createHorizontalGlue());
+		menuBar.add(minimizeMenu);
+		menuBar.add(changeScreenSizeMenu);
+		menuBar.add(exitMenu);
 	}
 
 	/**
@@ -318,7 +385,7 @@ public class MainGui {
 	public static ColoredJPanel makeFooter(){
 		ColoredJPanel footer = new ColoredJPanel();
 		footer.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
-		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4");
+		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4.1 - dey tuk our djerps!");
 		footer.add(footerText);
 		return footer;
 	}
@@ -340,7 +407,7 @@ public class MainGui {
 		try {
 			BufferedReader fileStream = new BufferedReader(new FileReader(getConfigFile()));
 			if(fileStream.ready()){
-				
+
 				if(fileStream.ready()){
 					String undecoratedSetting = fileStream.readLine().trim();
 					if(undecoratedSetting.equals("true"))
@@ -348,7 +415,7 @@ public class MainGui {
 					else if (undecoratedSetting.equals("false")) 
 						undecoratedBoolean = false;
 				}else updateSettingsFile();
-				
+
 				if(fileStream.ready()){
 					String coordinatesSetting = fileStream.readLine().trim();
 					if(coordinatesSetting.equals("true"))
@@ -356,7 +423,7 @@ public class MainGui {
 					else if(coordinatesSetting.equals("false"))
 						coordinatesBoolean = false;
 				}else updateSettingsFile();
-				
+
 				if(fileStream.ready()){
 					String colorThemeSetting = fileStream.readLine().trim();
 					if(colorThemeSetting.equals("Spring"))
@@ -368,7 +435,7 @@ public class MainGui {
 					else if(colorThemeSetting.equals("Autumn"))
 						ColorTheme.setAutumnTheme();
 				}else updateSettingsFile();
-				
+
 				if(fileStream.ready()){
 					String screenSetting = fileStream.readLine().trim();
 					if(screenSetting.equals("Fullscreen"))
@@ -382,7 +449,7 @@ public class MainGui {
 					if(screenSetting.equals("Dualscreenright"))
 						ScreenSize.setDualScreenRight();
 				}else updateSettingsFile();
-				
+
 				if(fileStream.ready()){
 					String dragonSetting = fileStream.readLine().trim();
 					if(dragonSetting.equals("true"))
@@ -390,7 +457,7 @@ public class MainGui {
 					else if(dragonSetting.equals("false"))
 						dragonBoolean = false;
 				}else updateSettingsFile();
-				
+
 				if(fileStream.ready()){
 					String coastlinesString = fileStream.readLine().trim();
 					if(coastlinesString.equals("true"))
@@ -398,7 +465,15 @@ public class MainGui {
 					else if(coastlinesString.equals("false"))
 						coastlinesWanted = false;
 				}else updateSettingsFile();
-				
+
+				if(fileStream.ready()){
+					String followString = fileStream.readLine().trim();
+					if(followString.equals("Follow"))
+						colorFollowTheme = true;
+					else if(followString.equals("Unfollow"))
+						colorFollowTheme = false;
+				}else updateSettingsFile();
+
 			}
 			else
 				updateSettingsFile();
@@ -407,7 +482,7 @@ public class MainGui {
 			JOptionPane.showMessageDialog(frame, "Could not find config file. Setting defualt settings");
 		}
 	}
-	
+
 	/**
 	 * Updates the config file with the new settings
 	 */
@@ -418,12 +493,12 @@ public class MainGui {
 				fileWriter.write("true\n");
 			else
 				fileWriter.write("false\n");
-			
+
 			if(coordinatesBoolean)
 				fileWriter.write("true\n");
 			else
 				fileWriter.write("false\n");
-			
+
 			if(ColorTheme.summerTheme)
 				fileWriter.write("Summer\n");
 			if(ColorTheme.winterTheme)
@@ -432,7 +507,7 @@ public class MainGui {
 				fileWriter.write("Autumn\n");
 			if(ColorTheme.springTheme)
 				fileWriter.write("Spring\n");
-			
+
 			if(ScreenSize.fullScreen)
 				fileWriter.write("Fullscreen\n");
 			if(ScreenSize.mediumScreen)
@@ -443,37 +518,42 @@ public class MainGui {
 				fileWriter.write("Dualscreenleft\n");
 			if(ScreenSize.dualScreenRight)
 				fileWriter.write("Dualscreenright\n");
-			
+
 			if(dragonBoolean)
 				fileWriter.write("true\n");
 			else
 				fileWriter.write("false\n");
-			
+
 			if(coastlinesWanted)
 				fileWriter.write("true\n");
 			else
 				fileWriter.write("false\n");
-						
-			
+
+			if(colorFollowTheme)
+				fileWriter.write("Follow\n");
+			else
+				fileWriter.write("Unfollow\n");
+
+
 			fileWriter.close();
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(frame, "Could not find config file. Setting defualt settings");
 		}
 	}
-	
+
 	/**
 	 * Reads the config file. If none is found, one is made with the default settings
 	 * @return the configfile for the settings
 	 */
 	public static File getConfigFile() {
-	    File configFile = new File("config.txt");
-	    if(!configFile.exists())
+		File configFile = new File("config.txt");
+		if(!configFile.exists())
 			try {
 				configFile.createNewFile();
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(frame, "Could not create config file");
 			}
-	    return configFile;
+		return configFile;
 	}
 
 	/**
@@ -489,13 +569,13 @@ public class MainGui {
 				JOptionPane.showMessageDialog(frame, "Something went wrong setting up the program, please contact TeamAwesome.");
 			}
 	}
-	
+
 	/**
 	 * Defines the cursor as the dragon cursor or as the default cursor.
 	 */
 	public static void setMainHand(){
 		if(dragonBoolean == false)
-		 frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			frame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		else { Toolkit toolkit = Toolkit.getDefaultToolkit(); 
 		Image image = toolkit.getImage("resources/dragon.png"); 
 		Point hotSpot = new Point(0,0);
