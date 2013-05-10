@@ -63,6 +63,8 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 	public void mouseDragged(MouseEvent e) {
 
 		if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
+			AreaToDraw area = mp.getArea();
+			if(area.getPercentageOfEntireMap() > 0.01){
 			drawing = true;
 
 			endX = Math.abs(mousePressedAt.x - e.getPoint().x);
@@ -88,7 +90,7 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			endX = startX+rectWidth;
 			endY = startY+rectHeight;
 			mp.repaint();
-		}
+		}}
 		else { mousePan(e); }
 			}
 	
@@ -107,7 +109,9 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			mpu.show(e.getComponent(), e.getX(), e.getY());
 		}
 		else if(SwingUtilities.isLeftMouseButton(e) && e.isShiftDown()) {
-			zoomIn();
+			AreaToDraw area = mp.getArea();
+			if(area.getPercentageOfEntireMap() > 0.01)
+				zoomIn();
 		}
 	}
 	

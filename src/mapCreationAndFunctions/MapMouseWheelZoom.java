@@ -24,11 +24,11 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 	private double smallX, bigX, smallY, bigY;
 	private Point mouseLocation;
 	private AreaToDraw currentArea, newArea;
-	
+
 	public MapMouseWheelZoom(MapPanel mp) {
 		recalculateTimer.setRepeats(false);
 		this.mp = mp;
-		
+
 	}
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		if (recalculateTimer.isRunning()) {
@@ -41,14 +41,15 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 			mouseLocation = e.getPoint();
 		}
 	}
-	
+
 	/**
 	 * Handles the actual zoom in/out.
 	 */
 	private class ZoomWheelActionListener implements ActionListener {
-		
+
 		public void actionPerformed(ActionEvent e) {
-			if(zoomWay != 0) {
+			if(zoomWay != 0) 
+			{
 				smallX = 0; bigX = mp.getMapWidth(); smallY = 0; bigY = mp.getMapHeight();
 				double xCoord = mouseLocation.getX();
 				double yCoord = mouseLocation.getY();
@@ -56,18 +57,22 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 				CoordinateConverter coordConverter = new CoordinateConverter(mp.getMapWidth(), mp.getMapHeight(), currentArea);
 				double zoomX = ((coordConverter.pixelToUTMCoordX((int)bigX) - coordConverter.pixelToUTMCoordX((int)smallX))/100);
 				double zoomY = ((coordConverter.pixelToUTMCoordY((int)bigY) - coordConverter.pixelToUTMCoordY((int)smallY))/100);						
-				
+
 				if(zoomWay > 0) 
 					zoomingOut(zoomX, zoomY, coordConverter);
-				else 
+				else if(zoomWay < 0 && mp.getArea().getPercentageOfEntireMap() > 0.01)
 					zoomingIn(coordConverter, xCoord, yCoord, zoomX, zoomY);
-				
+				else {
+					smallX = mp.getArea().getSmallestX(); bigX = mp.getArea().getLargestX(); 
+					smallY = mp.getArea().getSmallestY(); bigY = mp.getArea().getLargestY();
+				}
+
 				zoomWay = 0;
-				try {
-						newArea = new AreaToDraw(smallX, bigX, smallY, bigY, true);
-		  		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
-		  			System.out.println(e1.getClass() + ": " + e1.getMessage());
-		  			newArea = currentArea;
+				try {		
+					newArea = new AreaToDraw(smallX, bigX, smallY, bigY, true);
+				} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
+					System.out.println(e1.getClass() + ": " + e1.getMessage());
+					newArea = currentArea;
 				}
 				mp.repaintMap(newArea);
 			}
@@ -99,9 +104,8 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 			if(smallY < currentArea.getSmallestYOfEntireMap()) {
 				smallY = currentArea.getSmallestYOfEntireMap();
 			} 
-				System.out.println("step 2: "+ smallX +", "+ bigX +", "+ smallY +", "+ bigY);
 		}
-		
+
 		/** 
 		 * Zooming in is done by taking the mouse's position and adding 25% of the current maps size to either side, and thus there's a new areaToDraw.
 		 * @param coordConverter

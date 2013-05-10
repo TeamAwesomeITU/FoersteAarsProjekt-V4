@@ -259,13 +259,14 @@ public class MapWindow {
 	/**
 	 * NOT DONE
 	 */
+	//TODO fix med jespers halløj
 	public void findRoute(){
-		if(fromSearchQuery.getText().trim().length() != 0 || 
+		/*if(fromSearchQuery.getText().trim().length() != 0 || 
 				toSearchQuery.getText().trim().length() != 0){
 			DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), fromSearchQuery.getText(), VehicleType, RouteType);
 			mapPanel.setPathTo((Stack<Edge>) dip.pathTo(toSearchQuery.getText()));
 			mapPanel.repaintMap();
-		}
+		}*/
 	}
 	/**
 	 * @return the center panel witch hold the map
