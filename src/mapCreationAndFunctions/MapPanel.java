@@ -58,7 +58,7 @@ public class MapPanel extends JPanel {
 				waterColor = ColorTheme.TEXT_COLOR;
 		}
 		if(!MainGui.coastlinesWanted)
-			waterColor = new Color(255,255,210);
+			waterColor = Color.white;
 		setBackground(waterColor);
 
 		makeLinesForMap();

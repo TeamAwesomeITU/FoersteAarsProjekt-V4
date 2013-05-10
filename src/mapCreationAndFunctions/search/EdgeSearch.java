@@ -260,11 +260,5 @@ public class EdgeSearch  {
 		
 		System.out.println('E' > letterChar);
 		System.out.println('A' < letterChar);
-		
-		Edge[] foundEdges3 = searchForRoadNameSuggestions("nørregade");
-		System.out.println(foundEdges3.length);
-		for(Edge edge : foundEdges3)
-			System.out.println(edge.toStringNumberAndLetterInfo());
-
 	}
 }

@@ -368,6 +368,12 @@ public class Edge {
         return p;
     }
     
+    @Override
+    public String toString()
+    {
+    	return "";
+    }
+    
     public String toStringNumberAndLetterInfo()
     {
     	return this.getRoadName() + ": " + "fromNumberLeft: " + this.getFromLeftNumber() + ", toNumberLeft: " + this.getToLeftNumber() + ", fromNumberRight: " +
