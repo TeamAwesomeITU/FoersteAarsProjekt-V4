@@ -33,7 +33,7 @@ public class DijkstraSP
 		s = -1;
 		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
 		{
-			if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName)) 
+			if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName.trim().toLowerCase())) 
 			{
 				s = DataHolding.getEdge(i).getToNode()-1;
 				break;
@@ -109,7 +109,7 @@ public class DijkstraSP
 			int n = -1; 
 			for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
 			{
-				if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName)) 
+				if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName.trim().toLowerCase())) 
 				{
 					n = DataHolding.getEdge(i).getToNode()-1;
 					break;
