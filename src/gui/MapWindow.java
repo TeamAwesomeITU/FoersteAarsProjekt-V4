@@ -3,6 +3,8 @@ package gui;
 import gui.customJUnits.*;
 import gui.settingsAndPopUp.*;
 
+import inputHandler.exceptions.MalformedAdressException;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -354,14 +356,22 @@ public class MapWindow {
 
 		public void makeMatchingResult(){
 			HashSet<String> listSet = new HashSet<>();
-			Edge[] edgesList = EdgeSearch.searchForRoadNameSuggestions(query);
-			for(Edge edge : edgesList){
-				String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
-				listSet.add(hit);
+			Edge[] edgesList;
+			try {
+				edgesList = EdgeSearch.searchForRoadSuggestions(query, -1, "");
+				for(Edge edge : edgesList){
+					String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+					listSet.add(hit);
+				}
+				for(String searchResult : listSet){
+					listModel.addElement(searchResult);
+				}
+				
+			} catch (MalformedAdressException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			for(String searchResult : listSet){
-				listModel.addElement(searchResult);
-			}
+
 
 			/*City[] citiesList = CitySearch.getCityNameSuggestions(query);
 			for(City city : citiesList){

@@ -1,6 +1,7 @@
 package mapCreationAndFunctions.test;
 
 import static org.junit.Assert.*;
+import inputHandler.exceptions.MalformedAdressException;
 
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.search.EdgeSearch;
@@ -21,12 +22,19 @@ public class EdgeSearchRoadNameOnlyTest {
 	
 	public void testNumberOfFoundRoadNamesSuggestions(String edgeToFind, int expectedFinds)
 	{		
-		Edge[] edgesFound = EdgeSearch.searchForRoadNameSuggestions(edgeToFind);
-		assertEquals(expectedFinds, edgesFound.length);
-		
-		for(Edge edge : edgesFound)
-			//Test if the found Edge's road name actually contains what we are searching for
-			assertTrue(edge.getRoadName().toLowerCase().contains(edgeToFind.toLowerCase()));
+		Edge[] edgesFound;
+		try {
+			edgesFound = EdgeSearch.searchForRoadSuggestions(edgeToFind, -1, "");
+			assertEquals(expectedFinds, edgesFound.length);
+			
+			for(Edge edge : edgesFound)
+				//Test if the found Edge's road name actually contains what we are searching for
+				assertTrue(edge.getRoadName().toLowerCase().contains(edgeToFind.toLowerCase()));
+		} catch (MalformedAdressException e) {
+			fail();
+			e.printStackTrace();
+		}
+
 	}
 	
 	@Test
