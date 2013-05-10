@@ -1,7 +1,9 @@
 package navigation;
 
 import inputHandler.AdressParser;
+import inputHandler.exceptions.MalformedAdressException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Stack;
@@ -16,7 +18,7 @@ public class DijkstraSP
 	private int[] edgeTo; //contains edgeIDs on the edge towards the node i on edgeTo[i].
 	private double[] distTo;
 	private IndexMinPQ<Double> pq;
-	private int s;
+	private int from;
 	private String routeType = "Fastest";
 	private HashSet<Integer> setOfNonViableEdges;
 	private HashSet<String> setOfNonViableRoadTypes;
@@ -24,39 +26,37 @@ public class DijkstraSP
 
 	public DijkstraSP(EdgeWeightedDigraph graph, String roadName, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
-		String[] AddressMatches = AdressParser.getAdressArray();
-		
-		for(String string: AddressMatches) {
-			System.out.println(string);
-		}
-		
+
 		this.routeType = routeType;
 		if(setOfNonViableEdges == null) 
 			throw new NullPointerException("setOfNonViableEdges is empty");
 		this.graph = graph;
-		s = -1;
-		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
+
+		from = compareAddress(roadName);
+		if(from != -1) 
 		{
-			if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName)) 
-			{
-				s = DataHolding.getEdge(i).getToNode()-1;
-				break;
-			}
+			from = DataHolding.getEdge(from).getToNode()-1;
+
+			edgeTo = new int[graph.nodes()];
+			distTo = new double[graph.nodes()];
+			pq = new IndexMinPQ<Double>(graph.nodes());
+
+			for (int n = 0; n < graph.nodes(); n++)
+				distTo[n] = Double.POSITIVE_INFINITY;
+			distTo[from] = 0.0;
+
+			pq.insert(from, 0.0);
+			System.out.println("Starting relaxation");
+			while (!pq.isEmpty())
+				prepareForRelax(pq.delMin());
+			System.out.println("Relaxation done");
 		}
-		edgeTo = new int[graph.nodes()];
-		distTo = new double[graph.nodes()];
-		pq = new IndexMinPQ<Double>(graph.nodes());
-
-		for (int n = 0; n < graph.nodes(); n++)
-			distTo[n] = Double.POSITIVE_INFINITY;
-		distTo[s] = 0.0;
-
-		pq.insert(s, 0.0);
-		System.out.println("Starting relaxation");
-		while (!pq.isEmpty())
-			prepareForRelax(pq.delMin());
-		System.out.println("Relaxation done");
+		
+		else
+			System.out.println("Du er en idiot, din from findes ikke.");
 	}
+
+	
 
 	private void prepareForRelax(int n) {
 		Edge currentEdge;
@@ -99,6 +99,7 @@ public class DijkstraSP
 		}
 	}
 	public double distTo(int n) { 
+
 		return distTo[n]; 
 	}
 
@@ -107,28 +108,22 @@ public class DijkstraSP
 	}
 
 	public Iterable<Edge> pathTo(String roadName) {
-		int n = -1; 
-		for(int i = 1; i < DataHolding.getEdgeArray().length; i++) 
-		{
-			if (DataHolding.getEdge(i).getRoadName().toLowerCase().equals(roadName)) 
-			{
-				n = DataHolding.getEdge(i).getToNode()-1;
-				break;
-			}
-		}
-		if (!hasPathTo(n)) { 
+		int to = compareAddress(roadName); 
+		if(to != -1) {
+			to = DataHolding.getEdge(to).getToNode()-1;
+		if (!hasPathTo(to)) { 
 			System.out.println("nej");
 			return null;
 		}
 		System.out.println("Finding route!");
 		Stack<Edge> path = new Stack<Edge>();
-		for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
-			if (n+1 == e.getFromNode())
-				n = e.getToNode()-1;
+		for (Edge e = DataHolding.getEdge(edgeTo[to]); e != null; e = DataHolding.getEdge(edgeTo[to])) {
+			if (to+1 == e.getFromNode())
+				to = e.getToNode()-1;
 			else {
-				n = e.getFromNode()-1;
+				to = e.getFromNode()-1;
 			}
-			if (n == s) 
+			if (to == from) 
 			{
 				path.push(e);
 				System.out.println("Succes! Route found.");
@@ -137,6 +132,9 @@ public class DijkstraSP
 			path.push(e);
 		}
 		return path;
+		
+		} else
+			return null;
 	}
 
 	private void TransportType(String meansOfTransportation) {
