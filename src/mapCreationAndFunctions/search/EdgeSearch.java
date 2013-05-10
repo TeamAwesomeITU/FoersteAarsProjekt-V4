@@ -241,16 +241,27 @@ public class EdgeSearch  {
 	{		
 		Edge[] foundEdges = searchForRoadSuggestions("Nørregade", 2, "");
 		System.out.println(foundEdges.length);
-		/*
+		
 		for(Edge edge : foundEdges)
-			System.out.println(edge.getRoadName());
-		*/
+			System.out.println(edge.toString());		
 		
 		Edge[] foundEdges2 = searchForRoadSuggestions("Nørregade", -1, "");
 		System.out.println(foundEdges2.length);
-		/*
+		
 		for(Edge edge : foundEdges2)
-			System.out.println(edge.getRoadName());
-			*/
+			System.out.println(edge.toString());
+		
+		Edge[] foundEdges3 = searchForRoadSuggestions("Stadionvej", 4, "A");
+		System.out.println(foundEdges3.length);
+		
+		for(Edge edge : foundEdges3)
+			System.out.println(edge.toString() + " " + edge.getiD());
+		
+		Edge[] foundEdges4 = searchForRoadSuggestions("Næstvedvej", 24, "E");
+		System.out.println(foundEdges4.length);
+		
+		for(Edge edge : foundEdges4)
+			System.out.println(edge.toString() + " " + edge.getiD());
+			
 	}
 }
