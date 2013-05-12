@@ -80,4 +80,18 @@ public class EdgeSearchRoadNameAndNumberLetter {
 		int expectedFinds = 1;
 		testRoadNameAndNumber(edgeToFind, number, letter, expectedFinds);
 	}
+	
+	@Test
+	public void testRoadnameTwoSameNumbersInToFromInterval()
+	{
+		String edgeToFind = "Stadionvej";
+		int number = 2;
+		
+		//The actual letter in the interval
+		String letter = "B";
+		
+		//Number found by manual search in notepad++
+		int expectedFinds = 1;
+		testRoadNameAndNumber(edgeToFind, number, letter, expectedFinds);
+	}
 }

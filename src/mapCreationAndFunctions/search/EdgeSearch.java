@@ -81,8 +81,6 @@ public class EdgeSearch  {
 		while(iterator.hasNext())
 		{
 			Edge[] edges = searchForRoadName(iterator.next().toLowerCase());
-			System.out.println(edgeNumber++);
-
 			for(Edge edge : edges)
 			{
 				//If the search should only include road name
@@ -95,8 +93,6 @@ public class EdgeSearch  {
 					betweenNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, number);
 					betweenNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, number);
 
-					System.out.println(betweenNumbersLeft + " " + betweenNumbersRight);
-
 					//If the given number is NOT in the Edge's interval
 					if(!betweenNumbersRight && !betweenNumbersLeft )
 						System.out.println("This edge is NOT in ANY of the correct intervals");
@@ -104,7 +100,6 @@ public class EdgeSearch  {
 					//If the Edge only has correct numbers on the right side's interval
 					else if(betweenNumbersRight && !betweenNumbersLeft )
 					{
-						System.out.println("This edge is in the correct interval of the right side!");
 						if(letter.isEmpty())
 							foundEdges.add(edge);
 
@@ -116,7 +111,6 @@ public class EdgeSearch  {
 					//If the Edge only has correct numbers on the left side's interval
 					else if(betweenNumbersLeft && !betweenNumbersRight )
 					{
-						System.out.println("This edge is in the correct interval of the left side!");
 						if(letter.isEmpty())
 							foundEdges.add(edge);
 
@@ -128,7 +122,6 @@ public class EdgeSearch  {
 					//Both sides of the Edge have the number in their intervals
 					else
 					{
-						System.out.println("This edge is in the correct interval of both sides!");
 						if(letter.isEmpty())
 							foundEdges.add(edge);
 

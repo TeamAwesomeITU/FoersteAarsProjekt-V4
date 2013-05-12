@@ -363,8 +363,15 @@ public class MapWindow {
 					String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
 					listSet.add(hit);
 				}
-				for(String searchResult : listSet){
-					listModel.addElement(searchResult);
+				
+				if(listSet.size() == 0)
+					listModel.addElement("Could not find any matches");
+				
+				else {
+					for(String searchResult : listSet){
+						listModel.addElement(searchResult);
+				}
+
 				}
 				
 			} catch (MalformedAdressException e) {
