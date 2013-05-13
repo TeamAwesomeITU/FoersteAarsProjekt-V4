@@ -96,12 +96,12 @@ public class EdgeSearch  {
 				matchCityRight = isCityCorrectForRightSideOfEdge(edge, postalNumber, cityName);
 				matchCityLeft = isCityCorrectForLeftSideOfEdge(edge, postalNumber, cityName);
 				
-				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
-				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
-				System.out.println("matchCityRight: " + matchCityRight);
-				System.out.println("matchCityLeft: " + matchCityLeft);
+//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
+//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
+//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
+//				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
+//				System.out.println("matchCityRight: " + matchCityRight);
+//				System.out.println("matchCityLeft: " + matchCityLeft);
 
 				if(betweenRoadNumbersRight && betweenRoadLettersRight && matchCityRight)
 				{
@@ -143,10 +143,10 @@ public class EdgeSearch  {
 	}
 
 	/**
-	 * Returns the Edge with the given road name, inside a specified city.
-	 * @param edgeToFind The name of the road
-	 * @param postalNumber The postal roadNumber, which the road belongs to
-	 * @return The wanted Edge - null, if no match could be found
+	 * Returns the Edges with a given road name, inside a specified city.
+	 * @param edgeToFind The name of the roads
+	 * @param postalNumber The postal roadNumber, which the roads belongs to
+	 * @return The wanted Edges - null, if no match could be found
 	 */
 	public static Edge[] searchForRoadNameInCity(String edgeToFind, int postalNumber)
 	{
