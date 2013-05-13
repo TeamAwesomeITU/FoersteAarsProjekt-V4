@@ -99,7 +99,7 @@ public class AdressParser {
 	 * @return A matcher with a pattern and a subjectstring which you "apply" the pattern to. 
 	 */
 	private Matcher match(String pattern, String input) {
-		Matcher matcher = Pattern.compile(pattern).matcher(input);		
+		Matcher matcher = Pattern.compile(pattern).matcher(input);	//"\\[0-9]*\\[X-x]{1}\\b"	
 		return matcher;
 	}
 
@@ -165,13 +165,14 @@ public class AdressParser {
 		Matcher floor = match(pFloor, s);			
 		if(floor.find()) {																		/* 12 */
 			floorTemp = floor.group();
-			match(pTal, f loorTemp);
+			match(pTal, floorTemp);
 			addressAfterDeletion = addressAfterDeletion.replace(floorTemp, "");
 			Matcher tal = match(pTal, floorTemp);		
 			tal.find();																	
 			System.out.println(tal.group() + ". etage");
 			adressArray[3] = tal.group().trim();
-
+			
+	
 		}
 
 
