@@ -10,18 +10,37 @@ import mapCreationAndFunctions.data.City;
  */
 public class CitySearch  {
 
-	private static TernarySearchTrie citySearchTrie = createCitySearchTrie();
+	private static TernarySearchTrie cityNameSearchTrie = createCityNameSearchTrie();
+	private static TernarySearchTrie cityPostalNumberSearchTrie = createCityPostalNumberSearchTrie();
 
 	/**
 	 * Creates a TernarySearchTrie from data from the City class
 	 * @return a TernarySearchTrie of Cities.
 	 */
-	private static TernarySearchTrie createCitySearchTrie()
+	private static TernarySearchTrie createCityNameSearchTrie()
 	{
 		TernarySearchTrie tst = new TernarySearchTrie();
 
 		for(City city : City.getAllCities())
 			tst.put(city.getCityName().toLowerCase(), city.getCityID());
+
+		return tst;
+	}
+	
+	/**
+	 * Creates a TernarySearchTrie from data from the City class
+	 * @return a TernarySearchTrie of Cities.
+	 */
+	private static TernarySearchTrie createCityPostalNumberSearchTrie()
+	{
+		TernarySearchTrie tst = new TernarySearchTrie();
+
+		for(City city : City.getAllCities())
+		{
+			Iterator<Integer> iterator = city.getCityPostalNumbers().iterator();
+			while(iterator.hasNext())
+				tst.put(iterator.next().toString(), city.getCityID());
+		}
 
 		return tst;
 	}
@@ -34,7 +53,7 @@ public class CitySearch  {
 	public static City[] searchForCityName(String cityToFind)
 	{
 		cityToFind = cityToFind.toLowerCase();
-		ArrayList<Integer> listOfFoundCities = citySearchTrie.get(cityToFind);
+		ArrayList<Integer> listOfFoundCities = cityNameSearchTrie.get(cityToFind);
 
 		City[] arrayOfFoundCities = new City[listOfFoundCities.size()];
 
@@ -52,26 +71,74 @@ public class CitySearch  {
 	public static City[] searchForCityNameSuggestions(String cityToFind)
 	{
 		cityToFind = cityToFind.toLowerCase();
-		Iterable<String> cityNames = citySearchTrie.prefixMatch(cityToFind);
+		Iterable<String> cityNames = cityNameSearchTrie.prefixMatch(cityToFind);
 		Iterator<String> cityNamesIterator = cityNames.iterator();
-		ArrayList<City> cityList = new ArrayList<>();
+		ArrayList<City> foundCityList = new ArrayList<>();
 		
 		while(cityNamesIterator.hasNext())
 		{
 			String cityName = cityNamesIterator.next();
 			City city = City.getCityByCityName(cityName);
 			if(!(city == null))
-				cityList.add(city);
+				foundCityList.add(city);
 		}
 
-		return cityList.toArray(new City[cityList.size()]);
+		return foundCityList.toArray(new City[foundCityList.size()]);
+	}
+	
+	/**
+	 * Searches for City postal numbers, that starts with the given number.
+	 * @param cityToFind The postal number of the City to find
+	 * @return The city that has the given postal number
+	 */
+	public static City searchForCityPostalNumber(String cityToFind)
+	{
+		return City.getCityByPostalNumber(Integer.parseInt(cityToFind));
+	}
+	
+	/**
+	 * Searches for City postal numbers, that starts with the given number.
+	 * @param cityToFind The postal number of the City to find
+	 * @return An array of all the Cities, that starts with the given postal number
+	 */
+	public static City[] searchForCityPostalNumberSuggestions(String cityToFind)
+	{
+		cityToFind = cityToFind.toLowerCase();
+		Iterable<String> cityNumbers = cityPostalNumberSearchTrie.prefixMatch(cityToFind);
+		Iterator<String> cityNumbersIterator = cityNumbers.iterator();
+		ArrayList<City> foundCityList = new ArrayList<>();
+		
+		while(cityNumbersIterator.hasNext())
+		{
+			String cityNumber = cityNumbersIterator.next();
+			City city = City.getCityByPostalNumber(Integer.parseInt(cityNumber));
+			if(!(city == null))
+				foundCityList.add(city);
+		}
+
+		return foundCityList.toArray(new City[foundCityList.size()]);
 	}
 	
 	public static void main(String[] args) {
-		City[] citylist = searchForCityNameSuggestions("k");
-		for(City city : citylist)
+		/*
+		City[] foundCityList = searchForCityNameSuggestions("k");
+		for(City city : foundCityList)
 			System.out.println(city.getCityName());
 		
 		System.out.println(searchForCityName("KØGE")[0].getCityName());
+		*/
+		
+		for(City city : searchForCityPostalNumberSuggestions("46"))
+				System.out.println(city.getCityName());
+		
+		System.out.println("BREAK---------------");
+		
+		for(City city : searchForCityPostalNumberSuggestions("24"))
+			System.out.println(city.getCityName());
+		
+		System.out.println("BREAK---------------");
+		
+		for(City city : searchForCityPostalNumberSuggestions("0"))
+			System.out.println(city.getCityName());
 	}
 }

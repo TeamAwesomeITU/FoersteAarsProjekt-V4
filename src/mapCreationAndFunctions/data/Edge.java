@@ -7,76 +7,76 @@ import java.awt.geom.Rectangle2D;
 import mapCreationAndFunctions.RoadType;
 
 public class Edge {
-	
+
 	//The ID of the Node from which the Edge goes from
 	private final int fromNode;
-	
+
 	//The ID of the Node from which the Edge goes to
 	private final int toNode;
-	
+
 	//The length of the Edge in meters
 	private final double length;
-	
+
 	//The ID of the Edge
 	private final int iD;
-	
+
 	//The roadType of the Edge
 	private final int roadType;
-	
+
 	//The roadTypeCategory of the Edge
 	private final int roadTypeCategory;
-	
+
 	//The roadName of the Edge
 	private final String roadName;
-	
+
 	//The beginning of the house numbers on the	left
 	private final int fromLeftNumber;
-	
+
 	//The end of the house numbers on the left
 	private final int toLeftNumber;
-	
+
 	////The beginning of the house numbers on the right
 	private final int fromRightNumber;
-	
+
 	////The end of the house numbers on the right
 	private final int toRightNumber;
-	
+
 	//The beginning of the house letters on the	left
 	private final String fromLeftLetter;
-	
+
 	//The end of the house letters on the	left
 	private final String toLeftLetter;
-	
+
 	//The beginning of the house letters on the	right
 	private final String fromRightLetter;
-	
+
 	//The end of the house letters on the right 
 	private final String toRightLetter;
-	
+
 	//The postal numbers on the left
 	private final int postalNumberLeft;
-	
+
 	//The postal numbers on the left
 	private final int postalNumberRight;
-	
+
 	//The ID of the turnoff, if the Edge has one.
 	private final int highWayTurnoff;
-	
+
 	//Estimated driving time
 	private final double driveTime;
-	
+
 	//tf = one way in the direction To-From, ft = one way in the direction From-To,	n = No driving allowed,	<blank> = No restrictions
 	private final String oneWay;
-	
+
 	//Road ID to use with turn restrictions
 	private final int tjekID;
-	
+
 	//Road ID to use with turn restrictions
 	private final int fromTurn;
-	
+
 	//Road ID to use with turn restrictions
 	private final int toTurn;
-	
+
 	/**
 	 * 
 	 * @param fromNode The ID of the Node, the Edge goes from
@@ -242,7 +242,7 @@ public class Edge {
 	public int getPostalNumberRight() {
 		return postalNumberRight;
 	}
-	
+
 	/**
 	 * @return the postalNumberLeft of the Edge
 	 */
@@ -298,7 +298,7 @@ public class Edge {
 	public int getToTurn() {
 		return toTurn;
 	}
-	
+
 	/**
 	 * 
 	 * @return the category of which the Edge's road type belong to
@@ -307,7 +307,7 @@ public class Edge {
 	{
 		return roadTypeCategory;
 	}
-	
+
 	/**
 	 * Returns a graphic Line2D representation of the Edge
 	 * @param coordconverter The CoordConverter with which the coordinates should be converted
@@ -317,61 +317,85 @@ public class Edge {
 	{
 		Node fromNode = DataHolding.getNode(getFromNode());
 		Node toNode = DataHolding.getNode(getToNode());
-		
+
 		return new Line2D.Double(coordconverter.UTMToPixelCoordX(fromNode.getXCoord()),
 				coordconverter.UTMToPixelCoordY(fromNode.getYCoord()), coordconverter.UTMToPixelCoordX(toNode.getXCoord()),
 				coordconverter.UTMToPixelCoordY(toNode.getYCoord()));
 	}
-	
+
 	private Line2D getLine2DUnconverted()
 	{
 		Node fromNode = DataHolding.getNode(getFromNode());
 		Node toNode = DataHolding.getNode(getToNode());
 		return new Line2D.Double(fromNode.getXCoord(), fromNode.getYCoord(), toNode.getXCoord(), toNode.getYCoord());
 	}
-	
-	
+
+
 	//TODO lad vær med at lave en line2d for hver Edge - lav i stedet en intersectmetode i edge?
 	public boolean intersects(Rectangle2D rectangle2d)
 	{
 		return getLine2DUnconverted().intersects(rectangle2d);
 	}
-		
+
 	public int getAdressNumberAtPoint(double xCoord, double yCoord)
 	{		
 		return 0;
 	}
-	
-    @SuppressWarnings("unused")
+
+	@SuppressWarnings("unused")
 	private Point2D getIntersectionPoint(Line2D lineA, Line2D lineB) {
 
-        double x1 = lineA.getX1();
-        double y1 = lineA.getY1();
-        double x2 = lineA.getX2();
-        double y2 = lineA.getY2();
+		double x1 = lineA.getX1();
+		double y1 = lineA.getY1();
+		double x2 = lineA.getX2();
+		double y2 = lineA.getY2();
 
-        double x3 = lineB.getX1();
-        double y3 = lineB.getY2();
-        double x4 = lineB.getX2();
-        double y4 = lineB.getY2();
+		double x3 = lineB.getX1();
+		double y3 = lineB.getY2();
+		double x4 = lineB.getX2();
+		double y4 = lineB.getY2();
 
-        Point2D p = null;
+		Point2D p = null;
 
-        double d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-        if (d != 0) {
-            double xi = ((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d;
-            double yi = ((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d;
+		double d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+		if (d != 0) {
+			double xi = ((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d;
+			double yi = ((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d;
 
-            p = new Point2D.Double(xi, yi);
+			p = new Point2D.Double(xi, yi);
 
-        }
-        return p;
-    }
-    
-    public String toStringNumberAndLetterInfo()
-    {
-    	return this.getRoadName() + ": " + "fromNumberLeft: " + this.getFromLeftNumber() + ", toNumberLeft: " + this.getToLeftNumber() + ", fromNumberRight: " +
-    			this.getFromRightNumber() + ", toNumberRight: " + this.getToRightNumber() + ", fromLetterLeft: " + this.getFromLeftLetter() + ", toLetterLeft: " + this.getToLeftLetter() 
-    			+ ", fromLetterRight: " + this.getFromRightLetter() + ", toLetterRight: " + this.getToRightLetter() ;
-    }
+		}
+		return p;
+	}
+
+	@Override
+	public String toString()
+	{
+		String unevenNumber, evenNumber, postAndCity = "";
+
+		if(this.fromLeftNumber == 0 && this.toLeftNumber == 0) { unevenNumber = "";}
+		else{unevenNumber = "(" + (this.fromLeftNumber + "-" +  this.toLeftNumber) + ") "; }
+
+		if(this.fromRightNumber == 0 && this.toRightNumber == 0) { evenNumber = ""; }
+		else{evenNumber = "(" + (this.fromRightNumber + "-" +  this.toRightNumber) + ") "; }
+		if(this.postalNumberLeft != 0 && this.postalNumberRight != 0) {
+		if(this.postalNumberLeft == this.postalNumberRight) { 
+			postAndCity = this.postalNumberRight+ " " + City.getCityNameByPostalNumber(this.postalNumberRight); }
+		else{
+			System.out.println(this.postalNumberLeft + " " + this.postalNumberRight);
+			postAndCity = 
+					this.postalNumberRight + "/" + this.postalNumberLeft + " " +  
+					City.getCityNameByPostalNumber(this.postalNumberRight) + 
+					"/" + 
+					City.getCityNameByPostalNumber(this.postalNumberLeft); }
+		}
+		return this.roadName + " " + unevenNumber + evenNumber + postAndCity;
+	}
+
+	public String toStringNumberAndLetterInfo()
+	{
+		return this.getRoadName() + ": " + "fromNumberLeft: " + this.getFromLeftNumber() + ", toNumberLeft: " + this.getToLeftNumber() + ", fromNumberRight: " +
+				this.getFromRightNumber() + ", toNumberRight: " + this.getToRightNumber() + ", fromLetterLeft: " + this.getFromLeftLetter() + ", toLetterLeft: " + this.getToLeftLetter() 
+				+ ", fromLetterRight: " + this.getFromRightLetter() + ", toLetterRight: " + this.getToRightLetter() ;
+	}
 }

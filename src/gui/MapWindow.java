@@ -3,6 +3,8 @@ package gui;
 import gui.customJUnits.*;
 import gui.settingsAndPopUp.*;
 
+import inputHandler.exceptions.MalformedAdressException;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -259,13 +261,14 @@ public class MapWindow {
 	/**
 	 * NOT DONE
 	 */
+	//TODO fix med jespers halløj
 	public void findRoute(){
-		if(fromSearchQuery.getText().trim().length() != 0 || 
+		/*if(fromSearchQuery.getText().trim().length() != 0 || 
 				toSearchQuery.getText().trim().length() != 0){
 			DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), fromSearchQuery.getText(), VehicleType, RouteType);
 			mapPanel.setPathTo((Stack<Edge>) dip.pathTo(toSearchQuery.getText()));
 			mapPanel.repaintMap();
-		}
+		}*/
 	}
 	/**
 	 * @return the center panel witch hold the map
@@ -353,14 +356,29 @@ public class MapWindow {
 
 		public void makeMatchingResult(){
 			HashSet<String> listSet = new HashSet<>();
-			Edge[] edgesList = EdgeSearch.searchForRoadNameSuggestions(query);
-			for(Edge edge : edgesList){
-				String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
-				listSet.add(hit);
+			Edge[] edgesList;
+			try {
+				edgesList = EdgeSearch.searchForRoadSuggestions(query, -1, "");
+				for(Edge edge : edgesList){
+					String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+					listSet.add(hit);
+				}
+				
+				if(listSet.size() == 0)
+					listModel.addElement("Could not find any matches");
+				
+				else {
+					for(String searchResult : listSet){
+						listModel.addElement(searchResult);
+				}
+
+				}
+				
+			} catch (MalformedAdressException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			for(String searchResult : listSet){
-				listModel.addElement(searchResult);
-			}
+
 
 			/*City[] citiesList = CitySearch.getCityNameSuggestions(query);
 			for(City city : citiesList){

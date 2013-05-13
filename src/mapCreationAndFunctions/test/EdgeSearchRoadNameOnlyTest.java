@@ -1,6 +1,7 @@
 package mapCreationAndFunctions.test;
 
 import static org.junit.Assert.*;
+import inputHandler.exceptions.MalformedAdressException;
 
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.search.EdgeSearch;
@@ -15,16 +16,25 @@ public class EdgeSearchRoadNameOnlyTest {
 		assertEquals(expectedFinds, edgesFound.length);
 		
 		for(Edge edge : edgesFound)
-			assertEquals(edge.getRoadName(), edgeToFind);
+			//Test if the found Edge's road name is equal to what we are searching for
+			assertEquals(edge.getRoadName().toLowerCase(), edgeToFind.toLowerCase());
 	}
 	
 	public void testNumberOfFoundRoadNamesSuggestions(String edgeToFind, int expectedFinds)
 	{		
-		Edge[] edgesFound = EdgeSearch.searchForRoadNameSuggestions(edgeToFind);
-		assertEquals(expectedFinds, edgesFound.length);
-		
-		for(Edge edge : edgesFound)
-			assertEquals(edge.getRoadName(), edgeToFind);
+		Edge[] edgesFound;
+		try {
+			edgesFound = EdgeSearch.searchForRoadSuggestions(edgeToFind, -1, "");
+			assertEquals(expectedFinds, edgesFound.length);
+			
+			for(Edge edge : edgesFound)
+				//Test if the found Edge's road name actually contains what we are searching for
+				assertTrue(edge.getRoadName().toLowerCase().contains(edgeToFind.toLowerCase()));
+		} catch (MalformedAdressException e) {
+			fail();
+			e.printStackTrace();
+		}
+
 	}
 	
 	@Test
@@ -37,9 +47,45 @@ public class EdgeSearchRoadNameOnlyTest {
 	}
 	
 	@Test
+	public void testRoadnameNoWhitespacesNumberSuggestions()
+	{
+		String edgeToFind = "Nørregade";
+		//Number found by manual search
+		int expectedFinds = 1122;
+		testNumberOfFoundRoadNamesSuggestions(edgeToFind, expectedFinds);
+	}
+	
+	@Test
+	public void testRoadNameNoWhitespaceNumberLowerCase()
+	{
+		String edgeToFind = "nørregade";
+		//Number found by manual search
+		int expectedFinds = 1117;
+		testNumberOfFoundRoadNames(edgeToFind, expectedFinds);
+	}
+	
+	@Test
+	public void testRoadNameNoWhitespaceNumberLowerCaseSuggestions()
+	{
+		String edgeToFind = "nørregade";
+		//Number found by manual search
+		int expectedFinds = 1122;
+		testNumberOfFoundRoadNamesSuggestions(edgeToFind, expectedFinds);
+	}
+	
+	@Test
 	public void testRoadNameSingleWhitespaceNumber()
 	{
 		String edgeToFind = "Kongens Vænge";
+		//Number found by manual search
+		int expectedFinds = 48;
+		testNumberOfFoundRoadNames(edgeToFind, expectedFinds);
+	}
+	
+	@Test
+	public void testRoadNameSingleWhitespaceNumberLowerCase()
+	{
+		String edgeToFind = "kongens vænge";
 		//Number found by manual search
 		int expectedFinds = 48;
 		testNumberOfFoundRoadNames(edgeToFind, expectedFinds);

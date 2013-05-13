@@ -1,6 +1,7 @@
 package mapCreationAndFunctions.test;
 
 import static org.junit.Assert.*;
+import inputHandler.exceptions.MalformedAdressException;
 
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.search.EdgeSearch;
@@ -11,12 +12,20 @@ public class EdgeSearchRoadNameAndNumberLetter {
 	
 	public void testRoadNameAndNumber(String edgeToFind, int number, String letter, int expectedFinds)
 	{		
-		Edge[] edgesFound = EdgeSearch.searchForRoadNameNumberAndLetter(edgeToFind, number, letter);
-		assertEquals(expectedFinds, edgesFound.length);
-		
-		for(Edge edge : edgesFound)
-		{
-			assertEquals(edge.getRoadName(), edgeToFind);
+		Edge[] edgesFound;
+		try {
+			edgesFound = EdgeSearch.searchForRoadSuggestions(edgeToFind, number, letter);
+
+			assertEquals(expectedFinds, edgesFound.length);
+			
+			for(Edge edge : edgesFound)
+			{
+				assertEquals(edge.getRoadName(), edgeToFind);
+			}
+			
+		} catch (MalformedAdressException e) {
+			fail();
+			e.printStackTrace();
 		}
 	}
 	
@@ -63,6 +72,20 @@ public class EdgeSearchRoadNameAndNumberLetter {
 	{
 		String edgeToFind = "Stadionvej";
 		int number = 56;
+		
+		//The actual letter in the interval
+		String letter = "B";
+		
+		//Number found by manual search in notepad++
+		int expectedFinds = 1;
+		testRoadNameAndNumber(edgeToFind, number, letter, expectedFinds);
+	}
+	
+	@Test
+	public void testRoadnameTwoSameNumbersInToFromInterval()
+	{
+		String edgeToFind = "Stadionvej";
+		int number = 2;
 		
 		//The actual letter in the interval
 		String letter = "B";
