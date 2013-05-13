@@ -26,6 +26,7 @@ public class EdgeWeightedDigraph {
 	public int nodes() { 
 		return nodes; 
 	}
+	
 	/**
 	 * @return the number of edges
 	 */
