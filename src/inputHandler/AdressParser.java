@@ -165,7 +165,7 @@ public class AdressParser {
 		Matcher floor = match(pFloor, s);			
 		if(floor.find()) {																		/* 12 */
 			floorTemp = floor.group();
-			match(pTal, floorTemp);
+			match(pTal, f loorTemp);
 			addressAfterDeletion = addressAfterDeletion.replace(floorTemp, "");
 			Matcher tal = match(pTal, floorTemp);		
 			tal.find();																	
