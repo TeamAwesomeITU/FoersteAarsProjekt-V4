@@ -110,15 +110,19 @@ public class City {
 	 */
 	public static String getCityNameByPostalNumber(int postalNumber)
 	{
+		String cityName = "CITY POSTAL NUMBER DOES NOT BELONG TO A CITY";
 		if(postalNumber == 0)
-			return "CITY POSTAL NUMBER DOES NOT BELONG TO A CITY";
+			return cityName;
+		
 		else
 		{
-			if(cityHashMap.get(postalNumber).getCityName() == null)
-				System.out.println("Could not find postal number: " + postalNumber);
-			String cityName = cityHashMap.get(postalNumber).getCityName();
+			try {
+				cityName = cityHashMap.get(postalNumber).getCityName();
+			
+			} catch (NullPointerException e) {
+				//Do nothing
+			}
 
-		
 			return cityName;
 		}
 	}

@@ -3,8 +3,10 @@ package mapCreationAndFunctions.search;
 import inputHandler.exceptions.MalformedAdressException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
+import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 
@@ -79,21 +81,17 @@ public class EdgeSearch  {
 		while(iterator.hasNext())
 		{
 			Edge[] edges = searchForRoadName(iterator.next().toLowerCase());
-			System.out.println(edgeNumber++);
-
 			for(Edge edge : edges)
 			{
 				//If the search should only include road name
 				if(number == -1)
 					foundEdges.add(edge);
-				
+
 				//If the search should include road number
 				else
 				{
 					betweenNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, number);
 					betweenNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, number);
-
-					System.out.println(betweenNumbersLeft + " " + betweenNumbersRight);
 
 					//If the given number is NOT in the Edge's interval
 					if(!betweenNumbersRight && !betweenNumbersLeft )
@@ -102,7 +100,6 @@ public class EdgeSearch  {
 					//If the Edge only has correct numbers on the right side's interval
 					else if(betweenNumbersRight && !betweenNumbersLeft )
 					{
-						System.out.println("This edge is in the correct interval of the right side!");
 						if(letter.isEmpty())
 							foundEdges.add(edge);
 
@@ -114,7 +111,6 @@ public class EdgeSearch  {
 					//If the Edge only has correct numbers on the left side's interval
 					else if(betweenNumbersLeft && !betweenNumbersRight )
 					{
-						System.out.println("This edge is in the correct interval of the left side!");
 						if(letter.isEmpty())
 							foundEdges.add(edge);
 
@@ -126,7 +122,6 @@ public class EdgeSearch  {
 					//Both sides of the Edge have the number in their intervals
 					else
 					{
-						System.out.println("This edge is in the correct interval of both sides!");
 						if(letter.isEmpty())
 							foundEdges.add(edge);
 
@@ -241,16 +236,55 @@ public class EdgeSearch  {
 	{		
 		Edge[] foundEdges = searchForRoadSuggestions("Nørregade", 2, "");
 		System.out.println(foundEdges.length);
-		/*
+
 		for(Edge edge : foundEdges)
-			System.out.println(edge.getRoadName());
-		*/
-		
+			System.out.println(edge);		
+
 		Edge[] foundEdges2 = searchForRoadSuggestions("Nørregade", -1, "");
 		System.out.println(foundEdges2.length);
-		/*
+
 		for(Edge edge : foundEdges2)
-			System.out.println(edge.getRoadName());
-			*/
+			System.out.println(edge);
+
+		Edge[] foundEdges3 = searchForRoadSuggestions("Stadionvej", 4, "A");
+		System.out.println(foundEdges3.length);
+
+		for(Edge edge : foundEdges3)
+			System.out.println(edge + " " + edge.getiD());
+
+		//FEJL HER I HVORDAN DEN SAMMENLIGNER BOGSTAVER - BURDE KUN FINDE NOGET, HVIS LETTEREN VAR A
+		Edge[] foundEdges4 = searchForRoadSuggestions("Næstvedvej", 24, "I");
+		System.out.println(foundEdges4.length);
+
+		for(Edge edge : foundEdges4)
+			System.out.println(edge + " " + edge.getiD());
+
+		/*
+		HashSet<Integer> foundShittyPostalNumberSet = new HashSet<>();
+		int leftNumber = 0;
+		int rightNumber = 0;
+		for(Edge edge : DataHolding.getEdgeArray())
+		{
+			leftNumber = edge.getPostalNumberLeft();
+			rightNumber = edge.getPostalNumberRight();
+					
+			try {
+				System.out.println(City.getCityNameByPostalNumber(leftNumber));
+			} catch (NullPointerException e) {
+				foundShittyPostalNumberSet.add(leftNumber);
+			}
+
+			try {
+				System.out.println(City.getCityNameByPostalNumber(rightNumber));
+			} catch (NullPointerException e) {
+				foundShittyPostalNumberSet.add(rightNumber);
+			}
+		}
+		
+		Iterator<Integer> iterator = foundShittyPostalNumberSet.iterator();
+		while (iterator.hasNext()) {
+			System.out.print(", " + iterator.next());			
+		}
+		*/
 	}
 }

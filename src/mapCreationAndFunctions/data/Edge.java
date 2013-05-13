@@ -382,11 +382,12 @@ public class Edge {
 		if(this.postalNumberLeft == this.postalNumberRight) { 
 			postAndCity = this.postalNumberRight+ " " + City.getCityNameByPostalNumber(this.postalNumberRight); }
 		else{
+			System.out.println(this.postalNumberLeft + " " + this.postalNumberRight);
 			postAndCity = 
 					this.postalNumberRight + "/" + this.postalNumberLeft + " " +  
 					City.getCityNameByPostalNumber(this.postalNumberRight) + 
 					"/" + 
-					City.getCityNameByPostalNumber(this.postalNumberRight); }
+					City.getCityNameByPostalNumber(this.postalNumberLeft); }
 		}
 		return this.roadName + " " + unevenNumber + evenNumber + postAndCity;
 	}
