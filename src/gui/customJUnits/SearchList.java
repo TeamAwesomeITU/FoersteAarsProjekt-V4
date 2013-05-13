@@ -34,7 +34,7 @@ public class SearchList extends JList<String> {
 		setBackground(ColorTheme.BACKGROUND_COLOR);
 		setForeground(ColorTheme.TEXT_COLOR);
 
-		JScrollPane listScroller = new ColoredJScrollPane(this);
+		ColoredJScrollPane listScroller = new ColoredJScrollPane(this);
 		listScroller.setPreferredSize(new Dimension(250, 80));
 	}
 	
