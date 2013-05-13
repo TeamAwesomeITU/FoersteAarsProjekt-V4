@@ -60,7 +60,7 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 
 				if(zoomWay > 0) 
 					zoomingOut(zoomX, zoomY, coordConverter);
-				else if(zoomWay < 0 && mp.getArea().getPercentageOfEntireMap() > 0.01)
+				else if(zoomWay < 0 && mp.getArea().getPercentageOfEntireMap() > 0.002)
 					zoomingIn(coordConverter, xCoord, yCoord, zoomX, zoomY);
 				else {
 					smallX = mp.getArea().getSmallestX(); bigX = mp.getArea().getLargestX(); 

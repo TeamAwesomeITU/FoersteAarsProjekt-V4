@@ -37,6 +37,8 @@ public class MapPanel extends JPanel {
 	private CoordinateConverter coordConverter;
 	private double mapHeight, mapWidth;
 	private Stack<Edge> pathTo;
+	private Edge[] highlightEdges;
+	private Color purple = new Color(204,0,102);
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
@@ -97,6 +99,7 @@ public class MapPanel extends JPanel {
 	 * to see where you are about to zoom.
 	 * @param g The graphics object which is used.
 	 */
+	@SuppressWarnings("unchecked")
 	public void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
@@ -133,12 +136,10 @@ public class MapPanel extends JPanel {
 			g2.setStroke(new BasicStroke(RoadType.getStroke(roadType)));
 			g2.draw(line); 			
 		}		
-
+		Edge edgeToDraw;
 		if(pathTo != null) 
 		{
-			@SuppressWarnings("unchecked")
 			Stack<Edge> drawPath = (Stack<Edge>) pathTo.clone();
-			Edge edgeToDraw;
 			while(!drawPath.empty()) 
 			{
 
@@ -149,6 +150,18 @@ public class MapPanel extends JPanel {
 				g2.draw(line); 
 			}
 		}
+
+		if(highlightEdges != null) {
+			for(int i = 0; i<highlightEdges.length; i++) 
+			{
+				edgeToDraw = highlightEdges[i];
+				g2.setColor(purple);
+				line.setLine(edgeToDraw.getLine2DToDraw(coordConverter));
+				g2.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+				g2.draw(line); 
+			}
+		}
+
 		setBounds(new Rectangle((int)mapWidth, (int) mapHeight));
 
 		if (mapMouseZoomAndPan.getRect() == null) {
