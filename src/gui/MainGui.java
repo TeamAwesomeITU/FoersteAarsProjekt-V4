@@ -1,6 +1,6 @@
 package gui;
 
-import gui.customJUnits.*;
+import gui.customJComponents.*;
 import gui.settingsAndPopUp.*;
 
 import java.awt.BorderLayout;
@@ -19,13 +19,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComboBox;
@@ -115,6 +118,7 @@ public class MainGui {
 		contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
 	}
+	
 
 	/**
 	 * Makes the menu and adds shortcuts to it. This is the standard menu for all future windows.
