@@ -26,7 +26,6 @@ public class AddressParserJesperLeger {
 	private String suggestedRoadNumbersFoundByString = "";
 	private String suggestedRoadLettersFoundByString = "";
 
-
 	private boolean isRoadNameLocked;
 	private String foundRoadName = "";
 	private boolean isRoadNumberLocked;
@@ -105,6 +104,7 @@ public class AddressParserJesperLeger {
 				System.out.println("Result of deletion is: " + modifiedInput);
 			}
 		}
+		
 		if(isRoadLetterLocked)
 		{
 			if(!originalInput.contains(suggestedRoadLettersFoundByString)) 
@@ -200,34 +200,18 @@ public class AddressParserJesperLeger {
 			//If no matches is found and never has been with this input, create empty array.
 			if(lastSuggestedRoads == null)
 				lastSuggestedRoads = new Edge[0];
-
-			else 
-			{
-				possibleEdges = lastSuggestedRoads; //If no suggestions available, use the last available suggestions
-				System.out.println("LOCKING ROADNAME");
-				isRoadNameLocked = true; //Lock the Edge
-			}
 		}
 
-		//If there all found Edges have exactly the same road name
-		else if(doesRoadNamesMatch(possibleEdges))
+		//If there's more found Edges
+		else
 		{
 			System.out.println("ALL ROADNAMES MATCHES");
 			lastSuggestedRoads = possibleEdges;
 			//foundRoad = possibleEdges[0];
 			//isRoadNameLocked = true;
 			foundRoadName = modifiedInput;
-
 			suggestedRoadNamesFoundByString = modifiedInput;
 			//modifiedInput = modifiedInput.replace(suggestedRoadNamesFoundByString, "");
-		}
-
-		//If more than one matches are found
-		else
-		{
-			System.out.println("More than one matching road!");
-			lastSuggestedRoads = possibleEdges;
-			suggestedRoadNamesFoundByString = modifiedInput; //Save the String, which the roads were found by
 		}
 	}
 
@@ -241,7 +225,6 @@ public class AddressParserJesperLeger {
 			{
 				isRoadNumberLocked = true;
 			}
-
 			return;
 		}
 
@@ -260,18 +243,7 @@ public class AddressParserJesperLeger {
 
 		if(numberOfCurrentSuggestedCities > 0)
 		{
-			if(numberOfCurrentSuggestedCities == 1)
-			{
-				foundRoadNumber = possibleNumber;
-				System.out.println("LOCKING ROAD NUMBER");
-				isRoadNumberLocked = true;
-				foundRoad = possibleEdges[0];
-			}
-
-			else {
-				foundRoadNumber = possibleNumber;
-				lastSuggestedRoads = possibleEdges;
-			}
+			lastSuggestedRoads = possibleEdges;
 			suggestedRoadNumbersFoundByString = modifiedInput;
 		}
 
@@ -281,20 +253,12 @@ public class AddressParserJesperLeger {
 	private void setRoadLetterSuggestions() throws MalformedAdressException
 	{
 		Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(suggestedRoadNamesFoundByString, foundRoadNumber, modifiedInput);
-
-		if(possibleEdges.length > 0)
+		numberOfCurrentSuggestedRoads = possibleEdges.length;
+		
+		if(numberOfCurrentSuggestedRoads > 0)
 		{
 			System.out.println("FOUND MATCHING ROAD LETTERS WITH THE MODIFIED INPUT: " + modifiedInput);
-			foundRoadLetter = modifiedInput;
 			lastSuggestedRoads = possibleEdges;
-
-			if(possibleEdges.length == 1)
-			{
-				System.out.println("LOCKING ROAD LETTER");
-				isRoadLetterLocked = true;
-				foundRoad = possibleEdges[0];
-			}
-
 			suggestedRoadLettersFoundByString = foundRoadLetter;;
 		}
 	}
@@ -367,7 +331,10 @@ public class AddressParserJesperLeger {
 					isCityNameLocked = true;
 					foundCityName = lastSuggestedCities[0].getCityName();
 				}
-				resetRoadSearchTotal();				
+				suggestedCitiesFoundByString = modifiedInput;
+				
+				if(!isRoadNameLocked)
+					resetRoadSearchTotal();				
 			}
 		}
 
@@ -375,15 +342,57 @@ public class AddressParserJesperLeger {
 		if(!isRoadNameLocked)	
 		{
 			//If no cities are suggested and one or more roads are, it must be a road
-			if(numberOfCurrentSuggestedRoads >= 1 && numberOfCurrentSuggestedCities == 0)
+			if(numberOfCurrentSuggestedRoads >= 1 && numberOfCurrentSuggestedRoads == 0 && numberOfCurrentSuggestedCities == 0)
 			{				
 				if(doesRoadNamesMatch(lastSuggestedRoads))
 				{
+					System.out.println("LOCKING ROADNAME");
 					isRoadNameLocked = true;
 					foundRoadName = lastSuggestedRoads[0].getRoadName();
+					suggestedRoadNumbersFoundByString = modifiedInput;
 				}
-				resetCitySearch();
+				
+				if(!isCityNameLocked)
+					resetCitySearch();
 			}
+		}
+		
+		//If the road has been locked, check if road number or letter should be locked
+		else {
+			if (!isRoadNumberLocked) 
+			{
+				if(lastSuggestedRoads.length > 0 && numberOfCurrentSuggestedRoads == 0 && numberOfCurrentSuggestedCities == 0)
+				{
+					System.out.println("LOCKING ROAD NUMBER");
+					isRoadNumberLocked = true;
+					foundRoadNumber = Integer.parseInt(suggestedRoadNumbersFoundByString);
+				}
+				
+			}
+			else
+			{
+				if(!isRoadLetterLocked)
+				{
+					if(numberOfCurrentSuggestedRoads >= 1 && numberOfCurrentSuggestedCities == 0)
+					{
+						System.out.println("LOCKING ROAD LETTER");
+						isRoadLetterLocked = true;
+						foundRoadLetter = suggestedRoadLettersFoundByString;
+					}
+				}
+			}
+		}
+		
+		//If there is a 100% match on a city and nothing else
+		if(isCityNameLocked && foundCity == null && numberOfCurrentSuggestedCities == 1 && numberOfCurrentSuggestedRoads == 0)
+		{
+			foundCity = lastSuggestedCities[0];
+		}
+		
+		//If there is a 100% match on a road and nothing else
+		if(isRoadNameLocked && foundRoad == null && numberOfCurrentSuggestedRoads == 1 && numberOfCurrentSuggestedCities == 0)
+		{
+			foundRoad = lastSuggestedRoads[0];
 		}
 	}
 
