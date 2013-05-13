@@ -24,7 +24,7 @@ public class EdgeSearchRoadNameOnlyTest {
 	{		
 		Edge[] edgesFound;
 		try {
-			edgesFound = EdgeSearch.searchForRoadSuggestions(edgeToFind, -1, "");
+			edgesFound = EdgeSearch.searchForRoadSuggestions(edgeToFind, -1, "", -1, "");
 			assertEquals(expectedFinds, edgesFound.length);
 			
 			for(Edge edge : edgesFound)

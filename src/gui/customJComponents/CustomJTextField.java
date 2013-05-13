@@ -1,4 +1,4 @@
-package gui.customJUnits;
+package gui.customJComponents;
 
 
 import gui.MapWindow;

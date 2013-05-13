@@ -119,6 +119,9 @@ public class CitySearch  {
 		return foundCityList.toArray(new City[foundCityList.size()]);
 	}
 	
+	public static boolean doesCityNameMatchPostalNumber(String cityName, int postalNumber)
+	{ return City.getCityByCityName(cityName).getCityPostalNumbers().contains(postalNumber); }
+	
 	public static void main(String[] args) {
 		/*
 		City[] foundCityList = searchForCityNameSuggestions("k");
