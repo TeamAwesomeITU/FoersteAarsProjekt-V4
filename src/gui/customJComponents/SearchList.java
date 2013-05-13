@@ -1,4 +1,4 @@
-package gui.customJUnits;
+package gui.customJComponents;
 
 import gui.MapWindow;
 import gui.settingsAndPopUp.ColorTheme;
@@ -17,15 +17,14 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-@SuppressWarnings("serial")
-public class SearchList extends JList<String> {
+@SuppressWarnings({ "serial", "hiding" })
+public class SearchList<Object> extends JList<String> {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public SearchList(ListModel model){
 		super(model);
 		stylize();
 		addMouseListener(new SearchListSelectionListener());
-		addKeyListener(new NextListElementListener(model));
 	}
 
 	private void stylize(){
@@ -36,41 +35,6 @@ public class SearchList extends JList<String> {
 
 		ColoredJScrollPane listScroller = new ColoredJScrollPane(this);
 		listScroller.setPreferredSize(new Dimension(250, 80));
-	}
-	
-	class NextListElementListener implements KeyListener{
-		
-		private ListModel model;
-		
-		public NextListElementListener(ListModel model){
-			this.model = model;
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			int index = (int) getSelectedIndex();
-			if(e.getKeyCode() == 38){
-				if(index == 1)
-					return;
-				else
-					setSelectedIndex(index-1);
-			}
-			if(e.getKeyCode() == 40){
-				if(index == model.getSize())
-					setSelectedIndex(1);
-				else
-					setSelectedIndex(index+1);
-			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-		}
-
-		@Override
-		public void keyTyped(KeyEvent e) {
-		}
-		
 	}
 
 	class SearchListSelectionListener implements MouseListener{

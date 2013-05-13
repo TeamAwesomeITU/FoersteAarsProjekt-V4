@@ -1,6 +1,6 @@
 package gui;
 
-import gui.customJUnits.*;
+import gui.customJComponents.*;
 import gui.settingsAndPopUp.*;
 
 import inputHandler.exceptions.MalformedAdressException;
@@ -54,7 +54,7 @@ import mapCreationAndFunctions.search.EdgeSearch;
 public class MapWindow {
 
 	public static JTextField toSearchQuery, fromSearchQuery;
-	public static JList<String> searchList;
+	public static SearchList<String> searchList;
 	public static DefaultListModel<String> listModel;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
