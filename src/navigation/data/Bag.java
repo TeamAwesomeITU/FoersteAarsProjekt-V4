@@ -37,7 +37,7 @@ public class Bag<Item> implements Iterable<Item> {
     }
 
    /**
-     * Add an item to the bag.
+     * Adds an item to the bag.
      */
     public void add(Item item) {
         Node oldfirst = first;
@@ -79,7 +79,6 @@ public class Bag<Item> implements Iterable<Item> {
         return new ListIterator();  
     }
 
-    // an iterator, doesn't implement remove() since it's optional
     private class ListIterator implements Iterator<Item> {
         private Node current = first;
 

@@ -55,6 +55,9 @@ public class MapPanelResize extends ComponentAdapter {
 		}
 	}
 
+	/**
+	 * Resizes.
+	 */
 	public void resize() {
 		if(isResizing == true) {
 			double newWidth = mw.getWidthForMap();

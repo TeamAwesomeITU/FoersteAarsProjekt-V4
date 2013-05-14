@@ -26,11 +26,16 @@ public class EdgeWeightedDigraph {
 	public int nodes() { 
 		return nodes; 
 	}
+	
 	/**
 	 * @return the number of edges
 	 */
 	public int edges() { 
 		return edges; 
+	}
+	
+	public Bag<Integer>[] getAdj() {
+		return adj;
 	}
 
 	/**
