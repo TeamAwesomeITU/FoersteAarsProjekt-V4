@@ -11,7 +11,7 @@ import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 
 /**
- * Enables searching for Edges by road name, or by road name and postal number
+ * Enables searching for Edges by road name, or by road name and postal roadNumber
  */
 public class EdgeSearch  {
 
@@ -52,83 +52,65 @@ public class EdgeSearch  {
 	}
 
 	/**
-	 * Searches for Edges with a specific roadname, an optional number and an optional letter. If no search on a letter is wanted, enter an empty String as the letter parameter,
+	 * Searches for Edges with the specific criterias
 	 * @param roadName The name of the road
-	 * @param number TODO
-	 * @param letter An optional letter of the specific address - if no search on a letter is wanted, enter -1 as the integer
+	 * @param roadNumber An optional number of the specific address - if no search on a number is wanted, enter -1 as the integer
 	 * @param letter An optional letter of the specific address - if no search on a letter is wanted, enter an empty String as the letter parameter
+	 * @param postalNumber An optional postal number of the specific address - if no search on a postal number is wanted, enter -1 as the integer
+	 * @param cityName An optional String of the specific address' city name - if no search on a city name is wanted, enter an empty String as the letter parameter
 	 * @return All of the Edges that fits the search criterias.
 	 * @throws MalformedAdressException 
 	 */
-	public static Edge[] searchForRoadSuggestions(String roadName, int number, String letter) throws MalformedAdressException
+	public static Edge[] searchForRoadSuggestions(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAdressException
 	{
 		if(roadName.isEmpty())
 			throw new MalformedAdressException("No roadname was entered");
-		if(number == -1 && !letter.isEmpty())
-			throw new MalformedAdressException("A road letter cannot be entered without having a road number");
-		if(number == 0)
-			throw new MalformedAdressException("A road number cannot be 0");
+		if(roadNumber == -1 && !letter.isEmpty())
+			throw new MalformedAdressException("A road letter cannot be entered without having a road roadNumber");
+		if(roadNumber == 0 || postalNumber == 0)
+			throw new MalformedAdressException("A road's road number or postal number cannot be 0");
+		if(!cityName.isEmpty() && postalNumber != -1)
+			if(!CitySearch.doesCityNameMatchPostalNumber(cityName, postalNumber))
+				throw new MalformedAdressException("Postal number and city name does not match");
 
 		roadName = roadName.toLowerCase();
 		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
-		Iterable<String> possibleEdges = edgeSearchTrie.prefixMatch(roadName);
-		Iterator<String> iterator = possibleEdges.iterator();
+		Iterator<String> iterator = edgeSearchTrie.prefixMatch(roadName).iterator();
 
-		boolean betweenNumbersRight;
-		boolean betweenNumbersLeft; 
-		int edgeNumber = 1;
+		boolean betweenRoadNumbersRight;
+		boolean betweenRoadNumbersLeft; 
+		boolean betweenRoadLettersRight;
+		boolean betweenRoadLettersLeft;
+		boolean matchCityRight;
+		boolean matchCityLeft;
 
 		while(iterator.hasNext())
 		{
 			Edge[] edges = searchForRoadName(iterator.next().toLowerCase());
 			for(Edge edge : edges)
 			{
-				//If the search should only include road name
-				if(number == -1)
-					foundEdges.add(edge);
+				betweenRoadNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, roadNumber);
+				betweenRoadNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, roadNumber);
+				betweenRoadLettersRight = isRoadLetterWithinRightSideOfEdge(edge, letter);
+				betweenRoadLettersLeft = isRoadLetterWithinLeftSideOfEdge(edge, letter);
+				matchCityRight = isCityCorrectForRightSideOfEdge(edge, postalNumber, cityName);
+				matchCityLeft = isCityCorrectForLeftSideOfEdge(edge, postalNumber, cityName);
+				
+//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
+//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
+//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
+//				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
+//				System.out.println("matchCityRight: " + matchCityRight);
+//				System.out.println("matchCityLeft: " + matchCityLeft);
 
-				//If the search should include road number
-				else
+				if(betweenRoadNumbersRight && betweenRoadLettersRight && matchCityRight)
 				{
-					betweenNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, number);
-					betweenNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, number);
-
-					//If the given number is NOT in the Edge's interval
-					if(!betweenNumbersRight && !betweenNumbersLeft )
-						System.out.println("This edge is NOT in ANY of the correct intervals");
-
-					//If the Edge only has correct numbers on the right side's interval
-					else if(betweenNumbersRight && !betweenNumbersLeft )
-					{
-						if(letter.isEmpty())
-							foundEdges.add(edge);
-
-						else
-							if(isRoadLetterWithinRightSideOfEdge(edge, letter))
-								foundEdges.add(edge);
-					}
-
-					//If the Edge only has correct numbers on the left side's interval
-					else if(betweenNumbersLeft && !betweenNumbersRight )
-					{
-						if(letter.isEmpty())
-							foundEdges.add(edge);
-
-						else
-							if(isRoadLetterWithinLeftSideOfEdge(edge, letter))
-								foundEdges.add(edge);
-					}
-
-					//Both sides of the Edge have the number in their intervals
-					else
-					{
-						if(letter.isEmpty())
-							foundEdges.add(edge);
-
-						else
-							if(isRoadLetterWithinLeftSideOfEdge(edge, letter) || isRoadLetterWithinRightSideOfEdge(edge, letter))
-								foundEdges.add(edge);
-					}
+						foundEdges.add(edge);
+				}
+				
+				else if (betweenRoadNumbersLeft && betweenRoadLettersLeft && matchCityLeft)
+				{
+						foundEdges.add(edge);
 				}
 			}
 		}
@@ -136,11 +118,35 @@ public class EdgeSearch  {
 		return foundEdges.toArray(new Edge[foundEdges.size()]);
 	}
 
+	private static boolean isCityCorrectForLeftSideOfEdge( Edge edge, int postalNumber, String cityName )
+	{ 
+		//If the search should not include cities
+		if(cityName.isEmpty() && postalNumber == -1)
+			return true;
+		
+		if(!cityName.isEmpty())
+			return City.getCityByCityName(cityName).getCityPostalNumbers().contains(edge.getPostalNumberLeft());
+		else
+			return edge.getPostalNumberLeft() == postalNumber; 
+	}
+
+	private static boolean isCityCorrectForRightSideOfEdge( Edge edge, int postalNumber, String cityName )
+	{ 
+		//If the search should not include cities
+		if(cityName.isEmpty() && postalNumber == -1)
+			return true;
+		
+		if(!cityName.isEmpty())
+			return City.getCityByCityName(cityName).getCityPostalNumbers().contains(edge.getPostalNumberRight());
+		else
+			return edge.getPostalNumberRight() == postalNumber; 
+	}
+
 	/**
-	 * Returns the Edge with the given road name, inside a specified city.
-	 * @param edgeToFind The name of the road
-	 * @param postalNumber The postal number, which the road belongs to
-	 * @return The wanted Edge - null, if no match could be found
+	 * Returns the Edges with a given road name, inside a specified city.
+	 * @param edgeToFind The name of the roads
+	 * @param postalNumber The postal roadNumber, which the roads belongs to
+	 * @return The wanted Edges - null, if no match could be found
 	 */
 	public static Edge[] searchForRoadNameInCity(String edgeToFind, int postalNumber)
 	{
@@ -159,33 +165,45 @@ public class EdgeSearch  {
 	}	
 
 	/**
-	 * Searches for Edges with a specific roadname, number and an optional letter. If no search on a letter is wanted, enter an empty String as the letter parameter,
+	 * Searches for Edges with a specific roadname, roadNumber and an optional letter. If no search on a letter is wanted, enter an empty String as the letter parameter,
 	 * @param roadName The name of the road
-	 * @param number The number of the specific address
+	 * @param roadNumber The roadNumber of the specific address
 	 * @param letter An optional letter of the specific address - if no search on a letter is wanted, enter an empty String as the letter parameter,
 	 * @return All of the Edges that fits the search criterias.
 	 */
 
-	private static boolean isRoadNumberWithinLeftSideOfEdge(Edge edge, int number)
+	private static boolean isRoadNumberWithinLeftSideOfEdge(Edge edge, int roadNumber)
 	{ 
-		//Checks if the number is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
-		if(edge.getToLeftNumber() != 0 && (edge.getToLeftNumber() % 2) != (number % 2) || (edge.getFromLeftNumber() != 0 && (edge.getFromLeftNumber() % 2) != (number % 2)))
-			System.out.println("Number was not equal to this sides evenness");//return false;
-		System.out.println(edge.getFromLeftNumber() + "<= " + number + ", " + edge.getToLeftNumber() + ">=" +  number);
-		return (edge.getFromLeftNumber() <= number && edge.getToLeftNumber() >= number );
+		//If the search should not include road number
+		if(roadNumber == -1)
+			return true;
+		
+		//Checks if the roadNumber is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
+		if(edge.getToLeftNumber() != 0 && (edge.getToLeftNumber() % 2) != (roadNumber % 2) || (edge.getFromLeftNumber() != 0 && (edge.getFromLeftNumber() % 2) != (roadNumber % 2)))
+			System.out.println("roadNumber was not equal to this sides evenness");//return false;
+		System.out.println(edge.getFromLeftNumber() + "<= " + roadNumber + ", " + edge.getToLeftNumber() + ">=" +  roadNumber);
+		return (edge.getFromLeftNumber() <= roadNumber && edge.getToLeftNumber() >= roadNumber );
 	}
 
-	private static boolean isRoadNumberWithinRightSideOfEdge(Edge edge, int number)
+	private static boolean isRoadNumberWithinRightSideOfEdge(Edge edge, int roadNumber)
 	{	
-		//Checks if the number is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
-		if(edge.getToRightNumber() != 0 && (edge.getToRightNumber() % 2) != (number % 2) || (edge.getFromRightNumber() != 0 && (edge.getFromRightNumber() % 2) != (number % 2)))
-			System.out.println("Number was not equal to this sides evenness");//return false;
-		System.out.println(edge.getFromRightNumber() + "<= " + number + ", " + edge.getToRightNumber() + ">=" +  number);
-		return (edge.getFromRightNumber() <= number && edge.getToRightNumber() >= number );
+		//If the search should not include road number
+		if(roadNumber == -1)
+			return true;
+		
+		//Checks if the roadNumber is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
+		if(edge.getToRightNumber() != 0 && (edge.getToRightNumber() % 2) != (roadNumber % 2) || (edge.getFromRightNumber() != 0 && (edge.getFromRightNumber() % 2) != (roadNumber % 2)))
+			System.out.println("roadNumber was not equal to this sides evenness");//return false;
+		System.out.println(edge.getFromRightNumber() + "<= " + roadNumber + ", " + edge.getToRightNumber() + ">=" +  roadNumber);
+		return (edge.getFromRightNumber() <= roadNumber && edge.getToRightNumber() >= roadNumber );
 	}
 
 	private static boolean isRoadLetterWithinLeftSideOfEdge(Edge edge, String letter)
 	{
+		//If the search should not include letters
+		if(letter.isEmpty()) 
+			return true;
+		
 		System.out.println("Noget med road letter left side");
 		String fromLetter = edge.getFromLeftLetter();
 		String toLetter = edge.getToLeftLetter();
@@ -202,14 +220,18 @@ public class EdgeSearch  {
 		else
 		{
 			if(!fromLetter.isEmpty())
-				return (fromLetter.charAt(0) >= letterChar);
+				return (fromLetter.charAt(0) == letterChar);
 			else
-				return (toLetter.charAt(0) <= letterChar);
+				return (toLetter.charAt(0) == letterChar);
 		}
 	}
 
 	private static boolean isRoadLetterWithinRightSideOfEdge(Edge edge, String letter)
 	{
+		//If the search should not include letters
+		if(letter.isEmpty()) 
+			return true;
+		
 		System.out.println("Noget med road letter right side");
 		String fromLetter = edge.getFromRightLetter();
 		String toLetter = edge.getToRightLetter();
@@ -225,41 +247,47 @@ public class EdgeSearch  {
 		else
 		{
 			if(!fromLetter.isEmpty())
-				return (fromLetter.charAt(0) >= letterChar);
+				return (fromLetter.charAt(0) == letterChar);
 			else
-				return (toLetter.charAt(0) <= letterChar);
+				return (toLetter.charAt(0) == letterChar);
 		}
 	}
 
 
 	public static void main(String[] args) throws MalformedAdressException
 	{		
-		Edge[] foundEdges = searchForRoadSuggestions("Nørregade", 2, "");
+		Edge[] foundEdges = searchForRoadSuggestions("Nørregade", 2, "", -1, "");
 		System.out.println(foundEdges.length);
 
 		for(Edge edge : foundEdges)
 			System.out.println(edge);		
 
-		Edge[] foundEdges2 = searchForRoadSuggestions("Nørregade", -1, "");
+		Edge[] foundEdges2 = searchForRoadSuggestions("Nørregade", -1, "", -1, "");
 		System.out.println(foundEdges2.length);
 
 		for(Edge edge : foundEdges2)
 			System.out.println(edge);
 
-		Edge[] foundEdges3 = searchForRoadSuggestions("Stadionvej", 4, "A");
+		Edge[] foundEdges3 = searchForRoadSuggestions("Stadionvej", 4, "A", -1, "");
 		System.out.println(foundEdges3.length);
 
 		for(Edge edge : foundEdges3)
 			System.out.println(edge + " " + edge.getiD());
 
-		//FEJL HER I HVORDAN DEN SAMMENLIGNER BOGSTAVER - BURDE KUN FINDE NOGET, HVIS LETTEREN VAR A
-		Edge[] foundEdges4 = searchForRoadSuggestions("Næstvedvej", 24, "I");
+		Edge[] foundEdges4 = searchForRoadSuggestions("Næstvedvej", 24, "A", -1, "");
 		System.out.println(foundEdges4.length);
 
 		for(Edge edge : foundEdges4)
 			System.out.println(edge + " " + edge.getiD());
 
 		/*
+		Edge[] foundEdges5 = searchForRoadSuggestions("Næstvedvej", 24, "I", 4230);
+		System.out.println(foundEdges5.length);
+
+		for(Edge edge : foundEdges5)
+			System.out.println(edge + " " + edge.getiD());
+
+
 		HashSet<Integer> foundShittyPostalNumberSet = new HashSet<>();
 		int leftNumber = 0;
 		int rightNumber = 0;
@@ -267,7 +295,7 @@ public class EdgeSearch  {
 		{
 			leftNumber = edge.getPostalNumberLeft();
 			rightNumber = edge.getPostalNumberRight();
-					
+
 			try {
 				System.out.println(City.getCityNameByPostalNumber(leftNumber));
 			} catch (NullPointerException e) {
@@ -280,11 +308,11 @@ public class EdgeSearch  {
 				foundShittyPostalNumberSet.add(rightNumber);
 			}
 		}
-		
+
 		Iterator<Integer> iterator = foundShittyPostalNumberSet.iterator();
 		while (iterator.hasNext()) {
 			System.out.print(", " + iterator.next());			
 		}
-		*/
+		 */
 	}
 }
