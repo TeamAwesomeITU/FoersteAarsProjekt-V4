@@ -67,7 +67,6 @@ public class MainGui {
 		MainGui.getInstance();
 		long endTime = System.currentTimeMillis();
 		System.out.println("Total startup time is " + (endTime - startTime) + " milliseconds");
-
 	}
 
 	/**
