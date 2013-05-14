@@ -83,6 +83,7 @@ public class MapWindow {
 		MainGui.frame.pack();
 		MapPanelResize mcr = new MapPanelResize(this);
 		MainGui.frame.addComponentListener(mcr);
+		MainGui.changeScreenSize();
 	}
 
 	/**

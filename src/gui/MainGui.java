@@ -111,9 +111,17 @@ public class MainGui {
 	public static void makeFrameAndContentPane(){
 		frame = new JFrame("Team Awesome Maps");
 		frame.setUndecorated(MainGui.undecoratedBoolean);
-
-		changeScreenSize();
-		frame.setPreferredSize(ScreenSize.screenSize);
+		
+		int screenWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		int screenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		screenWidth = (int)(screenWidth*0.75);
+		screenHeight = (int)(screenHeight*0.75);
+		Dimension screenSize = new Dimension(screenWidth, screenHeight);
+		frame.setBounds(0, 0, screenWidth, screenHeight);
+		
+		frame.setLocationRelativeTo(null);
+		frame.setPreferredSize(screenSize);
+		
 
 		contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
