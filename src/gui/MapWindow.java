@@ -378,7 +378,7 @@ public class MapWindow {
 				for(String string : addressParser.getSearchResults(query))
 					listModel.addElement(string);
 				
-				mapPanel.setHighlightedEdges(addressParser.getFoundEdges());
+				mapPanel.setFromEdgesToHighlight(addressParser.getFoundEdges());
 			}
 			catch (MalformedAdressException e) {
 				// TODO Auto-generated catch block
