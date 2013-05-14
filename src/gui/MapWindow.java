@@ -55,7 +55,9 @@ public class MapWindow {
 	private MapPanel mapPanel;
 	private String VehicleType = "Bike", RouteType = "Fastest";
 	public static JWindow listWindow;
-	public static AddressParserJesperLeger addressParser = new AddressParserJesperLeger();
+	public static AddressParserJesperLeger addressParserFrom = new AddressParserJesperLeger();
+	public static AddressParserJesperLeger addressParserTo = new AddressParserJesperLeger();
+	
 	/**
 	 * The constructor makes the frame
 	 */
@@ -375,10 +377,10 @@ public class MapWindow {
 				}
 				*/
 			try {
-				for(String string : addressParser.getSearchResults(query))
+				for(String string : addressParserFrom.getSearchResults(query))
 					listModel.addElement(string);
 				
-				mapPanel.setFromEdgesToHighlight(addressParser.getFoundEdges());
+				mapPanel.setFromEdgesToHighlight(addressParserFrom.getFoundEdges());
 			}
 			catch (MalformedAdressException e) {
 				// TODO Auto-generated catch block
