@@ -3,6 +3,7 @@ package gui;
 import gui.customJComponents.*;
 import gui.settingsAndPopUp.*;
 
+import inputHandler.AddressParserJesperLeger;
 import inputHandler.exceptions.MalformedAdressException;
 
 import java.awt.BorderLayout;
@@ -54,6 +55,9 @@ public class MapWindow {
 	private MapPanel mapPanel;
 	private String VehicleType = "Bike", RouteType = "Fastest";
 	public static JWindow listWindow;
+	public static AddressParserJesperLeger addressParserFrom = new AddressParserJesperLeger();
+	public static AddressParserJesperLeger addressParserTo = new AddressParserJesperLeger();
+	
 	/**
 	 * The constructor makes the frame
 	 */
@@ -352,6 +356,7 @@ public class MapWindow {
 		 * Adds matching result for the list to show.
 		 */
 		public void makeMatchingResult(){
+			/*
 			HashSet<String> listSet = new HashSet<>();
 			Edge[] edgesList;
 			try {
@@ -370,8 +375,14 @@ public class MapWindow {
 				}
 
 				}
+				*/
+			try {
+				for(String string : addressParserFrom.getSearchResults(query))
+					listModel.addElement(string);
 				
-			} catch (MalformedAdressException e) {
+				mapPanel.setFromEdgesToHighlight(addressParserFrom.getFoundEdges());
+			}
+			catch (MalformedAdressException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

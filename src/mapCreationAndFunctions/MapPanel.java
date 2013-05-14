@@ -37,8 +37,8 @@ public class MapPanel extends JPanel {
 	private CoordinateConverter coordConverter;
 	private double mapHeight, mapWidth;
 	private Stack<Edge> pathTo;
-	private Edge[] highlightEdges;
-	private Color purple = new Color(204,0,102);
+	private Edge[] fromEdgesToHighlight, toEdgesToHighlight;
+	private Color fromColor = new Color(204,0,102), toColor = new Color(204,0,102);
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
@@ -151,11 +151,22 @@ public class MapPanel extends JPanel {
 			}
 		}
 
-		if(highlightEdges != null) {
-			for(int i = 0; i<highlightEdges.length; i++) 
+		if(fromEdgesToHighlight != null) {
+			for(int i = 0; i<fromEdgesToHighlight.length; i++) 
 			{
-				edgeToDraw = highlightEdges[i];
-				g2.setColor(purple);
+				edgeToDraw = fromEdgesToHighlight[i];
+				g2.setColor(fromColor);
+				line.setLine(edgeToDraw.getLine2DToDraw(coordConverter));
+				g2.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+				g2.draw(line); 
+			}
+		}
+		
+		if(toEdgesToHighlight != null) {
+			for(int i = 0; i<toEdgesToHighlight.length; i++) 
+			{
+				edgeToDraw = toEdgesToHighlight[i];
+				g2.setColor(toColor);
 				line.setLine(edgeToDraw.getLine2DToDraw(coordConverter));
 				g2.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 				g2.draw(line); 
@@ -226,6 +237,16 @@ public class MapPanel extends JPanel {
 	public void setPathTo(Stack<Edge> pathTo) {
 		this.pathTo = pathTo;
 	}
+	
+	public void setFromEdgesToHighlight(Edge[] edges)
+	{
+		fromEdgesToHighlight = edges;
+		this.repaintMap();
+	}
+	
+	public void setToEdgesToHighlight(Edge[] edges) {
+		this.toEdgesToHighlight = edges;
+	}
 
 
 	/**
@@ -240,6 +261,14 @@ public class MapPanel extends JPanel {
 	 */
 	public double getMapHeight() {
 		return mapHeight;
+	}
+	
+	public void setFromColor(Color fromColor) {
+		this.fromColor = fromColor;
+	}
+	
+	public void setToColor(Color toColor) {
+		this.toColor = toColor;
 	}
 
 	/**
