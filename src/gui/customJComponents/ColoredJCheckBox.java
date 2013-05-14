@@ -5,7 +5,7 @@ import gui.settingsAndPopUp.ColorTheme;
 
 import javax.swing.JCheckBox;
 /**
- * This is our own implementation of the JCheckBox.
+ * This is our own extension of the JCheckBox.
  * It allows us to easily change the look of all checkboxes.
  */
 @SuppressWarnings("serial")

@@ -3,7 +3,6 @@ package mapCreationAndFunctions.search;
 import inputHandler.exceptions.MalformedAdressException;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import mapCreationAndFunctions.data.City;

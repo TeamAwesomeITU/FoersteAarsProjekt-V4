@@ -14,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 
 /**
- * This is our own implementation of the JButton.
+ * This is our own extension of the JButton.
  * It allows us to easily change the look of all buttons.
  */
 @SuppressWarnings("serial")
@@ -52,14 +52,21 @@ public class ColoredJButton extends JButton {
 		setBorder(BorderFactory.createRaisedSoftBevelBorder());
 	}
 	
+	/**
+	 * When the field has focus it highligths the field.
+	 */
 	public void inFocusColor(){
 		UIManager.put("Button.highlight", Color.black);
 	}
-	
+	/**
+	 * When the field looses focus it returns to it original state.
+	 */
 	public void outOfFocusColor(){
 		UIManager.put("Button.highlight", Color.white);
 	}
-	
+	/**
+	 * colors the button depending on if it has focus or not.
+	 */
 	class HighlightFocusListener implements FocusListener{
 		
 		private ColoredJButton field;
@@ -78,6 +85,5 @@ public class ColoredJButton extends JButton {
 		public void focusLost(FocusEvent e) {
 			field.outOfFocusColor();
 		}
-		
 	}
 }

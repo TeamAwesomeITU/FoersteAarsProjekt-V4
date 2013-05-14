@@ -41,6 +41,9 @@ public class City {
 	private static boolean initilalized = createCities();
 	
 	
+	public static void main(String[] args) {
+		createCities();
+	}
 	/**
 	 * Creates a City with the input cityName and one of its postal numbers
 	 * @param cityName The name of the City
@@ -149,7 +152,8 @@ public class City {
 	 */
 	private static boolean createCities()
 	{
-		try {				
+		try {			
+			long s = System.currentTimeMillis();
 			File file = new File(cityFileName);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
@@ -184,7 +188,9 @@ public class City {
 				}				
 			}
 
-			reader.close();			
+			reader.close();		
+			long t = System.currentTimeMillis();
+			System.out.println("Creation of CitySomeThingJesper took " + (t-s));
 			return true;
 			
 		} catch (IOException e) {
