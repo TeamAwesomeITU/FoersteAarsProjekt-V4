@@ -6,18 +6,21 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Stack;
 
-import navigation.data.IndexMinPQ;
+import navigation.data.SWPriorityQueue;
 
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 
+/**
+ * DijsktraSP finds the best route between two points with certain parameters as weights for how a road is deemed the best.
+ */
 public class DijkstraSP
 {
 	private int[] edgeTo; //contains edgeIDs on the edge towards the node i on edgeTo[i].
 	private double[] distTo;
-	private IndexMinPQ<Double> pq;
+	private SWPriorityQueue<Double> pq;
 	private int s;
-	private String routeType = "Fastest";
+	private String routeType = "Fastest", meansOfTransportation;
 	private HashSet<Integer> setOfNonViableEdges;
 	private HashSet<String> setOfNonViableRoadTypes;
 	private EdgeWeightedDigraph graph;
@@ -26,6 +29,7 @@ public class DijkstraSP
 	public DijkstraSP(EdgeWeightedDigraph graph, int fromRoadName, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
 
+		this.meansOfTransportation = meansOfTransportation;
 		this.routeType = routeType;
 		if(setOfNonViableEdges == null) 
 			throw new NullPointerException("setOfNonViableEdges is empty");
@@ -37,7 +41,7 @@ public class DijkstraSP
 		{
 			edgeTo = new int[graph.nodes()];
 			distTo = new double[graph.nodes()];
-			pq = new IndexMinPQ<Double>(graph.nodes());
+			pq = new SWPriorityQueue<Double>(graph.nodes());
 
 			for (int n = 0; n < graph.nodes(); n++)
 				distTo[n] = Double.POSITIVE_INFINITY;
@@ -56,6 +60,10 @@ public class DijkstraSP
 		}
 	}
 
+	/**
+	 * This method makes sure that we do not add an edge to the graph that we cant go by. For instance one direction roads as a car.
+	 * @param n is the node id-1.
+	 */
 	private void prepareForRelax(int n) {
 		Edge currentEdge;
 		for(Integer e : graph.adj(n)) 
@@ -70,12 +78,18 @@ public class DijkstraSP
 		}
 	}
 
+	/**
+	 * Checks if the route that this edge is a part to the given end node is the fastest that has been found so far.
+	 * If so, this is saved.
+	 * @param n is the node id-1
+	 * @param currentEdge the edge currently looked at.
+	 */
 	private void relax(int n, Edge currentEdge) {
 		int w = -1;
 		w = currentEdge.getToNode()-1;
 		if(w == n)
 			w = currentEdge.getFromNode()-1;
-		if (routeType.trim().equals("Fastest")) 
+		if (routeType.trim().equals("Fastest") && meansOfTransportation.equals("Car")) 
 		{
 			if (distTo[w] > distTo[n] + currentEdge.getDriveTime()) 
 			{
@@ -85,7 +99,7 @@ public class DijkstraSP
 				else pq.insert(w, distTo[w]);
 			}
 		}
-		else if(routeType.trim().equals("Shortest"))
+		else
 		{
 			if (distTo[w] > distTo[n] + currentEdge.getLength()) 
 			{
@@ -97,6 +111,11 @@ public class DijkstraSP
 		}
 	}
 
+	/**
+	 * Checks if there's a route to the given end node. If there is, the egdes in the route is pushed to a stack.
+	 * @param toRoadName is the end node.
+	 * @returns the stack with the edges for the route or returns null.
+	 */
 	public Iterable<Edge> pathTo(int toRoadName) {
 		if(badInput == false) 
 		{
@@ -135,6 +154,11 @@ public class DijkstraSP
 		return null;
 	}
 
+	/**
+	 * Is used for limiting which road type a vehicle type can use, and also what kind of edges the vehicle type can use, for instance
+	 * cars can't use one way roads going in the opposite way that the car is going.
+	 * @param meansOfTransportation
+	 */
 	private void TransportType(String meansOfTransportation) {
 		switch (meansOfTransportation) {
 		case "Bike": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,21,22,23,3,31,32,33,41,42,43}));
@@ -150,14 +174,28 @@ public class DijkstraSP
 		}
 	}
 
+	/**
+	 * The distance to the node n from the source node.
+	 * @param n is the end node.
+	 * @returns the distance.
+	 */
 	public double distTo(int n) { 
 		return distTo[n]; 
 	}
 
+	/**
+	 * Checks if there is a route the node n.
+	 * @param n is the node.
+	 * @returns either true of false.
+	 */
 	private boolean hasPathTo(int n) { 
 		return distTo[n] < Double.POSITIVE_INFINITY; 
 	}
 
+	/**
+	 * Is used to trigger error messages if either start or end input is wrong.
+	 * @return true or false.
+	 */
 	public boolean isBadInput() {
 		return badInput;
 	}

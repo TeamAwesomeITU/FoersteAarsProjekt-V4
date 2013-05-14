@@ -32,6 +32,10 @@ public class EdgeWeightedDigraph {
 	public int edges() { 
 		return edges; 
 	}
+	
+	public Bag<Integer>[] getAdj() {
+		return adj;
+	}
 
 	/**
 	 * Adds edge references in the adjacency list at the index corresponding to the 

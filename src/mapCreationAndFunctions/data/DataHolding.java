@@ -183,4 +183,12 @@ public class DataHolding {
 	public static EdgeWeightedDigraph getGraph() {
 		return graph;
 	}
+	
+	public static int getNumberOfEdges() {
+		return numberOfEdges;
+	}
+	
+	public static int getNumberOfNodes() {
+		return numberOfNodes;
+	}
 }

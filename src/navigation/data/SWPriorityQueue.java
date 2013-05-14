@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 
-public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer> {
+public class SWPriorityQueue<Key extends Comparable<Key>> implements Iterable<Integer> {
     private int NMAX;        // maximum number of elements on PQ
     private int N;           // number of elements on PQ
     private int[] pq;        // binary heap using 1-based indexing
@@ -16,7 +16,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
      * @throws java.lang.IllegalArgumentException if NMAX < 0
      */
     @SuppressWarnings("unchecked")
-	public IndexMinPQ(int NMAX) {
+	public SWPriorityQueue(int NMAX) {
         if (NMAX < 0) throw new IllegalArgumentException();
         this.NMAX = NMAX;
         keys = (Key[]) new Comparable[NMAX + 1];    
@@ -26,13 +26,13 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
     }
 
    /**
-     * Is the priority queue empty?
+     * checks if the queue is empty.
      */
     public boolean isEmpty() { return N == 0; }
 
    /**
      * Is i an index on the priority queue?
-     * @throws java.lang.IndexOutOfBoundsException unless (0 &le; i < NMAX)
+     * @throws java.lang.IndexOutOfBoundsException if i is under 0 or over NMAX.
      */
     public boolean contains(int i) {
         if (i < 0 || i >= NMAX) throw new IndexOutOfBoundsException();
@@ -40,16 +40,16 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
     }
 
    /**
-     * Return the number of keys on the priority queue.
+     * Return the number of keys in the priority queue.
      */
     public int size() {
         return N;
     }
 
    /**
-     * Associate key with index i.
-     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; i < NMAX
-     * @throws java.util.IllegalArgumentException if there already is an item associated with index i.
+     * add value to index i.
+     * @throws java.lang.IndexOutOfBoundsException if i is under 0 or over NMAX.
+     * @throws java.util.IllegalArgumentException if there already is a value for index i.
      */
     public void insert(int i, Key key) {
         if (i < 0 || i >= NMAX) throw new IndexOutOfBoundsException();
@@ -62,8 +62,8 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
     }
 
    /**
-     * Delete a minimal key and return its associated index.
-     * @throws java.util.NoSuchElementException if priority queue is empty.
+     * Delete the minimal value and return its associated index.
+     * @throws java.util.NoSuchElementException if the priority queue is empty.
      */
     public int delMin() { 
         if (N == 0) throw new NoSuchElementException("Priority queue underflow");
@@ -77,9 +77,9 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
     }
 
    /**
-     * Return the key associated with index i.
-     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; i < NMAX
-     * @throws java.util.NoSuchElementException no key is associated with index i
+     * Return the value associated with index i.
+     * @throws java.lang.IndexOutOfBoundsException if i is under 0 or over NMAX.
+     * @throws java.util.NoSuchElementException no value is associated with index i
      */
     public Key keyOf(int i) {
         if (i < 0 || i >= NMAX) throw new IndexOutOfBoundsException();
@@ -88,9 +88,9 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
     }
 
    /**
-     * Change the key associated with index i to the specified value.
-     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; i < NMAX
-     * @throws java.util.NoSuchElementException no key is associated with index i
+     * Change the value associated with index i to the specified value.
+     * @throws java.lang.IndexOutOfBoundsException if i is under 0 or over NMAX.
+     * @throws java.util.NoSuchElementException no value is associated with index i
      */
     public void changeKey(int i, Key key) {
         if (i < 0 || i >= NMAX) throw new IndexOutOfBoundsException();
@@ -102,9 +102,9 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
 
 
    /**
-     * Delete the key associated with index i.
-     * @throws java.lang.IndexOutOfBoundsException unless 0 &le; i < NMAX
-     * @throws java.util.NoSuchElementException no key is associated with index i
+     * Delete the value associated with index i.
+     * @throws java.lang.IndexOutOfBoundsException if i is under 0 or over NMAX.
+     * @throws java.util.NoSuchElementException no value is associated with index i
      */
     public void delete(int i) {
         if (i < 0 || i >= NMAX) throw new IndexOutOfBoundsException();
@@ -166,12 +166,12 @@ public class IndexMinPQ<Key extends Comparable<Key>> implements Iterable<Integer
 
     private class HeapIterator implements Iterator<Integer> {
         // create a new pq
-        private IndexMinPQ<Key> copy;
+        private SWPriorityQueue<Key> copy;
 
         // add all elements to copy of heap
         // takes linear time since already in heap order so no keys move
         public HeapIterator() {
-            copy = new IndexMinPQ<Key>(pq.length - 1);
+            copy = new SWPriorityQueue<Key>(pq.length - 1);
             for (int i = 1; i <= N; i++)
                 copy.insert(pq[i], keys[pq[i]]);
         }
