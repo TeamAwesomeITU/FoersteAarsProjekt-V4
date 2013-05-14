@@ -16,7 +16,7 @@ import mapCreationAndFunctions.search.QuadTree;
 
 /**
  * This class makes the first window the user sees. It is
- * a simple search window.
+ * a simple loadingscreen window.
  */
 public class StartupWindow{
 
@@ -53,25 +53,6 @@ public class StartupWindow{
 		long t = System.currentTimeMillis();
 		System.out.println("Startup " + (t-s));
 		MainGui.menuBoolean = true;		
-		
-		/*
-        try {    
-    		System.out.println("Making static fields");
-    		loadingBar.setString("Making static fields");
-    		Thread t1 = new Thread(new QuadTree.QuadTreeCreation(), "Thread1");
-    		Thread t2 = new Thread(new DataHolding.EdgeMapCreation(),"Thread2");
-    		Thread t3 = new Thread(new DataHolding.NodeMapCreation(),"Thread3");
-
-            t1.start();
-            t2.start();
-			t3.start();		
-			t3.join();
-			
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		*/
-		
 		
 		new MapWindow();
 	}

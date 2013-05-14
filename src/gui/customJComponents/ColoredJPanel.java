@@ -5,7 +5,7 @@ import gui.settingsAndPopUp.ColorTheme;
 import javax.swing.JPanel;
 
 /**
- * Our implementation of our JPanel
+ * Our own extension of our JPanel
  */
 @SuppressWarnings("serial")
 public class ColoredJPanel extends JPanel {

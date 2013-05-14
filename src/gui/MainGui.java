@@ -18,17 +18,13 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComboBox;
@@ -39,8 +35,6 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 /**
  * This is our main gui class. It holds methods that is common for all
@@ -49,27 +43,20 @@ import javax.swing.event.MenuListener;
 public class MainGui {
 
 	private static MainGui instance;
-
+	//Fields to hold the settings
 	public static boolean coastlinesWanted = false;
-
 	public static boolean undecoratedBoolean = false;
-
 	public static boolean coordinatesBoolean = false;
-
 	public static boolean menuBoolean = false;
-
 	public static boolean isDefaultCursor;
-
 	public static boolean dragonBoolean = false;
-
 	public static boolean colorFollowTheme = false;
 
 	public static String locationString, coordinatesString;
-
 	public static JFrame frame;
-
 	public static Container contentPane;
 	/**
+	 * Reads the settings file, sets the theme, sets the screensize. Then starts the program.
 	 * @param args
 	 */
 	public static void main(String[] args) {
@@ -96,7 +83,9 @@ public class MainGui {
 		}
 	}
 	/**
-	 * the constructor for the main gui. It makes the frame and adds the footer.
+	 * The constructor for the main gui. First it detects whether or not the comuter is a mac.
+	 * If it is a mac it sets the look and feel to crossplatform. 
+	 * Starts the program with the loading screen.
 	 */
 	private MainGui(){
 		setMacLookAndFeel();
@@ -107,6 +96,8 @@ public class MainGui {
 
 	/**
 	 * The frame is made and the contentpane is initialized
+	 * The screensize is set to medium by the start, then later changed 
+	 * according to the settings, when the map is shown.
 	 */
 	public static void makeFrameAndContentPane(){
 		frame = new JFrame("Team Awesome Maps");
@@ -130,29 +121,32 @@ public class MainGui {
 
 	/**
 	 * Makes the menu and adds shortcuts to it. This is the standard menu for all future windows.
-	 * It contains alot of anonymous inner classes. These are used mostly by the settings menu, 
-	 * which can alter much of the appearance of the gui.
+	 * It contains a lot of anonymous inner classes in the form of actionlisteners.
+	 *  These are used mostly by the settings menu, which can alter much of the appearance of the gui.
 	 */
 	public static void makeMenu(){
 		final int SHORT_CUT_MASK = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
+		//Makes the menubar	
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		menuBar.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
 		menuBar.setBorder(BorderFactory.createEmptyBorder());
-
+		//Adds the two menuitems to the menubar
 		ColoredJMenu fileMenu = new ColoredJMenu("File");
 		ColoredJMenuItem quitItem = new ColoredJMenuItem("Quit");
 		quitItem.addActionListener(new ActionListener(){
+			//Closes the system.
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
 			}
 		});
 		quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, SHORT_CUT_MASK));
 
+		//Creates the settingsitem. This is a fram for it selv which contains actionlisteners for all its content.
 		ColoredJMenuItem settingsItem = new ColoredJMenuItem("Settings");
 		settingsItem.setEnabled(menuBoolean);
 		settingsItem.addActionListener(new ActionListener() {
+			//first reads the settingsfile, then makes the checkboxes and comboboxes.
 			public void actionPerformed(ActionEvent e) {
 				readSettingsFile();				
 				final JFrame settingsFrame = new JFrame("Settings");
@@ -278,7 +272,7 @@ public class MainGui {
 						}
 					}
 				});				
-
+				//Because we read the settingsfile at the start, if the apply button isn't clicked the settings won't update.
 				ColoredJButton applyButton = new ColoredJButton("Apply");
 				applyButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e) {
@@ -333,14 +327,15 @@ public class MainGui {
 		controlsItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				JOptionPane.showMessageDialog(frame, "Zooming: Use the scrollwheel or SHIFT + Left Mouse Button to use a rectangle zoomer. To go a zoomlevel out use Right Mouse button.\n"
-						+ "Panning: Use the arrows buttons or W, S, A or D or drag the map with Left Mouse Button");
+						+ "This brings up the popup menu. It allows you to zoomin, zoomout, copy coordinates to the clipboard, and copy addresses to the search fields.\n" + "" +
+								"Panning:Drag the map with Left Mouse Button");
 			}
 		});
 		ColoredJMenuItem aboutItem = new ColoredJMenuItem("About");
 		aboutItem.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(frame, "Welcome to T-A-M maps. Please enter an address" +
-						" to get on your way.");		
+				JOptionPane.showMessageDialog(frame, "Welcome to T-A-M maps. This program is made by\n" +
+						"Kasper Henningsen\nJesper Nysteen\nFrederik Hoffmann\nMark Klitgaard\nTobias Kristiansen");		
 			}
 		});
 
@@ -348,7 +343,7 @@ public class MainGui {
 		helpMenu.add(aboutItem);
 		helpMenu.add(controlsItem);
 
-
+		//These trhee menu items are only visible if the frame is undecorated.
 		ColoredJMenu exitMenu = new ColoredJMenu("X");
 		exitMenu.setForeground(Color.red);
 		exitMenu.setVisible(undecoratedBoolean);
@@ -397,7 +392,7 @@ public class MainGui {
 	public static ColoredJPanel makeFooter(){
 		ColoredJPanel footer = new ColoredJPanel();
 		footer.setBackground(ColorTheme.BUTTON_CLICKED_COLOR);
-		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4.1 - dey tuk our djerps!");
+		JLabel footerText = new JLabel("Team-Awesome-Maps ver 1.4.1");
 		footer.add(footerText);
 		return footer;
 	}
@@ -413,7 +408,7 @@ public class MainGui {
 	}
 
 	/**
-	 * reads the config file to start the program with the last settings.
+	 * Reads the config file to start the program with the last settings.
 	 * 	 */
 	public static void readSettingsFile(){
 		try {

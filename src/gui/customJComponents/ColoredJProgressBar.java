@@ -9,14 +9,21 @@ import javax.swing.BorderFactory;
 import javax.swing.JProgressBar;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
+/**
+ * Our own extension of the JProgressBar
+ */
 @SuppressWarnings("serial")
 public class ColoredJProgressBar extends JProgressBar {
-
+	/**
+	 * Calls the super constructor and styles the progressbar
+	 */
 	public ColoredJProgressBar(){
 		super();
 		stylize();
 	}
-	
+	/**
+	 * Styles the progressbar in our own way.
+	 */
 	private void stylize(){
 		setIndeterminate(true);
 		setBackground(ColorTheme.BACKGROUND_COLOR);

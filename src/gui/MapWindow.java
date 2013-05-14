@@ -18,7 +18,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
-import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -27,8 +26,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
+
 import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.ToolTipManager;
@@ -36,17 +34,12 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
 
-import navigation.DijkstraSP;
-
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
 import mapCreationAndFunctions.MapPanel;
 import mapCreationAndFunctions.MapPanelResize;
-import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.CoordinateConverter;
-import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.search.CitySearch;
 import mapCreationAndFunctions.search.EdgeSearch;
 /**
  * This class holds the window with the map of denmark.
@@ -62,7 +55,7 @@ public class MapWindow {
 	private String VehicleType = "Bike", RouteType = "Fastest";
 	public static JWindow listWindow;
 	/**
-	 * A constructor for making the window with an empty search query
+	 * The constructor makes the frame
 	 */
 	public MapWindow(){
 		createMapScreen();
@@ -111,13 +104,13 @@ public class MapWindow {
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
 		fromSearchQuery = new CustomJTextField();
-		fromSearchQuery.addKeyListener(new EnterKeyListener());
+		fromSearchQuery.addKeyListener(new ListListener());
 		fromSearchQuery.setPreferredSize(new Dimension(200, 20));
 
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(ColorTheme.TEXT_COLOR);
 		toSearchQuery = new CustomJTextField();
-		toSearchQuery.addKeyListener(new EnterKeyListener());
+		toSearchQuery.addKeyListener(new ListListener());
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
@@ -288,10 +281,11 @@ public class MapWindow {
 	//---------------------------------Listeners from here-----------------------------//
 
 	/**
+	 * Brings up a suggestion list when the user types.
 	 * If the user is in the search text field, then by pressing enter
 	 * is the same as clicking the find route button
 	 */
-	class EnterKeyListener implements KeyListener{
+	class ListListener implements KeyListener{
 
 		String query;
 
@@ -304,7 +298,7 @@ public class MapWindow {
 				listModel.removeAllElements();
 			}
 		}
-
+		@Override
 		public void keyReleased(KeyEvent e) {
 			JTextField textField = (JTextField)e.getSource();
 			String search = (String) textField.getText().trim();
@@ -348,13 +342,15 @@ public class MapWindow {
 			if(e.getKeyCode() == 8 && listWindow != null)
 				listWindow.dispose();
 		}
-
+		@Override
 		public void keyTyped(KeyEvent e) {
 			if(!checkKeyEvent(e)){
 				makeMatchingResult();
 			}
 		}
-
+		/**
+		 * Adds matching result for the list to show.
+		 */
 		public void makeMatchingResult(){
 			HashSet<String> listSet = new HashSet<>();
 			Edge[] edgesList;
@@ -388,7 +384,11 @@ public class MapWindow {
 			}*/
 
 		}
-
+		/**
+		 * Checks if the entered key is a valid one.
+		 * @param e the key entered
+		 * @return a boolean whichs determines whether or not to update the list.
+		 */
 		private boolean checkKeyEvent(KeyEvent e){
 			boolean check = true;
 
@@ -424,7 +424,7 @@ public class MapWindow {
 	}
 
 	/**
-	 * Not yet implemented!
+	 * Changes the route type in the routing. 
 	 */
 	class RouteTypeActionListener implements ActionListener{
 
@@ -442,7 +442,7 @@ public class MapWindow {
 	}
 
 	/**
-	 * Not yet implemented!
+	 * Changes the vehicle type for the routing
 	 */
 	class VehicleTypeActionListener implements ActionListener{
 
@@ -468,24 +468,37 @@ public class MapWindow {
 		private MapPanel mapPanel;
 		private AreaToDraw mapAreaToDraw;
 		private CoordinateConverter coordConverter;
-
+		/**
+		 * Makes the listener and initializes the fields
+		 * @param mapPanel the panel for which to display the coordinates.
+		 */
 		public CoordinatesMouseMotionListener(MapPanel mapPanel){
 			this.mapPanel = mapPanel;
 			makeCoordinatesConverter();
 		}
-
+		/**
+		 * calculate the correct x-coordinate
+		 * @param e the mouse position on the map
+		 * @return the x-coordinate
+		 */
 		public double getXCoord(MouseEvent e){
 			makeCoordinatesConverter();
 			double xCord = coordConverter.pixelToUTMCoordX(e.getX());				
 			return xCord;
 		}
-
+		/**
+		 * calculate the correct y-coordinate
+		 * @param e the mouse position on the map
+		 * @return the y-coordinate
+		 */
 		public double getYCoord(MouseEvent e){
 			makeCoordinatesConverter();
 			double yCord = coordConverter.pixelToUTMCoordY(e.getY());			
 			return yCord;
 		}
-
+		/**
+		 * A converter to convert the mouse coordinates to the coordinates of the map.
+		 */
 		public void makeCoordinatesConverter(){
 			mapAreaToDraw = mapPanel.getArea();
 			coordConverter = new CoordinateConverter((int)Math.round(getWidthForMap()), (int)Math.round(getHeightForMap()), mapAreaToDraw);
@@ -513,7 +526,9 @@ public class MapWindow {
 			else 
 				mapPanel.setToolTipText(roadName);
 		}
-
+		/**
+		 * Saves the coordinates for the mouse when pressed. Is used to copy them to the clipboard.
+		 */
 		public void mousePressed(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON3){
 				if(MainGui.coordinatesBoolean){
@@ -547,7 +562,7 @@ public class MapWindow {
 		}
 	}
 	/**
-	 * This listeren isn't done yet.
+	 * Calls the findRoute() method.
 	 */
 	class FindRouteActionListener implements ActionListener{
 
