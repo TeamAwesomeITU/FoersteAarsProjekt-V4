@@ -73,12 +73,17 @@ public class AddressParserJesperLeger {
 	}
 
 	public Edge[] getFoundEdges()
-	{ return lastSuggestedRoadsByNames; }
+	{
+		if(numberOfCurrentSuggestedRoads > 0)
+			return lastSuggestedRoadsByNames;
+		else
+			return new Edge[0];
+	}
 
 	public City[] getFoundCities()
 	{
 		//Only return cities, if cities is the only thing that is found!
-		if(lastSuggestedRoadsByNames.length == 0 && lastSuggestedCitiesByNames.length > 0)
+		if(lastSuggestedRoadsByNames.length == 0 && numberOfCurrentSuggestedCities > 0)
 			return lastSuggestedCitiesByNames;
 		else 
 			return new City[0];		
@@ -211,22 +216,6 @@ public class AddressParserJesperLeger {
 
 
 		suggestionsArray = suggestionsList.toArray(new String[suggestionsList.size()]);
-	}
-
-	private void setRoadSuggestions() throws MalformedAdressException
-	{
-		Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(foundRoadName, foundRoadNumber, foundRoadLetter, foundCityPostalNumber, foundCityName);
-
-		//If results are found with this input
-		if(possibleEdges.length > 0)
-		{
-			lastSuggestedRoadsByNames = possibleEdges;
-		}
-
-		//If no results are found, use the last suggested results and lock the next String, if the String was not empty
-		else {
-
-		}
 	}
 
 	private void setRoadNameSuggestions() throws MalformedAdressException
