@@ -226,6 +226,12 @@ public class MapPanel extends JPanel {
 	public void setPathTo(Stack<Edge> pathTo) {
 		this.pathTo = pathTo;
 	}
+	
+	public void setHighlightedEdges(Edge[] edges)
+	{
+		highlightEdges = edges;
+		this.repaintMap();
+	}
 
 
 	/**
