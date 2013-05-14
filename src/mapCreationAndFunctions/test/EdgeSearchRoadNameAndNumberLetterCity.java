@@ -8,6 +8,7 @@ import mapCreationAndFunctions.search.EdgeSearch;
 
 import org.junit.Test;
 
+//TODO Lav egentlig test med bynavne og postnumre!!!
 public class EdgeSearchRoadNameAndNumberLetterCity {
 	
 	public void testRoadNameNumberCity(String edgeToFind, int roadNumber, String letter, int expectedFinds, int postalNumber, String cityName)
@@ -66,6 +67,7 @@ public class EdgeSearchRoadNameAndNumberLetterCity {
 		//A letter in between the two biggest and smallest letters in the interval
 		String letter = "D";
 		int postalNumber = -1;
+		String cityName = "";
 		
 		//roadNumber found by manual search in notepad++
 		int expectedFinds = 1;
@@ -81,6 +83,7 @@ public class EdgeSearchRoadNameAndNumberLetterCity {
 		//The actual letter in the interval
 		String letter = "B";
 		int postalNumber = -1;
+		String cityName = "";
 		
 		//roadNumber found by manual search in notepad++
 		int expectedFinds = 1;
@@ -96,6 +99,7 @@ public class EdgeSearchRoadNameAndNumberLetterCity {
 		//The actual letter in the interval
 		String letter = "B";
 		int postalNumber = -1;
+		String cityName = "";
 		
 		//roadNumber found by manual search in notepad++
 		int expectedFinds = 1;

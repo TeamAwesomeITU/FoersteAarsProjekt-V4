@@ -83,6 +83,7 @@ public class MapWindow {
 		MainGui.frame.pack();
 		MapPanelResize mcr = new MapPanelResize(this);
 		MainGui.frame.addComponentListener(mcr);
+		MainGui.changeScreenSize();
 	}
 
 	/**
@@ -358,7 +359,7 @@ public class MapWindow {
 			HashSet<String> listSet = new HashSet<>();
 			Edge[] edgesList;
 			try {
-				edgesList = EdgeSearch.searchForRoadSuggestions(query, -1, "");
+				edgesList = EdgeSearch.searchForRoadSuggestions(query, -1, "", -1, "");
 				for(Edge edge : edgesList){
 					String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
 					listSet.add(hit);
