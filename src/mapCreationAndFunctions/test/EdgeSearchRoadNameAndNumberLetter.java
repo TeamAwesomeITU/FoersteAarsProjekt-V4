@@ -10,11 +10,11 @@ import org.junit.Test;
 
 public class EdgeSearchRoadNameAndNumberLetter {
 	
-	public void testRoadNameAndNumber(String edgeToFind, int number, String letter, int expectedFinds)
+	public void testRoadNameAndNumber(String edgeToFind, int roadNumber, String letter, int expectedFinds, int postalNumber)
 	{		
 		Edge[] edgesFound;
 		try {
-			edgesFound = EdgeSearch.searchForRoadSuggestions(edgeToFind, number, letter);
+			edgesFound = EdgeSearch.searchForRoadSuggestions(edgeToFind, roadNumber, letter, postalNumber, "");
 
 			assertEquals(expectedFinds, edgesFound.length);
 			
@@ -33,65 +33,70 @@ public class EdgeSearchRoadNameAndNumberLetter {
 	public void testRoadnameOnlyOneOccurenceNoLetter()
 	{
 		String edgeToFind = "Vandelvej";
-		int number = 10;
+		int roadNumber = 10;
 		String letter = "";
+		int postalNumber = -1;
 		
-		//Number found by manual search in notepad++
+		//roadNumber found by manual search in notepad++
 		int expectedFinds = 1;
-		testRoadNameAndNumber(edgeToFind, number, letter, expectedFinds);
+		testRoadNameAndNumber(edgeToFind, roadNumber, letter, expectedFinds, postalNumber);
 	}
 	
 	@Test
 	public void testRoadnameOnlyOneLetterInToFromInterval()
 	{
 		String edgeToFind = "Gammel Køgegård";
-		int number = 3;
+		int roadNumber = 3;
 		String letter = "A";
+		int postalNumber = -1;
 		
-		//Number found by manual search in notepad++
+		//roadNumber found by manual search in notepad++
 		int expectedFinds = 1;
-		testRoadNameAndNumber(edgeToFind, number, letter, expectedFinds);
+		testRoadNameAndNumber(edgeToFind, roadNumber, letter, expectedFinds, postalNumber);
 	}
 	
 	@Test
 	public void testRoadnameTwoDifferentLettersInToFromInterval()
 	{
 		String edgeToFind = "Stadionvej";
-		int number = 10;
+		int roadNumber = 10;
 		
 		//A letter in between the two biggest and smallest letters in the interval
 		String letter = "D";
+		int postalNumber = -1;
 		
-		//Number found by manual search in notepad++
+		//roadNumber found by manual search in notepad++
 		int expectedFinds = 1;
-		testRoadNameAndNumber(edgeToFind, number, letter, expectedFinds);
+		testRoadNameAndNumber(edgeToFind, roadNumber, letter, expectedFinds, postalNumber);
 	}
 
 	@Test
 	public void testRoadnameTwoSameLettersInToFromInterval()
 	{
 		String edgeToFind = "Stadionvej";
-		int number = 56;
+		int roadNumber = 56;
 		
 		//The actual letter in the interval
 		String letter = "B";
+		int postalNumber = -1;
 		
-		//Number found by manual search in notepad++
+		//roadNumber found by manual search in notepad++
 		int expectedFinds = 1;
-		testRoadNameAndNumber(edgeToFind, number, letter, expectedFinds);
+		testRoadNameAndNumber(edgeToFind, roadNumber, letter, expectedFinds, postalNumber);
 	}
 	
 	@Test
 	public void testRoadnameTwoSameNumbersInToFromInterval()
 	{
 		String edgeToFind = "Stadionvej";
-		int number = 2;
+		int roadNumber = 2;
 		
 		//The actual letter in the interval
 		String letter = "B";
+		int postalNumber = -1;
 		
-		//Number found by manual search in notepad++
+		//roadNumber found by manual search in notepad++
 		int expectedFinds = 1;
-		testRoadNameAndNumber(edgeToFind, number, letter, expectedFinds);
+		testRoadNameAndNumber(edgeToFind, roadNumber, letter, expectedFinds, postalNumber);
 	}
 }

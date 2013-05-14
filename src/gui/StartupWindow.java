@@ -1,7 +1,7 @@
 package gui;
 
 
-import gui.customJUnits.*;
+import gui.customJComponents.*;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;

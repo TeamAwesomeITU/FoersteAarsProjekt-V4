@@ -1,6 +1,6 @@
 package gui;
 
-import gui.customJUnits.*;
+import gui.customJComponents.*;
 import gui.settingsAndPopUp.*;
 
 import inputHandler.exceptions.MalformedAdressException;
@@ -54,7 +54,7 @@ import mapCreationAndFunctions.search.EdgeSearch;
 public class MapWindow {
 
 	public static JTextField toSearchQuery, fromSearchQuery;
-	public static JList<String> searchList;
+	public static SearchList<String> searchList;
 	public static DefaultListModel<String> listModel;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
@@ -83,6 +83,7 @@ public class MapWindow {
 		MainGui.frame.pack();
 		MapPanelResize mcr = new MapPanelResize(this);
 		MainGui.frame.addComponentListener(mcr);
+		MainGui.changeScreenSize();
 	}
 
 	/**
@@ -358,7 +359,7 @@ public class MapWindow {
 			HashSet<String> listSet = new HashSet<>();
 			Edge[] edgesList;
 			try {
-				edgesList = EdgeSearch.searchForRoadSuggestions(query, -1, "");
+				edgesList = EdgeSearch.searchForRoadSuggestions(query, -1, "", -1, "");
 				for(Edge edge : edgesList){
 					String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
 					listSet.add(hit);

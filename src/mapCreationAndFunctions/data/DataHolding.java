@@ -150,35 +150,27 @@ public class DataHolding {
 	 * Gets a HashMap of all of the entire map's Nodes - the Node ID is the key, the value is the Node
 	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are x-/y- coordinates
 	 */
-	public static Node[] getNodeArray()
-	{
-		return nodeArray;
-	}
+	public static Node[] getNodeArray(){return nodeArray;}
 
 	/**
 	 * Gets a HashSet of all of the entire map's Edges
 	 * @return A HashSet of all of the maps Edges 
 	 */
-	public static Edge[] getEdgeArray()
-	{
-		return allEdgesByIDArray;
-	}
+	public static Edge[] getEdgeArray(){return allEdgesByIDArray;}
 
 	/**
 	 * 
 	 * @param nodeID The ID of the Node
 	 * @return The Node with the input ID
 	 */
-	public static Node getNode(int nodeID)
-	{ return nodeArray[nodeID-1]; }
+	public static Node getNode(int nodeID){ return nodeArray[nodeID-1]; }
 
 	/**
 	 * 
 	 * @param edgeID The ID of the Edge
 	 * @return The Edge with the input ID
 	 */
-	public static Edge getEdge(int edgeID)
-	{ return allEdgesByIDArray[edgeID-1]; }
+	public static Edge getEdge(int edgeID){ return allEdgesByIDArray[edgeID-1]; }
 	
 	public static EdgeWeightedDigraph getGraph() {
 		return graph;

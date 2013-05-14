@@ -1,6 +1,6 @@
 package gui;
 
-import gui.customJUnits.*;
+import gui.customJComponents.*;
 import gui.settingsAndPopUp.*;
 
 import java.awt.BorderLayout;
@@ -19,13 +19,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComboBox;
@@ -108,13 +111,22 @@ public class MainGui {
 	public static void makeFrameAndContentPane(){
 		frame = new JFrame("Team Awesome Maps");
 		frame.setUndecorated(MainGui.undecoratedBoolean);
-
-		changeScreenSize();
-		frame.setPreferredSize(ScreenSize.screenSize);
+		
+		int screenWidth = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		int screenHeight = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		screenWidth = (int)(screenWidth*0.75);
+		screenHeight = (int)(screenHeight*0.75);
+		Dimension screenSize = new Dimension(screenWidth, screenHeight);
+		frame.setBounds(0, 0, screenWidth, screenHeight);
+		
+		frame.setLocationRelativeTo(null);
+		frame.setPreferredSize(screenSize);
+		
 
 		contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
 	}
+	
 
 	/**
 	 * Makes the menu and adds shortcuts to it. This is the standard menu for all future windows.
