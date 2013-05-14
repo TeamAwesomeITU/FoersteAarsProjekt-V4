@@ -323,7 +323,15 @@ public class EdgeSearch  {
 		}
 		 */
 
+		/*
 		Edge[] foundEdges5 = searchForRoadSuggestions("Stadionvej", 2, "b 6", -1, "");
+		System.out.println(foundEdges5.length);
+
+		for(Edge edge : foundEdges5)
+			System.out.println(edge + " " + edge.getiD());
+			*/
+		
+		Edge[] foundEdges5 = searchForRoadSuggestions("", -1, "", 4600, "");
 		System.out.println(foundEdges5.length);
 
 		for(Edge edge : foundEdges5)

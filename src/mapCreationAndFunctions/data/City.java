@@ -31,6 +31,9 @@ public class City {
 
 	//A HashSet of all the postal numbers which belong to the city
 	private HashSet<Integer> postalNumbers = new HashSet<Integer>();
+	
+	//A HashSet of all Edge's ID's that lies within this city
+	private HashSet<Integer> cityRoadsList = new HashSet<Integer>();
 
 	//The ID of the City
 	private int cityID;
@@ -41,51 +44,10 @@ public class City {
 	//TODO Fucking bad programming - this boolean only exists to ensure the creation of the other fields - FIX!
 	private static boolean initilalized = createCities();
 	
-	//A HashSet of all the postal numbers, that exists in our data file, but not in our postal number file
-	private static HashSet<Integer> nonExistingNumbers = createNonExistingNumbersSet();
-
-	public static void main(String[] args) {
-		createCities();
-		
-		System.out.println(getCityByPostalNumber(2200).getCityName());
-		System.out.println(getCityByPostalNumber(6).getCityName());
-	}
+	//An array of all the postal numbers, that exists in our data file, but not in our postal number file
+	private static int[] nonExistingNumbers = new int[]{0, 1405, 8103, 1097, 6,
+		1099, 1262, 5563, 1399, 676, 1639, 8117, 9392, 1778, 8685, 1748, 1783, 8454, 8125, 1109, 8458, 8126, 8373, 8797};
 	
-	private static HashSet<Integer> createNonExistingNumbersSet()
-	{
-		System.out.println(initilalized);
-		HashSet<Integer> fuckedUpPostalNumbers = new HashSet<>();
-
-		int postalNumber = 0;
-		for(Edge edge : DataHolding.getEdgeArray())
-		{
-			try {
-				postalNumber = edge.getPostalNumberLeft();
-				City city = cityHashMap.get(postalNumber);
-				city.getCityID();
-			}
-
-			catch (NullPointerException e) {
-				fuckedUpPostalNumbers.add(postalNumber);
-			}
-
-			try {
-				postalNumber = edge.getPostalNumberRight();
-				City city = cityHashMap.get(postalNumber);
-				city.getCityID();
-			}
-
-			catch (NullPointerException e) {
-				fuckedUpPostalNumbers.add(postalNumber);
-			}
-		}
-		
-		Iterator<Integer> iterator = fuckedUpPostalNumbers.iterator();
-		while(iterator.hasNext())
-			System.out.println(iterator.next().toString());
-
-		return fuckedUpPostalNumbers;
-	}
 	/**
 	 * Creates a City with the input cityName and one of its postal numbers
 	 * @param cityName The name of the City
@@ -139,6 +101,15 @@ public class City {
 	 */
 	private void addPostalNumberToCity(Integer postalNumberToAdd)
 	{ postalNumbers.add(postalNumberToAdd); }
+	
+	private void addRoadToCity(int edgeID)
+	{ cityRoadsList.add(edgeID); }
+	
+	public static void addRoadToRelevantCity(int postalNumber, int edgeID)
+	{
+		if(postalNumberExists(postalNumber))
+			getCityByPostalNumber(postalNumber).addRoadToCity(edgeID);
+	}
 
 	/**
 	 * Finds the City with the given postal number
@@ -147,10 +118,18 @@ public class City {
 	 */
 	public static City getCityByPostalNumber(int postalNumber)
 	{
-		if(nonExistingNumbers.contains(postalNumber))
+		if(!postalNumberExists(postalNumber))
 			return null;
 		else
 			return cityHashMap.get(postalNumber);
+	}
+	
+	private static boolean postalNumberExists(int postalNumber)
+	{
+		for(int number : nonExistingNumbers)
+			if(postalNumber == number)
+				return false;
+		return true;
 	}
 	
 	/**
@@ -249,4 +228,13 @@ public class City {
 	public String toString() {
 		return this.cityName;
 	}	
+
+	public static void main(String[] args) {
+		createCities();
+		
+		for(int number : nonExistingNumbers)
+			System.out.println(number);
+			
+		
+	}
 }

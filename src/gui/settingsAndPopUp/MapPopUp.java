@@ -73,7 +73,7 @@ public class MapPopUp extends JPopupMenu {
      */
     class CopyToActionListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			MapWindow.toSearchQuery.setText(MainGui.locationString);
+			MapWindow.toRoadName.setText(MainGui.locationString);
 		}
     	
     }
@@ -83,7 +83,7 @@ public class MapPopUp extends JPopupMenu {
      */
     class CopyFromActionListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-			MapWindow.fromSearchQuery.setText(MainGui.locationString);
+			MapWindow.fromRoadName.setText(MainGui.locationString);
 		}
     	
     }

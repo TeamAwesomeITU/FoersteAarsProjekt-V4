@@ -36,8 +36,8 @@ public class Zoidberg {
 			public void keyPressed(KeyEvent arg0) {
 				if(arg0.getKeyCode() == 10){
 					zoidbergFrame.dispose();
-					MapWindow.toSearchQuery.setText("");
-					MapWindow.fromSearchQuery.setText("");							
+					MapWindow.toRoadName.setText("");
+					MapWindow.fromRoadName.setText("");							
 				}
 			}
 			public void keyTyped(KeyEvent arg0) {}	public void keyReleased(KeyEvent arg0) {}
@@ -45,8 +45,8 @@ public class Zoidberg {
 		okayButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				zoidbergFrame.dispose();
-				MapWindow.toSearchQuery.setText("");
-				MapWindow.fromSearchQuery.setText("");
+				MapWindow.toRoadName.setText("");
+				MapWindow.fromRoadName.setText("");
 			}
 		});
 		okayButton.setBorder(BorderFactory.createEmptyBorder());
