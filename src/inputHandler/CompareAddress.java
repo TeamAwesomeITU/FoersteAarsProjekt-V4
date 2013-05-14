@@ -5,8 +5,6 @@ import inputHandler.exceptions.MalformedAdressException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import java_cup.internal_error;
-
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 

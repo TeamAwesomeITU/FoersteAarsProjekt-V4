@@ -9,13 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-import com.ximpleware.AutoPilot;
-import com.ximpleware.NavException;
-import com.ximpleware.VTDGen;
-import com.ximpleware.VTDNav;
-import com.ximpleware.XPathEvalException;
-import com.ximpleware.XPathParseException;
-
 public class nodeTxt {
 
 	/**
@@ -27,57 +20,6 @@ public class nodeTxt {
 	
 	public nodeTxt() {
 		makeEdgeTxtFromTXT();
-	}
-	public void reader() {
-		try {
-			File file = new File("XML/kdv_node_unload.txt");
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-
-			reader.readLine();
-			String line;
-			
-			BufferedWriter out = new BufferedWriter(new FileWriter("JespersMorErGrim.txt"));
-			VTDGen vgEdge = new VTDGen();
-			if(vgEdge.parseFile("XML/kdv_unload_Graph.xml", false)) {
-
-				VTDNav vnEdge = vgEdge.getNav();
-				AutoPilot apEdge = new AutoPilot(vnEdge);
-				apEdge.selectXPath("//RSC/RS");
-
-				String temp = "";
-				String id = "";
-				int FNODE = 0; int TNODE = 0; 
-				while((line = reader.readLine()) != null)
-				{
-					String[] lineParts = line.split("\\,");
-					Integer KDV = Integer.parseInt(lineParts[2]);
-					temp = "";
-					id = "";
-					while((apEdge.evalXPath())!=-1)
-					{						
-						vnEdge.toElement(VTDNav.FC, "FN");
-						FNODE = vnEdge.parseInt(vnEdge.getText());
-						vnEdge.toElement(VTDNav.NS, "TN");
-						TNODE = vnEdge.parseInt(vnEdge.getText());
-						if(FNODE == KDV || TNODE == KDV){
-							vnEdge.toElement(VTDNav.PARENT);
-							vnEdge.toElement(VTDNav.LC, "ID");
-							id = id + vnEdge.toString(vnEdge.getText()) + " ";
-						}						
-						vnEdge.toElement(VTDNav.PARENT); 
-					} 
-					temp = lineParts[2]+","+ lineParts[3]+","+ lineParts[4]+","+ id;
-					out.write(temp +  "\n");
-					apEdge.resetXPath();
-			}
-			}
-			out.close();
-			reader.close();
-		} catch (IOException | XPathEvalException | NavException | XPathParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 	}
 	
 	@SuppressWarnings("unused")
