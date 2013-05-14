@@ -142,7 +142,6 @@ public class MapPanel extends JPanel {
 			Stack<Edge> drawPath = (Stack<Edge>) pathTo.clone();
 			while(!drawPath.empty()) 
 			{
-
 				edgeToDraw = drawPath.pop();
 				g2.setColor(Color.ORANGE);
 				line.setLine(edgeToDraw.getLine2DToDraw(coordConverter));
@@ -155,7 +154,8 @@ public class MapPanel extends JPanel {
 			for(int i = 0; i<fromEdgesToHighlight.length; i++) 
 			{
 				edgeToDraw = fromEdgesToHighlight[i];
-				g2.setColor(fromColor);
+				
+				g2.setColor(setHighLightFromColor());
 				line.setLine(edgeToDraw.getLine2DToDraw(coordConverter));
 				g2.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 				g2.draw(line); 
@@ -166,7 +166,7 @@ public class MapPanel extends JPanel {
 			for(int i = 0; i<toEdgesToHighlight.length; i++) 
 			{
 				edgeToDraw = toEdgesToHighlight[i];
-				g2.setColor(toColor);
+				g2.setColor(setHighLightToColor());
 				line.setLine(edgeToDraw.getLine2DToDraw(coordConverter));
 				g2.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 				g2.draw(line); 
@@ -183,6 +183,28 @@ public class MapPanel extends JPanel {
 			g2.setColor(Color.red);
 			g2.draw(mapMouseZoomAndPan.getRect());
 		} 
+	}
+	
+	public Color setHighLightFromColor(){
+		Color color = new Color(204,0,102);
+		if(!MainGui.coastlinesWanted || !MainGui.colorFollowTheme) 
+			color = Color.ORANGE;
+		else if(ColorTheme.summerTheme || ColorTheme.springTheme || ColorTheme.autumnTheme)	
+			color = Color.WHITE;
+		else if(ColorTheme.winterTheme)
+			color = Color.yellow;
+		return color;
+	}
+	
+	public Color setHighLightToColor(){
+		Color color = new Color(204,0,102);
+		if(!MainGui.coastlinesWanted || !MainGui.colorFollowTheme) 
+			color = Color.CYAN;
+		else if(ColorTheme.summerTheme || ColorTheme.springTheme || ColorTheme.autumnTheme)	
+			color = Color.YELLOW;
+		else if(ColorTheme.winterTheme) 
+			color = Color.GRAY;
+		return color;
 	}
 
 	/**
