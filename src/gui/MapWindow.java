@@ -162,6 +162,13 @@ public class MapWindow {
 		toolBar.add(routeBox);
 
 		ColoredJPanel flow = new ColoredJPanel();
+		flow.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(listWindow != null)
+					listWindow.dispose();
+			}
+		});
 		flow.add(toolBar);
 
 		return flow;
