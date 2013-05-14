@@ -577,15 +577,18 @@ public class AddressParserJesperLeger {
 			System.out.println(string);
 		*/
 
-		/*
-		for(String string : ap.getSearchResults("Stadionvej 2 B 6752"))
-			System.out.println(string);
 		
-		for(String string : ap.getSearchResults("Stadionvej 2B 6752"))
-			System.out.println(string);
-			*/
+//		for(String string : ap.getSearchResults("Stadionvej 2 B 6752"))
+//			System.out.println(string);
 		
-		for(String string : ap.getSearchResults("Strandvejen 133"))
+//		for(String string : ap.getSearchResults("Stadionvej 2B 6752"))
+//			System.out.println(string);
+			
+		
+//		for(String string : ap.getSearchResults("Strandvejen 133"))
+//			System.out.println(string);
+		
+		for(String string : ap.getSearchResults("Rued Langgaards Vej"))
 			System.out.println(string);
 	}
 
