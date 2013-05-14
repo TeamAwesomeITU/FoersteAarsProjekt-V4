@@ -94,22 +94,22 @@ public class EdgeSearch  {
 				betweenRoadLettersLeft = isRoadLetterWithinLeftSideOfEdge(edge, letter);
 				matchCityRight = isCityCorrectForRightSideOfEdge(edge, postalNumber, cityName);
 				matchCityLeft = isCityCorrectForLeftSideOfEdge(edge, postalNumber, cityName);
-				
-//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
-//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-//				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
-//				System.out.println("matchCityRight: " + matchCityRight);
-//				System.out.println("matchCityLeft: " + matchCityLeft);
+
+				//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
+				//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
+				//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
+				//				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
+				//				System.out.println("matchCityRight: " + matchCityRight);
+				//				System.out.println("matchCityLeft: " + matchCityLeft);
 
 				if(betweenRoadNumbersRight && betweenRoadLettersRight && matchCityRight)
 				{
-						foundEdges.add(edge);
+					foundEdges.add(edge);
 				}
-				
+
 				else if (betweenRoadNumbersLeft && betweenRoadLettersLeft && matchCityLeft)
 				{
-						foundEdges.add(edge);
+					foundEdges.add(edge);
 				}
 			}
 		}
@@ -122,7 +122,7 @@ public class EdgeSearch  {
 		//If the search should not include cities
 		if(cityName.isEmpty() && postalNumber == -1)
 			return true;
-		
+
 		if(!cityName.isEmpty())
 			return City.getCityByCityName(cityName).getCityPostalNumbers().contains(edge.getPostalNumberLeft());
 		else
@@ -134,7 +134,7 @@ public class EdgeSearch  {
 		//If the search should not include cities
 		if(cityName.isEmpty() && postalNumber == -1)
 			return true;
-		
+
 		if(!cityName.isEmpty())
 			return City.getCityByCityName(cityName).getCityPostalNumbers().contains(edge.getPostalNumberRight());
 		else
@@ -176,11 +176,11 @@ public class EdgeSearch  {
 		//If the search should not include road number
 		if(roadNumber == -1)
 			return true;
-		
+
 		//Checks if the roadNumber is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
-//		if(edge.getToLeftNumber() != 0 && (edge.getToLeftNumber() % 2) != (roadNumber % 2) || (edge.getFromLeftNumber() != 0 && (edge.getFromLeftNumber() % 2) != (roadNumber % 2)))
-//			System.out.println("roadNumber was not equal to this sides evenness");//return false;
-//		System.out.println(edge.getFromLeftNumber() + "<= " + roadNumber + ", " + edge.getToLeftNumber() + ">=" +  roadNumber);
+		if(edge.getToLeftNumber() != 0 && (edge.getToLeftNumber() % 2) != (roadNumber % 2) || (edge.getFromLeftNumber() != 0 && (edge.getFromLeftNumber() % 2) != (roadNumber % 2)))
+			return false; //System.out.println("roadNumber was not equal to this sides evenness");
+		//		System.out.println(edge.getFromLeftNumber() + "<= " + roadNumber + ", " + edge.getToLeftNumber() + ">=" +  roadNumber);
 		return (edge.getFromLeftNumber() <= roadNumber && edge.getToLeftNumber() >= roadNumber );
 	}
 
@@ -189,11 +189,11 @@ public class EdgeSearch  {
 		//If the search should not include road number
 		if(roadNumber == -1)
 			return true;
-		
+
 		//Checks if the roadNumber is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
-//		if(edge.getToRightNumber() != 0 && (edge.getToRightNumber() % 2) != (roadNumber % 2) || (edge.getFromRightNumber() != 0 && (edge.getFromRightNumber() % 2) != (roadNumber % 2)))
-//			System.out.println("roadNumber was not equal to this sides evenness");//return false;
-//		System.out.println(edge.getFromRightNumber() + "<= " + roadNumber + ", " + edge.getToRightNumber() + ">=" +  roadNumber);
+		if(edge.getToRightNumber() != 0 && (edge.getToRightNumber() % 2) != (roadNumber % 2) || (edge.getFromRightNumber() != 0 && (edge.getFromRightNumber() % 2) != (roadNumber % 2)))
+			return false; // System.out.println("roadNumber was not equal to this sides evenness");
+		//		System.out.println(edge.getFromRightNumber() + "<= " + roadNumber + ", " + edge.getToRightNumber() + ">=" +  roadNumber);
 		return (edge.getFromRightNumber() <= roadNumber && edge.getToRightNumber() >= roadNumber );
 	}
 
@@ -202,11 +202,11 @@ public class EdgeSearch  {
 		//If the search should not include letters
 		if(letter.isEmpty()) 
 			return true;
-		
+
 		//If there are entered more than one letter in the string, return false
 		if(letter.length() > 1)
 			return false;
-		
+
 		//System.out.println("Noget med road letter left side");
 		String fromLetter = edge.getFromLeftLetter().toLowerCase();
 		String toLetter = edge.getToLeftLetter().toLowerCase();
@@ -234,12 +234,12 @@ public class EdgeSearch  {
 		//If the search should not include letters
 		if(letter.isEmpty()) 
 			return true;
-		
+
 		//If there are entered more than one letter in the string, return false
 		if(letter.length() > 1)
 			return false;
-		
-//		System.out.println("Noget med road letter right side");
+
+		//		System.out.println("Noget med road letter right side");
 		String fromLetter = edge.getFromRightLetter().toLowerCase();
 		String toLetter = edge.getToRightLetter().toLowerCase();
 		char letterChar = letter.charAt(0);	
@@ -288,7 +288,7 @@ public class EdgeSearch  {
 		for(Edge edge : foundEdges4)
 			System.out.println(edge + " " + edge.getiD());
 
-		
+
 		Edge[] foundEdges5 = searchForRoadSuggestions("Næstvedvej", 24, "I", 4230);
 		System.out.println(foundEdges5.length);
 
@@ -322,7 +322,7 @@ public class EdgeSearch  {
 			System.out.print(", " + iterator.next());			
 		}
 		 */
-		
+
 		Edge[] foundEdges5 = searchForRoadSuggestions("Stadionvej", 2, "b 6", -1, "");
 		System.out.println(foundEdges5.length);
 
