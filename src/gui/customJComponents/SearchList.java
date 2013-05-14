@@ -4,18 +4,12 @@ import gui.MapWindow;
 import gui.settingsAndPopUp.ColorTheme;
 
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JList;
-import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 /**
  * Our custom extension of JList. This is used to display the suggestions for addresses.
  *  @param <Object> the object which the list holds
