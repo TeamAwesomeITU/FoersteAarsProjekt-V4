@@ -179,9 +179,9 @@ public class EdgeSearch  {
 			return true;
 		
 		//Checks if the roadNumber is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
-		if(edge.getToLeftNumber() != 0 && (edge.getToLeftNumber() % 2) != (roadNumber % 2) || (edge.getFromLeftNumber() != 0 && (edge.getFromLeftNumber() % 2) != (roadNumber % 2)))
-			System.out.println("roadNumber was not equal to this sides evenness");//return false;
-		System.out.println(edge.getFromLeftNumber() + "<= " + roadNumber + ", " + edge.getToLeftNumber() + ">=" +  roadNumber);
+//		if(edge.getToLeftNumber() != 0 && (edge.getToLeftNumber() % 2) != (roadNumber % 2) || (edge.getFromLeftNumber() != 0 && (edge.getFromLeftNumber() % 2) != (roadNumber % 2)))
+//			System.out.println("roadNumber was not equal to this sides evenness");//return false;
+//		System.out.println(edge.getFromLeftNumber() + "<= " + roadNumber + ", " + edge.getToLeftNumber() + ">=" +  roadNumber);
 		return (edge.getFromLeftNumber() <= roadNumber && edge.getToLeftNumber() >= roadNumber );
 	}
 
@@ -192,9 +192,9 @@ public class EdgeSearch  {
 			return true;
 		
 		//Checks if the roadNumber is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
-		if(edge.getToRightNumber() != 0 && (edge.getToRightNumber() % 2) != (roadNumber % 2) || (edge.getFromRightNumber() != 0 && (edge.getFromRightNumber() % 2) != (roadNumber % 2)))
-			System.out.println("roadNumber was not equal to this sides evenness");//return false;
-		System.out.println(edge.getFromRightNumber() + "<= " + roadNumber + ", " + edge.getToRightNumber() + ">=" +  roadNumber);
+//		if(edge.getToRightNumber() != 0 && (edge.getToRightNumber() % 2) != (roadNumber % 2) || (edge.getFromRightNumber() != 0 && (edge.getFromRightNumber() % 2) != (roadNumber % 2)))
+//			System.out.println("roadNumber was not equal to this sides evenness");//return false;
+//		System.out.println(edge.getFromRightNumber() + "<= " + roadNumber + ", " + edge.getToRightNumber() + ">=" +  roadNumber);
 		return (edge.getFromRightNumber() <= roadNumber && edge.getToRightNumber() >= roadNumber );
 	}
 
@@ -204,9 +204,13 @@ public class EdgeSearch  {
 		if(letter.isEmpty()) 
 			return true;
 		
-		System.out.println("Noget med road letter left side");
-		String fromLetter = edge.getFromLeftLetter();
-		String toLetter = edge.getToLeftLetter();
+		//If there are entered more than one letter in the string, return false
+		if(letter.length() > 1)
+			return false;
+		
+		//System.out.println("Noget med road letter left side");
+		String fromLetter = edge.getFromLeftLetter().toLowerCase();
+		String toLetter = edge.getToLeftLetter().toLowerCase();
 		char letterChar = letter.charAt(0);	
 
 		//If no letters are found on this side of the road
@@ -232,9 +236,13 @@ public class EdgeSearch  {
 		if(letter.isEmpty()) 
 			return true;
 		
-		System.out.println("Noget med road letter right side");
-		String fromLetter = edge.getFromRightLetter();
-		String toLetter = edge.getToRightLetter();
+		//If there are entered more than one letter in the string, return false
+		if(letter.length() > 1)
+			return false;
+		
+//		System.out.println("Noget med road letter right side");
+		String fromLetter = edge.getFromRightLetter().toLowerCase();
+		String toLetter = edge.getToRightLetter().toLowerCase();
 		char letterChar = letter.charAt(0);	
 
 		if(fromLetter.isEmpty() && toLetter.isEmpty())
@@ -256,6 +264,7 @@ public class EdgeSearch  {
 
 	public static void main(String[] args) throws MalformedAdressException
 	{		
+		/*
 		Edge[] foundEdges = searchForRoadSuggestions("Nørregade", 2, "", -1, "");
 		System.out.println(foundEdges.length);
 
@@ -280,7 +289,7 @@ public class EdgeSearch  {
 		for(Edge edge : foundEdges4)
 			System.out.println(edge + " " + edge.getiD());
 
-		/*
+		
 		Edge[] foundEdges5 = searchForRoadSuggestions("Næstvedvej", 24, "I", 4230);
 		System.out.println(foundEdges5.length);
 
@@ -314,5 +323,11 @@ public class EdgeSearch  {
 			System.out.print(", " + iterator.next());			
 		}
 		 */
+		
+		Edge[] foundEdges5 = searchForRoadSuggestions("Stadionvej", 2, "b 6", -1, "");
+		System.out.println(foundEdges5.length);
+
+		for(Edge edge : foundEdges5)
+			System.out.println(edge + " " + edge.getiD());
 	}
 }

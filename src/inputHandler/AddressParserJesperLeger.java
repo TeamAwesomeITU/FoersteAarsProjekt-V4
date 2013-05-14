@@ -21,8 +21,6 @@ public class AddressParserJesperLeger {
 	private int lastInputLength = 0;
 
 	private Edge[] lastSuggestedRoadsByNames;
-	private Edge[] lastSuggestedRoadsByNumbers;
-	private Edge[] lastSuggestedRoadsByLetters;
 	private int numberOfCurrentSuggestedRoads;
 	private String suggestedRoadNamesFoundByString;
 	private String suggestedRoadNumbersFoundByString;
@@ -34,18 +32,14 @@ public class AddressParserJesperLeger {
 	private int foundRoadNumber;
 	private boolean isRoadLetterLocked;
 	private String foundRoadLetter;
-	private Edge foundRoad;
 
 	private City[] lastSuggestedCitiesByNames;
-	private City[] lastSuggestedCitiesByPostalNumbers;
 	private int numberOfCurrentSuggestedCities;
 	private String suggestedCitiesFoundByString;
 
 	private boolean isCityNameLocked;
-	private boolean isCityPostalNumberLocked;
 	private int foundCityPostalNumber;
 	private String foundCityName;
-	private City foundCity;
 
 	//The suggestions as Strings, ready to be presented to the user
 	private String[] suggestionsArray;
@@ -58,7 +52,7 @@ public class AddressParserJesperLeger {
 		resetCitySearch();
 	}
 
-	public String[] setSearchResults(String input) throws MalformedAdressException
+	public String[] getSearchResults(String input) throws MalformedAdressException
 	{
 		Matcher validInput = Pattern.compile(patternBadInput).matcher(input);		
 		if (validInput.find() || input.trim().isEmpty())
@@ -82,7 +76,13 @@ public class AddressParserJesperLeger {
 	{ return lastSuggestedRoadsByNames; }
 
 	public City[] getFoundCities()
-	{ return lastSuggestedCitiesByNames; }
+	{
+		//Only return cities, if cities is the only thing that is found!
+		if(lastSuggestedRoadsByNames.length == 0 && lastSuggestedCitiesByNames.length > 0)
+			return lastSuggestedCitiesByNames;
+		else 
+			return new City[0];		
+	}
 
 	private void setSearchString(String input) throws MalformedAdressException
 	{
@@ -193,14 +193,21 @@ public class AddressParserJesperLeger {
 			evaluateSuggestions();
 		}
 
-		for(Edge edge : lastSuggestedRoadsByNames)
-			suggestionsList.add(edge.toString());
+		//Only return cities, if cities is the only thing that is found!
+		if(lastSuggestedRoadsByNames.length == 0 && lastSuggestedCitiesByNames.length > 0)
+		{
+			for(City city : lastSuggestedCitiesByNames)
+				suggestionsList.add(city.toString());
+		}
+		
+
+		else {
+			for(Edge edge : lastSuggestedRoadsByNames)
+				suggestionsList.add(edge.toString());
+		}
 
 		System.out.println("Size of lastSuggestedRoadsByName: " + lastSuggestedRoadsByNames.length);
-
-		for(City city : lastSuggestedCitiesByNames)
-			suggestionsList.add(city.toString());
-
+		System.out.println("Size of lastSuggestedCitiesByNames: " + lastSuggestedCitiesByNames.length);
 
 
 		suggestionsArray = suggestionsList.toArray(new String[suggestionsList.size()]);
@@ -224,19 +231,13 @@ public class AddressParserJesperLeger {
 
 	private void setRoadNameSuggestions() throws MalformedAdressException
 	{
-		Edge[] possibleEdges;
-		
-		//If the search should depend on the found City
-		if(isCityNameLocked)
-			possibleEdges = EdgeSearch.searchForRoadSuggestions(modifiedInput, -1, "", foundCityPostalNumber, foundCityName);
-			
-		else
-			possibleEdges = EdgeSearch.searchForRoadSuggestions(modifiedInput, -1, "", -1, "");
-		
+		Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(modifiedInput, -1, "", foundCityPostalNumber, foundCityName);
+					
 		numberOfCurrentSuggestedRoads = possibleEdges.length;
 		System.out.println("Number of found edges: " + possibleEdges.length);
 		System.out.println("MODIFIED INPUT: " + modifiedInput);
 		//If no matches could be found it must mean that the user are no longer entering an input, which could be a road name
+		
 		if(numberOfCurrentSuggestedRoads == 0 )
 		{
 			//If no matches is found and never has been with this input, don't do anything
@@ -270,7 +271,7 @@ public class AddressParserJesperLeger {
 			else {
 				System.out.println("LOCKING ROAD NAME");
 				isRoadNumberLocked = true;
-				modifiedInput = modifiedInput.replaceFirst(suggestedRoadNumbersFoundByString, "").trim();
+				//modifiedInput = modifiedInput.replaceFirst(suggestedRoadNumbersFoundByString, "").trim();
 				foundRoadNumber = Integer.parseInt(suggestedRoadNumbersFoundByString);
 				System.out.println("MODIFIED INPUT AFTER LOCKING ROAD NAME: " + modifiedInput);
 			}
@@ -279,8 +280,7 @@ public class AddressParserJesperLeger {
 
 		//If there is only numbers in the input, search for it
 		else {
-
-			Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(suggestedRoadNamesFoundByString, Integer.parseInt(modifiedInput), "", -1, "");
+			Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(suggestedRoadNamesFoundByString, Integer.parseInt(modifiedInput), "", foundCityPostalNumber, foundCityName);
 
 			numberOfCurrentSuggestedRoads = possibleEdges.length;
 
@@ -297,14 +297,17 @@ public class AddressParserJesperLeger {
 	private void setRoadLetterSuggestions() throws MalformedAdressException
 	{
 		System.out.println("MODIFIED INPUT BEFORE SEARCHING FOR ROAD LETTERS: " + modifiedInput);
-		Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(suggestedRoadNamesFoundByString, foundRoadNumber, modifiedInput, -1, "");
+		System.out.println("SEARCHING FOR: " + suggestedRoadNamesFoundByString + " " + foundRoadNumber + " " + modifiedInput);
+		Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(suggestedRoadNamesFoundByString, foundRoadNumber, modifiedInput, foundCityPostalNumber, foundCityName);
 		numberOfCurrentSuggestedRoads = possibleEdges.length;
+		
+		System.out.println("FOUND NUMBER OF ROADS WITH THIS LETTER: " + numberOfCurrentSuggestedRoads);
 
 		if(numberOfCurrentSuggestedRoads > 0)
 		{
 			System.out.println("FOUND MATCHING ROAD LETTERS WITH THE MODIFIED INPUT: " + modifiedInput);
 			lastSuggestedRoadsByNames = possibleEdges;
-			foundRoadLetter = suggestedRoadNumbersFoundByString;
+			suggestedRoadLettersFoundByString = modifiedInput;
 		}
 	}
 
@@ -368,7 +371,6 @@ public class AddressParserJesperLeger {
 		else if(possibleCities.length == 1)
 		{
 			lastSuggestedCitiesByNames = possibleCities;
-			foundCity = possibleCities[0];
 			//isCityNameLocked = true;
 			suggestedCitiesFoundByString = modifiedInput;
 		}
@@ -387,7 +389,7 @@ public class AddressParserJesperLeger {
 		//Noget med, at hvis der f.eks. kun er fundet veje, og ingen byer, så ved vi at det kun er veje - ændr parametre 
 		//Hvis der kun er fundet resultater på en enkelt ting, så fastlås den og slet alle andre forslag, der endnu ikke er fastlåste
 
-/*
+
 		System.out.println("STATUS------------------------");
 		System.out.print("isCityNameLocked: " + isCityNameLocked + ", ");
 		System.out.print("isRoadNameLocked: " + isRoadNameLocked + ", ");
@@ -399,7 +401,7 @@ public class AddressParserJesperLeger {
 		System.out.print("numberOfCurrentSuggestedRoads: " + numberOfCurrentSuggestedRoads + ", ");
 
 		System.out.println("STATUS------------------------");
-*/
+
 		//If the road name have not been locked yet, check if it should be
 		if(!isRoadNameLocked)	
 		{
@@ -438,6 +440,7 @@ public class AddressParserJesperLeger {
 			{
 				if(!isRoadLetterLocked)
 				{
+					System.out.println("ROAD LETTER IS NOT LOCKED");
 					if(!suggestedRoadLettersFoundByString.isEmpty() && lastSuggestedRoadsByNames.length >= 1 && numberOfCurrentSuggestedRoads == 0 && numberOfCurrentSuggestedCities == 0)
 					{
 						System.out.println("LOCKING ROAD LETTER");
@@ -457,10 +460,21 @@ public class AddressParserJesperLeger {
 		{
 			if (lastSuggestedCitiesByNames.length >= 1 && numberOfCurrentSuggestedCities == 0 && numberOfCurrentSuggestedRoads == 0 )
 			{
+
 				if (numberOfCurrentSuggestedCities == 1) 
 				{
 					isCityNameLocked = true;
-					foundCityName = lastSuggestedCitiesByNames[0].getCityName();
+					//If the Cities have been found by a postal number
+					if(suggestedCitiesFoundByString.matches("\\d+"))
+					{
+						foundCityPostalNumber = Integer.parseInt(suggestedCitiesFoundByString);
+					}
+					
+					else {
+						foundCityName = lastSuggestedCitiesByNames[0].getCityName();
+					}
+
+
 				}
 				suggestedCitiesFoundByString = modifiedInput;
 
@@ -513,7 +527,7 @@ public class AddressParserJesperLeger {
 		isRoadNameLocked = false; isRoadNumberLocked = false; isRoadLetterLocked = false;
 		foundRoadName = ""; foundRoadLetter = ""; foundRoadNumber = -1;
 		suggestedRoadNamesFoundByString = ""; suggestedRoadNumbersFoundByString = ""; suggestedRoadLettersFoundByString = "";		
-		lastSuggestedRoadsByNames = new Edge[0]; foundRoad = null;
+		lastSuggestedRoadsByNames = new Edge[0];
 	}
 
 	private void resetRoadSearchNumberAndLetter()
@@ -540,34 +554,45 @@ public class AddressParserJesperLeger {
 		isCityNameLocked = false;
 		foundCityName = ""; foundCityPostalNumber = -1;
 		suggestedCitiesFoundByString = "";
-		lastSuggestedCitiesByNames = new City[0]; foundCity = null;
+		lastSuggestedCitiesByNames = new City[0];
 	}
 
 	public static void main(String[] args) throws MalformedAdressException {
 
 		AddressParserJesperLeger ap = new AddressParserJesperLeger();
 		/*
-		for(String string : ap.setSearchResults("V"))
+		for(String string : ap.getSearchResults("V"))
 			System.out.println(string);		
 
-		for(String string : ap.setSearchResults("Va"))
+		for(String string : ap.getSearchResults("Va"))
 			System.out.println(string);
 
-		ap.setSearchResults("V");
-		ap.setSearchResults("Va");
-		ap.setSearchResults("Vandelvej 10");
+		ap.getSearchResults("V");
+		ap.getSearchResults("Va");
+		ap.getSearchResults("Vandelvej 10");
 		 */	
-		//		for(String string : ap.setSearchResults("Vandelvej 10"))
-		//			System.out.println(string);
-
-		for(String string : ap.setSearchResults("Vandelvej Køge"))
+		
+		/*
+		String[] vandelvej10 = ap.getSearchResults("Vandelvej 10");
+		String[] vandelvejKoege = ap.getSearchResults("Vandelvej Køge");
+		String[] vandelvej10Koege = ap.getSearchResults("Vandelvej 10 Køge");
+		
+		
+		for(String string : vandelvej10)
 			System.out.println(string);
 
-		//		for(String string : ap.setSearchResults("Vandelvej 10 Køge"))
-		//			System.out.println(string);
+		for(String string : vandelvejKoege)
+			System.out.println(string);
 
-		//				for(String string : ap.setSearchResults("Stadionvej 2 B 6752"))
-		//					System.out.println(string);
+		for(String string : vandelvej10Koege)
+			System.out.println(string);
+		*/
+
+		for(String string : ap.getSearchResults("Stadionvej 2 B 6752"))
+			System.out.println(string);
+		
+		for(String string : ap.getSearchResults("Stadionvej 2B 6752"))
+			System.out.println(string);
 	}
 
 }
