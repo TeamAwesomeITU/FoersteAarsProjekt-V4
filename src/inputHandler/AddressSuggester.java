@@ -28,10 +28,19 @@ public class AddressSuggester {
 	}
 
 	private void calculateResults() throws MalformedAdressException, NoAddressFoundException
-	{ foundEdges = EdgeSearch.searchForRoadSuggestions(enteredRoadName, enteredRoadNumber, enteredRoadLetter, enteredPostalNumber, enteredCityName); }
+	{ 
+		foundEdges = EdgeSearch.searchForRoadSuggestions(enteredRoadName, enteredRoadNumber, enteredRoadLetter, enteredPostalNumber, enteredCityName);
+		System.out.println("NUMBER OF FOUND EDGES: " + foundEdges.length);
+	}
 
-	public void enterRoadNumber(int roadNumber) throws MalformedAdressException, NoAddressFoundException
-	{ this.enteredRoadNumber = roadNumber; calculateResults();}
+	public void enterRoadNumber(String number) throws MalformedAdressException, NoAddressFoundException
+	{
+		if(!number.isEmpty())
+			this.enteredRoadNumber = Integer.parseInt(number); 
+		else
+			this.enteredRoadNumber = -1;
+		calculateResults();
+	}
 
 	public void enterRoadLetter(String roadLetter) throws MalformedAdressException, NoAddressFoundException
 	{ this.enteredRoadLetter = roadLetter; calculateResults();}
@@ -39,8 +48,14 @@ public class AddressSuggester {
 	public void enterCityName(String cityName) throws MalformedAdressException, NoAddressFoundException
 	{ this.enteredCityName = cityName; calculateResults();}
 
-	public void enterPostalNumber(int postalNumber) throws MalformedAdressException, NoAddressFoundException
-	{ this.enteredPostalNumber = postalNumber; calculateResults();}
+	public void enterPostalNumber(String postalNumber) throws MalformedAdressException, NoAddressFoundException
+	{
+		if(!postalNumber.isEmpty())
+			this.enteredPostalNumber = Integer.parseInt(postalNumber);
+		else
+			this.enteredPostalNumber = -1;
+		calculateResults();
+	}
 
 	public void enterRoadName(String roadName) throws MalformedAdressException, NoAddressFoundException
 	{ enteredRoadName = roadName; calculateResults(); }	
@@ -54,17 +69,14 @@ public class AddressSuggester {
 		return possibleRoadNamesSet.toArray(new String[possibleRoadNamesSet.size()]);
 	}
 
-	public Integer[] getPossibleRoadNumbers()
+	public String[] getPossibleRoadNumbers()
 	{
-		TreeSet<Integer> possibleCitiesSet = new TreeSet<>();
+		TreeSet<String> possibleCitiesSet = new TreeSet<>();
 		for(Edge edge : foundEdges)
-			for(int number : edge.containedNumbers())
-				possibleCitiesSet.add(number);
-		
-		int[] numberArray = new int[possibleCitiesSet.size()];
-		
+			for(Integer number : edge.containedNumbers())
+				possibleCitiesSet.add(number.toString());
 
-		return possibleCitiesSet.toArray(new Integer[possibleCitiesSet.size()]);
+		return possibleCitiesSet.toArray(new String[possibleCitiesSet.size()]);
 	}
 
 	public String[] getPossibleRoadLetters()
@@ -89,16 +101,16 @@ public class AddressSuggester {
 		return possibleCitiesSet.toArray(new String[possibleCitiesSet.size()]);
 	}
 
-	public Integer[] getPossiblePostalNumbers()
+	public String[] getPossiblePostalNumbers()
 	{
-		TreeSet<Integer> possibleCitiesSet = new TreeSet<>();
+		TreeSet<String> possibleCitiesSet = new TreeSet<>();
 		for(Edge edge : foundEdges)
 		{
-			possibleCitiesSet.add(edge.getPostalNumberLeft());
-			possibleCitiesSet.add(edge.getPostalNumberRight());
+			possibleCitiesSet.add(edge.getPostalNumberLeft() + "");
+			possibleCitiesSet.add(edge.getPostalNumberRight() + "");
 		}
 
-		return possibleCitiesSet.toArray(new Integer[possibleCitiesSet.size()]);
+		return possibleCitiesSet.toArray(new String[possibleCitiesSet.size()]);
 	}
 	
 	public static void main(String[] args) throws MalformedAdressException, NoAddressFoundException {
@@ -111,7 +123,7 @@ public class AddressSuggester {
 		for(String string : as.getPossibleRoadNames())
 			System.out.println(string);
 		
-		for(Integer number : as.getPossibleRoadNumbers())
+		for(String number : as.getPossibleRoadNumbers())
 			System.out.println(number);
 		
 		for(String letter : as.getPossibleRoadLetters())

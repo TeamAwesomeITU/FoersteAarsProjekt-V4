@@ -39,7 +39,6 @@ public class EdgeSearch  {
 	 */
 	public static Edge[] searchForRoadName(String roadToFind)
 	{
-		System.out.println("ROAD TO FIND: " + roadToFind);
 		roadToFind = roadToFind.toLowerCase();
 		ArrayList<Integer> listOfFoundEdges = edgeSearchTrie.get(roadToFind);
 
@@ -58,7 +57,6 @@ public class EdgeSearch  {
 	 */
 	public static String searchForRoadNameLongestPrefix(String roadToFind)
 	{
-		System.out.println("ROAD TO FIND: " + roadToFind);
 		roadToFind = roadToFind.toLowerCase();
 		return edgeSearchTrie.longestPrefixOf(roadToFind);
 	}
@@ -76,15 +74,7 @@ public class EdgeSearch  {
 	 */
 	public static Edge[] searchForRoads(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAdressException, NoAddressFoundException
 	{
-		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && postalNumber == -1 && cityName.isEmpty())
-			throw new NoAddressFoundException("No address was found");
-		if(roadNumber == -1 && !letter.isEmpty())
-			throw new MalformedAdressException("A road letter cannot be entered without having a road roadNumber");
-		if(roadNumber == 0 || postalNumber == 0)
-			throw new MalformedAdressException("A road's road number or postal number cannot be 0");
-		if(!cityName.isEmpty() && postalNumber != -1)
-			if(!CitySearch.doesCityNameMatchPostalNumber(cityName, postalNumber))
-				throw new MalformedAdressException("Postal number and city name does not match");
+		checkInput(roadName, roadNumber, letter, postalNumber, cityName);
 
 		//If postal number or city name are the only things that should be searched for
 		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && (postalNumber != -1 || !cityName.isEmpty()))
@@ -162,6 +152,7 @@ public class EdgeSearch  {
 	 */
 	public static Edge[] searchForRoadSuggestions(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAdressException, NoAddressFoundException
 	{
+		checkInput(roadName, roadNumber, letter, postalNumber, cityName);
 		//If postal number or city name are the only things that should be searched for
 		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && (postalNumber != -1 || !cityName.isEmpty()))
 		{
@@ -182,12 +173,10 @@ public class EdgeSearch  {
 			}
 
 		}
-		
-		
 
 		roadName = roadName.toLowerCase();
 		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
-		Edge[] possibleEdges = searchForRoadName(roadName);
+		ArrayList<String> possibleEdges = edgeSearchTrie.prefixMatch(roadName);
 
 		boolean betweenRoadNumbersRight;
 		boolean betweenRoadNumbersLeft; 
@@ -196,37 +185,41 @@ public class EdgeSearch  {
 		boolean matchCityRight;
 		boolean matchCityLeft;
 
-		for(Edge edge : possibleEdges)
+		for(String edgeName : possibleEdges)
 		{
-			betweenRoadNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, roadNumber);
-			betweenRoadNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, roadNumber);
-			betweenRoadLettersRight = isRoadLetterWithinRightSideOfEdge(edge, letter);
-			betweenRoadLettersLeft = isRoadLetterWithinLeftSideOfEdge(edge, letter);
-			matchCityRight = isCityCorrectForEdge(edge, postalNumber, cityName);
-			matchCityLeft = isCityCorrectForEdge(edge, postalNumber, cityName);
-
-			//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-			//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
-			//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-			//				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
-			//				System.out.println("matchCityRight: " + matchCityRight);
-			//				System.out.println("matchCityLeft: " + matchCityLeft);
-
-			if(betweenRoadNumbersRight && betweenRoadLettersRight && matchCityRight)
+			Edge[] edges = searchForRoadName(edgeName);
+			for(Edge edge : edges)
 			{
-				foundEdges.add(edge);
-			}
+				betweenRoadNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, roadNumber);
+				betweenRoadNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, roadNumber);
+				betweenRoadLettersRight = isRoadLetterWithinRightSideOfEdge(edge, letter);
+				betweenRoadLettersLeft = isRoadLetterWithinLeftSideOfEdge(edge, letter);
+				matchCityRight = isCityCorrectForEdge(edge, postalNumber, cityName);
+				matchCityLeft = isCityCorrectForEdge(edge, postalNumber, cityName);
 
-			else if (betweenRoadNumbersLeft && betweenRoadLettersLeft && matchCityLeft)
-			{
-				foundEdges.add(edge);
+				//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
+				//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
+				//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
+				//				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
+				//				System.out.println("matchCityRight: " + matchCityRight);
+				//				System.out.println("matchCityLeft: " + matchCityLeft);
+
+				if(betweenRoadNumbersRight && betweenRoadLettersRight && matchCityRight)
+				{
+					foundEdges.add(edge);
+				}
+
+				else if (betweenRoadNumbersLeft && betweenRoadLettersLeft && matchCityLeft)
+				{
+					foundEdges.add(edge);
+				}
 			}
 		}
 
 		return foundEdges.toArray(new Edge[foundEdges.size()]);
-		
+
 	}
-	
+
 	private static void checkInput(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws NoAddressFoundException, MalformedAdressException
 	{
 		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && postalNumber == -1 && cityName.isEmpty())
@@ -290,7 +283,7 @@ public class EdgeSearch  {
 		//If the search should not include road number
 		if(roadNumber == -1)
 			return true;
-		
+
 		int toLeftNumber = edge.getToLeftNumber();
 		int fromLeftNumber = edge.getFromLeftNumber();
 
@@ -306,10 +299,10 @@ public class EdgeSearch  {
 		//If the search should not include road number
 		if(roadNumber == -1)
 			return true;
-		
+
 		int toRightNumber = edge.getToRightNumber();
 		int fromRightNumber = edge.getFromRightNumber();
-		
+
 		//Checks if the roadNumber is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
 		if(toRightNumber != 0 && (toRightNumber % 2) != (roadNumber % 2) || (fromRightNumber != 0 && (fromRightNumber % 2) != (roadNumber % 2)))
 			return false; // System.out.println("roadNumber was not equal to this sides evenness");
@@ -451,25 +444,25 @@ public class EdgeSearch  {
 			System.out.println(edge + " " + edge.getiD());
 		 */
 
-				Edge[] foundEdges5 = searchForRoads("Vandelvej", 10, "", 2800, "Køge");
-				System.out.println(foundEdges5.length);
-		
-				for(Edge edge : foundEdges5)
-					System.out.println(edge + " " + edge.getiD());
+		Edge[] foundEdges5 = searchForRoads("Vandelvej", 10, "", 2800, "Køge");
+		System.out.println(foundEdges5.length);
+
+		for(Edge edge : foundEdges5)
+			System.out.println(edge + " " + edge.getiD());
 
 		//		ArrayList<String> foundEdges5 = edgeSearchTrie.prefixMatch("Vandelvej 10, 4600 Køge");
 		//
 		//		for(String string : foundEdges5)
 		//			System.out.println(string);
 
-//		String foundString = edgeSearchTrie.longestPrefixOf("køge vandelvej");
-//		System.out.println(foundString);
-//
-//		for(int edgeID : edgeSearchTrie.get(foundString))
-//			System.out.println(DataHolding.getEdge(edgeID));
-//
-//		String foundString2 = edgeSearchTrie.longestPrefixOf("køgevandelvej");
-//		System.out.println(foundString2);
+		//		String foundString = edgeSearchTrie.longestPrefixOf("køge vandelvej");
+		//		System.out.println(foundString);
+		//
+		//		for(int edgeID : edgeSearchTrie.get(foundString))
+		//			System.out.println(DataHolding.getEdge(edgeID));
+		//
+		//		String foundString2 = edgeSearchTrie.longestPrefixOf("køgevandelvej");
+		//		System.out.println(foundString2);
 
 	}
 }

@@ -320,7 +320,7 @@ public class MapWindow {
 		return MainGui.frame;
 	}
 	
-	public void createWarning(String message)
+	private void createWarning(String message)
 	{
 		new JOptionPane().showMessageDialog(getJFrame(), message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
