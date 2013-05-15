@@ -148,8 +148,6 @@ public class MapWindow {
 				}
 			}
 		});
-		//ColoredJPanel expandPanel = new ColoredJPanel();
-		//expandPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		buttonPanel.add(expandSearchButton);
 
 		ColoredJComboBox vehicleBox = new ColoredJComboBox();
@@ -180,7 +178,6 @@ public class MapWindow {
 		toolBar.add(toHeader);
 		toolBar.add(toSearchQuery);
 		toolBar.add(buttonPanel);
-		//toolBar.add(expandPanel);
 		toolBar.add(vehicleBox);
 		toolBar.add(routeBox);
 
