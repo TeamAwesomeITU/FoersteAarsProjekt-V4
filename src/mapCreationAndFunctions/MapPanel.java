@@ -263,11 +263,12 @@ public class MapPanel extends JPanel {
 	public void setFromEdgesToHighlight(Edge[] edges)
 	{
 		fromEdgesToHighlight = edges;
-		this.repaintMap();
+		repaintMap();
 	}
 	
 	public void setToEdgesToHighlight(Edge[] edges) {
-		this.toEdgesToHighlight = edges;
+		toEdgesToHighlight = edges;
+		repaintMap();
 	}
 
 

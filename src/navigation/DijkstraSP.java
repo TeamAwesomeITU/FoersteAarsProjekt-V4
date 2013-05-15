@@ -26,7 +26,7 @@ public class DijkstraSP
 	private EdgeWeightedDigraph graph;
 	private boolean badInput = false;
 
-	public DijkstraSP(EdgeWeightedDigraph graph, int fromRoadName, String meansOfTransportation, String routeType) {
+	public DijkstraSP(EdgeWeightedDigraph graph, Edge fromEdge, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
 
 		this.meansOfTransportation = meansOfTransportation;
@@ -35,7 +35,7 @@ public class DijkstraSP
 			throw new NullPointerException("setOfNonViableEdges is empty");
 		this.graph = graph;
 		s = -1;
-		s = DataHolding.getEdge(fromRoadName).getToNode()-1;
+		s = fromEdge.getToNode()-1;
 
 		if(s != -1) 
 		{
@@ -113,14 +113,14 @@ public class DijkstraSP
 
 	/**
 	 * Checks if there's a route to the given end node. If there is, the egdes in the route is pushed to a stack.
-	 * @param toRoadName is the end node.
+	 * @param toEdge is the end node.
 	 * @returns the stack with the edges for the route or returns null.
 	 */
-	public Iterable<Edge> pathTo(int toRoadName) {
+	public Iterable<Edge> pathTo(Edge toEdge) {
 		if(badInput == false) 
 		{
 			int n = -1; 
-			n = DataHolding.getEdge(toRoadName).getToNode()-1;
+			n = toEdge.getToNode()-1;
 			
 			if(n != -1) 
 			{

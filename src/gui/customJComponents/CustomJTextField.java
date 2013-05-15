@@ -1,6 +1,7 @@
 package gui.customJComponents;
 
 
+import gui.ExpandedSearch;
 import gui.MapWindow;
 import gui.settingsAndPopUp.ColorTheme;
 
@@ -64,6 +65,8 @@ public class CustomJTextField extends JTextField {
 			field.outOfFocusColor();
 			if(MapWindow.listWindow != null)
 				MapWindow.listWindow.dispose();
+			if(ExpandedSearch.listWindow != null)
+				ExpandedSearch.listWindow.dispose();
 		}
 	}
 }

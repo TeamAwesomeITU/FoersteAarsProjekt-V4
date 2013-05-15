@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import mapCreationAndFunctions.search.CitySearch;
+
 /**
  * This class is implemented to be able to deal with many different cities with many different postal numbers.
  * Each individual City object contains the name of the city as a String, and a HashSet<Integer>, which holds all of the postal numbers that belongs to the city.
@@ -149,6 +151,10 @@ public class City {
 				return false;
 		return true;
 	}
+	
+	
+	public static boolean cityNameExists(String cityName)
+	{ return CitySearch.searchForCityName(cityName).length > 0;	}
 	
 	
 	/**

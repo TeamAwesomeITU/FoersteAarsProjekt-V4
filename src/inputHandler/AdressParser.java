@@ -9,16 +9,18 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import mapCreationAndFunctions.search.EdgeSearch;
+
+
 /**
- * This class is responsible for the handling of all the input from the user. 
+ * This class is responsible to handle all the input from the user. 
  * When an address is entered into the gui, it is parsed through
  * this class. It is checked in the textfield containing all the
  * road names. If it finds a match it returns it as an array of strings.
  */
-@Deprecated
 public class AdressParser {
 
-	private	String[] adressArray = new String[6];
+	private	String[] adressArray = new String[]{"","","","","",""};
 	private	String pBuilding = "(\\b\\d{1,3}[A-ZÆØÅa-zæøå]?\\b )|" +
 			"\\b\\d{1,3}[^.]\\b}|" +
 			"(\\b\\d{1,3}[A-ZÆØÅa-zæøå,]?\\b|" +
@@ -31,28 +33,14 @@ public class AdressParser {
 	private	String numberLetter = ""; // Gemmer vejnummeret med tal og bogstav.
 	private String addressAfterDeletion = "";
 
-	private String[] roadNamesArray;	
-
-	private BinarySearchStringInArray binSearch;
-
 	/**
 	 * This is the constructor for the class. It makes a binary search of the road_names.txt
 	 * and then sorts it.
 	 */
 	public AdressParser()	{
-		binSearch = new BinarySearchStringInArray();
-		File file = new File("road_names.txt");
 
-		try {
-			roadNamesArray = TxtToFromStringArray.convertTxtToArray(file);
-			//Sorts the array - which means the adresses has another order, than they do in the .txt-file!
-			Arrays.sort(roadNamesArray);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
-
+		
 	/** This method checks if input is valid and whether it contains a number or the letter i.
 	 * 	If it does not it places the address in index 0 as the name of the road. If it does 
 	 * 	the else-statment will try to find and place the parts of the address in their proper
@@ -60,7 +48,7 @@ public class AdressParser {
 	 * @param address Is a String that is supposed to be the entire address written on a single line. 
 	 * @return the array containing information regarding the address
 	 * @throws MalformedAdressException
-	 *  */
+	 */
 	public String[] parseAdress(String address) throws MalformedAdressException {
 		//Is the input valid?			
 		address = address.toLowerCase();
@@ -78,7 +66,7 @@ public class AdressParser {
 			addressAfterDeletion = address;
 			findRoadName(address);
 			//Only checks for roadnumber, roadletter and floornumber, if a valid adress is found
-			if(adressArray[0] != null)												/* 2 */
+			if(!adressArray[0].isEmpty())												/* 2 */
 			{
 				findFloorNumber(addressAfterDeletion);
 				findRoadNumber(addressAfterDeletion);
@@ -111,14 +99,16 @@ public class AdressParser {
 	 * 
 	 * @param input Address string
 	 */
+
 	private void findRoadName(String input)
 	{
-		String roadName = binSearch.search(input, roadNamesArray);
+		String roadName = EdgeSearch.searchForRoadNameLongestPrefix(input);
+		System.out.println("ROADNAME: " + roadName);
 		adressArray[0] = roadName;
-		if(roadName != null)
+		if(!roadName.isEmpty())
 			addressAfterDeletion = addressAfterDeletion.replace(roadName,"");
 	}
-	
+
 	/**	This method uses the matcher to find the number and eventual letter of a building. 
 	 * 	It then isolates the number and places this at the index of the road number. 
 	 * @param s Address string	
@@ -138,7 +128,6 @@ public class AdressParser {
 			}
 		}
 	}
-	
 	/** Uses the number and eventual letter found in roadNumber() and isolates the letter
 	 * 	using a matcher. Places the letter in the array. 
 	 * 
@@ -153,7 +142,6 @@ public class AdressParser {
 			adressArray[2] = buildingLetter.group().trim(); 
 		}				
 	}
-	
 	/**	Finds the floor of the address using a scanner and places this in the array.
 	 * 
 	 * @param s Address string
@@ -171,9 +159,12 @@ public class AdressParser {
 			tal.find();																	
 			System.out.println(tal.group() + ". etage");
 			adressArray[3] = tal.group().trim();
-		}
-	}
+			
 	
+		}
+
+
+	}
 	/**	Returns the postcode of the string and places it in the array.
 	 * 
 	 * @param s Address string
@@ -187,7 +178,6 @@ public class AdressParser {
 			adressArray[4] = postcode.group().trim(); 
 		}
 	}
-	
 	/**	Finds the name of the city by applying the patterns used to find the 
 	 * 	previous parts of the address. After applying them, and some additional 
 	 * 	patterns it replaces them with whitespace. Then the extra whitespace
@@ -213,4 +203,15 @@ public class AdressParser {
 	public String[] getAdressArray(){
 		return adressArray;
 	}
+	
+	public static void main( String[] args ) throws MalformedAdressException {
+		AdressParser aParser = new AdressParser();
+		aParser.parseAdress("Vandelvej 10, 4600 Køge");
+		
+		for(String string : aParser.getAdressArray())
+			System.out.println(string);
+	}
+	
+	
 }
+
