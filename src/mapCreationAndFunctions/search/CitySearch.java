@@ -41,7 +41,6 @@ public class CitySearch  {
 			while(iterator.hasNext())
 				tst.put(iterator.next().toString(), city.getCityID());
 		}
-
 		return tst;
 	}
 
@@ -114,7 +113,7 @@ public class CitySearch  {
 
 		return foundCityList.toArray(new City[foundCityList.size()]);
 	}
-			
+		
 	public static boolean doesCityNameMatchPostalNumber(String cityName, int postalNumber)
 	{ return City.getCityByCityName(cityName).getCityPostalNumbers().contains(postalNumber); }
 	
