@@ -72,7 +72,7 @@ public class EdgeSearch  {
 		if(!cityName.isEmpty() && postalNumber != -1)
 			if(!CitySearch.doesCityNameMatchPostalNumber(cityName, postalNumber))
 				throw new MalformedAdressException("Postal number and city name does not match");
-		
+
 		//If postal number or city name are the only things that should be searched for
 		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && (postalNumber != 1 || !cityName.isEmpty()))
 		{
@@ -82,8 +82,8 @@ public class EdgeSearch  {
 				System.out.println("SEARCHING FOR POSTAL NUMBER");
 				return City.getCityByPostalNumber(postalNumber).getCityRoads();		
 			}
-			
-			
+
+
 			else if(!cityName.isEmpty())
 			{
 				System.out.println("SEARCHING FOR CITY NAME");
@@ -91,10 +91,10 @@ public class EdgeSearch  {
 				if(city != null)
 					return city.getCityRoads();
 			}
-				
+
 		}
-		
-		
+
+
 
 		roadName = roadName.toLowerCase();
 		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
@@ -353,12 +353,16 @@ public class EdgeSearch  {
 
 		for(Edge edge : foundEdges5)
 			System.out.println(edge + " " + edge.getiD());
-			*/
-		
-		Edge[] foundEdges5 = searchForRoadSuggestions("Vandelvej", 10, "", 4600, "Køge");
+		 */
+
+		Edge[] foundEdges5 = searchForRoadSuggestions("Friskærvej", -1, "", -1, "");
 		System.out.println(foundEdges5.length);
 
-		for(Edge edge : foundEdges5)
-			System.out.println(edge + " " + edge.getiD());
+
+		for(Edge edge : foundEdges5){
+			System.out.println(edge.getiD());
+			edge.toStringLetter();
+			
+		}
 	}
 }

@@ -9,9 +9,8 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 /**
- * This class is responsible to handle all the input from the user. 
+ * This class is responsible for the handling of all the input from the user. 
  * When an address is entered into the gui, it is parsed through
  * this class. It is checked in the textfield containing all the
  * road names. If it finds a match it returns it as an array of strings.
@@ -61,7 +60,7 @@ public class AdressParser {
 	 * @param address Is a String that is supposed to be the entire address written on a single line. 
 	 * @return the array containing information regarding the address
 	 * @throws MalformedAdressException
-	 */
+	 *  */
 	public String[] parseAdress(String address) throws MalformedAdressException {
 		//Is the input valid?			
 		address = address.toLowerCase();
@@ -112,7 +111,6 @@ public class AdressParser {
 	 * 
 	 * @param input Address string
 	 */
-
 	private void findRoadName(String input)
 	{
 		String roadName = binSearch.search(input, roadNamesArray);
@@ -120,7 +118,7 @@ public class AdressParser {
 		if(roadName != null)
 			addressAfterDeletion = addressAfterDeletion.replace(roadName,"");
 	}
-
+	
 	/**	This method uses the matcher to find the number and eventual letter of a building. 
 	 * 	It then isolates the number and places this at the index of the road number. 
 	 * @param s Address string	
@@ -140,6 +138,7 @@ public class AdressParser {
 			}
 		}
 	}
+	
 	/** Uses the number and eventual letter found in roadNumber() and isolates the letter
 	 * 	using a matcher. Places the letter in the array. 
 	 * 
@@ -154,6 +153,7 @@ public class AdressParser {
 			adressArray[2] = buildingLetter.group().trim(); 
 		}				
 	}
+	
 	/**	Finds the floor of the address using a scanner and places this in the array.
 	 * 
 	 * @param s Address string
@@ -171,12 +171,9 @@ public class AdressParser {
 			tal.find();																	
 			System.out.println(tal.group() + ". etage");
 			adressArray[3] = tal.group().trim();
-			
-	
 		}
-
-
 	}
+	
 	/**	Returns the postcode of the string and places it in the array.
 	 * 
 	 * @param s Address string
@@ -190,6 +187,7 @@ public class AdressParser {
 			adressArray[4] = postcode.group().trim(); 
 		}
 	}
+	
 	/**	Finds the name of the city by applying the patterns used to find the 
 	 * 	previous parts of the address. After applying them, and some additional 
 	 * 	patterns it replaces them with whitespace. Then the extra whitespace
@@ -215,7 +213,4 @@ public class AdressParser {
 	public String[] getAdressArray(){
 		return adressArray;
 	}
-	
-	
 }
-
