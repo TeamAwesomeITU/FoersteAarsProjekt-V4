@@ -249,6 +249,13 @@ public class Edge {
 	public String getPostalNumberLeftCityName() {
 		return City.getCityNameByPostalNumber(postalNumberLeft);
 	}
+	
+	/**
+	 * @return the postalNumberLeft of the Edge
+	 */
+	public City getPostalNumberLeftCity() {
+		return City.getCityByPostalNumber(postalNumberLeft);
+	}
 
 	/**
 	 * @return the postalNumberRight of the Edge
@@ -256,6 +263,15 @@ public class Edge {
 	public String getPostalNumberRightCityName() {
 		return City.getCityNameByPostalNumber(postalNumberRight);
 	}
+	
+	/**
+	 * @return the postalNumberLeft of the Edge
+	 */
+	public City getPostalNumberRightCity() {
+		return City.getCityByPostalNumber(postalNumberRight);
+	}
+	
+	
 
 	/**
 	 * @return the highWayTurnoff of the Edge
@@ -382,7 +398,6 @@ public class Edge {
 		if(this.postalNumberLeft == this.postalNumberRight) { 
 			postAndCity = this.postalNumberRight+ " " + City.getCityNameByPostalNumber(this.postalNumberRight); }
 		else{
-			System.out.println(this.postalNumberLeft + " " + this.postalNumberRight);
 			postAndCity = 
 					this.postalNumberRight + "/" + this.postalNumberLeft + " " +  
 					City.getCityNameByPostalNumber(this.postalNumberRight) + 

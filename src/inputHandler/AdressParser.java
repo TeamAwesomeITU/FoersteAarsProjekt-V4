@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import mapCreationAndFunctions.search.EdgeSearch;
+
 
 /**
  * This class is responsible to handle all the input from the user. 
@@ -16,10 +18,9 @@ import java.util.regex.Pattern;
  * this class. It is checked in the textfield containing all the
  * road names. If it finds a match it returns it as an array of strings.
  */
-@Deprecated
 public class AdressParser {
 
-	private	String[] adressArray = new String[6];
+	private	String[] adressArray = new String[]{"","","","","",""};
 	private	String pBuilding = "(\\b\\d{1,3}[A-ZÆØÅa-zæøå]?\\b )|" +
 			"\\b\\d{1,3}[^.]\\b}|" +
 			"(\\b\\d{1,3}[A-ZÆØÅa-zæøå,]?\\b|" +
@@ -32,28 +33,14 @@ public class AdressParser {
 	private	String numberLetter = ""; // Gemmer vejnummeret med tal og bogstav.
 	private String addressAfterDeletion = "";
 
-	private String[] roadNamesArray;	
-
-	private BinarySearchStringInArray binSearch;
-
 	/**
 	 * This is the constructor for the class. It makes a binary search of the road_names.txt
 	 * and then sorts it.
 	 */
 	public AdressParser()	{
-		binSearch = new BinarySearchStringInArray();
-		File file = new File("road_names.txt");
 
-		try {
-			roadNamesArray = TxtToFromStringArray.convertTxtToArray(file);
-			//Sorts the array - which means the adresses has another order, than they do in the .txt-file!
-			Arrays.sort(roadNamesArray);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
-
+		
 	/** This method checks if input is valid and whether it contains a number or the letter i.
 	 * 	If it does not it places the address in index 0 as the name of the road. If it does 
 	 * 	the else-statment will try to find and place the parts of the address in their proper
@@ -79,7 +66,7 @@ public class AdressParser {
 			addressAfterDeletion = address;
 			findRoadName(address);
 			//Only checks for roadnumber, roadletter and floornumber, if a valid adress is found
-			if(adressArray[0] != null)												/* 2 */
+			if(!adressArray[0].isEmpty())												/* 2 */
 			{
 				findFloorNumber(addressAfterDeletion);
 				findRoadNumber(addressAfterDeletion);
@@ -99,7 +86,7 @@ public class AdressParser {
 	 * @return A matcher with a pattern and a subjectstring which you "apply" the pattern to. 
 	 */
 	private Matcher match(String pattern, String input) {
-		Matcher matcher = Pattern.compile(pattern).matcher(input);		
+		Matcher matcher = Pattern.compile(pattern).matcher(input);	//"\\[0-9]*\\[X-x]{1}\\b"	
 		return matcher;
 	}
 
@@ -115,9 +102,10 @@ public class AdressParser {
 
 	private void findRoadName(String input)
 	{
-		String roadName = binSearch.search(input, roadNamesArray);
+		String roadName = EdgeSearch.searchForRoadNameLongestPrefix(input);
+		System.out.println("ROADNAME: " + roadName);
 		adressArray[0] = roadName;
-		if(roadName != null)
+		if(!roadName.isEmpty())
 			addressAfterDeletion = addressAfterDeletion.replace(roadName,"");
 	}
 
@@ -171,7 +159,8 @@ public class AdressParser {
 			tal.find();																	
 			System.out.println(tal.group() + ". etage");
 			adressArray[3] = tal.group().trim();
-
+			
+	
 		}
 
 
@@ -213,6 +202,14 @@ public class AdressParser {
 
 	public String[] getAdressArray(){
 		return adressArray;
+	}
+	
+	public static void main( String[] args ) throws MalformedAdressException {
+		AdressParser aParser = new AdressParser();
+		aParser.parseAdress("Vandelvej 10, 4600 Køge");
+		
+		for(String string : aParser.getAdressArray())
+			System.out.println(string);
 	}
 	
 	

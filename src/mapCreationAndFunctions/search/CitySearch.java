@@ -71,13 +71,11 @@ public class CitySearch  {
 	public static City[] searchForCityNameSuggestions(String cityToFind)
 	{
 		cityToFind = cityToFind.toLowerCase();
-		Iterable<String> cityNames = cityNameSearchTrie.prefixMatch(cityToFind);
-		Iterator<String> cityNamesIterator = cityNames.iterator();
+		ArrayList<String> cityNames = cityNameSearchTrie.prefixMatch(cityToFind);
 		ArrayList<City> foundCityList = new ArrayList<>();
 		
-		while(cityNamesIterator.hasNext())
+		for(String cityName : cityNames)
 		{
-			String cityName = cityNamesIterator.next();
 			City city = City.getCityByCityName(cityName);
 			if(!(city == null))
 				foundCityList.add(city);
@@ -104,13 +102,11 @@ public class CitySearch  {
 	public static City[] searchForCityPostalNumberSuggestions(String cityToFind)
 	{
 		cityToFind = cityToFind.toLowerCase();
-		Iterable<String> cityNumbers = cityPostalNumberSearchTrie.prefixMatch(cityToFind);
-		Iterator<String> cityNumbersIterator = cityNumbers.iterator();
+		ArrayList<String> cityNumbers = cityPostalNumberSearchTrie.prefixMatch(cityToFind);
 		ArrayList<City> foundCityList = new ArrayList<>();
 		
-		while(cityNumbersIterator.hasNext())
+		for(String cityNumber : cityNumbers)
 		{
-			String cityNumber = cityNumbersIterator.next();
 			City city = City.getCityByPostalNumber(Integer.parseInt(cityNumber));
 			if(!(city == null))
 				foundCityList.add(city);
@@ -118,7 +114,7 @@ public class CitySearch  {
 
 		return foundCityList.toArray(new City[foundCityList.size()]);
 	}
-		
+			
 	public static boolean doesCityNameMatchPostalNumber(String cityName, int postalNumber)
 	{ return City.getCityByCityName(cityName).getCityPostalNumbers().contains(postalNumber); }
 	
