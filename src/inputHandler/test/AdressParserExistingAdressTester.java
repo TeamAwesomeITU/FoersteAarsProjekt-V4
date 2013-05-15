@@ -58,7 +58,7 @@ public class AdressParserExistingAdressTester {
 	@Test
 	//Reason: contains everything to fill out the array
 	public void fullArrayTest() {
-		String test = "Rued Langgaards Vej 7A, 5., 2300 K¯benhavn S";
+		String test = "Rued Langgaards Vej 7A, 5., 2300 København S";
 		String[] expectedResult = new String[]{"rued langgaards vej", "7", "a", "5", "2300", "k¯benhavn s"};
 		AdressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
@@ -67,7 +67,7 @@ public class AdressParserExistingAdressTester {
 	@Test
 	//Reason: contains only roadname and city, separated by an "i"
 	public void inputSeperatedByAnITest() {
-		String test = "Rued Langgaards Vej i K¯benhavn";
+		String test = "Rued Langgaards Vej i København";
 		String[] expectedResult = new String[]{"rued langgaards vej", null, null, null, null, "k¯benhavn"};
 		AdressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
@@ -96,7 +96,7 @@ public class AdressParserExistingAdressTester {
 	@Test
 	//Reason: roadname contains single letters followed by dots
 	public void singleLettersFollowedByDotsTest() {
-		String test = "Kong Chr.D. X s Bro 7, 5., 2300 K¯benhavn S";
+		String test = "Kong Chr.D. X s Bro 7, 5., 2300 København S";
 		String[] expectedResult = new String[]{"kong chr.d. x s bro", "7", null, "5", "2300", "k¯benhavn s"};
 		AdressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
@@ -105,7 +105,7 @@ public class AdressParserExistingAdressTester {
 	@Test
 	//Reason: roadname contains single letters not followed by dots
 	public void singleLettersNOTfollowedByDotsTest() {
-		String test = "A P M¯ller Kollegiet 10, 12., 2300 K¯benhavn S";
+		String test = "A P M¯ller Kollegiet 10, 12., 2300 København S";
 		String[] expectedResult = new String[]{"a p m¯ller kollegiet", "10", null, "12", "2300", "k¯benhavn s"};
 		AdressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
@@ -114,8 +114,8 @@ public class AdressParserExistingAdressTester {
 	@Test
 	//Reason: contains "Ê"
 	public void nordicCharacterAETest() {
-		String test = "∆ Towt";
-		String[] expectedResult = new String[]{"∆ towt", null, null, null, null, null};
+		String test = "Ê Towt";
+		String[] expectedResult = new String[]{"Ê towt", null, null, null, null, null};
 		AdressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
@@ -132,8 +132,8 @@ public class AdressParserExistingAdressTester {
 	@Test
 	//Reason: contains "Â"
 	public void nordicCharacterAATest() {
-		String test = "≈brinksgatan";
-		String[] expectedResult = new String[]{"≈brinksgatan", null, null, null, null, null};
+		String test = "Âbrinksgatan";
+		String[] expectedResult = new String[]{"Âbrinksgatan", null, null, null, null, null};
 		AdressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
@@ -142,8 +142,8 @@ public class AdressParserExistingAdressTester {
 	@Test
 	//Reason: contains "È"
 	public void accentTest() {
-		String test = "Broholms AllÈ";
-		String[] expectedResult = new String[]{"broholms allÈ", null, null, null, null, null};
+		String test = "Broholms Allè";
+		String[] expectedResult = new String[]{"broholms allè", null, null, null, null, null};
 		AdressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
@@ -151,8 +151,8 @@ public class AdressParserExistingAdressTester {
 	@Test
 	//Reason: contains "Ë"
 	public void antiAccenctTest() {
-		String test = "Chr. Rasmussens AllË";
-		String[] expectedResult = new String[]{"chr. Rasmussens allË", null, null, null, null, null};
+		String test = "Chr. Rasmussens Allë";
+		String[] expectedResult = new String[]{"chr. Rasmussens allë", null, null, null, null, null};
 		AdressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	

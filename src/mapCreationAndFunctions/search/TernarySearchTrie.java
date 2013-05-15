@@ -13,7 +13,7 @@ public class TernarySearchTrie
 
 	private class TrieNode
 	{
-		private char c;                 // character
+		private char character;                 // character
 		private TrieNode left, mid, right;  // left, middle, and right subtries
 		private ArrayList<Integer> val = new ArrayList<>();              // ArrayList<Integer> associated with string
 	}
@@ -27,20 +27,21 @@ public class TernarySearchTrie
 	public ArrayList<Integer> get(String key) {
 		if (key == null) throw new NullPointerException();
 		if (key.trim().isEmpty()) throw new IllegalArgumentException("Key cannot be empty");
-		TrieNode x = get(root, key, 0);
-		if (x == null) return null;
-		return (ArrayList<Integer>) x.val;
+		TrieNode currentNode = get(root, key, 0);
+		if (currentNode == null) return null;
+		return currentNode.val;
 	}
 
-	private TrieNode get(TrieNode x, String key, int d) {
+	private TrieNode get(TrieNode currentNode, String key, int d) {
 		if (key == null) throw new NullPointerException();
 		if (key.length() == 0) throw new IllegalArgumentException("Key must have length >= 1");
-		if (x == null) return null;
-		char c = key.charAt(d);
-		if      (c < x.c)              return get(x.left,  key, d);
-		else if (c > x.c)              return get(x.right, key, d);
-		else if (d < key.length() - 1) return get(x.mid,   key, d+1);
-		else                           return x;
+		if (currentNode == null) return null;
+		char character = key.charAt(d);
+		if (character < currentNode.character) return get(currentNode.left,  key, d);
+		else if (character > currentNode.character) return get(currentNode.right, key, d);
+		else if (d < key.length() - 1) return get(currentNode.mid,   key, d+1);
+		else
+			return currentNode;
 	}
 
 	public void put(String s, int val) {
@@ -48,74 +49,77 @@ public class TernarySearchTrie
 		root = put(root, s, val, 0);
 	}
 
-	private TrieNode put(TrieNode x, String s, int val, int d) {
-		char c = s.charAt(d);
-		if (x == null) {
-			x = new TrieNode();
-			x.c = c;
+	private TrieNode put(TrieNode currentNode, String s, int val, int d) {
+		char character = s.charAt(d);
+		if (currentNode == null) {
+			currentNode = new TrieNode();
+			currentNode.character = character;
 		}
-		if      (c < x.c)             x.left  = put(x.left,  s, val, d);
-		else if (c > x.c)             x.right = put(x.right, s, val, d);
-		else if (d < s.length() - 1)  x.mid   = put(x.mid,   s, val, d+1);
-		else                          x.val.add(val);
-		return x;
+		if      (character < currentNode.character)             currentNode.left  = put(currentNode.left,  s, val, d);
+		else if (character > currentNode.character)             currentNode.right = put(currentNode.right, s, val, d);
+		else if (d < s.length() - 1)  currentNode.mid   = put(currentNode.mid,   s, val, d+1);
+		else                          currentNode.val.add(val);
+		return currentNode;
 	}
 
 	public String longestPrefixOf(String s) {
+		s = s.toLowerCase();
 		if (s == null || s.length() == 0) return null;
 		int length = 0;
-		TrieNode x = root;
+		TrieNode currentNode = root;
 		int i = 0;
-		while (x != null && i < s.length()) {
-			char c = s.charAt(i);
-			if      (c < x.c) x = x.left;
-			else if (c > x.c) x = x.right;
+		while (currentNode != null && i < s.length()) {
+			char character = s.charAt(i);
+			if      (character < currentNode.character) currentNode = currentNode.left;
+			else if (character > currentNode.character) currentNode = currentNode.right;
 			else {
 				i++;
-				if (x.val != null) length = i;
-				x = x.mid;
+				if (currentNode.val != null) length = i;
+				currentNode = currentNode.mid;
 			}
 		}
 		return s.substring(0, length);
 	}
 
-	public Iterable<String> keys() {
-		Queue<String> queue = new Queue<String>();
-		collect(root, "", queue);
-		return queue;
+	public ArrayList<String> keys() {
+		ArrayList<String> list = new ArrayList<String>();
+		collect(root, "", list);
+		return list;
 	}
 
-	public Iterable<String> prefixMatch(String prefix) {
-		Queue<String> queue = new Queue<String>();
-		TrieNode x = get(root, prefix, 0);
-		if (x == null) return queue;
-		if (x.val != null) queue.enqueue(prefix);
-		collect(x.mid, prefix, queue);
-		return queue;
+	public ArrayList<String> prefixMatch(String prefix) {
+		prefix = prefix.toLowerCase();
+		ArrayList<String> list = new ArrayList<String>();
+		TrieNode currentNode = get(root, prefix, 0);
+		if (currentNode == null) return list;
+		if (currentNode.val != null) list.add(prefix);
+		collect(currentNode.mid, prefix, list);
+		return list;
 	}
 
-	private void collect(TrieNode x, String prefix, Queue<String> queue) {
-		if (x == null) return;
-		collect(x.left,  prefix,       queue);
-		if (x.val != null) queue.enqueue(prefix + x.c);
-		collect(x.mid,   prefix + x.c, queue);
-		collect(x.right, prefix,       queue);
+	private void collect(TrieNode currentNode, String prefix, ArrayList<String> list) {
+		if (currentNode == null) return;
+		collect(currentNode.left,  prefix, list);
+		if (currentNode.val != null) list.add(prefix + currentNode.character);
+		collect(currentNode.mid, prefix + currentNode.character, list);
+		collect(currentNode.right, prefix, list);
 	}
 
-	public Iterable<String> wildcardMatch(String pat) {
-		Queue<String> queue = new Queue<String>();
-		collect(root, "", 0, pat, queue);
-		return queue;
+	public ArrayList<String> wildcardMatch(String pattern) {
+		pattern = pattern.toLowerCase();
+		ArrayList<String> list = new ArrayList<String>();
+		collect(root, "", 0, pattern, list);
+		return list;
 	}
 
-	public void collect(TrieNode x, String prefix, int i, String pat, Queue<String> q) {
-		if (x == null) return;
-		char c = pat.charAt(i);
-		if (c == '.' || c < x.c) collect(x.left, prefix, i, pat, q);
-		if (c == '.' || c == x.c) {
-			if (i == pat.length() - 1 && x.val != null) q.enqueue(prefix + x.c);
-			if (i < pat.length() - 1) collect(x.mid, prefix + x.c, i+1, pat, q);
+	public void collect(TrieNode currentNode, String prefix, int i, String pattern, ArrayList<String> list) {
+		if (currentNode == null) return;
+		char character = pattern.charAt(i);
+		if (character == '.' || character < currentNode.character) collect(currentNode.left, prefix, i, pattern, list);
+		if (character == '.' || character == currentNode.character) {
+			if (i == pattern.length() - 1 && currentNode.val != null) list.add(prefix + currentNode.character);
+			if (i < pattern.length() - 1) collect(currentNode.mid, prefix + currentNode.character, i+1, pattern, list);
 		}
-		if (c == '.' || c > x.c) collect(x.right, prefix, i, pat, q);
+		if (character == '.' || character > currentNode.character) collect(currentNode.right, prefix, i, pattern, list);
 	}
 }

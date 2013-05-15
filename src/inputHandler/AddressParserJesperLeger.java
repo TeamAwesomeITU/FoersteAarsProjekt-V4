@@ -60,13 +60,15 @@ public class AddressParserJesperLeger {
 
 		//TODO IF THE INPUT CONTAINS THE PREVIOUSLY GIVEN SUGGESTIONS , DONT DO THE INCREMENTAL SEARCH!!!!
 		//If the user enters more than one character between each search, the program has to search char by char
-		if(input.length() > lastInputLength+1)
+		if(input.length() != lastInputLength+1)
 			runAsIncrementalSearch(input);
 
 		else {			
 			setSearchString(input);
 			calculateSuggestions();
 		}
+		
+		
 
 		return suggestionsArray;
 
@@ -74,7 +76,7 @@ public class AddressParserJesperLeger {
 
 	public Edge[] getFoundEdges()
 	{
-		if(numberOfCurrentSuggestedRoads > 0)
+		if(true/*numberOfCurrentSuggestedRoads > 0*/)
 			return lastSuggestedRoadsByNames;
 		else
 			return new Edge[0];
@@ -201,13 +203,13 @@ public class AddressParserJesperLeger {
 		//Only return cities, if cities is the only thing that is found!
 		if(lastSuggestedRoadsByNames.length == 0 && lastSuggestedCitiesByNames.length > 0)
 		{
-			for(City city : lastSuggestedCitiesByNames)
+			for(City city : getFoundCities())
 				suggestionsList.add(city.toString());
 		}
 		
 
 		else {
-			for(Edge edge : lastSuggestedRoadsByNames)
+			for(Edge edge : getFoundEdges())
 				suggestionsList.add(edge.toString());
 		}
 
@@ -585,11 +587,11 @@ public class AddressParserJesperLeger {
 //			System.out.println(string);
 			
 		
-//		for(String string : ap.getSearchResults("Strandvejen 133"))
-//			System.out.println(string);
-		
-		for(String string : ap.getSearchResults("Rued Langgaards Vej"))
+		for(String string : ap.getSearchResults("Strandvejen 133 3300"))
 			System.out.println(string);
+		
+//		for(String string : ap.getSearchResults("Rued Langgaards Vej"))
+//			System.out.println(string);
 	}
 
 }
