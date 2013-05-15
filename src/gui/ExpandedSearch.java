@@ -11,6 +11,7 @@ import gui.customJComponents.SearchList;
 import gui.settingsAndPopUp.ColorTheme;
 
 import inputHandler.AddressParserJesperLeger;
+import inputHandler.AddressSearch;
 import inputHandler.exceptions.MalformedAdressException;
 
 import java.awt.BorderLayout;
@@ -42,19 +43,19 @@ import com.sun.java.swing.plaf.motif.MotifBorders.BevelBorder;
 @SuppressWarnings("serial")
 public class ExpandedSearch extends JFrame{
 
-	private CustomJTextField fromRoadNameField, fromRoadNumberField, fromRoadLetterField, fromCityNameField, fromCityPostalNumberField;
-	private CustomJTextField toRoadNameField, toRoadNumberField, toRoadLetterField, toCityNameField, toCityPostalNumberField;
+	public static CustomJTextField fromRoadNameField, fromRoadNumberField, fromRoadLetterField, fromCityNameField, fromCityPostalNumberField;
+	public static CustomJTextField toRoadNameField, toRoadNumberField, toRoadLetterField, toCityNameField, toCityPostalNumberField;
 
 	public static SearchList<String> searchList;
 	public static DefaultListModel<String> listModel;
 
 	public static JWindow listWindow;
 
-	public static AddressParserJesperLeger addressParserFrom = new AddressParserJesperLeger();
-	public static AddressParserJesperLeger addressParserTo = new AddressParserJesperLeger();
+	public static AddressSearch fromAddressSearch = new AddressSearch();
+	public static AddressSearch toAddressSearch = new AddressSearch();
 
 	private Container contentPane;
-	
+
 	private static String query = "";
 
 	private static ExpandedSearch instance;
@@ -190,16 +191,12 @@ public class ExpandedSearch extends JFrame{
 		toPanel.add(cityPostalLabel1);
 		toPanel.add(toCityPostalNumberField = new CustomJTextField());
 		toCityPostalNumberField.setPreferredSize(new Dimension(200, 20));
-		
+
 		addActionListenersToTextFields();
-		
-		 CustomJTextField arrayOfFields[] = new CustomJTextField[]  
-		 {fromCityNameField,fromCityPostalNumberField,fromRoadLetterField,fromRoadNameField,fromRoadNumberField,
-		   toCityNameField,toCityPostalNumberField,toRoadLetterField,toRoadNameField,toRoadNumberField};  
-		
+
 		listWindow = new JWindow();
 		listModel = new DefaultListModel();
-		searchList = new SearchList(listModel, arrayOfFields);
+		searchList = new SearchList(listModel);
 
 		textFieldPanel.add(fromPanel);
 		textFieldPanel.add(toPanel);
@@ -282,20 +279,43 @@ public class ExpandedSearch extends JFrame{
 		return check;
 	}
 
+	/**
+	 * Kig på den her jesper!!
+	 */
 	public void fillList(){
+		//first removes all the elemnts of the list
 		listModel.removeAllElements();
-		/*try {
-			for(String string : addressParserFrom.getSearchResults(query))
-				listModel.addElement(string);
-
+		if(fromRoadNameField.hasFocus())
+		{
+			//Do something. This is the first field from the left colon.
+		}else if(fromRoadNumberField.hasFocus())
+		{
+			//Do something. This is the second field from the left colon.
+		}else if(fromRoadLetterField.hasFocus())
+		{
+			//Do something. This is the third field from the left colon.
+		}else if(fromCityNameField.hasFocus())
+		{
+			//Do something. This is the fourth field from the left colon.
+		}else if(fromCityPostalNumberField.hasFocus())
+		{
+			//Do something. This is the fifth and final field from the left colon.
+		}else if(toRoadNameField.hasFocus())
+		{
+			//Do something. This is the first field from the right colon.
+		}else if(toRoadNumberField.hasFocus())
+		{
+			//Do something. This is the second field from the right colon.
+		}else if(toRoadLetterField.hasFocus())
+		{
+			//Do something. This is the third field from the right colon.
+		}else if(toCityNameField.hasFocus())
+		{
+			//Do something. This is the fourth field from the right colon.
+		}else if(toCityPostalNumberField.hasFocus())
+		{
+			//Do something. This is the fifth and final field from the right colon.
 		}
-		catch (MalformedAdressException e) {
-		}*/
-		listModel.addElement("mark");
-		listModel.addElement("mark");
-		listModel.addElement("mark");
-		listModel.addElement("mark");
-		listModel.addElement("mark");
 	}
 
 	public void setLocationOfList(){
@@ -333,7 +353,7 @@ public class ExpandedSearch extends JFrame{
 	}
 
 	class MatchingList implements KeyListener{
-		
+
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if(checkKeyEvent(e)){
@@ -347,23 +367,25 @@ public class ExpandedSearch extends JFrame{
 			JTextField textField = (JTextField)e.getSource();
 			String search = (String) textField.getText().trim();
 			query = search;
-			if(checkKeyEvent(e))
+
+			if(checkKeyEvent(e)){
 				makeListWindow();
-			if(query.length() < 2 && listWindow != null)
-				listWindow.dispose();
-			else return;
+				if(query.length() < 2 && listWindow != null)
+					listWindow.dispose();
+			}else return;
 			if(e.getKeyCode() == 8 && listWindow != null)
 				listWindow.dispose();
 		}
 
 		@Override
 		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
+			if(!checkKeyEvent(e))
+				fillList();
 
 		}
 
 	}
-	
+
 	/**
 	 * Jesper do your shit!
 	 */

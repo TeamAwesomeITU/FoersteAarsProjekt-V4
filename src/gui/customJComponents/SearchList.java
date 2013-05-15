@@ -17,8 +17,6 @@ import javax.swing.ListSelectionModel;
  */
 @SuppressWarnings({ "serial", "hiding" })
 public class SearchList<Object> extends JList<Object> {
-	
-	private CustomJTextField[] fieldsForList;
 	/**
 	 * Calls the super constructor and the stylize method.
 	 * Also adds a ListSelectionListener to the list.
@@ -27,19 +25,6 @@ public class SearchList<Object> extends JList<Object> {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public SearchList(ListModel model){
 		super(model);
-		stylize();
-		addMouseListener(new SearchListSelectionListener());
-	}
-	
-	/**
-	 * Calls the super constructor and the stylize method.
-	 * Also adds a ListSelectionListener to the list.
-	 * @param model that holds the strings in the list.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public SearchList(ListModel model, CustomJTextField[] fieldsForList){
-		super(model);
-		this.fieldsForList = fieldsForList;
 		stylize();
 		addMouseListener(new SearchListSelectionListener());
 	}
@@ -60,28 +45,24 @@ public class SearchList<Object> extends JList<Object> {
 	 * Copies the selected address to the right field.
 	 */
 	class SearchListSelectionListener implements MouseListener{
-		
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			String adressSelected = (String) getSelectedValue();
-			for(CustomJTextField field : fieldsForList){
-				if(field.hasFocus()){
-					field.setText(adressSelected);
-					System.out.println("Success");
-				}
-			}
+			if(ExpandedSearch.fromRoadNameField.hasFocus())
+				ExpandedSearch.fromRoadNameField.setText(adressSelected);
 			ExpandedSearch.listWindow.dispose();
-			
-			/*if(MapWindow.fromSearchQuery.hasFocus())
+
+				/*if(MapWindow.fromSearchQuery.hasFocus())
 				MapWindow.fromSearchQuery.setText(adressSelected);
 			if(MapWindow.toSearchQuery.hasFocus())
 				MapWindow.toSearchQuery.setText(adressSelected);*/
-			MapWindow.listWindow.dispose();
-			
+				//MapWindow.listWindow.dispose();
+
+			}
+			public void mouseEntered(MouseEvent e) {}
+			public void mouseExited(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseReleased(MouseEvent e) {}
 		}
-		public void mouseEntered(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}
-		public void mousePressed(MouseEvent e) {}
-		public void mouseReleased(MouseEvent e) {}
 	}
-}
