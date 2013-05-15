@@ -17,5 +17,6 @@ public class ColoredJPanel extends JPanel {
 		super.setBackground(ColorTheme.BACKGROUND_COLOR);
 	}
 	
+	
 
 }

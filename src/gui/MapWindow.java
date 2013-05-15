@@ -118,6 +118,7 @@ public class MapWindow {
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
+		findRouteButton.setPreferredSize(new Dimension(95, 20));
 
 		ColoredJPanel buttonPanel = new ColoredJPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -129,6 +130,27 @@ public class MapWindow {
 		reverseButton.setContentAreaFilled(false);
 		reverseButton.setToolTipText("Click to reverse from and to");
 		reverseButton.addActionListener(new ReverseActionListener());
+		
+		ColoredJButton expandSearchButton = new ColoredJButton("Expand Search");
+		expandSearchButton.setPreferredSize(new Dimension(95, 20));
+		expandSearchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ExpandedSearch expandedSearch = ExpandedSearch.getInstance();
+				if(expandedSearch.isVisible())
+					expandedSearch.setVisible(false);
+				else{
+					Point location = fromSearchQuery.getLocationOnScreen();
+					if(ScreenSize.dualScreenRight)
+						expandedSearch.setLocation(new Point((int)location.getX()-expandedSearch.getWidth()-5, ((int)location.getY())));
+					else
+						expandedSearch.setLocation(new Point((int)location.getX()+210, ((int)location.getY())));
+					expandedSearch.setVisible(true);
+				}
+			}
+		});
+		//ColoredJPanel expandPanel = new ColoredJPanel();
+		//expandPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		buttonPanel.add(expandSearchButton);
 
 		ColoredJComboBox vehicleBox = new ColoredJComboBox();
 		vehicleBox.setPreferredSize(new Dimension(120, 30));
@@ -158,6 +180,7 @@ public class MapWindow {
 		toolBar.add(toHeader);
 		toolBar.add(toSearchQuery);
 		toolBar.add(buttonPanel);
+		//toolBar.add(expandPanel);
 		toolBar.add(vehicleBox);
 		toolBar.add(routeBox);
 
@@ -167,6 +190,12 @@ public class MapWindow {
 			public void mouseClicked(MouseEvent e) {
 				if(listWindow != null)
 					listWindow.dispose();
+				if(!ExpandedSearch.isNull()){
+					ExpandedSearch expandedSearch = ExpandedSearch.getInstance();
+					expandedSearch.dispose();
+				}
+					
+				
 			}
 		});
 		flow.add(toolBar);

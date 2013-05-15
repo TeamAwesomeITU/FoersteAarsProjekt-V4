@@ -342,7 +342,7 @@ public class MainGui {
 		helpMenu.add(aboutItem);
 		helpMenu.add(controlsItem);
 
-		//These trhee menu items are only visible if the frame is undecorated.
+		//These three menu items are only visible if the frame is undecorated.
 		ColoredJMenu exitMenu = new ColoredJMenu("X");
 		exitMenu.setForeground(Color.red);
 		exitMenu.setVisible(undecoratedBoolean);
