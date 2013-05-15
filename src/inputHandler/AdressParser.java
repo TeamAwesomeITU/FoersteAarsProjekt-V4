@@ -103,6 +103,7 @@ public class AdressParser {
 	private void findRoadName(String input)
 	{
 		String roadName = EdgeSearch.searchForRoadNameLongestPrefix(input);
+		System.out.println("ROADNAME: " + roadName);
 		adressArray[0] = roadName;
 		if(!roadName.isEmpty())
 			addressAfterDeletion = addressAfterDeletion.replace(roadName,"");

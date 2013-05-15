@@ -111,8 +111,9 @@ public class EdgeSearch  {
 
 		roadName = roadName.toLowerCase();
 		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
-		ArrayList<String> possibleEdgesNames = edgeSearchTrie.prefixMatch(roadName);
-
+		//ArrayList<String> possibleEdgesNames = edgeSearchTrie.prefixMatch(roadName);
+		ArrayList<Integer> possibleEdgeIDs = edgeSearchTrie.get(roadName);
+		
 		boolean betweenRoadNumbersRight;
 		boolean betweenRoadNumbersLeft; 
 		boolean betweenRoadLettersRight;
@@ -120,17 +121,19 @@ public class EdgeSearch  {
 		boolean matchCityRight;
 		boolean matchCityLeft;
 
-		for(String possibleEdgeName : possibleEdgesNames)
+		//for(String possibleEdgeName : possibleEdgesNames)
+		for(int possibleEdgeID : possibleEdgeIDs)
 		{
-			Edge[] edges = searchForRoadName(possibleEdgeName.toLowerCase());
+			//Edge[] edges = searchForRoadName(possibleEdgeName.toLowerCase());
+			Edge[] edges = new Edge[]{DataHolding.getEdge(possibleEdgeID)};
 			for(Edge edge : edges)
 			{
 				betweenRoadNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, roadNumber);
 				betweenRoadNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, roadNumber);
 				betweenRoadLettersRight = isRoadLetterWithinRightSideOfEdge(edge, letter);
 				betweenRoadLettersLeft = isRoadLetterWithinLeftSideOfEdge(edge, letter);
-				matchCityRight = isCityCorrectForRightSideOfEdge(edge, postalNumber, cityName);
-				matchCityLeft = isCityCorrectForLeftSideOfEdge(edge, postalNumber, cityName);
+				matchCityRight = isCityCorrectForEdge(edge, postalNumber, cityName);
+				matchCityLeft = isCityCorrectForEdge(edge, postalNumber, cityName);
 
 				//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
 				//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
@@ -153,29 +156,20 @@ public class EdgeSearch  {
 
 		return foundEdges.toArray(new Edge[foundEdges.size()]);
 	}
-
-	private static boolean isCityCorrectForLeftSideOfEdge( Edge edge, int postalNumber, String cityName )
+	
+	private static boolean isCityCorrectForEdge( Edge edge, int postalNumber, String cityName )
 	{ 
 		//If the search should not include cities
 		if(cityName.isEmpty() && postalNumber == -1)
 			return true;
 
-		if(!cityName.isEmpty())
+		if(!cityName.isEmpty() && City.cityNameExists(cityName))
 			return City.getCityByCityName(cityName).containsRoad(edge.getiD());
-		else
+		else if(City.postalNumberExists(postalNumber))
 			return City.getCityByPostalNumber(postalNumber).containsRoad(edge.getiD()); 
-	}
-
-	private static boolean isCityCorrectForRightSideOfEdge( Edge edge, int postalNumber, String cityName )
-	{ 
-		//If the search should not include cities
-		if(cityName.isEmpty() && postalNumber == -1)
-			return true;
-
-		if(!cityName.isEmpty())
-			return City.getCityByCityName(cityName).containsRoad(edge.getiD());
-		else
-			return City.getCityByPostalNumber(postalNumber).containsRoad(edge.getiD()); 
+		else {
+			return false;
+		}
 	}
 
 	/**
