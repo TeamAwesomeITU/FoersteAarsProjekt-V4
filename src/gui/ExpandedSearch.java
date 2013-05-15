@@ -160,6 +160,9 @@ public class ExpandedSearch extends JFrame{
 		fromPanel.add(cityPostalLabel);
 		fromPanel.add(fromCityPostalNumberField = new CustomJTextField());
 
+		fromRoadNumberField.setEnabled(false);
+		fromRoadLetterField.setEnabled(false);
+
 		ColoredJPanel toPanel = new ColoredJPanel();
 		toPanel.setLayout(new GridLayout(11, 1, 5, 5));
 		toPanel.setBorder(BorderFactory.createEtchedBorder());
@@ -192,10 +195,14 @@ public class ExpandedSearch extends JFrame{
 		toPanel.add(toCityPostalNumberField = new CustomJTextField());
 		toCityPostalNumberField.setPreferredSize(new Dimension(200, 20));
 
+		toRoadNumberField.setEnabled(false);
+		toRoadLetterField.setEnabled(false);
+
 		addActionListenersToTextFields();
 
 		listWindow = new JWindow();
 		listModel = new DefaultListModel();
+		listModel.ensureCapacity(150000);
 		searchList = new SearchList(listModel);
 
 		textFieldPanel.add(fromPanel);
@@ -300,42 +307,59 @@ public class ExpandedSearch extends JFrame{
 				fromAddressSuggester.enterRoadName(fromRoadNameField.getText().trim());
 				for(String string : fromAddressSuggester.getPossibleRoadNames())
 					listModel.addElement(string);
+				//If the list model is not empty after this, roads must have been found - unlock the fromRoadNumberField
+				if(!listModel.isEmpty())
+					fromRoadNumberField.setEnabled(true);
+				else
+				{
+					fromRoadNumberField.setText("");
+					fromRoadNumberField.setEnabled(false);
+				}
+
 			}
 		}
 		else if(fromRoadNumberField.hasFocus())
 		{
 			if(!fromRoadNumberField.getText().trim().isEmpty())
 			{
-			fromAddressSuggester.enterRoadNumber(fromRoadNumberField.getText().trim());
-			for(String number : fromAddressSuggester.getPossibleRoadNumbers())
-				listModel.addElement(number);
+				fromAddressSuggester.enterRoadNumber(fromRoadNumberField.getText().trim());
+				for(String number : fromAddressSuggester.getPossibleRoadNumbers())
+					listModel.addElement(number);
+				//If the list model is not empty after this, roads must have been found - unlock the fromRoadLetterField
+				if(!listModel.isEmpty())
+					fromRoadLetterField.setEnabled(true);
+				else
+				{
+					fromRoadLetterField.setText("");
+					fromRoadLetterField.setEnabled(false);
+				}
 			}
 		}
 		else if(fromRoadLetterField.hasFocus())
 		{
 			if(!fromRoadLetterField.getText().trim().isEmpty())
 			{
-			fromAddressSuggester.enterRoadLetter(fromRoadLetterField.getText().trim());
-			for(String string : fromAddressSuggester.getPossibleRoadLetters())
-				listModel.addElement(string);
+				fromAddressSuggester.enterRoadLetter(fromRoadLetterField.getText().trim());
+				for(String string : fromAddressSuggester.getPossibleRoadLetters())
+					listModel.addElement(string);
 			}
 		}
 		else if(fromCityNameField.hasFocus())
 		{
 			if(!fromCityNameField.getText().trim().isEmpty())
 			{
-			fromAddressSuggester.enterCityName(fromCityNameField.getText().trim());
-			for(String string : fromAddressSuggester.getPossibleCityNames())
-				listModel.addElement(string);
+				fromAddressSuggester.enterCityName(fromCityNameField.getText().trim());
+				for(String string : fromAddressSuggester.getPossibleCityNames())
+					listModel.addElement(string);
 			}
 		}
 		else if(fromCityPostalNumberField.hasFocus())
 		{
 			if(!fromCityPostalNumberField.getText().trim().isEmpty())
 			{
-			fromAddressSuggester.enterPostalNumber(fromCityPostalNumberField.getText().trim());
-			for(String string : fromAddressSuggester.getPossiblePostalNumbers())
-				listModel.addElement(string);
+				fromAddressSuggester.enterPostalNumber(fromCityPostalNumberField.getText().trim());
+				for(String string : fromAddressSuggester.getPossiblePostalNumbers())
+					listModel.addElement(string);
 			}
 		}
 		else if(toRoadNameField.hasFocus())
@@ -345,44 +369,65 @@ public class ExpandedSearch extends JFrame{
 				toAddressSuggester.enterRoadName(toRoadNameField.getText().trim());
 				for(String string : toAddressSuggester.getPossibleRoadNames())
 					listModel.addElement(string);
+				//If the list model is not empty after this, roads must have been found - unlock the toRoadNumberField
+				if(!listModel.isEmpty())
+					toRoadNumberField.setEnabled(true);
+				else
+				{
+					toRoadNumberField.setText("");
+					toRoadNumberField.setEnabled(false);
+				}
+
 			}
 		}
 		else if(toRoadNumberField.hasFocus())
 		{
 			if(!toRoadNumberField.getText().trim().isEmpty())
 			{
-			toAddressSuggester.enterRoadNumber(toRoadNumberField.getText().trim());
-			for(String number : toAddressSuggester.getPossibleRoadNumbers())
-				listModel.addElement(number);
+				toAddressSuggester.enterRoadNumber(toRoadNumberField.getText().trim());
+				for(String number : toAddressSuggester.getPossibleRoadNumbers())
+					listModel.addElement(number);
+				//If the list model is not empty after this, roads must have been found - unlock the toRoadLetterField
+				if(!listModel.isEmpty())
+					toRoadLetterField.setEnabled(true);
+				else
+				{
+					toRoadLetterField.setText("");
+					toRoadLetterField.setEnabled(false);
+				}
 			}
+
 		}
 		else if(toRoadLetterField.hasFocus())
 		{
 			if(!toRoadLetterField.getText().trim().isEmpty())
 			{
-			toAddressSuggester.enterRoadLetter(toRoadLetterField.getText().trim());
-			for(String string : toAddressSuggester.getPossibleRoadLetters())
-				listModel.addElement(string);
+				toAddressSuggester.enterRoadLetter(toRoadLetterField.getText().trim());
+				for(String string : toAddressSuggester.getPossibleRoadLetters())
+					listModel.addElement(string);
 			}
 		}
 		else if(toCityNameField.hasFocus())
 		{
 			if(!toCityNameField.getText().trim().isEmpty())
 			{
-			toAddressSuggester.enterCityName(toCityNameField.getText().trim());
-			for(String string : toAddressSuggester.getPossibleCityNames())
-				listModel.addElement(string);
+				toAddressSuggester.enterCityName(toCityNameField.getText().trim());
+				for(String string : toAddressSuggester.getPossibleCityNames())
+					listModel.addElement(string);
 			}
 		}
 		else if(toCityPostalNumberField.hasFocus())
 		{
 			if(!toCityPostalNumberField.getText().trim().isEmpty())
 			{
-			toAddressSuggester.enterPostalNumber(toCityPostalNumberField.getText().trim());
-			for(String string : toAddressSuggester.getPossiblePostalNumbers())
-				listModel.addElement(string);
+				toAddressSuggester.enterPostalNumber(toCityPostalNumberField.getText().trim());
+				for(String string : toAddressSuggester.getPossiblePostalNumbers())
+					listModel.addElement(string);
 			}
 		}
+
+		if(listModel.isEmpty())
+			listModel.addElement("No search results");
 	}
 
 	public void setLocationOfList(){
@@ -423,22 +468,22 @@ public class ExpandedSearch extends JFrame{
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-//			if(checkKeyEvent(e)){
-//				listModel.removeAllElements();
-//			}
+			//			if(checkKeyEvent(e)){
+			//				listModel.removeAllElements();
+			//			}
 
-			try {
-				makeListWindow();
-			} catch (MalformedAdressException | NoAddressFoundException e1) {
-				createWarning(e1.getMessage());
-			}
+			//			try {
+			//				makeListWindow();
+			//			} catch (MalformedAdressException | NoAddressFoundException e1) {
+			//				createWarning(e1.getMessage());
+			//			}
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			JTextField textField = (JTextField)e.getSource();
-			String search = (String) textField.getText().trim();
-			query = search;
+			//			JTextField textField = (JTextField)e.getSource();
+			//			String search = (String) textField.getText().trim();
+			//			query = search;
 
 			//			if(checkKeyEvent(e)){
 
@@ -448,18 +493,19 @@ public class ExpandedSearch extends JFrame{
 			//			else
 			//				return;
 
-//			if(e.getKeyCode() == 8 && listWindow != null)
-//				listWindow.dispose();
+			//			if(e.getKeyCode() == 8 && listWindow != null)
+			//				listWindow.dispose();
 		}
 
 		@Override
 		public void keyTyped(KeyEvent e) {
-//			if(!checkKeyEvent(e))
-				try {
-					fillList();
-				} catch (MalformedAdressException | NoAddressFoundException e1) {
-					createWarning(e1.getMessage());
-				}
+			//			if(!checkKeyEvent(e))
+			try {
+				makeListWindow();
+				fillList();
+			} catch (MalformedAdressException | NoAddressFoundException e1) {
+				createWarning(e1.getMessage());
+			}
 
 		}
 

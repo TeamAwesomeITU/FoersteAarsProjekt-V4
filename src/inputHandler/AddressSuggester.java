@@ -22,7 +22,6 @@ public class AddressSuggester {
 
 	public Edge[] getFoundEdges() throws MalformedAdressException, NoAddressFoundException
 	{ 
-		calculateResults();
 		System.out.println("Number of found edges: " + foundEdges.length);
 		return foundEdges; 
 	}
