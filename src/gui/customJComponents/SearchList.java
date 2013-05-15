@@ -1,5 +1,6 @@
 package gui.customJComponents;
 
+import gui.ExpandedSearch;
 import gui.MapWindow;
 import gui.settingsAndPopUp.ColorTheme;
 
@@ -15,7 +16,9 @@ import javax.swing.ListSelectionModel;
  *  @param <Object> the object which the list holds
  */
 @SuppressWarnings({ "serial", "hiding" })
-public class SearchList<Object> extends JList<String> {
+public class SearchList<Object> extends JList<Object> {
+	
+	private CustomJTextField[] fieldsForList;
 	/**
 	 * Calls the super constructor and the stylize method.
 	 * Also adds a ListSelectionListener to the list.
@@ -24,6 +27,19 @@ public class SearchList<Object> extends JList<String> {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public SearchList(ListModel model){
 		super(model);
+		stylize();
+		addMouseListener(new SearchListSelectionListener());
+	}
+	
+	/**
+	 * Calls the super constructor and the stylize method.
+	 * Also adds a ListSelectionListener to the list.
+	 * @param model that holds the strings in the list.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public SearchList(ListModel model, CustomJTextField[] fieldsForList){
+		super(model);
+		this.fieldsForList = fieldsForList;
 		stylize();
 		addMouseListener(new SearchListSelectionListener());
 	}
@@ -48,10 +64,18 @@ public class SearchList<Object> extends JList<String> {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			String adressSelected = (String) getSelectedValue();
-			if(MapWindow.fromSearchQuery.hasFocus())
+			for(CustomJTextField field : fieldsForList){
+				if(field.hasFocus()){
+					field.setText(adressSelected);
+					System.out.println("Success");
+				}
+			}
+			ExpandedSearch.listWindow.dispose();
+			
+			/*if(MapWindow.fromSearchQuery.hasFocus())
 				MapWindow.fromSearchQuery.setText(adressSelected);
 			if(MapWindow.toSearchQuery.hasFocus())
-				MapWindow.toSearchQuery.setText(adressSelected);
+				MapWindow.toSearchQuery.setText(adressSelected);*/
 			MapWindow.listWindow.dispose();
 			
 		}
