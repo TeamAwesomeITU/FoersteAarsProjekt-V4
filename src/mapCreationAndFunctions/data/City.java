@@ -33,7 +33,7 @@ public class City {
 	private HashSet<Integer> postalNumbers = new HashSet<Integer>();
 	
 	//A HashSet of all Edge's ID's that lies within this city
-	private HashSet<Integer> cityRoadsList = new HashSet<Integer>();
+	private HashSet<Integer> cityRoadsSet = new HashSet<Integer>();
 
 	//The ID of the City
 	private int cityID;
@@ -103,13 +103,31 @@ public class City {
 	{ postalNumbers.add(postalNumberToAdd); }
 	
 	private void addRoadToCity(int edgeID)
-	{ cityRoadsList.add(edgeID); }
+	{ cityRoadsSet.add(edgeID); }
 	
 	public static void addRoadToRelevantCity(int postalNumber, int edgeID)
 	{
 		if(postalNumberExists(postalNumber))
 			getCityByPostalNumber(postalNumber).addRoadToCity(edgeID);
 	}
+	
+	public HashSet<Integer> getCityRoadIDs()
+	{ return cityRoadsSet; }
+	
+	public Edge[] getCityRoads()
+	{
+		HashSet<Integer> edgeIDsSet = getCityRoadIDs();
+		Iterator<Integer> iterator = edgeIDsSet.iterator();
+		Edge[] edges = new Edge[edgeIDsSet.size()];
+		int currentIndex = 0;
+		while (iterator.hasNext())
+			edges[currentIndex++] = DataHolding.getEdge(iterator.next());
+		
+		return edges;		
+	}
+	
+	public boolean containsRoad(int edgeID)
+	{ return cityRoadsSet.contains(edgeID); }
 
 	/**
 	 * Finds the City with the given postal number
@@ -124,13 +142,14 @@ public class City {
 			return cityHashMap.get(postalNumber);
 	}
 	
-	private static boolean postalNumberExists(int postalNumber)
+	public static boolean postalNumberExists(int postalNumber)
 	{
 		for(int number : nonExistingNumbers)
 			if(postalNumber == number)
 				return false;
 		return true;
 	}
+	
 	
 	/**
 	 * Finds the name of the City with the given postal number

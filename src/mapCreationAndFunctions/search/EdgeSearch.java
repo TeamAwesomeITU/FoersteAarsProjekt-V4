@@ -3,6 +3,7 @@ package mapCreationAndFunctions.search;
 import inputHandler.exceptions.MalformedAdressException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import mapCreationAndFunctions.data.City;
@@ -62,8 +63,8 @@ public class EdgeSearch  {
 	 */
 	public static Edge[] searchForRoadSuggestions(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAdressException
 	{
-		if(roadName.isEmpty())
-			throw new MalformedAdressException("No roadname was entered");
+		if(roadName.isEmpty() && postalNumber == -1 && cityName.isEmpty())
+			throw new MalformedAdressException("Nothing was found to search for");
 		if(roadNumber == -1 && !letter.isEmpty())
 			throw new MalformedAdressException("A road letter cannot be entered without having a road roadNumber");
 		if(roadNumber == 0 || postalNumber == 0)
@@ -71,6 +72,29 @@ public class EdgeSearch  {
 		if(!cityName.isEmpty() && postalNumber != -1)
 			if(!CitySearch.doesCityNameMatchPostalNumber(cityName, postalNumber))
 				throw new MalformedAdressException("Postal number and city name does not match");
+		
+		//If postal number or city name are the only things that should be searched for
+		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && (postalNumber != 1 || !cityName.isEmpty()))
+		{
+			System.out.println("CITY IS THE ONLY THING TO SEARCH");
+			if(postalNumber != -1 && City.postalNumberExists(postalNumber))
+			{
+				System.out.println("SEARCHING FOR POSTAL NUMBER");
+				return City.getCityByPostalNumber(postalNumber).getCityRoads();		
+			}
+			
+			
+			else if(!cityName.isEmpty())
+			{
+				System.out.println("SEARCHING FOR CITY NAME");
+				City city = City.getCityByCityName(cityName);
+				if(city != null)
+					return city.getCityRoads();
+			}
+				
+		}
+		
+		
 
 		roadName = roadName.toLowerCase();
 		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
@@ -124,9 +148,9 @@ public class EdgeSearch  {
 			return true;
 
 		if(!cityName.isEmpty())
-			return City.getCityByCityName(cityName).getCityPostalNumbers().contains(edge.getPostalNumberLeft());
+			return City.getCityByCityName(cityName).containsRoad(edge.getiD());
 		else
-			return edge.getPostalNumberLeft() == postalNumber; 
+			return City.getCityByPostalNumber(postalNumber).containsRoad(edge.getiD()); 
 	}
 
 	private static boolean isCityCorrectForRightSideOfEdge( Edge edge, int postalNumber, String cityName )
@@ -136,9 +160,9 @@ public class EdgeSearch  {
 			return true;
 
 		if(!cityName.isEmpty())
-			return City.getCityByCityName(cityName).getCityPostalNumbers().contains(edge.getPostalNumberRight());
+			return City.getCityByCityName(cityName).containsRoad(edge.getiD());
 		else
-			return edge.getPostalNumberRight() == postalNumber; 
+			return City.getCityByPostalNumber(postalNumber).containsRoad(edge.getiD()); 
 	}
 
 	/**
@@ -331,7 +355,7 @@ public class EdgeSearch  {
 			System.out.println(edge + " " + edge.getiD());
 			*/
 		
-		Edge[] foundEdges5 = searchForRoadSuggestions("", -1, "", 4600, "");
+		Edge[] foundEdges5 = searchForRoadSuggestions("Vandelvej", 10, "", 4600, "Køge");
 		System.out.println(foundEdges5.length);
 
 		for(Edge edge : foundEdges5)
