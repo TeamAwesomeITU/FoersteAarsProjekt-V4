@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * This class is implemented to be able to deal with many different cities with many different postal numbers.
@@ -15,34 +16,75 @@ import java.util.HashSet;
  *
  */
 public class City {
-	
+
 	//The path to the file from which to create Cities
 	private static String cityFileName = "XML/postalNumbersAndCityNamesFINAL.txt";
-	
+
 	//A HashMap where the postal number is the key, and the corresponding City is the value
 	private static HashMap<Integer, City> cityHashMap = new HashMap<Integer, City>();
-	
+
 	//An ArrayList of all Cities
 	private static ArrayList<City> allCitiesList = new ArrayList<City>();
-	
+
 	//The City's name
 	private String cityName;
-	
+
 	//A HashSet of all the postal numbers which belong to the city
 	private HashSet<Integer> postalNumbers = new HashSet<Integer>();
-	
+
 	//The ID of the City
 	private int cityID;
-	
+
 	//The ID count of the cities;
 	private static int cityIDcount = 1;
-		
+
 	//TODO Fucking bad programming - this boolean only exists to ensure the creation of the other fields - FIX!
 	private static boolean initilalized = createCities();
 	
-	
+	//A HashSet of all the postal numbers, that exists in our data file, but not in our postal number file
+	private static HashSet<Integer> nonExistingNumbers = createNonExistingNumbersSet();
+
 	public static void main(String[] args) {
 		createCities();
+		
+		System.out.println(getCityByPostalNumber(2200).getCityName());
+		System.out.println(getCityByPostalNumber(6).getCityName());
+	}
+	
+	private static HashSet<Integer> createNonExistingNumbersSet()
+	{
+		System.out.println(initilalized);
+		HashSet<Integer> fuckedUpPostalNumbers = new HashSet<>();
+
+		int postalNumber = 0;
+		for(Edge edge : DataHolding.getEdgeArray())
+		{
+			try {
+				postalNumber = edge.getPostalNumberLeft();
+				City city = cityHashMap.get(postalNumber);
+				city.getCityID();
+			}
+
+			catch (NullPointerException e) {
+				fuckedUpPostalNumbers.add(postalNumber);
+			}
+
+			try {
+				postalNumber = edge.getPostalNumberRight();
+				City city = cityHashMap.get(postalNumber);
+				city.getCityID();
+			}
+
+			catch (NullPointerException e) {
+				fuckedUpPostalNumbers.add(postalNumber);
+			}
+		}
+		
+		Iterator<Integer> iterator = fuckedUpPostalNumbers.iterator();
+		while(iterator.hasNext())
+			System.out.println(iterator.next().toString());
+
+		return fuckedUpPostalNumbers;
 	}
 	/**
 	 * Creates a City with the input cityName and one of its postal numbers
@@ -55,7 +97,7 @@ public class City {
 		this.cityID = cityIDcount++;
 		postalNumbers.add(postalNumber);
 	}
-	
+
 	/**
 	 * Check if a City with the given name exists
 	 * @param cityName The name to check for
@@ -69,42 +111,47 @@ public class City {
 				exists = true;
 		return exists;
 	}
-	
+
 	/**
 	 * Returns the name of the City
 	 * @return the name of the City
 	 */
 	public String getCityName()
 	{ return this.cityName; }
-	
+
 	/**
 	 * Returns the postal numbers of the City in a HashSet<Integer>
 	 * @return the postal numbers of the City in a HashSet<Integer>
 	 */
 	public HashSet<Integer> getCityPostalNumbers()
 	{ return this.postalNumbers; }
-	
+
 	/**
 	 * Returns the ID of the City
 	 * @return the ID of the City
 	 */
 	public int getCityID()
 	{ return this.cityID; }
-	
+
 	/**
 	 * Adds a postal number to the City's current postal numbers
 	 * @param postalNumberToAdd the postal number to add
 	 */
 	private void addPostalNumberToCity(Integer postalNumberToAdd)
 	{ postalNumbers.add(postalNumberToAdd); }
-	
+
 	/**
 	 * Finds the City with the given postal number
 	 * @param postalNumber the City's postal number
 	 * @return The City with the corresponding postal number - returns null, if nothing could be found.
 	 */
 	public static City getCityByPostalNumber(int postalNumber)
-	{ return cityHashMap.get(postalNumber); }
+	{
+		if(nonExistingNumbers.contains(postalNumber))
+			return null;
+		else
+			return cityHashMap.get(postalNumber);
+	}
 	
 	/**
 	 * Finds the name of the City with the given postal number
@@ -113,23 +160,17 @@ public class City {
 	 */
 	public static String getCityNameByPostalNumber(int postalNumber)
 	{
-		String cityName = "CITY POSTAL NUMBER DOES NOT BELONG TO A CITY";
-		if(postalNumber == 0)
-			return cityName;
+		String cityName = "";
 		
-		else
-		{
-			try {
-				cityName = cityHashMap.get(postalNumber).getCityName();
-			
-			} catch (NullPointerException e) {
-				//Do nothing
-			}
-
-			return cityName;
+		try {
+			cityName = getCityByPostalNumber(postalNumber).getCityName();
+		} catch (NullPointerException e) {
+			cityName = "CITY POSTAL NUMBER DOES NOT BELONG TO A CITY";
 		}
-	}
 	
+		return cityName;
+	}
+
 	/**
 	 * Finds the City with the given name
 	 * @param cityName the wanted City's name
@@ -142,10 +183,10 @@ public class City {
 				return city;
 		return null;
 	}
-	
+
 	public static City getCityByID(int ID)
 	{ return allCitiesList.get(ID-1); }
-	
+
 	/**
 	 * Creates all of the Cities
 	 * @return true if the creation went well
@@ -165,21 +206,20 @@ public class City {
 
 			while((line = reader.readLine()) != null)
 			{
-				//TODO Hvis nogen har en id� til en regex, der kun splitter op til f�rste space -s� skriv den her og erstat den der for i = 2 l�kke med noget andet, flottere
 				lineParts = line.split("\\s");
 				postalNumber = Integer.parseInt(lineParts[0]);
 				cityName = lineParts[1];
-				
+
 				for(int i = 2; i < lineParts.length; i++)
 					cityName += " " + lineParts[i];
-				
+
 				if(!cityNameAlreadyExists(cityName))
 				{
 					city = new City(cityName, postalNumber);
 					cityHashMap.put(postalNumber, city);
 					allCitiesList.add(city);
 				}
-				
+
 				else
 				{
 					city = getCityByCityName(cityName);
@@ -192,13 +232,13 @@ public class City {
 			long t = System.currentTimeMillis();
 			System.out.println("Creation of CitySomeThingJesper took " + (t-s));
 			return true;
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}		
 	}
-	
+
 	public static ArrayList<City> getAllCities()
 	{
 		if(initilalized == false)
@@ -208,6 +248,5 @@ public class City {
 	@Override
 	public String toString() {
 		return this.cityName;
-	}
-	
+	}	
 }

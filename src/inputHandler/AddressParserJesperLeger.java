@@ -395,9 +395,9 @@ public class AddressParserJesperLeger {
 		if(!isRoadNameLocked)	
 		{
 			//If no cities are suggested and one or more roads are, it must be a road
-			if(lastSuggestedRoadsByNames.length >= 1 && numberOfCurrentSuggestedRoads == 0 && numberOfCurrentSuggestedCities == 0)
+			if(lastSuggestedRoadsByNames.length >= 1 && numberOfCurrentSuggestedRoads == 0)
 			{				
-				if(doesRoadNamesMatch(lastSuggestedRoadsByNames))
+				if(doesRoadNamesMatch(lastSuggestedRoadsByNames) || numberOfCurrentSuggestedCities == 0)
 				{
 					System.out.println("LOCKING ROADNAME: " + suggestedRoadNamesFoundByString);
 					isRoadNameLocked = true;
@@ -577,10 +577,18 @@ public class AddressParserJesperLeger {
 			System.out.println(string);
 		*/
 
-		for(String string : ap.getSearchResults("Stadionvej 2 B 6752"))
-			System.out.println(string);
 		
-		for(String string : ap.getSearchResults("Stadionvej 2B 6752"))
+//		for(String string : ap.getSearchResults("Stadionvej 2 B 6752"))
+//			System.out.println(string);
+		
+//		for(String string : ap.getSearchResults("Stadionvej 2B 6752"))
+//			System.out.println(string);
+			
+		
+//		for(String string : ap.getSearchResults("Strandvejen 133"))
+//			System.out.println(string);
+		
+		for(String string : ap.getSearchResults("Rued Langgaards Vej"))
 			System.out.println(string);
 	}
 
