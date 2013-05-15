@@ -223,7 +223,7 @@ public class AddressParserJesperLeger {
 
 	private void setRoadNameSuggestions() throws MalformedAdressException
 	{
-		Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(modifiedInput, -1, "", foundCityPostalNumber, foundCityName);
+		Edge[] possibleEdges = EdgeSearch.searchForRoads(modifiedInput, -1, "", foundCityPostalNumber, foundCityName);
 					
 		numberOfCurrentSuggestedRoads = possibleEdges.length;
 		System.out.println("Number of found edges: " + possibleEdges.length);
@@ -272,7 +272,7 @@ public class AddressParserJesperLeger {
 
 		//If there is only numbers in the input, search for it
 		else {
-			Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(suggestedRoadNamesFoundByString, Integer.parseInt(modifiedInput), "", foundCityPostalNumber, foundCityName);
+			Edge[] possibleEdges = EdgeSearch.searchForRoads(suggestedRoadNamesFoundByString, Integer.parseInt(modifiedInput), "", foundCityPostalNumber, foundCityName);
 
 			numberOfCurrentSuggestedRoads = possibleEdges.length;
 
@@ -290,7 +290,7 @@ public class AddressParserJesperLeger {
 	{
 		System.out.println("MODIFIED INPUT BEFORE SEARCHING FOR ROAD LETTERS: " + modifiedInput);
 		System.out.println("SEARCHING FOR: " + suggestedRoadNamesFoundByString + " " + foundRoadNumber + " " + modifiedInput);
-		Edge[] possibleEdges = EdgeSearch.searchForRoadSuggestions(suggestedRoadNamesFoundByString, foundRoadNumber, modifiedInput, foundCityPostalNumber, foundCityName);
+		Edge[] possibleEdges = EdgeSearch.searchForRoads(suggestedRoadNamesFoundByString, foundRoadNumber, modifiedInput, foundCityPostalNumber, foundCityName);
 		numberOfCurrentSuggestedRoads = possibleEdges.length;
 		
 		System.out.println("FOUND NUMBER OF ROADS WITH THIS LETTER: " + numberOfCurrentSuggestedRoads);

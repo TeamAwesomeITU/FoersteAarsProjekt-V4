@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Stack;
 
 import navigation.data.SWPriorityQueue;
+import navigation.exceptions.NoRoutePossibleException;
 
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
@@ -112,11 +113,12 @@ public class DijkstraSP
 	}
 
 	/**
-	 * Checks if there's a route to the given end node. If there is, the egdes in the route is pushed to a stack.
+	 * Checks if there's a route to the given end node. If there is, the Edges in the route is pushed to a Stack.
 	 * @param toEdge is the end node.
+	 * @throws NoRoutePossibleException Is thrown if no possible route could be found
 	 * @returns the stack with the edges for the route or returns null.
 	 */
-	public Iterable<Edge> pathTo(Edge toEdge) {
+	public Iterable<Edge> pathTo(Edge toEdge) throws NoRoutePossibleException {
 		if(badInput == false) 
 		{
 			int n = -1; 
@@ -125,8 +127,7 @@ public class DijkstraSP
 			if(n != -1) 
 			{
 				if (!hasPathTo(n)) { 
-					System.out.println("nej");
-					return null;
+					throw new NoRoutePossibleException("No route is possible between these roads");
 				}
 				System.out.println("Finding route!");
 				Stack<Edge> path = new Stack<Edge>();

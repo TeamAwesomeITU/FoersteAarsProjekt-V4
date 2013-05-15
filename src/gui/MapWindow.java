@@ -5,6 +5,7 @@ import gui.settingsAndPopUp.*;
 
 import inputHandler.AddressSearch;
 import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.NoAddressFoundException;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -26,6 +27,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import javax.swing.JTextField;
 import javax.swing.JWindow;
@@ -35,6 +37,7 @@ import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
 
 import navigation.DijkstraSP;
+import navigation.exceptions.NoRoutePossibleException;
 
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
@@ -294,9 +297,11 @@ public class MapWindow {
 	/**
 	 * NOT DONE
 	 * @throws MalformedAdressException 
+	 * @throws NoAddressFoundException 
+	 * @throws NoRoutePossibleException 
 	 */
 	//TODO fix med jespers halløj
-	public void findRoute() throws MalformedAdressException{
+	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException{
 			DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), VehicleType, RouteType);
 			mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 			mapPanel.repaintMap();
@@ -313,6 +318,11 @@ public class MapWindow {
 	 */
 	public JFrame getJFrame() {
 		return MainGui.frame;
+	}
+	
+	public void createWarning(String message)
+	{
+		new JOptionPane().showMessageDialog(getJFrame(), message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 
 
@@ -341,8 +351,8 @@ public class MapWindow {
 						addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 						mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
 					}
-				}catch (MalformedAdressException e1) {
-					//make popup
+				}catch (MalformedAdressException | NoAddressFoundException e1) {
+					createWarning(e1.getMessage());
 					}
 				}
 			}
@@ -501,9 +511,8 @@ public class MapWindow {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					findRoute();
-				} catch (MalformedAdressException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (NoAddressFoundException | NoRoutePossibleException e) {
+					createWarning(e.getMessage());
 				}			
 			}
 

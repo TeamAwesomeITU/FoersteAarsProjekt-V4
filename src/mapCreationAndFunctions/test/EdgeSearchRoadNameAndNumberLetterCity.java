@@ -15,7 +15,7 @@ public class EdgeSearchRoadNameAndNumberLetterCity {
 	{		
 		Edge[] edgesFound;
 		try {
-			edgesFound = EdgeSearch.searchForRoadSuggestions(edgeToFind, roadNumber, letter, postalNumber, cityName);
+			edgesFound = EdgeSearch.searchForRoads(edgeToFind, roadNumber, letter, postalNumber, cityName);
 
 			assertEquals(expectedFinds, edgesFound.length);
 			

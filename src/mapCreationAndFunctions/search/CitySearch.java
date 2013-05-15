@@ -62,6 +62,20 @@ public class CitySearch  {
 
 		return arrayOfFoundCities;
 	}
+	
+	/**
+	 * Searches for the specified city name
+	 * @param cityToFind
+	 * @return The City name with the longest prefix match for the given input
+	 */
+	public static String searchForCityNameLongestPrefix(String cityToFind)
+	{
+		System.out.println("CITY TO FIND: " + cityToFind);
+		cityToFind = cityToFind.toLowerCase();
+		String longestPrefix = cityNameSearchTrie.longestPrefixOf(cityToFind);
+		
+		return longestPrefix;
+	}
 
 	/**
 	 * Searches for City names, that starts with the given string.
