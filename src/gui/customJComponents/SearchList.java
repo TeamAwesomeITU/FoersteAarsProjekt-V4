@@ -48,10 +48,10 @@ public class SearchList<Object> extends JList<String> {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			String adressSelected = (String) getSelectedValue();
-			if(MapWindow.fromRoadName.hasFocus())
-				MapWindow.fromRoadName.setText(adressSelected);
-			if(MapWindow.toRoadName.hasFocus())
-				MapWindow.toRoadName.setText(adressSelected);
+			if(MapWindow.fromSearchQuery.hasFocus())
+				MapWindow.fromSearchQuery.setText(adressSelected);
+			if(MapWindow.toSearchQuery.hasFocus())
+				MapWindow.toSearchQuery.setText(adressSelected);
 			MapWindow.listWindow.dispose();
 			
 		}

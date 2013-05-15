@@ -35,13 +35,13 @@ public class EdgeSearch  {
 
 	/**
 	 * Searches for the specified road name
-	 * @param edgeToFind
+	 * @param roadToFind
 	 * @return An array of all the Edges with the given road name.
 	 */
-	public static Edge[] searchForRoadName(String edgeToFind)
+	public static Edge[] searchForRoadName(String roadToFind)
 	{
-		edgeToFind = edgeToFind.toLowerCase();
-		ArrayList<Integer> listOfFoundEdges = edgeSearchTrie.get(edgeToFind);
+		roadToFind = roadToFind.toLowerCase();
+		ArrayList<Integer> listOfFoundEdges = edgeSearchTrie.get(roadToFind);
 
 		Edge[] arrayOfFoundEdges = new Edge[listOfFoundEdges.size()];
 
@@ -167,14 +167,14 @@ public class EdgeSearch  {
 
 	/**
 	 * Returns the Edges with a given road name, inside a specified city.
-	 * @param edgeToFind The name of the roads
+	 * @param roadToFind The name of the roads
 	 * @param postalNumber The postal roadNumber, which the roads belongs to
 	 * @return The wanted Edges - null, if no match could be found
 	 */
-	public static Edge[] searchForRoadNameInCity(String edgeToFind, int postalNumber)
+	public static Edge[] searchForRoadNameInCity(String roadToFind, int postalNumber)
 	{
-		edgeToFind = edgeToFind.toLowerCase();
-		ArrayList<Integer> listOfEdgeWithCorrectName = edgeSearchTrie.get(edgeToFind);
+		roadToFind = roadToFind.toLowerCase();
+		ArrayList<Integer> listOfEdgeWithCorrectName = edgeSearchTrie.get(roadToFind);
 		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
 
 		for(Integer ID : listOfEdgeWithCorrectName)

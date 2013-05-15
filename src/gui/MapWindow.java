@@ -11,7 +11,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,7 +27,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import javax.swing.JTextField;
 import javax.swing.JWindow;
@@ -49,12 +47,9 @@ import mapCreationAndFunctions.search.EdgeSearch;
  */
 public class MapWindow {
 
-	public static JTextField fromRoadName, fromRoadNumber, fromRoadLetter, fromRoadPostalNumber, fromRoadCityName,
-	toRoadName, toRoadNumber, toRoadLetter, toRoadPostalNumber, toRoadCityName;
-	
+	public static JTextField toSearchQuery, fromSearchQuery;
 	public static SearchList<String> searchList;
 	public static DefaultListModel<String> listModel;
-	private static JPanel toSearchPanel, fromSearchPanel;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
@@ -77,7 +72,7 @@ public class MapWindow {
 		fillContentPane();
 
 		MainGui.frame.pack();
-		fromRoadCityName.requestFocusInWindow();
+		fromSearchQuery.requestFocusInWindow();
 		double widthOfFrame = widthForMap();
 		double heightOfFrame = heightForMap();
 		createMapOfDenmark(Math.round(widthOfFrame), Math.round(heightOfFrame));
@@ -110,66 +105,17 @@ public class MapWindow {
 		ColoredJPanel toolBar = new ColoredJPanel();
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
 
-		JLabel fromRoadNameHeader = new JLabel("Road name");
-		fromRoadNameHeader.setForeground(ColorTheme.TEXT_COLOR);
-		fromRoadName = new CustomJTextField();
-		fromRoadName.addKeyListener(new ListListener());
-		fromRoadName.setPreferredSize(new Dimension(200, 20));
-		
-		JLabel fromRoadNumberHeader = new JLabel("Road number");
-		fromRoadNumberHeader.setForeground(ColorTheme.TEXT_COLOR);
-		fromRoadNumber = new CustomJTextField();
-		fromRoadNumber.addKeyListener(new ListListener());
-		fromRoadNumber.setPreferredSize(new Dimension(200, 20));
-		
-		JLabel fromRoadLetterHeader = new JLabel("Road letter");
-		fromRoadLetterHeader.setForeground(ColorTheme.TEXT_COLOR);
-		fromRoadLetter = new CustomJTextField();
-		fromRoadLetter.addKeyListener(new ListListener());
-		fromRoadLetter.setPreferredSize(new Dimension(200, 20));
-		
-		JLabel fromCityNameHeader = new JLabel("City name");
-		fromCityNameHeader.setForeground(ColorTheme.TEXT_COLOR);
-		fromRoadCityName = new CustomJTextField();
-		fromRoadCityName.addKeyListener(new ListListener());
-		fromRoadCityName.setPreferredSize(new Dimension(200, 20));
-		
-		JLabel fromPostalNumberHeader = new JLabel("Postal number");
-		fromPostalNumberHeader.setForeground(ColorTheme.TEXT_COLOR);
-		fromRoadPostalNumber = new CustomJTextField();
-		fromRoadPostalNumber.addKeyListener(new ListListener());
-		fromRoadPostalNumber.setPreferredSize(new Dimension(200, 20));
-		
-		JLabel toRoadNameHeader = new JLabel("Road name");
-		toRoadNameHeader.setForeground(ColorTheme.TEXT_COLOR);
-		toRoadName = new CustomJTextField();
-		toRoadName.addKeyListener(new ListListener());
-		toRoadName.setPreferredSize(new Dimension(200, 20));
-		
-		JLabel toRoadNumberHeader = new JLabel("Road number");
-		toRoadNumberHeader.setForeground(ColorTheme.TEXT_COLOR);
-		toRoadNumber = new CustomJTextField();
-		toRoadNumber.addKeyListener(new ListListener());
-		toRoadNumber.setPreferredSize(new Dimension(200, 20));
-		
-		JLabel toRoadLetterHeader = new JLabel("Road letter");
-		toRoadLetterHeader.setForeground(ColorTheme.TEXT_COLOR);
-		toRoadLetter = new CustomJTextField();
-		toRoadLetter.addKeyListener(new ListListener());
-		toRoadLetter.setPreferredSize(new Dimension(200, 20));
-		
-		JLabel toCityNameHeader = new JLabel("City name");
-		toCityNameHeader.setForeground(ColorTheme.TEXT_COLOR);
-		toRoadCityName = new CustomJTextField();
-		toRoadCityName.addKeyListener(new ListListener());
-		toRoadCityName.setPreferredSize(new Dimension(200, 20));
-		
-		JLabel toPostalNumberHeader = new JLabel("Postal number");
-		toPostalNumberHeader.setForeground(ColorTheme.TEXT_COLOR);
-		toRoadPostalNumber = new CustomJTextField();
-		toRoadPostalNumber.addKeyListener(new ListListener());
-		toRoadPostalNumber.setPreferredSize(new Dimension(200, 20));
-		
+		JLabel fromHeader = new JLabel("From");
+		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
+		fromSearchQuery = new CustomJTextField();
+		fromSearchQuery.addKeyListener(new ListListener());
+		fromSearchQuery.setPreferredSize(new Dimension(200, 20));
+
+		JLabel toHeader = new JLabel("To");
+		toHeader.setForeground(ColorTheme.TEXT_COLOR);
+		toSearchQuery = new CustomJTextField();
+		toSearchQuery.addKeyListener(new ListListener());
+
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
 		findRouteButton.setPreferredSize(new Dimension(95, 20));
@@ -225,58 +171,12 @@ public class MapWindow {
 
 		listModel = new DefaultListModel();
 		searchList = new SearchList(listModel);
-		
-//		fromSearchPanel = new JPanel();		
-//		fromSearchPanel.add(fromRoadNameHeader);
-//		fromSearchPanel.add(fromRoadName);
-//		fromSearchPanel.add(fromRoadNumberHeader);
-//		fromSearchPanel.add(fromRoadNumber);
-//		fromSearchPanel.add(fromRoadLetterHeader);
-//		fromSearchPanel.add(fromRoadLetter);
-//		fromSearchPanel.add(fromCityNameHeader);
-//		fromSearchPanel.add(fromRoadCityName);
-//		fromSearchPanel.add(fromPostalNumberHeader);
-//		fromSearchPanel.add(fromRoadPostalNumber);
-//		
-//		toSearchPanel = new JPanel();		
-//		toSearchPanel.add(toRoadNameHeader);
-//		toSearchPanel.add(toRoadName);
-//		toSearchPanel.add(toRoadNumberHeader);
-//		toSearchPanel.add(toRoadNumber);
-//		toSearchPanel.add(toRoadLetterHeader);
-//		toSearchPanel.add(toRoadLetter);
-//		toSearchPanel.add(toCityNameHeader);
-//		toSearchPanel.add(toRoadCityName);
-//		toSearchPanel.add(toPostalNumberHeader);
-//		toSearchPanel.add(toRoadPostalNumber);
-		
 
 		toolBar.add(reverseButton);
-		
-//		toolBar.add(fromSearchPanel);
-//		toolBar.add(toSearchPanel);
-	
-		toolBar.add(fromRoadNameHeader);
-		toolBar.add(fromRoadName);
-		toolBar.add(fromRoadNumberHeader);
-		toolBar.add(fromRoadNumber);
-		toolBar.add(fromRoadLetterHeader);
-		toolBar.add(fromRoadLetter);
-		toolBar.add(fromCityNameHeader);
-		toolBar.add(fromRoadCityName);
-		toolBar.add(fromPostalNumberHeader);
-		toolBar.add(fromRoadPostalNumber);			
-		toolBar.add(toRoadNameHeader);
-		toolBar.add(toRoadName);
-		toolBar.add(toRoadNumberHeader);
-		toolBar.add(toRoadNumber);
-		toolBar.add(toRoadLetterHeader);
-		toolBar.add(toRoadLetter);
-		toolBar.add(toCityNameHeader);
-		toolBar.add(toRoadCityName);
-		toolBar.add(toPostalNumberHeader);
-		toolBar.add(toRoadPostalNumber);
-		
+		toolBar.add(fromHeader);
+		toolBar.add(fromSearchQuery);
+		toolBar.add(toHeader);
+		toolBar.add(toSearchQuery);
 		toolBar.add(buttonPanel);
 		toolBar.add(vehicleBox);
 		toolBar.add(routeBox);
@@ -428,7 +328,7 @@ public class MapWindow {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if(true/*checkKeyEvent(e)*/){
+			if(checkKeyEvent(e)){
 				if(e.getKeyCode() == 10){
 					findRoute();
 				}
@@ -442,18 +342,18 @@ public class MapWindow {
 			query = search;
 
 
-			if(true/*checkKeyEvent(e)*/){
+			if(checkKeyEvent(e)){
 				if(query.length() >= 2){
 					if(listWindow != null)
 						listWindow.dispose();
 					listWindow = new JWindow();
 					Container contentPane = listWindow.getContentPane();
-					if(fromRoadName.hasFocus()){
-						Point location = fromRoadName.getLocationOnScreen();
+					if(fromSearchQuery.hasFocus()){
+						Point location = fromSearchQuery.getLocationOnScreen();
 						listWindow.setLocation(new Point((int)location.getX(), ((int)location.getY()+32)));
 					}
-					if(toRoadName.hasFocus()){
-						Point location = toRoadName.getLocationOnScreen();
+					if(toSearchQuery.hasFocus()){
+						Point location = toSearchQuery.getLocationOnScreen();
 						listWindow.setLocation(new Point((int)location.getX(), ((int)location.getY()+32)));
 					}
 					listWindow.setPreferredSize(new Dimension(200, 80));
@@ -481,9 +381,9 @@ public class MapWindow {
 		}
 		@Override
 		public void keyTyped(KeyEvent e) {
-//			if(!checkKeyEvent(e))
+			if(!checkKeyEvent(e)){
 				makeMatchingResult();
-			
+			}
 		}
 		/**
 		 * Adds matching result for the list to show.
@@ -510,7 +410,6 @@ public class MapWindow {
 				}
 				*/
 			try {
-				listModel.clear();
 				for(String string : addressParserFrom.getSearchResults(query))
 					listModel.addElement(string);
 				
@@ -535,33 +434,36 @@ public class MapWindow {
 		 * @return a boolean whichs determines whether or not to update the list.
 		 */
 		private boolean checkKeyEvent(KeyEvent e){
+			boolean check = true;
+
 			int keyEvent = e.getKeyCode();
-			
 			switch (keyEvent) {
-			case 8:	return false;
-			case 16: return false;
-			case 17: return false;
-			case 18: return false;
-			case 37: return false;
-			case 38: return false;
-			case 39: return false;
-			case 40: return false;
-			case 112: return false;
-			case 113: return false;
-			case 114: return false;
-			case 115: return false;
-			case 116: return false;
-			case 117: return false;
-			case 118: return false;
-			case 119: return false;
-			case 120: return false;
-			case 121: return false;
-			case 122: return false;
-			case 123: return false;
-			case 124: return false;
+			case 8:	check = false;
+			case 16: check = false;
+			case 17: check = false;
+			case 18: check = false;
+			case 37: check = false;
+			case 38: check = false;
+			case 39: check = false;
+			case 40: check = false;
+			case 112: check = false;
+			case 113: check = false;
+			case 114: check = false;
+			case 115: check = false;
+			case 116: check = false;
+			case 117: check = false;
+			case 118: check = false;
+			case 119: check = false;
+			case 120: check = false;
+			case 121: check = false;
+			case 122: check = false;
+			case 123: check = false;
+			case 124: check = false;
+			break;
+			default:
+				break;
 			}
-			
-			return true;
+			return check;
 		}
 	}
 
@@ -698,9 +600,9 @@ public class MapWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String tempFrom = fromRoadName.getText();
-			fromRoadName.setText(toRoadName.getText());
-			toRoadName.setText(tempFrom);			
+			String tempFrom = fromSearchQuery.getText();
+			fromSearchQuery.setText(toSearchQuery.getText());
+			toSearchQuery.setText(tempFrom);			
 		}
 	}
 	/**
