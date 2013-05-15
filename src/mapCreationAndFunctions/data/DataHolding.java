@@ -98,6 +98,7 @@ public class DataHolding {
 
 			reader.close();		
 			System.out.println(edgeArray.length);
+			
 			return edgeArray;
 
 		} catch (IOException e) {
