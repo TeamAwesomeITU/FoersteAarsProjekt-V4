@@ -162,16 +162,6 @@ public class EdgeSearch  {
 	 */
 	public static Edge[] searchForRoadSuggestions(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAdressException, NoAddressFoundException
 	{
-		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && postalNumber == -1 && cityName.isEmpty())
-			throw new NoAddressFoundException("No address was found");
-		if(roadNumber == -1 && !letter.isEmpty())
-			throw new MalformedAdressException("A road letter cannot be entered without having a road roadNumber");
-		if(roadNumber == 0 || postalNumber == 0)
-			throw new MalformedAdressException("A road's road number or postal number cannot be 0");
-		if(!cityName.isEmpty() && postalNumber != -1)
-			if(!CitySearch.doesCityNameMatchPostalNumber(cityName, postalNumber))
-				throw new MalformedAdressException("Postal number and city name does not match");
-
 		//If postal number or city name are the only things that should be searched for
 		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && (postalNumber != -1 || !cityName.isEmpty()))
 		{
@@ -192,6 +182,8 @@ public class EdgeSearch  {
 			}
 
 		}
+		
+		
 
 		roadName = roadName.toLowerCase();
 		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
@@ -231,8 +223,21 @@ public class EdgeSearch  {
 			}
 		}
 
-
 		return foundEdges.toArray(new Edge[foundEdges.size()]);
+		
+	}
+	
+	private static void checkInput(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws NoAddressFoundException, MalformedAdressException
+	{
+		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && postalNumber == -1 && cityName.isEmpty())
+			throw new NoAddressFoundException("No address was found");
+		else if(roadNumber == -1 && !letter.isEmpty())
+			throw new MalformedAdressException("A road letter cannot be entered without having a road roadNumber");
+		else if(roadNumber == 0 || postalNumber == 0)
+			throw new MalformedAdressException("A road's road number or postal number cannot be 0");
+		else if(!cityName.isEmpty() && postalNumber != -1)
+			if(!CitySearch.doesCityNameMatchPostalNumber(cityName, postalNumber))
+				throw new MalformedAdressException("Postal number and city name does not match");
 	}
 
 	private static boolean isCityCorrectForEdge( Edge edge, int postalNumber, String cityName )
@@ -376,7 +381,7 @@ public class EdgeSearch  {
 	}
 
 
-	public static void main(String[] args) throws MalformedAdressException
+	public static void main(String[] args) throws MalformedAdressException, NoAddressFoundException
 	{		
 		/*
 		Edge[] foundEdges = searchForRoadSuggestions("Nørregade", 2, "", -1, "");
@@ -446,25 +451,25 @@ public class EdgeSearch  {
 			System.out.println(edge + " " + edge.getiD());
 		 */
 
-		//		Edge[] foundEdges5 = searchForRoadSuggestions("Vandelvej", 10, "", 4600, "Køge");
-		//		System.out.println(foundEdges5.length);
-		//
-		//		for(Edge edge : foundEdges5)
-		//			System.out.println(edge + " " + edge.getiD());
+				Edge[] foundEdges5 = searchForRoads("Vandelvej", 10, "", 2800, "Køge");
+				System.out.println(foundEdges5.length);
+		
+				for(Edge edge : foundEdges5)
+					System.out.println(edge + " " + edge.getiD());
 
 		//		ArrayList<String> foundEdges5 = edgeSearchTrie.prefixMatch("Vandelvej 10, 4600 Køge");
 		//
 		//		for(String string : foundEdges5)
 		//			System.out.println(string);
 
-		String foundString = edgeSearchTrie.longestPrefixOf("køge vandelvej");
-		System.out.println(foundString);
-
-		for(int edgeID : edgeSearchTrie.get(foundString))
-			System.out.println(DataHolding.getEdge(edgeID));
-
-		String foundString2 = edgeSearchTrie.longestPrefixOf("køgevandelvej");
-		System.out.println(foundString2);
+//		String foundString = edgeSearchTrie.longestPrefixOf("køge vandelvej");
+//		System.out.println(foundString);
+//
+//		for(int edgeID : edgeSearchTrie.get(foundString))
+//			System.out.println(DataHolding.getEdge(edgeID));
+//
+//		String foundString2 = edgeSearchTrie.longestPrefixOf("køgevandelvej");
+//		System.out.println(foundString2);
 
 	}
 }

@@ -416,9 +416,7 @@ public class Edge {
 		return this.roadName;
 	}
 
-	public Integer[] toStringNumbers() {
-
-
+	public Integer[] containedNumbers() {
 		ArrayList<Integer> numbers = new ArrayList<>();
 		int fL = this.fromLeftNumber, tL = this.toLeftNumber;
 
@@ -471,17 +469,11 @@ public class Edge {
 		}
 		Integer[] sortedArray = numbers.toArray(new Integer[numbers.size()]);
 		Arrays.sort(sortedArray);
-		System.out.println("Array "+ sortedArray.length);
-		System.out.println("ArrayList " + numbers.size());
-		System.out.println("Id " + this.iD);
-		for(Integer ints: sortedArray){
-			System.out.println(ints);
-		}
 
 		return sortedArray; 
 	}
 
-	public String[] toStringLetter(){
+	public String[] containedLetters(){
 		ArrayList<String> letters = new ArrayList<>();
 		char fromLeft = 0, toLeft = 0, fromRight = 0, toRight = 0;
 
@@ -513,11 +505,6 @@ public class Edge {
 
 		String[] sortedLetters = letters.toArray(new String[letters.size()]);
 		Arrays.sort(sortedLetters);
-
-
-		for(String string: sortedLetters) {		
-			System.out.println(string);
-		}
 
 		return sortedLetters;
 	}

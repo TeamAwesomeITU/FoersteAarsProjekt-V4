@@ -11,6 +11,7 @@ import gui.customJComponents.SearchList;
 import gui.settingsAndPopUp.ColorTheme;
 
 import inputHandler.AddressParserJesperLeger;
+import inputHandler.AddressSuggester;
 import inputHandler.exceptions.MalformedAdressException;
 
 import java.awt.BorderLayout;
@@ -50,8 +51,8 @@ public class ExpandedSearch extends JFrame{
 
 	public static JWindow listWindow;
 
-	public static AddressParserJesperLeger addressParserFrom = new AddressParserJesperLeger();
-	public static AddressParserJesperLeger addressParserTo = new AddressParserJesperLeger();
+	public static AddressSuggester addressSuggesterFrom = new AddressSuggester();
+	public static AddressSuggester addressSuggesterTo = new AddressSuggester();
 
 	private Container contentPane;
 	

@@ -11,7 +11,7 @@ public class AddressSearch {
 	
 	private AdressParser ap;
 	private String[] parsedInput;
-	private Edge[] foundEdges;
+	private Edge[] foundEdges = new Edge[0];
 	
 	public AddressSearch()
 	{

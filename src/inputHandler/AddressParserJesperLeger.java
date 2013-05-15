@@ -1,6 +1,7 @@
 package inputHandler;
 
 import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.NoAddressFoundException;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -53,7 +54,7 @@ public class AddressParserJesperLeger {
 		resetCitySearch();
 	}
 
-	public String[] getSearchResults(String input) throws MalformedAdressException
+	public String[] getSearchResults(String input) throws MalformedAdressException, NoAddressFoundException
 	{
 		Matcher validInput = Pattern.compile(patternBadInput).matcher(input);		
 		if (validInput.find() || input.trim().isEmpty())
@@ -166,7 +167,7 @@ public class AddressParserJesperLeger {
 		System.out.println("Searching for: " + modifiedInput);
 	}
 
-	private void calculateSuggestions() throws MalformedAdressException
+	private void calculateSuggestions() throws MalformedAdressException, NoAddressFoundException
 	{
 		ArrayList<String> suggestionsList = new ArrayList<String>();
 
@@ -221,7 +222,7 @@ public class AddressParserJesperLeger {
 		suggestionsArray = suggestionsList.toArray(new String[suggestionsList.size()]);
 	}
 
-	private void setRoadNameSuggestions() throws MalformedAdressException
+	private void setRoadNameSuggestions() throws MalformedAdressException, NoAddressFoundException
 	{
 		Edge[] possibleEdges = EdgeSearch.searchForRoads(modifiedInput, -1, "", foundCityPostalNumber, foundCityName);
 					
@@ -247,7 +248,7 @@ public class AddressParserJesperLeger {
 		}
 	}
 
-	private void setRoadNumberSuggestions() throws MalformedAdressException
+	private void setRoadNumberSuggestions() throws MalformedAdressException, NoAddressFoundException
 	{
 		//If the input does not contain numbers, it is not a road number
 		if(!modifiedInput.matches("\\d+"))
@@ -286,7 +287,7 @@ public class AddressParserJesperLeger {
 		//lastSuggestedRoadsByName = possibleEdges;
 	}
 
-	private void setRoadLetterSuggestions() throws MalformedAdressException
+	private void setRoadLetterSuggestions() throws MalformedAdressException, NoAddressFoundException
 	{
 		System.out.println("MODIFIED INPUT BEFORE SEARCHING FOR ROAD LETTERS: " + modifiedInput);
 		System.out.println("SEARCHING FOR: " + suggestedRoadNamesFoundByString + " " + foundRoadNumber + " " + modifiedInput);
@@ -502,7 +503,7 @@ public class AddressParserJesperLeger {
 		 */
 	}
 
-	private void runAsIncrementalSearch(String input) throws MalformedAdressException
+	private void runAsIncrementalSearch(String input) throws MalformedAdressException, NoAddressFoundException
 	{
 		System.out.println("Running incremental search");
 		for (int i = 1; i <= input.length(); i++) 
