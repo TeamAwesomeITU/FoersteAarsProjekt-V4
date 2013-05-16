@@ -1,7 +1,6 @@
 package gui.customJComponents;
 
 
-import gui.ExpandedSearch;
 import gui.MapWindow;
 import gui.settingsAndPopUp.ColorTheme;
 

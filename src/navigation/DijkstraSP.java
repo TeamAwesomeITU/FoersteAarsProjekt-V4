@@ -9,7 +9,6 @@ import java.util.Stack;
 import navigation.data.SWPriorityQueue;
 import navigation.exceptions.NoRoutePossibleException;
 
-import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 
 /**
@@ -25,11 +24,13 @@ public class DijkstraSP
 	private HashSet<Integer> setOfNonViableEdges;
 	private HashSet<String> setOfNonViableRoadTypes;
 	private EdgeWeightedDigraph graph;
+	private Edge[] edgeArray;
 	private boolean badInput = false;
 
-	public DijkstraSP(EdgeWeightedDigraph graph, Edge fromEdge, String meansOfTransportation, String routeType) {
+	public DijkstraSP(EdgeWeightedDigraph graph, Edge fromEdge, Edge[] edgeArray, String meansOfTransportation, String routeType) {
 		TransportType(meansOfTransportation);
 
+		this.edgeArray = edgeArray;
 		this.meansOfTransportation = meansOfTransportation;
 		this.routeType = routeType;
 		if(setOfNonViableEdges == null) 
@@ -69,7 +70,7 @@ public class DijkstraSP
 		Edge currentEdge;
 		for(Integer e : graph.adj(n)) 
 		{
-			currentEdge = DataHolding.getEdge(e);
+			currentEdge = edgeArray[e-1];
 			if(!setOfNonViableEdges.contains(currentEdge.getRoadType())) {
 				if(currentEdge.getRoadType() == 1)
 					relax(n, currentEdge);
@@ -131,7 +132,7 @@ public class DijkstraSP
 				}
 				System.out.println("Finding route!");
 				Stack<Edge> path = new Stack<Edge>();
-				for (Edge e = DataHolding.getEdge(edgeTo[n]); e != null; e = DataHolding.getEdge(edgeTo[n])) {
+				for (Edge e = edgeArray[edgeTo[n]-1]; e != null; e = edgeArray[edgeTo[n]-1]) {
 					if (n+1 == e.getFromNode())
 						n = e.getToNode()-1;
 					else {

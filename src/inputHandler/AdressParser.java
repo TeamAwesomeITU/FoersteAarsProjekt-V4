@@ -109,11 +109,13 @@ public class AdressParser {
 
 	private void findRoadName(String input)
 	{
+		System.out.println("INPUT TO FIND ROADNAME BY: " + input);
 		String possibleRoadName = EdgeSearch.searchForRoadNameLongestPrefix(input);
 		String actualRoadName = "";
 		if(!possibleRoadName.isEmpty())
 		{
 			Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
+			System.out.println("NUMBER OF FOUNDS EDGES" + possibleEdges.length);
 			//If theres actually any roads with this name, take this as the name - otherwise, set it as an empty String
 			actualRoadName = (possibleEdges.length > 0) ? possibleEdges[0].getRoadName().toLowerCase() : "";
 
@@ -125,7 +127,11 @@ public class AdressParser {
 		System.out.println("ROADNAME: " + actualRoadName);
 		adressArray[0] = actualRoadName;
 		if(!actualRoadName.isEmpty())
+		{
+			System.out.println("Address left BEFORE roadname was found: " + addressAfterDeletion);
 			addressAfterDeletion = addressAfterDeletion.replace(actualRoadName,"");
+		}
+		System.out.println("Address left AFTER roadname was found: " + addressAfterDeletion);
 	}
 
 	/**	This method uses the matcher to find the number and eventual letter of a building. 
@@ -239,7 +245,7 @@ public class AdressParser {
 	public static void main( String[] args ) throws MalformedAdressException, NoAddressFoundException {
 		AdressParser aParser = new AdressParser();
 		//aParser.parseAdress("Vandelvej 10, 4600 Køge");
-		aParser.parseAdress("4600");
+		aParser.parseAdress("Strandvejen 133");
 
 		for(String string : aParser.getAdressArray())
 			System.out.println(string);
