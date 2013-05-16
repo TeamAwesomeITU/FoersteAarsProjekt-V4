@@ -35,7 +35,7 @@ public class AddressSearch {
 		
 		for(String string : parsedInput)
 			System.out.println("STRING IN PARSED INPUT: " + string);
-		
+		 
 		foundEdges = EdgeSearch.searchForRoads(parsedInput[0], roadNumber, parsedInput[2], postalNumber, parsedInput[5]);
 	}
 	

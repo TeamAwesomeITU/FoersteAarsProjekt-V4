@@ -116,8 +116,12 @@ public class AdressParser {
 			Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
 			//If theres actually any roads with this name, take this as the name - otherwise, set it as an empty String
 			actualRoadName = (possibleEdges.length > 0) ? possibleEdges[0].getRoadName().toLowerCase() : "";
+
+			for(Edge string: possibleEdges) {
+				System.out.println(string.getRoadName());
 		}
 
+		}
 		System.out.println("ROADNAME: " + actualRoadName);
 		adressArray[0] = actualRoadName;
 		if(!actualRoadName.isEmpty())
