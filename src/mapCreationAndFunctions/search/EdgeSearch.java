@@ -58,7 +58,7 @@ public class EdgeSearch  {
 	public static String searchForRoadNameLongestPrefix(String roadToFind)
 	{
 		roadToFind = roadToFind.toLowerCase();
-		return edgeSearchTrie.longestPrefixOf(roadToFind);
+		return edgeSearchTrie.longestPrefixOf(roadToFind).trim();
 	}
 
 	/**
@@ -444,11 +444,11 @@ public class EdgeSearch  {
 			System.out.println(edge + " " + edge.getiD());
 		 */
 
-		Edge[] foundEdges5 = searchForRoads("Vandelvej", 10, "", 2800, "Køge");
-		System.out.println(foundEdges5.length);
-
-		for(Edge edge : foundEdges5)
-			System.out.println(edge + " " + edge.getiD());
+//		Edge[] foundEdges5 = searchForRoads("Vandelvej", 10, "", 2800, "Køge");
+//		System.out.println(foundEdges5.length);
+//
+//		for(Edge edge : foundEdges5)
+//			System.out.println(edge + " " + edge.getiD());
 
 		//		ArrayList<String> foundEdges5 = edgeSearchTrie.prefixMatch("Vandelvej 10, 4600 Køge");
 		//
@@ -461,8 +461,8 @@ public class EdgeSearch  {
 		//		for(int edgeID : edgeSearchTrie.get(foundString))
 		//			System.out.println(DataHolding.getEdge(edgeID));
 		//
-		//		String foundString2 = edgeSearchTrie.longestPrefixOf("køgevandelvej");
-		//		System.out.println(foundString2);
+				String foundString2 = edgeSearchTrie.longestPrefixOf("strandvejen 133");
+				System.out.println(foundString2);
 
 	}
 }

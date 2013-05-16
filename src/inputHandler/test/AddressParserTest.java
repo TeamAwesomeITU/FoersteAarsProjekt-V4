@@ -2,6 +2,7 @@ package inputHandler.test;
 
 import static org.junit.Assert.*;
 import inputHandler.AddressParserJesperLeger;
+import inputHandler.AdressParser;
 import inputHandler.exceptions.MalformedAdressException;
 
 import mapCreationAndFunctions.data.City;
@@ -13,7 +14,7 @@ public class AddressParserTest {
 	
 	public void addressParserTestRoadNameSingleOccExpected(String roadName, String roadNumber, String cityName) throws MalformedAdressException
 	{
-		AddressParserJesperLeger ap = new AddressParserJesperLeger();
+		AdressParser ap = new AdressParser();
 		ap.getSearchResults(roadName);
 		
 		Edge[] foundEdges = ap.getFoundEdges();
