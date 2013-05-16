@@ -28,8 +28,6 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
@@ -46,7 +44,6 @@ import mapCreationAndFunctions.MapPanelResize;
 import mapCreationAndFunctions.data.CoordinateConverter;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.search.EdgeSearch;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -62,6 +59,7 @@ public class MapWindow {
 	public static JWindow listWindow;
 	public static AddressSearch addressSearcherFrom = new AddressSearch();
 	public static AddressSearch addressSearcherTo = new AddressSearch();
+	public static ExpandedSearch expandedSearch;
 
 	/**
 	 * The constructor makes the frame
@@ -136,21 +134,19 @@ public class MapWindow {
 		reverseButton.setToolTipText("Click to reverse from and to");
 		reverseButton.addActionListener(new ReverseActionListener());
 
-		ColoredJButton expandSearchButton = new ColoredJButton("Expand Search");
+		final ColoredJToggleButton expandSearchButton = new ColoredJToggleButton("Expand Search");
 		expandSearchButton.setPreferredSize(new Dimension(95, 20));
 		expandSearchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ExpandedSearch expandedSearch = ExpandedSearch.getInstance();
-				if(expandedSearch.isVisible())
-					expandedSearch.setVisible(false);
-				else{
+				if(expandSearchButton.isSelected()){
+					expandedSearch = new ExpandedSearch();
 					Point location = fromSearchQuery.getLocationOnScreen();
 					if(ScreenSize.dualScreenRight)
 						expandedSearch.setLocation(new Point((int)location.getX()-expandedSearch.getWidth()-5, ((int)location.getY())));
 					else
 						expandedSearch.setLocation(new Point((int)location.getX()+210, ((int)location.getY())));
-					expandedSearch.setVisible(true);
-				}
+				} else if(!expandSearchButton.isSelected())
+					expandedSearch.dispose();
 			}
 		});
 		buttonPanel.add(expandSearchButton);
@@ -192,12 +188,6 @@ public class MapWindow {
 			public void mouseClicked(MouseEvent e) {
 				if(listWindow != null)
 					listWindow.dispose();
-				if(!ExpandedSearch.isNull()){
-					ExpandedSearch expandedSearch = ExpandedSearch.getInstance();
-					expandedSearch.dispose();
-				}
-
-
 			}
 		});
 		flow.add(toolBar);
@@ -302,11 +292,11 @@ public class MapWindow {
 	 */
 	//TODO fix med jespers halløj
 	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException{
-			DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), VehicleType, RouteType);
-			mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
-			mapPanel.repaintMap();
-		}
-	
+		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), VehicleType, RouteType);
+		mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
+		mapPanel.repaintMap();
+	}
+
 	/**
 	 * @return the center panel witch hold the map
 	 */
@@ -319,7 +309,8 @@ public class MapWindow {
 	public JFrame getJFrame() {
 		return MainGui.frame;
 	}
-	
+
+	@SuppressWarnings("static-access")
 	private void createWarning(String message)
 	{
 		new JOptionPane().showMessageDialog(getJFrame(), message, "Error", JOptionPane.ERROR_MESSAGE);
@@ -353,171 +344,171 @@ public class MapWindow {
 					}
 				}catch (MalformedAdressException | NoAddressFoundException e1) {
 					createWarning(e1.getMessage());
-					}
 				}
 			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {
+		}
+		@Override
+		public void keyTyped(KeyEvent e) {
+		}
 	}
 
-		/**
-		 * Changes the route type in the routing. 
-		 */
-		class RouteTypeActionListener implements ActionListener{
+	/**
+	 * Changes the route type in the routing. 
+	 */
+	class RouteTypeActionListener implements ActionListener{
 
-			@SuppressWarnings("rawtypes")
-			public void actionPerformed(ActionEvent e) {
-				try {
-					JComboBox cb = (JComboBox)e.getSource();
-					String type = (String) cb.getSelectedItem();
-					RouteType = type.trim();
-				} catch (ClassCastException e2) {
-					return;
-				}
-
+		@SuppressWarnings("rawtypes")
+		public void actionPerformed(ActionEvent e) {
+			try {
+				JComboBox cb = (JComboBox)e.getSource();
+				String type = (String) cb.getSelectedItem();
+				RouteType = type.trim();
+			} catch (ClassCastException e2) {
+				return;
 			}
+
+		}
+	}
+
+	/**
+	 * Changes the vehicle type for the routing
+	 */
+	class VehicleTypeActionListener implements ActionListener{
+
+		@SuppressWarnings("rawtypes")
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				JComboBox cb = (JComboBox)e.getSource();
+				String type = (String) cb.getSelectedItem();
+				VehicleType = type.trim();
+			} catch (ClassCastException e2) {
+				return;
+			}
+		}
+	}
+
+
+	/**
+	 * The listener for the coordinates
+	 */
+	class CoordinatesMouseMotionListener extends MouseAdapter {
+
+		private MapPanel mapPanel;
+		private AreaToDraw mapAreaToDraw;
+		private CoordinateConverter coordConverter;
+		/**
+		 * Makes the listener and initializes the fields
+		 * @param mapPanel the panel for which to display the coordinates.
+		 */
+		public CoordinatesMouseMotionListener(MapPanel mapPanel){
+			this.mapPanel = mapPanel;
+			makeCoordinatesConverter();
+		}
+		/**
+		 * calculate the correct x-coordinate
+		 * @param e the mouse position on the map
+		 * @return the x-coordinate
+		 */
+		public double getXCoord(MouseEvent e){
+			makeCoordinatesConverter();
+			double xCord = coordConverter.pixelToUTMCoordX(e.getX());				
+			return xCord;
+		}
+		/**
+		 * calculate the correct y-coordinate
+		 * @param e the mouse position on the map
+		 * @return the y-coordinate
+		 */
+		public double getYCoord(MouseEvent e){
+			makeCoordinatesConverter();
+			double yCord = coordConverter.pixelToUTMCoordY(e.getY());			
+			return yCord;
+		}
+		/**
+		 * A converter to convert the mouse coordinates to the coordinates of the map.
+		 */
+		public void makeCoordinatesConverter(){
+			mapAreaToDraw = mapPanel.getArea();
+			coordConverter = new CoordinateConverter((int)Math.round(getWidthForMap()), (int)Math.round(getHeightForMap()), mapAreaToDraw);
 		}
 
 		/**
-		 * Changes the vehicle type for the routing
+		 * gets the mouse moved coodinates and converts them
+		 * @Override the mouseMoved method
 		 */
-		class VehicleTypeActionListener implements ActionListener{
+		public void mouseMoved(MouseEvent e) {
+			Edge edge = mapPanel.getHitEdge(getXCoord(e), getYCoord(e));
+			String yString = String.format("%.2f", getYCoord(e));
+			String xString = String.format("%.2f", getXCoord(e));
 
-			@SuppressWarnings("rawtypes")
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					JComboBox cb = (JComboBox)e.getSource();
-					String type = (String) cb.getSelectedItem();
-					VehicleType = type.trim();
-				} catch (ClassCastException e2) {
-					return;
-				}
-			}
+			UIManager.put("ToolTip.background", new ColorUIResource(ColorTheme.BACKGROUND_COLOR));
+			Border border = BorderFactory.createLineBorder(ColorTheme.BUTTON_CLICKED_COLOR);
+			UIManager.put("ToolTip.border", border);
+			ToolTipManager.sharedInstance().setDismissDelay(15000);  
+
+			String roadName = "";
+			if(edge != null)
+				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName() + " edgeID: "+ edge.getiD();
+			if (MainGui.coordinatesBoolean) 				
+				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", " + "Roadname: " + roadName);
+			else 
+				mapPanel.setToolTipText(roadName);
 		}
-
-
 		/**
-		 * The listener for the coordinates
+		 * Saves the coordinates for the mouse when pressed. Is used to copy them to the clipboard.
 		 */
-		class CoordinatesMouseMotionListener extends MouseAdapter {
+		public void mousePressed(MouseEvent e) {
+			if (e.getButton() == MouseEvent.BUTTON3){
+				if(MainGui.coordinatesBoolean){
+					String yString = String.format("%.2f", getYCoord(e));
+					String xString = String.format("%.2f", getXCoord(e));
 
-			private MapPanel mapPanel;
-			private AreaToDraw mapAreaToDraw;
-			private CoordinateConverter coordConverter;
-			/**
-			 * Makes the listener and initializes the fields
-			 * @param mapPanel the panel for which to display the coordinates.
-			 */
-			public CoordinatesMouseMotionListener(MapPanel mapPanel){
-				this.mapPanel = mapPanel;
-				makeCoordinatesConverter();
-			}
-			/**
-			 * calculate the correct x-coordinate
-			 * @param e the mouse position on the map
-			 * @return the x-coordinate
-			 */
-			public double getXCoord(MouseEvent e){
-				makeCoordinatesConverter();
-				double xCord = coordConverter.pixelToUTMCoordX(e.getX());				
-				return xCord;
-			}
-			/**
-			 * calculate the correct y-coordinate
-			 * @param e the mouse position on the map
-			 * @return the y-coordinate
-			 */
-			public double getYCoord(MouseEvent e){
-				makeCoordinatesConverter();
-				double yCord = coordConverter.pixelToUTMCoordY(e.getY());			
-				return yCord;
-			}
-			/**
-			 * A converter to convert the mouse coordinates to the coordinates of the map.
-			 */
-			public void makeCoordinatesConverter(){
-				mapAreaToDraw = mapPanel.getArea();
-				coordConverter = new CoordinateConverter((int)Math.round(getWidthForMap()), (int)Math.round(getHeightForMap()), mapAreaToDraw);
-			}
-
-			/**
-			 * gets the mouse moved coodinates and converts them
-			 * @Override the mouseMoved method
-			 */
-			public void mouseMoved(MouseEvent e) {
+					MainGui.coordinatesString = "X: " + xString + " Y: " + yString;
+				}
 				Edge edge = mapPanel.getHitEdge(getXCoord(e), getYCoord(e));
-				String yString = String.format("%.2f", getYCoord(e));
-				String xString = String.format("%.2f", getXCoord(e));
-
-				UIManager.put("ToolTip.background", new ColorUIResource(ColorTheme.BACKGROUND_COLOR));
-				Border border = BorderFactory.createLineBorder(ColorTheme.BUTTON_CLICKED_COLOR);
-				UIManager.put("ToolTip.border", border);
-				ToolTipManager.sharedInstance().setDismissDelay(15000);  
-
-				String roadName = "";
 				if(edge != null)
-					roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName() + " edgeID: "+ edge.getiD();
-				if (MainGui.coordinatesBoolean) 				
-					mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", " + "Roadname: " + roadName);
-				else 
-					mapPanel.setToolTipText(roadName);
-			}
-			/**
-			 * Saves the coordinates for the mouse when pressed. Is used to copy them to the clipboard.
-			 */
-			public void mousePressed(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON3){
-					if(MainGui.coordinatesBoolean){
-						String yString = String.format("%.2f", getYCoord(e));
-						String xString = String.format("%.2f", getXCoord(e));
-
-						MainGui.coordinatesString = "X: " + xString + " Y: " + yString;
-					}
-					Edge edge = mapPanel.getHitEdge(getXCoord(e), getYCoord(e));
-					if(edge != null)
-						MainGui.locationString = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
-				}
-
-			}
-
-			public void mouseClicked(MouseEvent e) {}
-			public void mouseEntered(MouseEvent e) {}
-			public void mouseExited(MouseEvent e) {}
-			public void mouseReleased(MouseEvent e) {}
-		}
-		/**
-		 * Flips the from and to address
-		 */
-		class ReverseActionListener implements ActionListener{
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String tempFrom = fromSearchQuery.getText();
-				fromSearchQuery.setText(toSearchQuery.getText());
-				toSearchQuery.setText(tempFrom);			
-			}
-		}
-		/**
-		 * Calls the findRoute() method.
-		 */
-		class FindRouteActionListener implements ActionListener{
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					findRoute();
-				} catch (NoAddressFoundException | NoRoutePossibleException e) {
-					createWarning(e.getMessage());
-				}			
+					MainGui.locationString = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
 			}
 
 		}
 
+		public void mouseClicked(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
+	}
+	/**
+	 * Flips the from and to address
+	 */
+	class ReverseActionListener implements ActionListener{
 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String tempFrom = fromSearchQuery.getText();
+			fromSearchQuery.setText(toSearchQuery.getText());
+			toSearchQuery.setText(tempFrom);			
+		}
+	}
+	/**
+	 * Calls the findRoute() method.
+	 */
+	class FindRouteActionListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				findRoute();
+			} catch (NoAddressFoundException | NoRoutePossibleException e) {
+				createWarning(e.getMessage());
+			}			
+		}
 
 	}
+
+
+
+}

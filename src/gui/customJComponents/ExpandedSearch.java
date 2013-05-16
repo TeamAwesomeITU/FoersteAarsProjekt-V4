@@ -1,17 +1,8 @@
-package gui;
+package gui.customJComponents;
 
-import gui.customJComponents.ColoredJButton;
-import gui.customJComponents.ColoredJMenu;
-import gui.customJComponents.ColoredJMenuBar;
-import gui.customJComponents.ColoredJMenuItem;
-import gui.customJComponents.ColoredJPanel;
-import gui.customJComponents.ColoredJScrollPane;
-import gui.customJComponents.CustomJTextField;
-import gui.customJComponents.SearchList;
 import gui.settingsAndPopUp.ColorTheme;
 
 import inputHandler.AddressSuggester;
-import inputHandler.AddressSearch;
 import inputHandler.exceptions.MalformedAdressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
@@ -19,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -31,13 +21,10 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.JWindow;
 
 @SuppressWarnings("serial")
@@ -56,28 +43,8 @@ public class ExpandedSearch extends JFrame{
 
 	private Container contentPane;
 
-	private static String query = "";
-
-	private static ExpandedSearch instance;
-
-	public static ExpandedSearch getInstance(){
-		if(instance != null)
-			return instance;
-		else{
-			instance = new ExpandedSearch();
-			return instance;
-		}
-	}
-
-	private ExpandedSearch(){
+	public ExpandedSearch(){
 		makeWindow();
-	}
-
-	public static boolean isNull(){
-		if(instance == null)
-			return true;
-		else
-			return false;
 	}
 
 	public void makeWindow(){
@@ -86,6 +53,7 @@ public class ExpandedSearch extends JFrame{
 		fillContentPane();
 		makeMenu();
 		pack();
+		setVisible(true);
 	}
 
 	public void fillContentPane(){
@@ -119,12 +87,14 @@ public class ExpandedSearch extends JFrame{
 		exitMenu.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				dispose();
+				
 			}
 		});
 		menuBar.add(Box.createHorizontalGlue());
 		menuBar.add(exitMenu);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ColoredJPanel makeTextFields(){
 		ColoredJPanel textFieldPanel = new ColoredJPanel();
 		textFieldPanel.setLayout(new GridLayout(1, 2));
@@ -225,29 +195,24 @@ public class ExpandedSearch extends JFrame{
 		toCityPostalNumberField.addKeyListener(new MatchingList());
 	}
 
-	@SuppressWarnings("static-access")
+	
 	public void makeListWindow() throws MalformedAdressException, NoAddressFoundException{
 		Container listContentPane = listWindow.getContentPane();
 		setLocationOfList();
 		listWindow.setPreferredSize(new Dimension(285, 60));
-
-		ColoredJPanel listPanel = new ColoredJPanel();
-		listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-		ColoredJScrollPane scrollPane = new ColoredJScrollPane(listPanel);
-
+		
 		fillList();
-
-		listPanel.add(searchList);
-		listContentPane.add(scrollPane);
-
+		
+		listContentPane.add(searchList.getScrollPane());
 		listWindow.pack();
+		
 		if(listModel.getSize() == 0)
 			listWindow.setVisible(false);
 		else
 			listWindow.setVisible(true);
-
 	}
 
+	@SuppressWarnings("static-access")
 	private void createWarning(String message)
 	{
 		new JOptionPane().showMessageDialog(contentPane, message, "Error", JOptionPane.ERROR_MESSAGE);

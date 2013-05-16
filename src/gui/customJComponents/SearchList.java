@@ -1,10 +1,6 @@
 package gui.customJComponents;
 
-import gui.ExpandedSearch;
-import gui.MapWindow;
 import gui.settingsAndPopUp.ColorTheme;
-
-import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -17,6 +13,8 @@ import javax.swing.ListSelectionModel;
  */
 @SuppressWarnings({ "serial", "hiding" })
 public class SearchList<Object> extends JList<Object> {
+	
+	private ColoredJScrollPane listScroller;
 	/**
 	 * Calls the super constructor and the stylize method.
 	 * Also adds a ListSelectionListener to the list.
@@ -36,9 +34,13 @@ public class SearchList<Object> extends JList<Object> {
 		setLayoutOrientation(JList.VERTICAL);
 		setBackground(ColorTheme.BACKGROUND_COLOR);
 		setForeground(ColorTheme.TEXT_COLOR);
+		setCellRenderer(new SelectedListCellRenderer());
 
-		ColoredJScrollPane listScroller = new ColoredJScrollPane(this);
-		listScroller.setPreferredSize(new Dimension(250, 80));
+		listScroller = new ColoredJScrollPane(this);
+	}
+	
+	public ColoredJScrollPane getScrollPane(){
+		return listScroller;
 	}
 
 	/**
@@ -51,6 +53,24 @@ public class SearchList<Object> extends JList<Object> {
 			String adressSelected = (String) getSelectedValue();
 			if(ExpandedSearch.fromRoadNameField.hasFocus())
 				ExpandedSearch.fromRoadNameField.setText(adressSelected);
+			else if(ExpandedSearch.fromRoadNumberField.hasFocus())
+				ExpandedSearch.fromRoadNumberField.setText(adressSelected);
+			else if(ExpandedSearch.fromRoadLetterField.hasFocus())
+				ExpandedSearch.fromRoadLetterField.setText(adressSelected);
+			else if(ExpandedSearch.fromCityNameField.hasFocus())
+				ExpandedSearch.fromCityNameField.setText(adressSelected);
+			else if(ExpandedSearch.fromCityPostalNumberField.hasFocus())
+				ExpandedSearch.fromCityPostalNumberField.setText(adressSelected);
+			else if(ExpandedSearch.toRoadNameField.hasFocus())
+				ExpandedSearch.toRoadNameField.setText(adressSelected);
+			else if(ExpandedSearch.toRoadNumberField.hasFocus())
+				ExpandedSearch.toRoadNumberField.setText(adressSelected);
+			else if(ExpandedSearch.toRoadLetterField.hasFocus())
+				ExpandedSearch.toRoadLetterField.setText(adressSelected);
+			else if(ExpandedSearch.toCityNameField.hasFocus())
+				ExpandedSearch.toCityNameField.setText(adressSelected);
+			else if(ExpandedSearch.toCityPostalNumberField.hasFocus())
+				ExpandedSearch.toCityPostalNumberField.setText(adressSelected);
 			ExpandedSearch.listWindow.dispose();
 
 				/*if(MapWindow.fromSearchQuery.hasFocus())
