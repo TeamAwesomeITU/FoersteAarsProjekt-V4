@@ -302,7 +302,7 @@ public class MapWindow {
 	 */
 	//TODO fix med jespers halløj
 	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException{
-			DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), VehicleType, RouteType);
+			DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), DataHolding.getEdgeArray(), VehicleType, RouteType);
 			mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 			mapPanel.repaintMap();
 		}
