@@ -73,7 +73,7 @@ public class CitySearch  {
 		cityToFind = cityToFind.toLowerCase();
 		String longestPrefix = cityNameSearchTrie.longestPrefixOf(cityToFind);
 		
-		return longestPrefix;
+		return longestPrefix.trim();
 	}
 
 	/**

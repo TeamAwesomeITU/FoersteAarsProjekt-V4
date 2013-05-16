@@ -110,22 +110,58 @@ public class AdressParser {
 	private void findRoadName(String input)
 	{
 		System.out.println("INPUT TO FIND ROADNAME BY: " + input);
-		String possibleRoadName = EdgeSearch.searchForRoadNameLongestPrefix(input);
-		String actualRoadName = "";
-		if(!possibleRoadName.isEmpty())
-		{
-			Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
-			System.out.println("NUMBER OF FOUNDS EDGES" + possibleEdges.length);
-			//If theres actually any roads with this name, take this as the name - otherwise, set it as an empty String
-			actualRoadName = (possibleEdges.length > 0) ? possibleEdges[0].getRoadName().toLowerCase() : "";
+
+		String[] splitInput = input.split("\\s+");
+		String possibleRoadName = "";
+		String foundRoadName = "";
+		String totalInput = "";
+		int i = 0;
+		boolean isResultFound = false;
+		int wantedLength = splitInput.length;
+		int largestMatchFound = 0;
+
+		while(!isResultFound && i < splitInput.length && wantedLength >= 0)
+		{		
+			totalInput = "";
+			for (int j = splitInput.length-wantedLength; j < splitInput.length; j++) 
+				totalInput += splitInput[j].toLowerCase() + " ";
+
+			totalInput = totalInput.trim();		
+
+			System.out.println("totalInput: " + totalInput);
+
+			possibleRoadName = EdgeSearch.searchForRoadNameLongestPrefix(totalInput);
+
+			if(!possibleRoadName.isEmpty())
+			{
+				Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
+
+				if(possibleEdges.length > largestMatchFound)
+				{
+					foundRoadName = possibleRoadName;
+					largestMatchFound = possibleEdges.length;
+				}			
+			}
+			i++;
+			wantedLength--;
 		}
 
-		System.out.println("ROADNAME: " + actualRoadName);
-		adressArray[0] = actualRoadName;
-		if(!actualRoadName.isEmpty())
+		//		String actualRoadName = "";
+		//		if(!possibleRoadName.isEmpty())
+		//		{
+		//			Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
+		//			System.out.println("NUMBER OF FOUNDS EDGES" + possibleEdges.length);
+		//			//If theres actually any roads with this name, take this as the name - otherwise, set it as an empty String
+		//			actualRoadName = (possibleEdges.length > 0) ? possibleEdges[0].getRoadName().toLowerCase() : "";
+		//		}
+
+		System.out.println("ROADNAME: " + foundRoadName);
+		adressArray[0] = foundRoadName;
+
+		if(!foundRoadName.isEmpty())
 		{
 			System.out.println("Address left BEFORE roadname was found: " + addressAfterDeletion);
-			addressAfterDeletion = addressAfterDeletion.replace(actualRoadName,"");
+			addressAfterDeletion = addressAfterDeletion.replace(foundRoadName,"").trim();
 		}
 		System.out.println("Address left AFTER roadname was found: " + addressAfterDeletion);
 	}
@@ -197,10 +233,10 @@ public class AdressParser {
 			System.out.println("Postnummer: " + postcode.group());
 			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"").trim();
 			adressArray[4] = postcode.group().trim(); 
-			
+
 			//If the string is not empty, even after the city was found, try finding the road name again
-			if(!addressAfterDeletion.isEmpty())
-				findRoadName(addressAfterDeletion);
+			//			if(!addressAfterDeletion.isEmpty() && adressArray[0].isEmpty())
+			//				findRoadName(addressAfterDeletion);
 		}
 	}
 	/**	Finds the name of the city by applying the patterns used to find the 
@@ -212,7 +248,7 @@ public class AdressParser {
 	 */
 	private void findCityName(String s) {
 		String vejnavn = adressArray[0];
-
+		System.out.println("LOOKING FOR CITYNAME IN THIS INPUT: " + s);
 		String cityString = s.replaceAll(vejnavn, "").
 				replaceAll(pPost, "").
 				replaceAll(pBuilding, "").
@@ -227,10 +263,10 @@ public class AdressParser {
 			adressArray[5] = actualCityName;
 			System.out.println("Bynavn: " + actualCityName);	
 			addressAfterDeletion = cityString.replace(actualCityName,"").trim();
-			
+
 			//If the string is not empty, even after the city was found, try finding the road name again
-			if(!addressAfterDeletion.isEmpty())
-				findRoadName(addressAfterDeletion);
+			//			if(!addressAfterDeletion.isEmpty() && adressArray[0].isEmpty())
+			//				findRoadName(addressAfterDeletion);
 		}
 	}
 

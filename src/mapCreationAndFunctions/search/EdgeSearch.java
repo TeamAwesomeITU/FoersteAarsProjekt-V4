@@ -124,13 +124,15 @@ public class EdgeSearch  {
 			//				System.out.println("matchCityRight: " + matchCityRight);
 			//				System.out.println("matchCityLeft: " + matchCityLeft);
 
-			if(betweenRoadNumbersRight && betweenRoadLettersRight && matchCityRight)
+			if(betweenRoadNumbersRight && betweenRoadLettersRight)
 			{
+				if(matchCityRight || matchCityLeft)
 				foundEdges.add(edge);
 			}
 
-			else if (betweenRoadNumbersLeft && betweenRoadLettersLeft && matchCityLeft)
+			else if (betweenRoadNumbersLeft && betweenRoadLettersLeft)
 			{
+				if(matchCityRight || matchCityLeft)
 				foundEdges.add(edge);
 			}
 		}
@@ -194,8 +196,8 @@ public class EdgeSearch  {
 				betweenRoadNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, roadNumber);
 				betweenRoadLettersRight = isRoadLetterWithinRightSideOfEdge(edge, letter);
 				betweenRoadLettersLeft = isRoadLetterWithinLeftSideOfEdge(edge, letter);
-				matchCityRight = isCityCorrectForEdge(edge, postalNumber, cityName);
-				matchCityLeft = isCityCorrectForEdge(edge, postalNumber, cityName);
+				matchCityRight = isCitySuggestionsCorrectForEdge(edge, postalNumber, cityName);
+				matchCityLeft = isCitySuggestionsCorrectForEdge(edge, postalNumber, cityName);
 
 				//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
 				//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
@@ -204,13 +206,15 @@ public class EdgeSearch  {
 				//				System.out.println("matchCityRight: " + matchCityRight);
 				//				System.out.println("matchCityLeft: " + matchCityLeft);
 
-				if(betweenRoadNumbersRight && betweenRoadLettersRight && matchCityRight)
+				if(betweenRoadNumbersRight && betweenRoadLettersRight)
 				{
+					if(matchCityRight || matchCityLeft)
 					foundEdges.add(edge);
 				}
 
-				else if (betweenRoadNumbersLeft && betweenRoadLettersLeft && matchCityLeft)
+				else if (betweenRoadNumbersLeft && betweenRoadLettersLeft)
 				{
+					if(matchCityRight || matchCityLeft)
 					foundEdges.add(edge);
 				}
 			}
@@ -234,6 +238,21 @@ public class EdgeSearch  {
 	}
 
 	private static boolean isCityCorrectForEdge( Edge edge, int postalNumber, String cityName )
+	{ 
+		//If the search should not include cities
+		if(cityName.isEmpty() && postalNumber == -1)
+			return true;
+
+		if(!cityName.isEmpty() && City.cityNameExists(cityName))
+			return City.getCityByCityName(cityName).containsRoad(edge.getiD());
+		else if(City.postalNumberExists(postalNumber))
+			return City.getCityByPostalNumber(postalNumber).containsRoad(edge.getiD()); 
+		else {
+			return false;
+		}
+	}
+	
+	private static boolean isCitySuggestionsCorrectForEdge( Edge edge, int postalNumber, String cityName )
 	{ 
 		//If the search should not include cities
 		if(cityName.isEmpty() && postalNumber == -1)
