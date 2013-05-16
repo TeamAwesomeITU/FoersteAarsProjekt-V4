@@ -33,6 +33,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
+import javax.xml.crypto.Data;
 
 import navigation.DijkstraSP;
 import navigation.exceptions.NoRoutePossibleException;
@@ -292,7 +293,7 @@ public class MapWindow {
 	 */
 	//TODO fix med jespers halløj
 	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException{
-		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), VehicleType, RouteType);
+		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), DataHolding.getEdgeArray(), VehicleType, RouteType);
 		mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 		mapPanel.repaintMap();
 	}
