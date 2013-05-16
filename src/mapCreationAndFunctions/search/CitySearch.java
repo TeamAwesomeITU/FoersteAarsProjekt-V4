@@ -132,9 +132,9 @@ public class CitySearch  {
 	
 	public static void main(String[] args) {
 		
-		City[] foundCityList = searchForCityNameSuggestions("k");
-		for(City city : foundCityList)
-			System.out.println(city.getCityName());
+//		City[] foundCityList = searchForCityNameSuggestions("k");
+//		for(City city : foundCityList)
+//			System.out.println(city.getCityName());
 		
 //		System.out.println(searchForCityName("KØGE")[0].getCityName());
 //		
@@ -149,7 +149,8 @@ public class CitySearch  {
 //		
 //		System.out.println("BREAK---------------");
 //		
-//		for(City city : searchForCityPostalNumberSuggestions(0))
+//		for(City city : searchForCityName("København"))
 //			System.out.println(city.getCityName());
+		
 	}
 }

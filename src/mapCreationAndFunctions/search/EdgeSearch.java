@@ -82,7 +82,12 @@ public class EdgeSearch  {
 		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && (postalNumber != -1 || !cityName.isEmpty()))
 		{
 			System.out.println("CITY IS THE ONLY THING TO SEARCH");
-			if(postalNumber != -1 && City.postalNumberExists(postalNumber))
+			
+			//If city does not exist, return no roads
+			if(postalNumber != -1 && !City.postalNumberExists(postalNumber))
+				return new Edge[0];
+			
+			else if(postalNumber != -1 && City.postalNumberExists(postalNumber))
 			{
 				System.out.println("SEARCHING FOR POSTAL NUMBER");
 				return City.getCityByPostalNumber(postalNumber).getCityRoads();		
