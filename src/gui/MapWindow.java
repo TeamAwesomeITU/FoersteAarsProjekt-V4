@@ -591,8 +591,9 @@ public class MapWindow {
 			if(arg0.getKeyCode() == 10){
 				if(toSearchQuery.hasFocus()){
 					try {
+						addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 						findRoute();
-					} catch (NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+					} catch (NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException | MalformedAdressException e) {
 						createWarning(e.getMessage());
 					}
 				}else if(fromSearchQuery.hasFocus())
