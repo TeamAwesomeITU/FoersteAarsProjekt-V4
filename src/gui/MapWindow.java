@@ -412,8 +412,18 @@ public class MapWindow {
 				if (mapPanel.getPathTo() != null) {
 					try {
 						mapPanel.setPathTo(null);
+						directionEdges = new ArrayList<>();
 					} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
 						createWarning(e1.getMessage());
+					}
+					if(fromSearchQuery.getText().isEmpty()) 
+					{
+						mapPanel.setFromEdgesToHighlight(null);
+					}
+					
+					if(toSearchQuery.getText().isEmpty())
+					{
+						mapPanel.setToEdgesToHighlight(null);
 					}
 					mapPanel.repaintMap();
 				}
