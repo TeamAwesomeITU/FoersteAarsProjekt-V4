@@ -491,7 +491,7 @@ public class MapWindow {
 				if(toSearchQuery.hasFocus()){
 					try {
 						findRoute();
-					} catch (NoAddressFoundException | NoRoutePossibleException e) {
+					} catch (NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 						createWarning(e.getMessage());
 					}
 				}else if(fromSearchQuery.hasFocus())
