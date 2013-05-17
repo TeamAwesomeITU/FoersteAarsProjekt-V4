@@ -18,6 +18,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Stack;
+import javax.swing.Timer;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -45,6 +46,7 @@ import mapCreationAndFunctions.data.Edge;
  */
 public class MapWindow {
 
+	private Timer showAddressTimer = new Timer(800, new TimerListener());
 	public static CustomJTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
@@ -57,6 +59,7 @@ public class MapWindow {
 	 * The constructor makes the frame
 	 */
 	public MapWindow(){
+		showAddressTimer.setRepeats(false);
 		createMapScreen();
 	}
 
@@ -102,12 +105,14 @@ public class MapWindow {
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
 		fromSearchQuery = new CustomJTextField();
+		fromSearchQuery.addKeyListener(new TextFieldListener());
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
 		fromSearchQuery.setPreferredSize(new Dimension(200, 20));
 
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(ColorTheme.TEXT_COLOR);
 		toSearchQuery = new CustomJTextField();
+		toSearchQuery.addKeyListener(new TextFieldListener());
 		toSearchQuery.addKeyListener(new EnterKeyListener());
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
@@ -278,38 +283,51 @@ public class MapWindow {
 	private void createWarning(String message)
 	{
 		new JOptionPane().showMessageDialog(getJFrame(), message, "Error", JOptionPane.ERROR_MESSAGE);
+		fromSearchQuery.requestFocus();
 	}
 
 
 	//---------------------------------Listeners from here-----------------------------//
 
+
+	private class TimerListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				if(fromSearchQuery.hasFocus())
+				{
+					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
+				}
+				else if(toSearchQuery.hasFocus())
+				{
+					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
+				}
+			}catch (MalformedAdressException | NoAddressFoundException e1) {
+				//				createWarning(e1.getMessage());
+			}
+		}
+
+	}
+
 	/**
-	 * Brings up a suggestion list when the user types.
-	 * If the user is in the search text field, then by pressing enter
-	 * is the same as clicking the find route button
+	 * Resets the timer. If the user lingers it paints the edge inputted.
 	 */
-	class EnterKeyListener implements KeyListener{
+	class TextFieldListener implements KeyListener{
 
 		String query;
 
 		@Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == 10){
-				try {
-					if(fromSearchQuery.hasFocus())
-					{
-						addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
-						mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
-					}
-					else if(toSearchQuery.hasFocus())
-					{
-						addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
-						mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
-					}
-				}catch (MalformedAdressException | NoAddressFoundException e1) {
-					createWarning(e1.getMessage());
-				}
+		public void keyPressed(KeyEvent arg) {
+			if (showAddressTimer.isRunning()){
+				showAddressTimer.restart();
+			} 	
+			else {
+				showAddressTimer.start();
 			}
+
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
@@ -456,6 +474,25 @@ public class MapWindow {
 			fromSearchQuery.setText(toSearchQuery.getText());
 			toSearchQuery.setText(tempFrom);			
 		}
+	}
+
+
+	class EnterKeyListener implements KeyListener{
+
+		public void keyPressed(KeyEvent arg0) {
+			if(arg0.getKeyCode() == 10){
+				if(toSearchQuery.hasFocus()){
+					try {
+						findRoute();
+					} catch (NoAddressFoundException | NoRoutePossibleException e) {
+						createWarning(e.getMessage());
+					}
+				}else if(fromSearchQuery.hasFocus())
+					toSearchQuery.requestFocus();
+			}
+		}
+		public void keyReleased(KeyEvent arg0) {}
+		public void keyTyped(KeyEvent arg0) {}
 	}
 	/**
 	 * Calls the findRoute() method.
