@@ -43,7 +43,6 @@ public class MapPanel extends JPanel {
 	private double mapHeight, mapWidth;
 	private Stack<Edge> pathTo;
 	private Edge[] fromEdgesToHighlight, toEdgesToHighlight;
-	private Color fromColor = new Color(204,0,102), toColor = new Color(204,0,102);
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
@@ -295,14 +294,6 @@ public class MapPanel extends JPanel {
 	 */
 	public double getMapHeight() {
 		return mapHeight;
-	}
-	
-	public void setFromColor(Color fromColor) {
-		this.fromColor = fromColor;
-	}
-	
-	public void setToColor(Color toColor) {
-		this.toColor = toColor;
 	}
 
 	/**
