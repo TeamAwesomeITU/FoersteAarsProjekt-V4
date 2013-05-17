@@ -41,6 +41,9 @@ import mapCreationAndFunctions.MapPanelResize;
 import mapCreationAndFunctions.data.CoordinateConverter;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
+import mapCreationAndFunctions.exceptions.AreaIsNotWithinDenmarkException;
+import mapCreationAndFunctions.exceptions.InvalidAreaProportionsException;
+import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
 /**
  * This class holds the window with the map of denmark.
  */
@@ -259,9 +262,12 @@ public class MapWindow {
 	 * @throws MalformedAdressException 
 	 * @throws NoAddressFoundException 
 	 * @throws NoRoutePossibleException 
+	 * @throws InvalidAreaProportionsException 
+	 * @throws AreaIsNotWithinDenmarkException 
+	 * @throws NegativeAreaSizeException 
 	 */
 	//TODO fix med jespers halløj
-	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException{
+	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException, NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException{
 		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), DataHolding.getEdgeArray(), VehicleType, RouteType);
 		mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 		mapPanel.repaintMap();
@@ -504,7 +510,7 @@ public class MapWindow {
 		public void actionPerformed(ActionEvent arg0) {
 			try {
 				findRoute();
-			} catch (NoAddressFoundException | NoRoutePossibleException e) {
+			} catch (NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 				createWarning(e.getMessage());
 			}			
 		}
