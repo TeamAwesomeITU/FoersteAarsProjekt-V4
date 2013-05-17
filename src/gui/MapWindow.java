@@ -12,9 +12,10 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -26,18 +27,17 @@ import javax.swing.Timer;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
+
 
 import navigation.DijkstraSP;
 import navigation.exceptions.NoRoutePossibleException;
@@ -119,6 +119,7 @@ public class MapWindow {
 		fromSearchQuery = new CustomJTextField();
 		fromSearchQuery.addKeyListener(new TextFieldListener());
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
+		fromSearchQuery.addFocusListener(new UpdateFocusListener());
 		fromSearchQuery.setPreferredSize(new Dimension(200, 20));
 
 		JLabel toHeader = new JLabel("To");
@@ -126,6 +127,7 @@ public class MapWindow {
 		toSearchQuery = new CustomJTextField();
 		toSearchQuery.addKeyListener(new TextFieldListener());
 		toSearchQuery.addKeyListener(new EnterKeyListener());
+		toSearchQuery.addFocusListener(new UpdateFocusListener());
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
@@ -140,7 +142,6 @@ public class MapWindow {
 		reverseButton.setContentAreaFilled(false);
 		reverseButton.setToolTipText("Click to reverse from and to");
 		reverseButton.addActionListener(new ReverseActionListener());
-
 
 		ColoredJComboBox vehicleBox = new ColoredJComboBox();
 		vehicleBox.setPreferredSize(new Dimension(120, 30));
@@ -160,7 +161,7 @@ public class MapWindow {
 		routeBox.addItems(routeList);
 		routeBox.setUI(ColoredArrowUI.createUI(routeBox));
 		routeBox.addActionListener(new RouteTypeActionListener());
-		
+
 		ColoredJToggleButton detailedDirectionsButton = new ColoredJToggleButton("Detailed Directions");
 		detailedDirectionsButton.addActionListener(new GetDirectionsListener(detailedDirectionsButton));
 
@@ -353,6 +354,24 @@ public class MapWindow {
 		fromSearchQuery.requestFocus();
 	}
 
+	public void highLightEdges(){
+		try {
+			if(fromSearchQuery.hasFocus())
+			{
+				addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+				mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
+			}
+			else if(toSearchQuery.hasFocus())
+			{
+				addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+				mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
+			}
+		}catch (MalformedAdressException | NoAddressFoundException e1) {
+			//				createWarning(e1.getMessage());
+		}
+	}
+
+
 
 	//---------------------------------Listeners from here-----------------------------//
 
@@ -361,20 +380,7 @@ public class MapWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			try {
-				if(fromSearchQuery.hasFocus())
-				{
-					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
-					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
-				}
-				else if(toSearchQuery.hasFocus())
-				{
-					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
-					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
-				}
-			}catch (MalformedAdressException | NoAddressFoundException e1) {
-				//				createWarning(e1.getMessage());
-			}
+			highLightEdges();
 		}
 
 	}
@@ -586,13 +592,13 @@ public class MapWindow {
 		}
 
 	}
-	
+
 	class GetDirectionsListener implements ActionListener{
-		
+
 		private JTextArea directionsArea;
 		private JToggleButton button;
 		private JFrame frame;
-		
+
 		public GetDirectionsListener(JToggleButton button){
 			directionsArea = new JTextArea();
 			directionsArea.setEditable(false);
@@ -613,51 +619,67 @@ public class MapWindow {
 			else if(!button.isSelected())
 				frame.dispose();
 		}
-		
+
 		public JFrame makeDirectionsFrame(){
 			JFrame directionsFrame = new JFrame();
 			directionsFrame.setUndecorated(true);
 			directionsFrame.setPreferredSize(new Dimension(300, 300));
 			directionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			
+
 			Container contentPane = directionsFrame.getContentPane();
 			contentPane.setLayout(new BorderLayout());
-			
-			ColoredJButton printButton = new ColoredJButton("Print");
-			
+
+			ColoredJButton printButton = new ColoredJButton("Close");
+
 			ColoredJPanel panel = new ColoredJPanel();
 			panel.setLayout(new BorderLayout());
 			ColoredJScrollPane scrollPane = new ColoredJScrollPane(panel);
-			
+
 			JLabel label = new JLabel("Directions:");
 			label.setForeground(ColorTheme.TEXT_COLOR);
-			
+
 			ColoredJPanel directionsPanel = new ColoredJPanel();
 			directionsPanel.add(directionsArea);
-			
+
 			panel.add(directionsPanel, BorderLayout.CENTER);
 			panel.add(printButton, BorderLayout.SOUTH);
 			panel.add(label, BorderLayout.NORTH);
-			
+
 			directionsFrame.add(scrollPane, BorderLayout.CENTER);
 			directionsFrame.pack();
 			directionsFrame.setVisible(true);
 			directionsFrame.setLocationRelativeTo(null);
-			
+
 			return directionsFrame;
 		}
-		
+
 		public void fillDirections(ArrayList<String> directions){
 			String outPut = "";
 			for(String line : directions)
 				outPut += line +"\n";
 			directionsArea.setText(outPut);
 		}
-		
+
 	}
-	
 
+	class UpdateFocusListener implements FocusListener{
+		public void focusGained(FocusEvent e) {
 
+		}
+		public void focusLost(FocusEvent e) {
+			try {
+				if(fromSearchQuery.getText().trim().length() != 0){
+					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
+				}else if(toSearchQuery.getText().trim().length() != 0){
+					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
+				}
+			} catch (MalformedAdressException | NoAddressFoundException e1) {
+			}
 
+		}
+
+	}
 
 }
