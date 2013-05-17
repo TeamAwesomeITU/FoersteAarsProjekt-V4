@@ -65,7 +65,8 @@ public class MapWindow {
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
-	private String VehicleType = "Bike", RouteType = "Fastest";
+
+	private String VehicleType = "Car", RouteType = "Fastest";
 	private static AddressSearch addressSearcherFrom = new AddressSearch();
 	private static AddressSearch addressSearcherTo = new AddressSearch();
 	private static ArrayList<Edge> directionEdges = new ArrayList<>();
@@ -166,7 +167,7 @@ public class MapWindow {
 		routeBox.addActionListener(new RouteTypeActionListener());
 
 		ColoredJButton detailedDirectionsButton = new ColoredJButton("Detailed Directions");
-		detailedDirectionsButton.addActionListener(new GetDirectionsListener(detailedDirectionsButton));
+		detailedDirectionsButton.addActionListener(new GetDirectionsListener());
 
 		ColoredJPanel directionsPanel = new ColoredJPanel();
 		directionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -599,27 +600,23 @@ public class MapWindow {
 	class GetDirectionsListener implements ActionListener{
 
 		private JTextArea directionsArea;
-		private JButton button;
-		private JFrame frame;
 
-		public GetDirectionsListener(JButton button){
+		public GetDirectionsListener(){
 			directionsArea = new JTextArea();
 			directionsArea.setEditable(false);
-			this.button = button;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ArrayList<String> testArrayList = new ArrayList<String>();
-			testArrayList.add("KøgeMuffi");
-			testArrayList.add("Mark");
-			testArrayList.add("Futte");
-			testArrayList.add("Tobias");
-			frame = makeDirectionsFrame();
-			fillDirections(testArrayList);
+			makeDirectionsFrame();
+			try {
+				fillDirections(getDirections());
+			} catch (NoAddressFoundException e) {
+				createWarning(e.getMessage());
+			}
 		}
 
-		public JFrame makeDirectionsFrame(){
+		public void makeDirectionsFrame(){
 			final JFrame directionsFrame = new JFrame();
 			directionsFrame.setUndecorated(true);
 			directionsFrame.setPreferredSize(new Dimension(300, 300));
@@ -658,11 +655,9 @@ public class MapWindow {
 			directionsFrame.pack();
 			directionsFrame.setVisible(true);
 			directionsFrame.setLocationRelativeTo(null);
-
-			return directionsFrame;
 		}
 
-		public void fillDirections(ArrayList<String> directions){
+		public void fillDirections(String[] directions){
 			String outPut = "";
 			for(String line : directions)
 				outPut += line +"\n";
