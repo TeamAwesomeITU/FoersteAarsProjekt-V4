@@ -8,29 +8,40 @@ import inputHandler.exceptions.MalformedAdressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Stack;
 import javax.swing.Timer;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
+
+
 import navigation.DijkstraSP;
 import navigation.exceptions.NoRoutePossibleException;
 
@@ -54,9 +65,11 @@ public class MapWindow {
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
-	private String VehicleType = "Bike", RouteType = "Fastest";
-	public static AddressSearch addressSearcherFrom = new AddressSearch();
-	public static AddressSearch addressSearcherTo = new AddressSearch();
+
+	private String VehicleType = "Car", RouteType = "Fastest";
+	private static AddressSearch addressSearcherFrom = new AddressSearch();
+	private static AddressSearch addressSearcherTo = new AddressSearch();
+	private static ArrayList<Edge> directionEdges = new ArrayList<>();
 
 	/**
 	 * The constructor makes the frame
@@ -103,13 +116,14 @@ public class MapWindow {
 	 */
 	public ColoredJPanel makeToolBar(){
 		ColoredJPanel toolBar = new ColoredJPanel();
-		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
+		toolBar.setLayout(new GridLayout(9, 1, 0, 3));
 
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
 		fromSearchQuery = new CustomJTextField();
 		fromSearchQuery.addKeyListener(new TextFieldListener());
 		fromSearchQuery.addKeyListener(new EnterKeyListener());
+		fromSearchQuery.addFocusListener(new UpdateFocusListener());
 		fromSearchQuery.setPreferredSize(new Dimension(200, 20));
 
 		JLabel toHeader = new JLabel("To");
@@ -117,6 +131,7 @@ public class MapWindow {
 		toSearchQuery = new CustomJTextField();
 		toSearchQuery.addKeyListener(new TextFieldListener());
 		toSearchQuery.addKeyListener(new EnterKeyListener());
+		toSearchQuery.addFocusListener(new UpdateFocusListener());
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
@@ -132,16 +147,14 @@ public class MapWindow {
 		reverseButton.setToolTipText("Click to reverse from and to");
 		reverseButton.addActionListener(new ReverseActionListener());
 
-
 		ColoredJComboBox vehicleBox = new ColoredJComboBox();
 		vehicleBox.setPreferredSize(new Dimension(120, 30));
 		vehicleBox.setEditable(true);
-		String[][] vehicleList = {{"Bike", "resources/bicycle.png"},
-				{"Car", "resources/car.png"},
+		String[][] vehicleList = {{"Car", "resources/car.png"},
+				{"Bike", "resources/bicycle.png"},
 				{"Walk", "resources/walk2.png"}};
 		vehicleBox.addItems(vehicleList);
 		vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
-		vehicleBox.setSelectedIndex(1);
 		vehicleBox.addActionListener(new VehicleTypeActionListener());
 
 		ColoredJComboBox routeBox = new ColoredJComboBox();
@@ -153,6 +166,13 @@ public class MapWindow {
 		routeBox.setUI(ColoredArrowUI.createUI(routeBox));
 		routeBox.addActionListener(new RouteTypeActionListener());
 
+		ColoredJButton detailedDirectionsButton = new ColoredJButton("Detailed Directions");
+		detailedDirectionsButton.addActionListener(new GetDirectionsListener());
+
+		ColoredJPanel directionsPanel = new ColoredJPanel();
+		directionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		directionsPanel.add(detailedDirectionsButton);
+
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
 		toolBar.add(fromSearchQuery);
@@ -161,6 +181,7 @@ public class MapWindow {
 		toolBar.add(buttonPanel);
 		toolBar.add(vehicleBox);
 		toolBar.add(routeBox);
+		toolBar.add(directionsPanel);
 
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(toolBar);
@@ -268,8 +289,53 @@ public class MapWindow {
 	 */
 	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException, NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException{
 		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), DataHolding.getEdgeArray(), VehicleType, RouteType);
+		setDirections((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 		mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 		mapPanel.repaintMap();
+
+		getDirections();
+	}
+
+	private void setDirections(Stack<Edge> edges)
+	{
+		directionEdges.clear();
+		while(!edges.isEmpty())
+			directionEdges.add(edges.pop());
+	}
+
+	public String[] getDirections() throws NoAddressFoundException
+	{
+		if(directionEdges.isEmpty())
+			return new String[0];
+		else {
+			ArrayList<String> directions = new ArrayList<>();
+
+			directions.add("Going from: " + addressSearcherFrom.getEdgeToNavigate().getRoadName() +  ", " + addressSearcherFrom.getEdgeToNavigate().getPostalNumberLeftCityName());
+			directions.add("Going to: " + addressSearcherTo.getEdgeToNavigate().getRoadName() + ", " + addressSearcherTo.getEdgeToNavigate().getPostalNumberLeftCityName());
+			directions.add("");
+
+			int currentLength = 0;
+
+			for(Edge edge : directionEdges)
+			{
+				currentLength += edge.getLength();
+				if(!directions.get(directions.size()-1).contains(edge.getRoadName()))
+				{
+					if(!edge.getRoadName().contains("i krydset"))
+					{
+						if(edge.getRoadName().contains("Rundkørsel"))
+							currentLength = 10;
+						directions.add("Travel along " + edge.getRoadName() + " for " + currentLength + " meters");
+						currentLength = 0;
+					}
+				}
+			}	
+
+			for(String string : directions)
+				System.out.println(string);
+
+			return directions.toArray(new String[directions.size()]);
+		}
 	}
 
 	/**
@@ -292,6 +358,24 @@ public class MapWindow {
 		fromSearchQuery.requestFocus();
 	}
 
+	public void highLightEdges(){
+		try {
+			if(fromSearchQuery.hasFocus())
+			{
+				addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+				mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
+			}
+			else if(toSearchQuery.hasFocus())
+			{
+				addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+				mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
+			}
+		}catch (MalformedAdressException | NoAddressFoundException e1) {
+			//				createWarning(e1.getMessage());
+		}
+	}
+
+
 
 	//---------------------------------Listeners from here-----------------------------//
 
@@ -300,20 +384,7 @@ public class MapWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			try {
-				if(fromSearchQuery.hasFocus())
-				{
-					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
-					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
-				}
-				else if(toSearchQuery.hasFocus())
-				{
-					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
-					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
-				}
-			}catch (MalformedAdressException | NoAddressFoundException e1) {
-				//				createWarning(e1.getMessage());
-			}
+			highLightEdges();
 		}
 
 	}
@@ -336,7 +407,7 @@ public class MapWindow {
 		@Override
 		public void keyReleased(KeyEvent e) {
 			if (toSearchQuery.hasFocus() && toSearchQuery.getText().isEmpty() ||
-				fromSearchQuery.hasFocus() && fromSearchQuery.getText().isEmpty()) 
+					fromSearchQuery.hasFocus() && fromSearchQuery.getText().isEmpty()) 
 			{
 				if (mapPanel.getPathTo() != null) {
 					try {
@@ -526,6 +597,93 @@ public class MapWindow {
 
 	}
 
+	class GetDirectionsListener implements ActionListener{
 
+		private JTextArea directionsArea;
+
+		public GetDirectionsListener(){
+			directionsArea = new JTextArea();
+			directionsArea.setEditable(false);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			makeDirectionsFrame();
+			try {
+				fillDirections(getDirections());
+			} catch (NoAddressFoundException e) {
+				createWarning(e.getMessage());
+			}
+		}
+
+		public void makeDirectionsFrame(){
+			final JFrame directionsFrame = new JFrame();
+			directionsFrame.setUndecorated(true);
+			directionsFrame.setPreferredSize(new Dimension(300, 300));
+			directionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+			ColoredJMenuBar menuBar = new ColoredJMenuBar();
+			directionsFrame.setJMenuBar(menuBar);
+
+			ColoredJMenu exitMenu = new ColoredJMenu("x");
+			exitMenu.setForeground(Color.red);
+			exitMenu.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					directionsFrame.dispose();
+				}
+			});
+			menuBar.add(Box.createHorizontalGlue());
+			menuBar.add(exitMenu);
+
+			Container contentPane = directionsFrame.getContentPane();
+			contentPane.setLayout(new BorderLayout());
+
+			ColoredJPanel panel = new ColoredJPanel();
+			panel.setLayout(new BorderLayout());
+			ColoredJScrollPane scrollPane = new ColoredJScrollPane(panel);
+
+			JLabel label = new JLabel("Directions:");
+			label.setForeground(ColorTheme.TEXT_COLOR);
+
+			ColoredJPanel directionsPanel = new ColoredJPanel();
+			directionsPanel.add(directionsArea);
+
+			panel.add(directionsPanel, BorderLayout.CENTER);
+			panel.add(label, BorderLayout.NORTH);
+
+			directionsFrame.add(scrollPane, BorderLayout.CENTER);
+			directionsFrame.pack();
+			directionsFrame.setVisible(true);
+			directionsFrame.setLocationRelativeTo(null);
+		}
+
+		public void fillDirections(String[] directions){
+			String outPut = "";
+			for(String line : directions)
+				outPut += line +"\n";
+			directionsArea.setText(outPut);
+		}
+
+	}
+
+	class UpdateFocusListener implements FocusListener{
+		public void focusGained(FocusEvent e) {
+
+		}
+		public void focusLost(FocusEvent e) {
+			try {
+				if(fromSearchQuery.getText().trim().length() != 0){
+					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
+				}else if(toSearchQuery.getText().trim().length() != 0){
+					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
+				}
+			} catch (MalformedAdressException | NoAddressFoundException e1) {
+			}
+
+		}
+
+	}
 
 }

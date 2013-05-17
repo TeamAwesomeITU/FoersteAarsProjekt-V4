@@ -1,6 +1,7 @@
 package inputHandler.test;
 
 import static org.junit.Assert.assertEquals;
+import inputHandler.AddressSearch;
 import inputHandler.AdressParser;
 import inputHandler.exceptions.MalformedAdressException;
 
@@ -8,6 +9,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import mapCreationAndFunctions.data.DataHolding;
+import mapCreationAndFunctions.data.Edge;
 
 import org.junit.Test;
 
@@ -19,8 +23,31 @@ public class AdressParserALLROADNAMESTest {
 
 	@Test
 	public void testALLROADNAMES() throws IOException, MalformedAdressException {
-		File file = new File("road_names.txt");
-		BufferedReader reader = new BufferedReader(new FileReader(file));
+		
+		Edge[] allEdges = DataHolding.getEdgeArray();
+		AddressSearch addressSearch;		
+		
+		for(Edge edgeOfAllEdges : allEdges)
+		{
+			String roadName = edge.getRoadName();
+			addressSearch = new AddressSearch();
+			addressSearch.searchForAdress("roadName");
+			
+			for(Edge edgeFound : addressSearch.getFoundEdges())
+				
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		String fileLine;
 		AdressParser ap = new AdressParser();
