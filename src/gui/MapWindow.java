@@ -60,8 +60,8 @@ import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
  */
 public class MapWindow {
 
-	private Timer showAddressTimer = new Timer(400, new TimerListener());
-	private Timer repaintTimer = new Timer(250, new RepaintActionListener());
+	private Timer showAddressTimer = new Timer(800, new TimerListener());
+	private Timer repaintTimer = new Timer(300, new RepaintActionListener());
 	public static CustomJTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
@@ -429,32 +429,33 @@ public class MapWindow {
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
-			if (toSearchQuery.hasFocus() && toSearchQuery.getText().trim().isEmpty() ||
-					fromSearchQuery.hasFocus() && fromSearchQuery.getText().trim().isEmpty()) 
-			{
-				if (mapPanel.getPathTo() != null) {
-					try {
-						mapPanel.setPathTo(null);
-						directionEdges = new ArrayList<>();
-					} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
-						createWarning(e1.getMessage());
-					}
-				}
-			}
 			if(fromSearchQuery.hasFocus() && fromSearchQuery.getText().trim().isEmpty()) 
 			{
 				mapPanel.setFromEdgesToHighlight(null);
 				addressSearcherFrom.clearResults();
+				clearInputOnMap();
 			}
 
-			if(toSearchQuery.hasFocus() && toSearchQuery.getText().trim().isEmpty())
+			else if(toSearchQuery.hasFocus() && toSearchQuery.getText().trim().isEmpty())
 			{
 				mapPanel.setToEdgesToHighlight(null);
 				addressSearcherTo.clearResults();
+				clearInputOnMap();
+				
 			}
 
 		}
 
+		private void clearInputOnMap() {
+			if (mapPanel.getPathTo() != null) {
+				try {
+					mapPanel.setPathTo(null);
+					directionEdges = new ArrayList<>();
+				} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
+					createWarning(e1.getMessage());
+				}
+			}
+		}
 		/**
 		 * If something is written in both fields, it'll try to make a path, otherwise focus shifts to the other field.
 		 */
@@ -476,7 +477,8 @@ public class MapWindow {
 					fromSearchQuery.requestFocus();
 				}
 			}
-			if(fromSearchQuery.hasFocus()) 
+			else 
+				if(fromSearchQuery.hasFocus()) 
 			{
 				if(addressSearcherTo.getFoundEdges().length > 0 && !fromSearchQuery.getText().trim().isEmpty())
 				{
