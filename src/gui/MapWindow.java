@@ -340,10 +340,6 @@ public class MapWindow {
 					}
 				}
 			}	
-
-			for(String string : directions)
-				System.out.println(string);
-
 			return directions.toArray(new String[directions.size()]);
 		}
 	}
@@ -596,10 +592,13 @@ public class MapWindow {
 					if(addressSearcherFrom.getFoundEdges().length > 0 && !toSearchQuery.getText().trim().isEmpty())
 					{
 						try {
+							System.out.println("HEJ1");
 							addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 							findRoute();
-						} catch (MalformedAdressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
-							System.out.println("fail!!");
+						} catch (MalformedAdressException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+						}
+						catch (NoAddressFoundException e1) {
+							createWarning(e1.getMessage());
 						}
 					}
 					else { 
@@ -611,7 +610,7 @@ public class MapWindow {
 					if(addressSearcherTo.getFoundEdges().length > 0 && !fromSearchQuery.getText().trim().isEmpty())
 					{
 						try {
-							System.out.println("HEJ");
+							System.out.println("HEJ2");
 							addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
 							findRoute();
 						} catch (MalformedAdressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
@@ -725,11 +724,7 @@ public class MapWindow {
 					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
 				}
-			} catch (NoAddressFoundException e1) {
-				createWarning(e1.getMessage());
-			}
-			catch (MalformedAdressException e1) {
-				createWarning(e1.getMessage());
+			} catch (NoAddressFoundException |MalformedAdressException e1) {
 			}
 
 		}
