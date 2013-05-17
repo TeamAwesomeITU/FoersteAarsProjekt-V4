@@ -29,6 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -588,11 +589,11 @@ public class MapWindow {
 	}
 	
 	class GetDirectionsListener implements ActionListener{
-		
+
 		private JTextArea directionsArea;
 		private JToggleButton button;
 		private JFrame frame;
-		
+
 		public GetDirectionsListener(JToggleButton button){
 			directionsArea = new JTextArea();
 			directionsArea.setEditable(false);
@@ -601,59 +602,59 @@ public class MapWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ArrayList<String> testArrayList = new ArrayList<String>();
-			testArrayList.add("KøgeMuffi");
-			testArrayList.add("Mark");
-			testArrayList.add("Futte");
-			testArrayList.add("Tobias");
+
 			if(button.isSelected()){
 				frame = makeDirectionsFrame();
-				fillDirections(testArrayList);
+				try {
+					fillDirections(getDirections());
+				} catch (NoAddressFoundException e) {
+					createWarning(e.getMessage());
+				}
 			}
 			else if(!button.isSelected())
 				frame.dispose();
 		}
-		
+
 		public JFrame makeDirectionsFrame(){
 			JFrame directionsFrame = new JFrame();
 			directionsFrame.setUndecorated(true);
 			directionsFrame.setPreferredSize(new Dimension(300, 300));
 			directionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			
+
 			Container contentPane = directionsFrame.getContentPane();
 			contentPane.setLayout(new BorderLayout());
-			
+
 			ColoredJButton printButton = new ColoredJButton("Print");
-			
+
 			ColoredJPanel panel = new ColoredJPanel();
 			panel.setLayout(new BorderLayout());
 			ColoredJScrollPane scrollPane = new ColoredJScrollPane(panel);
-			
+
 			JLabel label = new JLabel("Directions:");
 			label.setForeground(ColorTheme.TEXT_COLOR);
-			
+
 			ColoredJPanel directionsPanel = new ColoredJPanel();
 			directionsPanel.add(directionsArea);
-			
+
 			panel.add(directionsPanel, BorderLayout.CENTER);
 			panel.add(printButton, BorderLayout.SOUTH);
 			panel.add(label, BorderLayout.NORTH);
-			
+
 			directionsFrame.add(scrollPane, BorderLayout.CENTER);
 			directionsFrame.pack();
 			directionsFrame.setVisible(true);
 			directionsFrame.setLocationRelativeTo(null);
-			
+
 			return directionsFrame;
 		}
-		
-		public void fillDirections(ArrayList<String> directions){
+
+		public void fillDirections(String[] directions){
 			String outPut = "";
 			for(String line : directions)
 				outPut += line +"\n";
 			directionsArea.setText(outPut);
 		}
-		
+
 	}
 	
 
