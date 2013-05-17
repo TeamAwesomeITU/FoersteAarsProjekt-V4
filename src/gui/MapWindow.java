@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Stack;
 import javax.swing.Timer;
 
@@ -31,6 +32,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
+
 import navigation.DijkstraSP;
 import navigation.exceptions.NoRoutePossibleException;
 
@@ -55,8 +57,9 @@ public class MapWindow {
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
 	private String VehicleType = "Bike", RouteType = "Fastest";
-	public static AddressSearch addressSearcherFrom = new AddressSearch();
-	public static AddressSearch addressSearcherTo = new AddressSearch();
+	private static AddressSearch addressSearcherFrom = new AddressSearch();
+	private static AddressSearch addressSearcherTo = new AddressSearch();
+	private static ArrayList<Edge> directionEdges = new ArrayList<>();
 
 	/**
 	 * The constructor makes the frame
@@ -269,8 +272,34 @@ public class MapWindow {
 	//TODO fix med jespers halløj
 	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException, NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException{
 		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), DataHolding.getEdgeArray(), VehicleType, RouteType);
+		setDirections((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 		mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 		mapPanel.repaintMap();
+	}
+	
+	private void setDirections(Stack<Edge> edges)
+	{
+		directionEdges.clear();
+		while(!edges.isEmpty())
+			directionEdges.add(edges.pop());
+	}
+	
+	public String[] getDirections() throws NoAddressFoundException
+	{
+		if(directionEdges.isEmpty())
+			return new String[0];
+		else {
+			String[] directions = new String[directionEdges.size()+2];
+			
+			directions[0] = "Going from: " + addressSearcherFrom.getEdgeToNavigate().getRoadName();
+			directions[1] = "Going to: " + addressSearcherTo.getEdgeToNavigate().getRoadName();
+			directions[2] = "";
+			for (int i = 3; i < directions.length; i++) {
+				directions[i] = "Travel along " + directionEdges.get(i).getRoadName() + " for " + directionEdges.get(i).getLength() + " meters";
+			}
+			
+			return directions;
+		}
 	}
 
 	/**
@@ -491,7 +520,7 @@ public class MapWindow {
 				if(toSearchQuery.hasFocus()){
 					try {
 						findRoute();
-					} catch (NoAddressFoundException | NoRoutePossibleException e) {
+					} catch (NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 						createWarning(e.getMessage());
 					}
 				}else if(fromSearchQuery.hasFocus())
