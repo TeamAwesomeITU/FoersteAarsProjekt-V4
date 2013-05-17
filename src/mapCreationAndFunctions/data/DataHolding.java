@@ -59,8 +59,8 @@ public class DataHolding {
 				length = Double.parseDouble(lineParts[2]);
 				edgeID = Integer.parseInt(lineParts[3]);
 				roadType = Integer.parseInt(lineParts[4]);
-				//If the roadName is 0, make it an empty string instead
-				roadName = (lineParts[5].equals("0") ? "" : lineParts[5]);
+				//If the roadName is 0, make it an empty string instead and ALL amounts of whitespaces between words will be replaces with a single whitespace
+				roadName = (lineParts[5].equals("0") ? "" : lineParts[5].replaceAll("\\s+", " "));
 				fromLeftNumber = Integer.parseInt(lineParts[6]);
 				toLeftNumber = Integer.parseInt(lineParts[7]);
 				fromRightNumber = Integer.parseInt(lineParts[8]);
