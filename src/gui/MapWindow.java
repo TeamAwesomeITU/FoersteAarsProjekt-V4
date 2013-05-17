@@ -3,65 +3,66 @@ package gui;
 import gui.customJComponents.*;
 import gui.settingsAndPopUp.*;
 
-import inputHandler.AddressParserJesperLeger;
+import inputHandler.AddressSearch;
 import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.NoAddressFoundException;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashSet;
+import java.util.Stack;
+import javax.swing.Timer;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-import javax.swing.JTextField;
-import javax.swing.JWindow;
+import javax.swing.JOptionPane;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
+import navigation.DijkstraSP;
+import navigation.exceptions.NoRoutePossibleException;
 
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
 import mapCreationAndFunctions.MapPanel;
 import mapCreationAndFunctions.MapPanelResize;
 import mapCreationAndFunctions.data.CoordinateConverter;
+import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.search.EdgeSearch;
+import mapCreationAndFunctions.exceptions.AreaIsNotWithinDenmarkException;
+import mapCreationAndFunctions.exceptions.InvalidAreaProportionsException;
+import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
 /**
  * This class holds the window with the map of denmark.
  */
 public class MapWindow {
 
-	public static JTextField toSearchQuery, fromSearchQuery;
-	public static SearchList<String> searchList;
-	public static DefaultListModel<String> listModel;
+	private Timer showAddressTimer = new Timer(400, new TimerListener());
+	public static CustomJTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
 	private String VehicleType = "Bike", RouteType = "Fastest";
-	public static JWindow listWindow;
-	public static AddressParserJesperLeger addressParserFrom = new AddressParserJesperLeger();
-	public static AddressParserJesperLeger addressParserTo = new AddressParserJesperLeger();
-	
+	public static AddressSearch addressSearcherFrom = new AddressSearch();
+	public static AddressSearch addressSearcherTo = new AddressSearch();
+
 	/**
 	 * The constructor makes the frame
 	 */
 	public MapWindow(){
+		showAddressTimer.setRepeats(false);
 		createMapScreen();
 	}
 
@@ -100,7 +101,6 @@ public class MapWindow {
 	 * Makes the toolbar for the search input
 	 * @return the toolbar to be inserted later.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ColoredJPanel makeToolBar(){
 		ColoredJPanel toolBar = new ColoredJPanel();
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
@@ -108,17 +108,18 @@ public class MapWindow {
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
 		fromSearchQuery = new CustomJTextField();
-		fromSearchQuery.addKeyListener(new ListListener());
+		fromSearchQuery.addKeyListener(new TextFieldListener());
+		fromSearchQuery.addKeyListener(new EnterKeyListener());
 		fromSearchQuery.setPreferredSize(new Dimension(200, 20));
 
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(ColorTheme.TEXT_COLOR);
 		toSearchQuery = new CustomJTextField();
-		toSearchQuery.addKeyListener(new ListListener());
+		toSearchQuery.addKeyListener(new TextFieldListener());
+		toSearchQuery.addKeyListener(new EnterKeyListener());
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
-		findRouteButton.setPreferredSize(new Dimension(95, 20));
 
 		ColoredJPanel buttonPanel = new ColoredJPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -130,25 +131,7 @@ public class MapWindow {
 		reverseButton.setContentAreaFilled(false);
 		reverseButton.setToolTipText("Click to reverse from and to");
 		reverseButton.addActionListener(new ReverseActionListener());
-		
-		ColoredJButton expandSearchButton = new ColoredJButton("Expand Search");
-		expandSearchButton.setPreferredSize(new Dimension(95, 20));
-		expandSearchButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ExpandedSearch expandedSearch = ExpandedSearch.getInstance();
-				if(expandedSearch.isVisible())
-					expandedSearch.setVisible(false);
-				else{
-					Point location = fromSearchQuery.getLocationOnScreen();
-					if(ScreenSize.dualScreenRight)
-						expandedSearch.setLocation(new Point((int)location.getX()-expandedSearch.getWidth()-5, ((int)location.getY())));
-					else
-						expandedSearch.setLocation(new Point((int)location.getX()+210, ((int)location.getY())));
-					expandedSearch.setVisible(true);
-				}
-			}
-		});
-		buttonPanel.add(expandSearchButton);
+
 
 		ColoredJComboBox vehicleBox = new ColoredJComboBox();
 		vehicleBox.setPreferredSize(new Dimension(120, 30));
@@ -158,6 +141,7 @@ public class MapWindow {
 				{"Walk", "resources/walk2.png"}};
 		vehicleBox.addItems(vehicleList);
 		vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
+		vehicleBox.setSelectedIndex(1);
 		vehicleBox.addActionListener(new VehicleTypeActionListener());
 
 		ColoredJComboBox routeBox = new ColoredJComboBox();
@@ -169,9 +153,6 @@ public class MapWindow {
 		routeBox.setUI(ColoredArrowUI.createUI(routeBox));
 		routeBox.addActionListener(new RouteTypeActionListener());
 
-		listModel = new DefaultListModel();
-		searchList = new SearchList(listModel);
-
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
 		toolBar.add(fromSearchQuery);
@@ -182,19 +163,6 @@ public class MapWindow {
 		toolBar.add(routeBox);
 
 		ColoredJPanel flow = new ColoredJPanel();
-		flow.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(listWindow != null)
-					listWindow.dispose();
-				if(!ExpandedSearch.isNull()){
-					ExpandedSearch expandedSearch = ExpandedSearch.getInstance();
-					expandedSearch.dispose();
-				}
-					
-				
-			}
-		});
 		flow.add(toolBar);
 
 		return flow;
@@ -291,16 +259,20 @@ public class MapWindow {
 
 	/**
 	 * NOT DONE
+	 * @throws MalformedAdressException 
+	 * @throws NoAddressFoundException 
+	 * @throws NoRoutePossibleException 
+	 * @throws InvalidAreaProportionsException 
+	 * @throws AreaIsNotWithinDenmarkException 
+	 * @throws NegativeAreaSizeException 
 	 */
 	//TODO fix med jespers halløj
-	public void findRoute(){
-		/*if(fromSearchQuery.getText().trim().length() != 0 || 
-				toSearchQuery.getText().trim().length() != 0){
-			DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), fromSearchQuery.getText(), VehicleType, RouteType);
-			mapPanel.setPathTo((Stack<Edge>) dip.pathTo(toSearchQuery.getText()));
-			mapPanel.repaintMap();
-		}*/
+	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException, NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException{
+		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), DataHolding.getEdgeArray(), VehicleType, RouteType);
+		mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
+		mapPanel.repaintMap();
 	}
+
 	/**
 	 * @return the center panel witch hold the map
 	 */
@@ -314,156 +286,61 @@ public class MapWindow {
 		return MainGui.frame;
 	}
 
+	@SuppressWarnings("static-access")
+	private void createWarning(String message)
+	{
+		new JOptionPane().showMessageDialog(getJFrame(), message, "Error", JOptionPane.ERROR_MESSAGE);
+		fromSearchQuery.requestFocus();
+	}
+
 
 	//---------------------------------Listeners from here-----------------------------//
 
+
+	private class TimerListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				if(fromSearchQuery.hasFocus())
+				{
+					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
+				}
+				else if(toSearchQuery.hasFocus())
+				{
+					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
+				}
+			}catch (MalformedAdressException | NoAddressFoundException e1) {
+				//				createWarning(e1.getMessage());
+			}
+		}
+
+	}
+
 	/**
-	 * Brings up a suggestion list when the user types.
-	 * If the user is in the search text field, then by pressing enter
-	 * is the same as clicking the find route button
+	 * Resets the timer. If the user lingers it paints the edge inputted.
 	 */
-	class ListListener implements KeyListener{
+	class TextFieldListener implements KeyListener{
 
 		String query;
 
 		@Override
-		public void keyPressed(KeyEvent e) {
-			if(checkKeyEvent(e)){
-				if(e.getKeyCode() == 10){
-					findRoute();
-				}
-				listModel.removeAllElements();
+		public void keyPressed(KeyEvent arg) {
+			if (showAddressTimer.isRunning()){
+				showAddressTimer.restart();
+			} 	
+			else {
+				showAddressTimer.start();
 			}
+
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
-			JTextField textField = (JTextField)e.getSource();
-			String search = (String) textField.getText().trim();
-			query = search;
-
-
-			if(checkKeyEvent(e)){
-				if(query.length() >= 2){
-					if(listWindow != null)
-						listWindow.dispose();
-					listWindow = new JWindow();
-					Container contentPane = listWindow.getContentPane();
-					if(fromSearchQuery.hasFocus()){
-						Point location = fromSearchQuery.getLocationOnScreen();
-						listWindow.setLocation(new Point((int)location.getX(), ((int)location.getY()+32)));
-					}
-					if(toSearchQuery.hasFocus()){
-						Point location = toSearchQuery.getLocationOnScreen();
-						listWindow.setLocation(new Point((int)location.getX(), ((int)location.getY()+32)));
-					}
-					listWindow.setPreferredSize(new Dimension(200, 80));
-
-					ColoredJPanel listPanel = new ColoredJPanel();
-					listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-					ColoredJScrollPane scrollPane = new ColoredJScrollPane(listPanel);
-					makeMatchingResult();
-					listPanel.add(searchList);
-
-					contentPane.add(scrollPane);
-
-					listWindow.pack();
-					if(listModel.getSize() == 0)
-						listWindow.setVisible(false);
-					else
-						listWindow.setVisible(true);
-				}
-				if(query.length() < 2 && listWindow != null)
-					listWindow.dispose();
-			}
-			else return;
-			if(e.getKeyCode() == 8 && listWindow != null)
-				listWindow.dispose();
 		}
 		@Override
 		public void keyTyped(KeyEvent e) {
-			if(!checkKeyEvent(e)){
-				makeMatchingResult();
-			}
-		}
-		/**
-		 * Adds matching result for the list to show.
-		 */
-		public void makeMatchingResult(){
-			/*
-			HashSet<String> listSet = new HashSet<>();
-			Edge[] edgesList;
-			try {
-				edgesList = EdgeSearch.searchForRoadSuggestions(query, -1, "", -1, "");
-				for(Edge edge : edgesList){
-					String hit = edge.getRoadName() + " " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
-					listSet.add(hit);
-				}
-				
-				if(listSet.size() == 0)
-					listModel.addElement("Could not find any matches");
-				
-				else {
-					for(String searchResult : listSet){
-						listModel.addElement(searchResult);
-				}
-
-				}
-				*/
-			try {
-				for(String string : addressParserFrom.getSearchResults(query))
-					listModel.addElement(string);
-				
-				mapPanel.setFromEdgesToHighlight(addressParserFrom.getFoundEdges());
-			}
-			catch (MalformedAdressException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-
-			/*City[] citiesList = CitySearch.getCityNameSuggestions(query);
-			for(City city : citiesList){
-				listModel.addElement(city.getCityName());
-				System.out.println(city.getCityName());
-			}*/
-
-		}
-		/**
-		 * Checks if the entered key is a valid one.
-		 * @param e the key entered
-		 * @return a boolean whichs determines whether or not to update the list.
-		 */
-		private boolean checkKeyEvent(KeyEvent e){
-			boolean check = true;
-
-			int keyEvent = e.getKeyCode();
-			switch (keyEvent) {
-			case 8:	check = false;
-			case 16: check = false;
-			case 17: check = false;
-			case 18: check = false;
-			case 37: check = false;
-			case 38: check = false;
-			case 39: check = false;
-			case 40: check = false;
-			case 112: check = false;
-			case 113: check = false;
-			case 114: check = false;
-			case 115: check = false;
-			case 116: check = false;
-			case 117: check = false;
-			case 118: check = false;
-			case 119: check = false;
-			case 120: check = false;
-			case 121: check = false;
-			case 122: check = false;
-			case 123: check = false;
-			case 124: check = false;
-			break;
-			default:
-				break;
-			}
-			return check;
 		}
 	}
 
@@ -564,7 +441,7 @@ public class MapWindow {
 
 			String roadName = "";
 			if(edge != null)
-				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName() + " edgeID: "+ edge.getiD();
+				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
 			if (MainGui.coordinatesBoolean) 				
 				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", " + "Roadname: " + roadName);
 			else 
@@ -605,6 +482,25 @@ public class MapWindow {
 			toSearchQuery.setText(tempFrom);			
 		}
 	}
+
+
+	class EnterKeyListener implements KeyListener{
+
+		public void keyPressed(KeyEvent arg0) {
+			if(arg0.getKeyCode() == 10){
+				if(toSearchQuery.hasFocus()){
+					try {
+						findRoute();
+					} catch (NoAddressFoundException | NoRoutePossibleException e) {
+						createWarning(e.getMessage());
+					}
+				}else if(fromSearchQuery.hasFocus())
+					toSearchQuery.requestFocus();
+			}
+		}
+		public void keyReleased(KeyEvent arg0) {}
+		public void keyTyped(KeyEvent arg0) {}
+	}
 	/**
 	 * Calls the findRoute() method.
 	 */
@@ -612,7 +508,11 @@ public class MapWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			findRoute();			
+			try {
+				findRoute();
+			} catch (NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+				createWarning(e.getMessage());
+			}			
 		}
 
 	}

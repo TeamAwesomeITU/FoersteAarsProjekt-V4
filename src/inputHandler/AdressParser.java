@@ -2,13 +2,14 @@ package inputHandler;
 
 
 import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.NoAddressFoundException;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import mapCreationAndFunctions.data.City;
+import mapCreationAndFunctions.data.Edge;
+import mapCreationAndFunctions.search.CitySearch;
 import mapCreationAndFunctions.search.EdgeSearch;
 
 
@@ -27,9 +28,10 @@ public class AdressParser {
 			"\\b\\d{1,3}[,]?\\b)";
 	private	String pTal = "(\\d{1,3})";
 	private	String pFloor = "(\\b\\d{1,2}\\.)";	
-	private	String pPost = "(\\b\\d{4})"; 			
+	private	String pPost = "(\\b\\d{4,5})"; 			
 	private	String pLetter = "[A-ZÆØÅa-zæøå]";
-	private String pInput =  "[^A-ZÆØÅÄÖa-zæøåéèöäüâ0-9,\\-.´:)/(& ]{1,100}";
+	private String pBadInput =  "[^A-ZÆØÅÄÖa-zæøåéèöäüâ0-9,\\-.´:)/(& ]{1,100}";
+	private String pDelimiters = "sal|etage|plan|th|tv|\\,|\\.|\\bi\\b|\\bpå\\b";
 	private	String numberLetter = ""; // Gemmer vejnummeret med tal og bogstav.
 	private String addressAfterDeletion = "";
 
@@ -40,7 +42,7 @@ public class AdressParser {
 	public AdressParser()	{
 
 	}
-		
+
 	/** This method checks if input is valid and whether it contains a number or the letter i.
 	 * 	If it does not it places the address in index 0 as the name of the road. If it does 
 	 * 	the else-statment will try to find and place the parts of the address in their proper
@@ -48,21 +50,26 @@ public class AdressParser {
 	 * @param address Is a String that is supposed to be the entire address written on a single line. 
 	 * @return the array containing information regarding the address
 	 * @throws MalformedAdressException
+	 * @throws NoAddressFoundException 
 	 */
-	public String[] parseAdress(String address) throws MalformedAdressException {
+	public String[] parseAdress(String address) throws MalformedAdressException, NoAddressFoundException {
 		//Is the input valid?			
 		address = address.toLowerCase();
-		Matcher validInput = match(pInput, address);
-		if (validInput.find() || address.trim().isEmpty() || address == null){								/* 1 */
-			throw new MalformedAdressException("MALFORMED ADRESS");
-		}
-		
-		if(match("\\d|\\,|\\bi\\b", address).find() == false){											/* 2 */
-			adressArray[0] = address.trim();
-			System.out.println(address);
+		Matcher badInput = match(pBadInput, address);
+		if (badInput.find())
+			throw new MalformedAdressException("Illegal characters found in address");
+		else if(address.trim().isEmpty() || address == null){								/* 1 */
+			throw new NoAddressFoundException("No address to find was given");
 		}
 
-		else {			
+		//TODO FIX DEN HER REGEX eller slet svinet
+		//		if(match("\\d|\\,|\\bi\\b", address).find() == false){											/* 2 */
+		//			adressArray[0] = address.trim();
+		//			System.out.println(address);
+		//		}
+
+		//		else
+		{			
 			addressAfterDeletion = address;
 			findRoadName(address);
 			//Only checks for roadnumber, roadletter and floornumber, if a valid adress is found
@@ -75,7 +82,7 @@ public class AdressParser {
 			findPostCode(addressAfterDeletion);
 			findCityName(addressAfterDeletion);
 		}
-		
+
 		return adressArray;			     					
 	}
 
@@ -102,10 +109,60 @@ public class AdressParser {
 
 	private void findRoadName(String input)
 	{
-		String roadName = EdgeSearch.searchForRoadNameLongestPrefix(input);
-		adressArray[0] = roadName;
-		if(!roadName.isEmpty())
-			addressAfterDeletion = addressAfterDeletion.replace(roadName,"");
+		System.out.println("INPUT TO FIND ROADNAME BY: " + input);
+
+		String[] splitInput = input.split("\\s+");
+		String possibleRoadName = "";
+		String foundRoadName = "";
+		String totalInput = "";
+		int i = 0;
+		boolean isResultFound = false;
+		int wantedLength = splitInput.length;
+
+		while(!isResultFound && i < splitInput.length && wantedLength >= 0)
+		{		
+			totalInput = "";
+			for (int j = splitInput.length-wantedLength; j < splitInput.length; j++) 
+				totalInput += splitInput[j].toLowerCase() + " ";
+
+			totalInput = totalInput.trim();		
+
+			System.out.println("totalInput: " + totalInput);
+
+			possibleRoadName = EdgeSearch.searchForRoadNameLongestPrefix(totalInput);
+			System.out.println("MIGHT BE THIS ROAD: " + possibleRoadName);
+
+			if(!possibleRoadName.isEmpty())
+			{
+				Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
+
+				if(possibleEdges.length != 0 && possibleRoadName.length() > foundRoadName.length())
+				{
+					foundRoadName = possibleRoadName;
+				}			
+			}
+			i++;
+			wantedLength--;
+		}
+
+		//		String actualRoadName = "";
+		//		if(!possibleRoadName.isEmpty())
+		//		{
+		//			Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
+		//			System.out.println("NUMBER OF FOUNDS EDGES" + possibleEdges.length);
+		//			//If theres actually any roads with this name, take this as the name - otherwise, set it as an empty String
+		//			actualRoadName = (possibleEdges.length > 0) ? possibleEdges[0].getRoadName().toLowerCase() : "";
+		//		}
+
+		System.out.println("ROADNAME: " + foundRoadName);
+		adressArray[0] = foundRoadName;
+
+		if(!foundRoadName.isEmpty())
+		{
+			System.out.println("Address left BEFORE roadname was found: " + addressAfterDeletion);
+			addressAfterDeletion = addressAfterDeletion.replace(foundRoadName,"").trim();
+		}
+		System.out.println("Address left AFTER roadname was found: " + addressAfterDeletion);
 	}
 
 	/**	This method uses the matcher to find the number and eventual letter of a building. 
@@ -158,8 +215,8 @@ public class AdressParser {
 			tal.find();																	
 			System.out.println(tal.group() + ". etage");
 			adressArray[3] = tal.group().trim();
-			
-	
+
+
 		}
 
 
@@ -169,12 +226,16 @@ public class AdressParser {
 	 * @param s Address string
 	 */
 	private void findPostCode(String s) {
-		// Bruger pattern pPost til at finde postnummeret og gemme det p� index 4 i arrayet.
+		// Bruger pattern pPost til at finde postnummeret og gemme det på index 4 i arrayet.
 		Matcher postcode = match(pPost, s);	
 		if(postcode.find()) {																	/* 13 */
 			System.out.println("Postnummer: " + postcode.group());
-			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"");
+			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"").trim();
 			adressArray[4] = postcode.group().trim(); 
+
+			//If the string is not empty, even after the city was found, try finding the road name again
+			//			if(!addressAfterDeletion.isEmpty() && adressArray[0].isEmpty())
+			//				findRoadName(addressAfterDeletion);
 		}
 	}
 	/**	Finds the name of the city by applying the patterns used to find the 
@@ -186,31 +247,40 @@ public class AdressParser {
 	 */
 	private void findCityName(String s) {
 		String vejnavn = adressArray[0];
-
+		System.out.println("LOOKING FOR CITYNAME IN THIS INPUT: " + s);
 		String cityString = s.replaceAll(vejnavn, "").
 				replaceAll(pPost, "").
 				replaceAll(pBuilding, "").
 				replaceAll(pFloor, "").
-				replaceAll("sal|etage|plan|th|tv|\\,|\\.|\\bi\\b", "").trim();
+				replaceAll(pDelimiters, "").trim();
 
 		if(!cityString.isEmpty()) {													/* 14 */
-			adressArray[5] = cityString;
-			System.out.println("Bynavn: " + cityString);	
+			String possibleCityName = CitySearch.searchForCityNameLongestPrefix(cityString);
+			City[] possibleCities = CitySearch.searchForCityName(possibleCityName);
+			//If theres actually any roads with this name, take this as the name - otherwise, set it as an empty String
+			String actualCityName = (possibleCities.length > 0) ? possibleCities[0].getCityName().toLowerCase() : "";
+			adressArray[5] = actualCityName;
+			System.out.println("Bynavn: " + actualCityName);	
+			addressAfterDeletion = cityString.replace(actualCityName,"").trim();
+
+			//If the string is not empty, even after the city was found, try finding the road name again
+			//			if(!addressAfterDeletion.isEmpty() && adressArray[0].isEmpty())
+			//				findRoadName(addressAfterDeletion);
 		}
 	}
 
 	public String[] getAdressArray(){
 		return adressArray;
 	}
-	
-	public static void main( String[] args ) throws MalformedAdressException {
+
+	public static void main( String[] args ) throws MalformedAdressException, NoAddressFoundException {
 		AdressParser aParser = new AdressParser();
-		aParser.parseAdress("Vandelvej 10, 4600 Køge");
-		
+		//aParser.parseAdress("Vandelvej 10, 4600 Køge");
+		aParser.parseAdress("Strandvejen 133");
+
 		for(String string : aParser.getAdressArray())
 			System.out.println(string);
 	}
-	
-	
-}
 
+
+}

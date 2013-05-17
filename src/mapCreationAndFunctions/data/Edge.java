@@ -3,6 +3,11 @@ package mapCreationAndFunctions.data;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.io.CharConversionException;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.xml.stream.events.Characters;
 
 import mapCreationAndFunctions.RoadType;
 
@@ -249,6 +254,13 @@ public class Edge {
 	public String getPostalNumberLeftCityName() {
 		return City.getCityNameByPostalNumber(postalNumberLeft);
 	}
+	
+	/**
+	 * @return the postalNumberLeft of the Edge
+	 */
+	public City getPostalNumberLeftCity() {
+		return City.getCityByPostalNumber(postalNumberLeft);
+	}
 
 	/**
 	 * @return the postalNumberRight of the Edge
@@ -256,6 +268,15 @@ public class Edge {
 	public String getPostalNumberRightCityName() {
 		return City.getCityNameByPostalNumber(postalNumberRight);
 	}
+	
+	/**
+	 * @return the postalNumberLeft of the Edge
+	 */
+	public City getPostalNumberRightCity() {
+		return City.getCityByPostalNumber(postalNumberRight);
+	}
+	
+	
 
 	/**
 	 * @return the highWayTurnoff of the Edge
@@ -379,16 +400,113 @@ public class Edge {
 		if(this.fromRightNumber == 0 && this.toRightNumber == 0) { evenNumber = ""; }
 		else{evenNumber = "(" + (this.fromRightNumber + "-" +  this.toRightNumber) + ") "; }
 		if(this.postalNumberLeft != 0 && this.postalNumberRight != 0) {
-		if(this.postalNumberLeft == this.postalNumberRight) { 
-			postAndCity = this.postalNumberRight+ " " + City.getCityNameByPostalNumber(this.postalNumberRight); }
-		else{
-			postAndCity = 
-					this.postalNumberRight + "/" + this.postalNumberLeft + " " +  
-					City.getCityNameByPostalNumber(this.postalNumberRight) + 
-					"/" + 
-					City.getCityNameByPostalNumber(this.postalNumberLeft); }
+			if(this.postalNumberLeft == this.postalNumberRight) { 
+				postAndCity = this.postalNumberRight+ " " + City.getCityNameByPostalNumber(this.postalNumberRight); }
+			else{
+				postAndCity = 
+						this.postalNumberRight + "/" + this.postalNumberLeft + " " +  
+								City.getCityNameByPostalNumber(this.postalNumberRight) + 
+								"/" + 
+								City.getCityNameByPostalNumber(this.postalNumberLeft); }
 		}
 		return this.roadName + " " + unevenNumber + evenNumber + postAndCity;
+	}
+
+	public String toStringRoadName() {	
+		return this.roadName;
+	}
+
+	public Integer[] containedNumbers() {
+		ArrayList<Integer> numbers = new ArrayList<>();
+		int fL = this.fromLeftNumber, tL = this.toLeftNumber;
+
+		int fR = this.fromRightNumber, tR = this.toRightNumber;
+		if(fL!=0 && tL!=0 ){
+			//Checks the left side is uneven. Which it is sometimes not
+			if(fL%2 == 1 && tL%2==1) 
+			{
+				for(int i = Math.min(fL, tL); i<=Math.max(fL, tL); i++) 
+				{
+					if(i%2==1)
+					{
+						numbers.add(i);
+					}
+				}
+			}
+			if(fL%2 == 0 && tL%2==0) 
+			{
+				for(int i = Math.min(fL, tL); i<=Math.max(fL, tL); i++) 
+				{
+					if(i%2==0)
+					{
+						numbers.add(i);
+					}
+				}
+			}
+		}
+		if(fR!=0&&tR!=0) {
+			//Checks the right side is uneven. It could happen to you
+			if(fR%2 == 1 && tR%2==1) 
+			{
+				for(int i = Math.min(fR, tR); i<=Math.max(fR, tR); i++) 
+				{
+					if(i%2==1)
+					{
+						numbers.add(i);
+					}
+				}
+			}
+			if(fR%2 == 0 && tR%2==0) 
+			{
+				for(int i = Math.min(fR, tR); i<=Math.max(fR, tR); i++) 
+				{
+					if(i%2==0)
+					{
+						numbers.add(i);
+					}
+				}
+			}
+		}
+		Integer[] sortedArray = numbers.toArray(new Integer[numbers.size()]);
+		Arrays.sort(sortedArray);
+
+		return sortedArray; 
+	}
+
+	public String[] containedLetters(){
+		ArrayList<String> letters = new ArrayList<>();
+		char fromLeft = 0, toLeft = 0, fromRight = 0, toRight = 0;
+
+		if(!this.fromLeftLetter.equals("")){fromLeft = this.fromLeftLetter.toLowerCase().charAt(0);}
+		if(!this.toLeftLetter.equals("")){toLeft = this.toLeftLetter.toLowerCase().charAt(0);}
+		if(!this.fromRightLetter.equals("")){fromRight = this.fromRightLetter.toLowerCase().charAt(0);}
+		if(!this.toRightLetter.equals("")){toRight= this.toRightLetter.toLowerCase().charAt(0);}
+
+		if(fromLeft != 0 && toLeft != 0)
+		{
+			for(int i = Math.min(fromLeft, toLeft); i<=Math.max(fromLeft, toLeft); i++)
+			{
+				letters.add(Character.toString((char)i));
+			}
+		}
+		if(fromRight != 0 && toRight != 0)
+		{
+
+			for(int i = Math.min(fromRight, toRight); i<=Math.max(fromRight, toRight); i++)
+			{
+				letters.add(Character.toString((char)i));
+			}
+
+		}
+		if(fromLeft == 0 && toLeft!=0){letters.add(Character.toString(toLeft));}
+		if(fromLeft != 0 && toLeft==0){letters.add(Character.toString(fromLeft));}
+		if(fromRight == 0 && toRight!=0){letters.add(Character.toString(toRight));}
+		if(fromRight != 0 && toRight==0){letters.add(Character.toString(fromRight));}
+
+		String[] sortedLetters = letters.toArray(new String[letters.size()]);
+		Arrays.sort(sortedLetters);
+
+		return sortedLetters;
 	}
 
 	public String toStringNumberAndLetterInfo()

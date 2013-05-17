@@ -1,7 +1,5 @@
 package gui.customJComponents;
 
-
-import gui.MapWindow;
 import gui.settingsAndPopUp.ColorTheme;
 
 import java.awt.event.FocusEvent;
@@ -62,8 +60,6 @@ public class CustomJTextField extends JTextField {
 		@Override
 		public void focusLost(FocusEvent e) {
 			field.outOfFocusColor();
-			if(MapWindow.listWindow != null)
-				MapWindow.listWindow.dispose();
 		}
 	}
 }

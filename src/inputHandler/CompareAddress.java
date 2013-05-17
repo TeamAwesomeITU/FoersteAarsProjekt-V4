@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
+import mapCreationAndFunctions.search.CitySearch;
 
 public class CompareAddress {
 
@@ -156,7 +157,26 @@ public class CompareAddress {
 	}
 
 	private boolean compareCity(Edge edge){
-		//Jesper do your magic
-		return true; 
+		
+		if(CitySearch.searchForCityName(city).length==1){return true;}
+		
+		return false;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

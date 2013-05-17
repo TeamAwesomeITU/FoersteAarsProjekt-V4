@@ -10,12 +10,17 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import mapCreationAndFunctions.search.CitySearch;
+
 /**
  * This class is implemented to be able to deal with many different cities with many different postal numbers.
  * Each individual City object contains the name of the city as a String, and a HashSet<Integer>, which holds all of the postal numbers that belongs to the city.
  *
  */
 public class City {
+	
+	//The cities from which to only take its first substring as its name, i.e all major cities in Denmark
+	private static String[] majorCities = new String[]{"København","Frederiksberg","Aalborg","Aarhus","Esbjerg","Randers"};
 
 	//The path to the file from which to create Cities
 	private static String cityFileName = "XML/postalNumbersAndCityNamesFINAL.txt";
@@ -40,13 +45,17 @@ public class City {
 
 	//The ID count of the cities;
 	private static int cityIDcount = 1;
+		
+	//An array of all the postal numbers, that exists in our data file, but not in our postal number file
+	private static int[] faultyPostalNumbers = new int[]{0, 1405, 8103, 1097, 6,
+		1099, 1262, 5563, 1399, 676, 1639, 8117, 9392, 1778, 8685, 1748, 1783, 8454, 8125, 1109, 8458, 8126, 8373, 8797};
+	
+	//A HashSet of existing postal numbers 
+	private static HashSet<Integer> existingsPostalNumbers = new HashSet<Integer>();
 
 	//TODO Fucking bad programming - this boolean only exists to ensure the creation of the other fields - FIX!
 	private static boolean initilalized = createCities();
-	
-	//An array of all the postal numbers, that exists in our data file, but not in our postal number file
-	private static int[] nonExistingNumbers = new int[]{0, 1405, 8103, 1097, 6,
-		1099, 1262, 5563, 1399, 676, 1639, 8117, 9392, 1778, 8685, 1748, 1783, 8454, 8125, 1109, 8458, 8126, 8373, 8797};
+
 	
 	/**
 	 * Creates a City with the input cityName and one of its postal numbers
@@ -144,11 +153,16 @@ public class City {
 	
 	public static boolean postalNumberExists(int postalNumber)
 	{
-		for(int number : nonExistingNumbers)
-			if(postalNumber == number)
-				return false;
-		return true;
+//		for(int number : faultyPostalNumbers)
+//			if(postalNumber == number)
+//				return false;
+
+		return existingsPostalNumbers.contains(postalNumber);
 	}
+	
+	
+	public static boolean cityNameExists(String cityName)
+	{ return CitySearch.searchForCityName(cityName).length > 0;	}
 	
 	
 	/**
@@ -201,15 +215,26 @@ public class City {
 			Integer postalNumber; 
 			String cityName;
 			City city;
+			boolean isMajorCity;
+			boolean hasFaultyPostalNumber;
 
 			while((line = reader.readLine()) != null)
 			{
+				isMajorCity = false;
 				lineParts = line.split("\\s");
 				postalNumber = Integer.parseInt(lineParts[0]);
-				cityName = lineParts[1];
-
-				for(int i = 2; i < lineParts.length; i++)
-					cityName += " " + lineParts[i];
+				cityName = lineParts[1].trim();
+				
+				//If the city is a major city, use only the first part of its name
+				for(String majorCityName : majorCities)
+					if(cityName.equals(majorCityName))
+						isMajorCity = true;
+				
+				//If the city is NOT a major city, use the full name
+				if(!isMajorCity)
+					for(int i = 2; i < lineParts.length; i++)
+						cityName += " " + lineParts[i];
+				
 
 				if(!cityNameAlreadyExists(cityName))
 				{
@@ -224,6 +249,15 @@ public class City {
 					city.addPostalNumberToCity(postalNumber);
 					cityHashMap.put(postalNumber, city);
 				}				
+				
+				hasFaultyPostalNumber = false;
+				for(int number : faultyPostalNumbers)
+					if(postalNumber == number)
+						hasFaultyPostalNumber = true;
+				
+				if(!hasFaultyPostalNumber)
+					existingsPostalNumbers.add(postalNumber);				
+					
 			}
 
 			reader.close();		
@@ -251,7 +285,7 @@ public class City {
 	public static void main(String[] args) {
 		createCities();
 		
-		for(int number : nonExistingNumbers)
+		for(int number : faultyPostalNumbers)
 			System.out.println(number);
 			
 		
