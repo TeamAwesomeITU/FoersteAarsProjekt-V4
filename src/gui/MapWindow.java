@@ -8,6 +8,7 @@ import inputHandler.exceptions.MalformedAdressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -25,8 +26,10 @@ import java.util.Stack;
 import javax.swing.Timer;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -162,7 +165,7 @@ public class MapWindow {
 		routeBox.setUI(ColoredArrowUI.createUI(routeBox));
 		routeBox.addActionListener(new RouteTypeActionListener());
 
-		ColoredJToggleButton detailedDirectionsButton = new ColoredJToggleButton("Detailed Directions");
+		ColoredJButton detailedDirectionsButton = new ColoredJButton("Detailed Directions");
 		detailedDirectionsButton.addActionListener(new GetDirectionsListener(detailedDirectionsButton));
 
 		ColoredJPanel directionsPanel = new ColoredJPanel();
@@ -596,10 +599,10 @@ public class MapWindow {
 	class GetDirectionsListener implements ActionListener{
 
 		private JTextArea directionsArea;
-		private JToggleButton button;
+		private JButton button;
 		private JFrame frame;
 
-		public GetDirectionsListener(JToggleButton button){
+		public GetDirectionsListener(JButton button){
 			directionsArea = new JTextArea();
 			directionsArea.setEditable(false);
 			this.button = button;
@@ -612,24 +615,31 @@ public class MapWindow {
 			testArrayList.add("Mark");
 			testArrayList.add("Futte");
 			testArrayList.add("Tobias");
-			if(button.isSelected()){
-				frame = makeDirectionsFrame();
-				fillDirections(testArrayList);
-			}
-			else if(!button.isSelected())
-				frame.dispose();
+			frame = makeDirectionsFrame();
+			fillDirections(testArrayList);
 		}
 
 		public JFrame makeDirectionsFrame(){
-			JFrame directionsFrame = new JFrame();
+			final JFrame directionsFrame = new JFrame();
 			directionsFrame.setUndecorated(true);
 			directionsFrame.setPreferredSize(new Dimension(300, 300));
 			directionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+			ColoredJMenuBar menuBar = new ColoredJMenuBar();
+			directionsFrame.setJMenuBar(menuBar);
+
+			ColoredJMenu exitMenu = new ColoredJMenu("x");
+			exitMenu.setForeground(Color.red);
+			exitMenu.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					directionsFrame.dispose();
+				}
+			});
+			menuBar.add(Box.createHorizontalGlue());
+			menuBar.add(exitMenu);
+
 			Container contentPane = directionsFrame.getContentPane();
 			contentPane.setLayout(new BorderLayout());
-
-			ColoredJButton printButton = new ColoredJButton("Close");
 
 			ColoredJPanel panel = new ColoredJPanel();
 			panel.setLayout(new BorderLayout());
@@ -642,7 +652,6 @@ public class MapWindow {
 			directionsPanel.add(directionsArea);
 
 			panel.add(directionsPanel, BorderLayout.CENTER);
-			panel.add(printButton, BorderLayout.SOUTH);
 			panel.add(label, BorderLayout.NORTH);
 
 			directionsFrame.add(scrollPane, BorderLayout.CENTER);
