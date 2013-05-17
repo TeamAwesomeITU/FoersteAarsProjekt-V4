@@ -49,7 +49,7 @@ import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
  */
 public class MapWindow {
 
-	private Timer showAddressTimer = new Timer(800, new TimerListener());
+	private Timer showAddressTimer = new Timer(400, new TimerListener());
 	public static CustomJTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
@@ -141,6 +141,7 @@ public class MapWindow {
 				{"Walk", "resources/walk2.png"}};
 		vehicleBox.addItems(vehicleList);
 		vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
+		vehicleBox.setSelectedIndex(1);
 		vehicleBox.addActionListener(new VehicleTypeActionListener());
 
 		ColoredJComboBox routeBox = new ColoredJComboBox();

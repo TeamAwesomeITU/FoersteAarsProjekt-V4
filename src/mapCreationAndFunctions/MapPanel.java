@@ -193,7 +193,7 @@ public class MapPanel extends JPanel {
 	public Color setHighLightFromColor(){
 		Color color = new Color(204,0,102);
 		if(!MainGui.coastlinesWanted || !MainGui.colorFollowTheme) 
-			color = Color.ORANGE;
+			color = Color.GREEN;
 		else if(ColorTheme.summerTheme || ColorTheme.springTheme || ColorTheme.autumnTheme)	
 			color = Color.WHITE;
 		else if(ColorTheme.winterTheme)
