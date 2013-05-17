@@ -63,8 +63,9 @@ public class MapWindow {
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
 	private String VehicleType = "Bike", RouteType = "Fastest";
-	public static AddressSearch addressSearcherFrom = new AddressSearch();
-	public static AddressSearch addressSearcherTo = new AddressSearch();
+	private static AddressSearch addressSearcherFrom = new AddressSearch();
+	private static AddressSearch addressSearcherTo = new AddressSearch();
+	private static ArrayList<Edge> directionEdges = new ArrayList<>();
 
 	/**
 	 * The constructor makes the frame
@@ -283,8 +284,53 @@ public class MapWindow {
 	 */
 	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException, NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException{
 		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), DataHolding.getEdgeArray(), VehicleType, RouteType);
+		setDirections((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 		mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 		mapPanel.repaintMap();
+
+		getDirections();
+	}
+
+	private void setDirections(Stack<Edge> edges)
+	{
+		directionEdges.clear();
+		while(!edges.isEmpty())
+			directionEdges.add(edges.pop());
+	}
+
+	public String[] getDirections() throws NoAddressFoundException
+	{
+		if(directionEdges.isEmpty())
+			return new String[0];
+		else {
+			ArrayList<String> directions = new ArrayList<>();
+
+			directions.add("Going from: " + addressSearcherFrom.getEdgeToNavigate().getRoadName() +  ", " + addressSearcherFrom.getEdgeToNavigate().getPostalNumberLeftCityName());
+			directions.add("Going to: " + addressSearcherTo.getEdgeToNavigate().getRoadName() + ", " + addressSearcherTo.getEdgeToNavigate().getPostalNumberLeftCityName());
+			directions.add("");
+
+			int currentLength = 0;
+
+			for(Edge edge : directionEdges)
+			{
+				currentLength += edge.getLength();
+				if(!directions.get(directions.size()-1).contains(edge.getRoadName()))
+				{
+					if(!edge.getRoadName().contains("i krydset"))
+					{
+						if(edge.getRoadName().contains("Rundkørsel"))
+							currentLength = 10;
+						directions.add("Travel along " + edge.getRoadName() + " for " + currentLength + " meters");
+						currentLength = 0;
+					}
+				}
+			}	
+
+			for(String string : directions)
+				System.out.println(string);
+
+			return directions.toArray(new String[directions.size()]);
+		}
 	}
 
 	/**
@@ -351,7 +397,7 @@ public class MapWindow {
 		@Override
 		public void keyReleased(KeyEvent e) {
 			if (toSearchQuery.hasFocus() && toSearchQuery.getText().isEmpty() ||
-				fromSearchQuery.hasFocus() && fromSearchQuery.getText().isEmpty()) 
+					fromSearchQuery.hasFocus() && fromSearchQuery.getText().isEmpty()) 
 			{
 				if (mapPanel.getPathTo() != null) {
 					try {
