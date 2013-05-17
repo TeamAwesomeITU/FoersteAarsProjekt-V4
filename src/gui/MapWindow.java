@@ -8,29 +8,37 @@ import inputHandler.exceptions.MalformedAdressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Stack;
 import javax.swing.Timer;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
+
 import navigation.DijkstraSP;
 import navigation.exceptions.NoRoutePossibleException;
 
@@ -103,7 +111,7 @@ public class MapWindow {
 	 */
 	public ColoredJPanel makeToolBar(){
 		ColoredJPanel toolBar = new ColoredJPanel();
-		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
+		toolBar.setLayout(new GridLayout(9, 1, 0, 3));
 
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
@@ -136,12 +144,11 @@ public class MapWindow {
 		ColoredJComboBox vehicleBox = new ColoredJComboBox();
 		vehicleBox.setPreferredSize(new Dimension(120, 30));
 		vehicleBox.setEditable(true);
-		String[][] vehicleList = {{"Bike", "resources/bicycle.png"},
-				{"Car", "resources/car.png"},
+		String[][] vehicleList = {{"Car", "resources/car.png"},
+				{"Bike", "resources/bicycle.png"},
 				{"Walk", "resources/walk2.png"}};
 		vehicleBox.addItems(vehicleList);
 		vehicleBox.setUI(ColoredArrowUI.createUI(vehicleBox));
-		vehicleBox.setSelectedIndex(1);
 		vehicleBox.addActionListener(new VehicleTypeActionListener());
 
 		ColoredJComboBox routeBox = new ColoredJComboBox();
@@ -152,6 +159,13 @@ public class MapWindow {
 		routeBox.addItems(routeList);
 		routeBox.setUI(ColoredArrowUI.createUI(routeBox));
 		routeBox.addActionListener(new RouteTypeActionListener());
+		
+		ColoredJToggleButton detailedDirectionsButton = new ColoredJToggleButton("Detailed Directions");
+		detailedDirectionsButton.addActionListener(new GetDirectionsListener(detailedDirectionsButton));
+
+		ColoredJPanel directionsPanel = new ColoredJPanel();
+		directionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		directionsPanel.add(detailedDirectionsButton);
 
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
@@ -161,6 +175,7 @@ public class MapWindow {
 		toolBar.add(buttonPanel);
 		toolBar.add(vehicleBox);
 		toolBar.add(routeBox);
+		toolBar.add(directionsPanel);
 
 		ColoredJPanel flow = new ColoredJPanel();
 		flow.add(toolBar);
@@ -525,6 +540,77 @@ public class MapWindow {
 		}
 
 	}
+	
+	class GetDirectionsListener implements ActionListener{
+		
+		private JTextArea directionsArea;
+		private JToggleButton button;
+		private JFrame frame;
+		
+		public GetDirectionsListener(JToggleButton button){
+			directionsArea = new JTextArea();
+			directionsArea.setEditable(false);
+			this.button = button;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			ArrayList<String> testArrayList = new ArrayList<String>();
+			testArrayList.add("KøgeMuffi");
+			testArrayList.add("Mark");
+			testArrayList.add("Futte");
+			testArrayList.add("Tobias");
+			if(button.isSelected()){
+				frame = makeDirectionsFrame();
+				fillDirections(testArrayList);
+			}
+			else if(!button.isSelected())
+				frame.dispose();
+		}
+		
+		public JFrame makeDirectionsFrame(){
+			JFrame directionsFrame = new JFrame();
+			directionsFrame.setUndecorated(true);
+			directionsFrame.setPreferredSize(new Dimension(300, 300));
+			directionsFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
+			Container contentPane = directionsFrame.getContentPane();
+			contentPane.setLayout(new BorderLayout());
+			
+			ColoredJButton printButton = new ColoredJButton("Print");
+			
+			ColoredJPanel panel = new ColoredJPanel();
+			panel.setLayout(new BorderLayout());
+			ColoredJScrollPane scrollPane = new ColoredJScrollPane(panel);
+			
+			JLabel label = new JLabel("Directions:");
+			label.setForeground(ColorTheme.TEXT_COLOR);
+			
+			ColoredJPanel directionsPanel = new ColoredJPanel();
+			directionsPanel.add(directionsArea);
+			
+			panel.add(directionsPanel, BorderLayout.CENTER);
+			panel.add(printButton, BorderLayout.SOUTH);
+			panel.add(label, BorderLayout.NORTH);
+			
+			directionsFrame.add(scrollPane, BorderLayout.CENTER);
+			directionsFrame.pack();
+			directionsFrame.setVisible(true);
+			directionsFrame.setLocationRelativeTo(null);
+			
+			return directionsFrame;
+		}
+		
+		public void fillDirections(ArrayList<String> directions){
+			String outPut = "";
+			for(String line : directions)
+				outPut += line +"\n";
+			directionsArea.setText(outPut);
+		}
+		
+	}
+	
+
 
 
 
