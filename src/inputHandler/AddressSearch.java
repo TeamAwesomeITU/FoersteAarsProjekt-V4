@@ -81,7 +81,7 @@ public class AddressSearch {
 		for(Edge edge : edgesToCheck)
 		{
 			System.out.println(edge.getPostalNumberLeft() + " " + edge.getPostalNumberRight());
-			if(!relevantEdgeIDsLeft.contains(edge.getiD()) || !relevantEdgeIDsRight.contains(edge.getiD()))		
+			if(!relevantEdgeIDsLeft.contains(edge.getiD()) && !relevantEdgeIDsRight.contains(edge.getiD()))		
 				return false;
 		}
 		System.out.println("ALL ROADS CITIES MATCHES");
@@ -100,6 +100,8 @@ public class AddressSearch {
 		for(Edge edge : adressSearch.getFoundEdges())
 			System.out.println(edge);
 	}
+	
+
 
 
 }

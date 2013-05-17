@@ -118,7 +118,6 @@ public class AdressParser {
 		int i = 0;
 		boolean isResultFound = false;
 		int wantedLength = splitInput.length;
-		int largestMatchFound = 0;
 
 		while(!isResultFound && i < splitInput.length && wantedLength >= 0)
 		{		
@@ -131,15 +130,15 @@ public class AdressParser {
 			System.out.println("totalInput: " + totalInput);
 
 			possibleRoadName = EdgeSearch.searchForRoadNameLongestPrefix(totalInput);
+			System.out.println("MIGHT BE THIS ROAD: " + possibleRoadName);
 
 			if(!possibleRoadName.isEmpty())
 			{
 				Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
 
-				if(possibleEdges.length > largestMatchFound)
+				if(possibleEdges.length != 0 && possibleRoadName.length() > foundRoadName.length())
 				{
 					foundRoadName = possibleRoadName;
-					largestMatchFound = possibleEdges.length;
 				}			
 			}
 			i++;
@@ -285,4 +284,3 @@ public class AdressParser {
 
 
 }
-

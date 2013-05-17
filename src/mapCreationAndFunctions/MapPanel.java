@@ -20,7 +20,12 @@ import javax.swing.border.LineBorder;
 
 import mapCreationAndFunctions.data.CoastLineMaker;
 import mapCreationAndFunctions.data.CoordinateConverter;
+import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
+import mapCreationAndFunctions.data.Node;
+import mapCreationAndFunctions.exceptions.AreaIsNotWithinDenmarkException;
+import mapCreationAndFunctions.exceptions.InvalidAreaProportionsException;
+import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
 import mapCreationAndFunctions.search.FindRelevantEdges;
 
 @SuppressWarnings("serial")
@@ -38,7 +43,6 @@ public class MapPanel extends JPanel {
 	private double mapHeight, mapWidth;
 	private Stack<Edge> pathTo;
 	private Edge[] fromEdgesToHighlight, toEdgesToHighlight;
-	private Color fromColor = new Color(204,0,102), toColor = new Color(204,0,102);
 
 	/**
 	 * The constructor of MapPanel. Initializes the MapPanel, size and lines for the map.
@@ -188,7 +192,7 @@ public class MapPanel extends JPanel {
 	public Color setHighLightFromColor(){
 		Color color = new Color(204,0,102);
 		if(!MainGui.coastlinesWanted || !MainGui.colorFollowTheme) 
-			color = Color.ORANGE;
+			color = Color.GREEN;
 		else if(ColorTheme.summerTheme || ColorTheme.springTheme || ColorTheme.autumnTheme)	
 			color = Color.WHITE;
 		else if(ColorTheme.winterTheme)
@@ -256,8 +260,14 @@ public class MapPanel extends JPanel {
 
 	}
 
-	public void setPathTo(Stack<Edge> pathTo) {
+	public void setPathTo(Stack<Edge> pathTo) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException {
 		this.pathTo = pathTo;
+		if (pathTo != null)
+			zoomToRouteArea();
+	}
+	
+	public Stack<Edge> getPathTo() {
+		return pathTo;
 	}
 	
 	public void setFromEdgesToHighlight(Edge[] edges)
@@ -285,14 +295,6 @@ public class MapPanel extends JPanel {
 	public double getMapHeight() {
 		return mapHeight;
 	}
-	
-	public void setFromColor(Color fromColor) {
-		this.fromColor = fromColor;
-	}
-	
-	public void setToColor(Color toColor) {
-		this.toColor = toColor;
-	}
 
 	/**
 	 * Returns an Edge, which lies near the given mouse coordinates.
@@ -309,5 +311,49 @@ public class MapPanel extends JPanel {
 				return edge;
 
 		return null;
+	}
+	
+	private void zoomToRouteArea() throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException
+	{
+		double smallestX = 100000000, smallestY = 100000000;
+		double largestX = 0, largestY = 0;
+		double foundFromX, foundFromY, foundToX, foundToY;
+		
+		Node nodeFrom, nodeTo;
+		for(Edge edge : pathTo)
+		{
+			nodeFrom = DataHolding.getNode(edge.getFromNode());
+			nodeTo = DataHolding.getNode(edge.getToNode());
+			
+			foundFromX = nodeFrom.getXCoord();
+			foundFromY = nodeFrom.getYCoord();
+			foundToX = nodeTo.getXCoord();
+			foundToY = nodeTo.getYCoord();
+			
+			if(foundFromY < smallestY || foundToY < smallestY)
+				System.out.println(smallestY);
+			
+			smallestX = (foundFromX < smallestX) ? foundFromX : smallestX;
+			largestX = (foundFromX > largestX) ? foundFromX : largestX;
+			smallestY = (foundFromY < smallestY) ? foundFromY : smallestY;
+			largestY = (foundFromY > largestY) ? foundFromY : largestY;
+			
+			smallestX = (foundToX < smallestX) ? foundToX : smallestX;
+			largestX = (foundToX > largestX) ? foundToX : largestX;
+			smallestY = (foundToY < smallestY) ? foundToY : smallestY;
+			largestY = (foundToY > largestY) ? foundToY : largestY;
+
+		}
+		
+		double heightToAdd = (largestY-smallestY)/50;
+		double widthToAdd = (largestX-smallestX)/50;
+		
+		System.out.println("smallestX: " + smallestX);
+		System.out.println("smallestY: " + smallestY);
+		System.out.println("largestX: " + largestX);
+		System.out.println("largestY: " + largestY);
+		
+		repaintMap(new AreaToDraw(smallestX-widthToAdd, largestX+widthToAdd, smallestY-heightToAdd, largestY+heightToAdd, true));
+			
 	}
 }

@@ -112,10 +112,9 @@ public class CitySearch  {
 	 * @param cityToFind The postal number of the City to find
 	 * @return An array of all the Cities, that starts with the given postal number
 	 */
-	public static City[] searchForCityPostalNumberSuggestions(String cityToFind)
+	public static City[] searchForCityPostalNumberSuggestions(int postalNumberToFind)
 	{
-		cityToFind = cityToFind.toLowerCase();
-		ArrayList<String> cityNumbers = cityPostalNumberSearchTrie.prefixMatch(cityToFind);
+		ArrayList<String> cityNumbers = cityPostalNumberSearchTrie.prefixMatch(postalNumberToFind + "");
 		ArrayList<City> foundCityList = new ArrayList<>();
 		
 		for(String cityNumber : cityNumbers)
@@ -132,25 +131,26 @@ public class CitySearch  {
 	{ return City.getCityByCityName(cityName).getCityPostalNumbers().contains(postalNumber); }
 	
 	public static void main(String[] args) {
-		/*
-		City[] foundCityList = searchForCityNameSuggestions("k");
-		for(City city : foundCityList)
-			System.out.println(city.getCityName());
 		
-		System.out.println(searchForCityName("KØGE")[0].getCityName());
-		*/
+//		City[] foundCityList = searchForCityNameSuggestions("k");
+//		for(City city : foundCityList)
+//			System.out.println(city.getCityName());
 		
-		for(City city : searchForCityPostalNumberSuggestions("46"))
-				System.out.println(city.getCityName());
+//		System.out.println(searchForCityName("KØGE")[0].getCityName());
+//		
 		
-		System.out.println("BREAK---------------");
+//		for(City city : searchForCityPostalNumberSuggestions(46))
+//				System.out.println(city.getCityName());
 		
-		for(City city : searchForCityPostalNumberSuggestions("24"))
-			System.out.println(city.getCityName());
+//		System.out.println("BREAK---------------");
+//		
+//		for(City city : searchForCityPostalNumberSuggestions(24))
+//			System.out.println(city.getCityName());
+//		
+//		System.out.println("BREAK---------------");
+//		
+//		for(City city : searchForCityName("København"))
+//			System.out.println(city.getCityName());
 		
-		System.out.println("BREAK---------------");
-		
-		for(City city : searchForCityPostalNumberSuggestions("0"))
-			System.out.println(city.getCityName());
 	}
 }
