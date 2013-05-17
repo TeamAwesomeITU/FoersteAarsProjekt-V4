@@ -265,7 +265,6 @@ public class MapWindow {
 	 * @throws AreaIsNotWithinDenmarkException 
 	 * @throws NegativeAreaSizeException 
 	 */
-	//TODO fix med jespers halløj
 	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException, NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException{
 		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), DataHolding.getEdgeArray(), VehicleType, RouteType);
 		mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
@@ -323,8 +322,6 @@ public class MapWindow {
 	 */
 	class TextFieldListener implements KeyListener{
 
-		String query;
-
 		@Override
 		public void keyPressed(KeyEvent arg) {
 			if (showAddressTimer.isRunning()){
@@ -337,6 +334,18 @@ public class MapWindow {
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
+			if (toSearchQuery.hasFocus() && toSearchQuery.getText().isEmpty() ||
+				fromSearchQuery.hasFocus() && fromSearchQuery.getText().isEmpty()) 
+			{
+				if (mapPanel.getPathTo() != null) {
+					try {
+						mapPanel.setPathTo(null);
+					} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
+						createWarning(e1.getMessage());
+					}
+					mapPanel.repaintMap();
+				}
+			}
 		}
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -490,7 +499,7 @@ public class MapWindow {
 				if(toSearchQuery.hasFocus()){
 					try {
 						findRoute();
-					} catch (NoAddressFoundException | NoRoutePossibleException e) {
+					} catch (NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 						createWarning(e.getMessage());
 					}
 				}else if(fromSearchQuery.hasFocus())
