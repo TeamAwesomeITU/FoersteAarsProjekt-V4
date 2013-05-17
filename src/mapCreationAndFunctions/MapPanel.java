@@ -20,7 +20,12 @@ import javax.swing.border.LineBorder;
 
 import mapCreationAndFunctions.data.CoastLineMaker;
 import mapCreationAndFunctions.data.CoordinateConverter;
+import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
+import mapCreationAndFunctions.data.Node;
+import mapCreationAndFunctions.exceptions.AreaIsNotWithinDenmarkException;
+import mapCreationAndFunctions.exceptions.InvalidAreaProportionsException;
+import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
 import mapCreationAndFunctions.search.FindRelevantEdges;
 
 @SuppressWarnings("serial")
@@ -256,8 +261,9 @@ public class MapPanel extends JPanel {
 
 	}
 
-	public void setPathTo(Stack<Edge> pathTo) {
+	public void setPathTo(Stack<Edge> pathTo) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException {
 		this.pathTo = pathTo;
+		zoomToRouteArea();
 	}
 	
 	public void setFromEdgesToHighlight(Edge[] edges)
@@ -309,5 +315,49 @@ public class MapPanel extends JPanel {
 				return edge;
 
 		return null;
+	}
+	
+	private void zoomToRouteArea() throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException
+	{
+		double smallestX = 100000000, smallestY = 100000000;
+		double largestX = 0, largestY = 0;
+		double foundFromX, foundFromY, foundToX, foundToY;
+		
+		Node nodeFrom, nodeTo;
+		for(Edge edge : pathTo)
+		{
+			nodeFrom = DataHolding.getNode(edge.getFromNode());
+			nodeTo = DataHolding.getNode(edge.getToNode());
+			
+			foundFromX = nodeFrom.getXCoord();
+			foundFromY = nodeFrom.getYCoord();
+			foundToX = nodeTo.getXCoord();
+			foundToY = nodeTo.getYCoord();
+			
+			if(foundFromY < smallestY || foundToY < smallestY)
+				System.out.println(smallestY);
+			
+			smallestX = (foundFromX < smallestX) ? foundFromX : smallestX;
+			largestX = (foundFromX > largestX) ? foundFromX : largestX;
+			smallestY = (foundFromY < smallestY) ? foundFromY : smallestY;
+			largestY = (foundFromY > largestY) ? foundFromY : largestY;
+			
+			smallestX = (foundToX < smallestX) ? foundToX : smallestX;
+			largestX = (foundToX > largestX) ? foundToX : largestX;
+			smallestY = (foundToY < smallestY) ? foundToY : smallestY;
+			largestY = (foundToY > largestY) ? foundToY : largestY;
+
+		}
+		
+		double heightToAdd = (largestY-smallestY)/50;
+		double widthToAdd = (largestX-smallestX)/50;
+		
+		System.out.println("smallestX: " + smallestX);
+		System.out.println("smallestY: " + smallestY);
+		System.out.println("largestX: " + largestX);
+		System.out.println("largestY: " + largestY);
+		
+		repaintMap(new AreaToDraw(smallestX-widthToAdd, largestX+widthToAdd, smallestY-heightToAdd, largestY+heightToAdd, true));
+			
 	}
 }
