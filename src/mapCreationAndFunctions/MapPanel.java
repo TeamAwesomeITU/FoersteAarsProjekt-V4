@@ -263,7 +263,12 @@ public class MapPanel extends JPanel {
 
 	public void setPathTo(Stack<Edge> pathTo) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException {
 		this.pathTo = pathTo;
-		zoomToRouteArea();
+		if (pathTo != null)
+			zoomToRouteArea();
+	}
+	
+	public Stack<Edge> getPathTo() {
+		return pathTo;
 	}
 	
 	public void setFromEdgesToHighlight(Edge[] edges)
