@@ -11,7 +11,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -22,19 +21,15 @@ import java.util.Stack;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JWindow;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
-import javax.xml.crypto.Data;
-
 import navigation.DijkstraSP;
 import navigation.exceptions.NoRoutePossibleException;
 
@@ -51,16 +46,12 @@ import mapCreationAndFunctions.data.Edge;
 public class MapWindow {
 
 	public static CustomJTextField toSearchQuery, fromSearchQuery;
-	public static SearchList<String> searchList;
-	public static DefaultListModel<String> listModel;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
 	private String VehicleType = "Bike", RouteType = "Fastest";
-	public static JWindow listWindow;
 	public static AddressSearch addressSearcherFrom = new AddressSearch();
 	public static AddressSearch addressSearcherTo = new AddressSearch();
-	public static ExpandedSearch expandedSearch;
 
 	/**
 	 * The constructor makes the frame
@@ -104,7 +95,6 @@ public class MapWindow {
 	 * Makes the toolbar for the search input
 	 * @return the toolbar to be inserted later.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ColoredJPanel makeToolBar(){
 		ColoredJPanel toolBar = new ColoredJPanel();
 		toolBar.setLayout(new GridLayout(0, 1, 0, 3));
@@ -112,17 +102,16 @@ public class MapWindow {
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
 		fromSearchQuery = new CustomJTextField();
-		fromSearchQuery.addKeyListener(new ListListener());
+		fromSearchQuery.addKeyListener(new EnterKeyListener());
 		fromSearchQuery.setPreferredSize(new Dimension(200, 20));
 
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(ColorTheme.TEXT_COLOR);
 		toSearchQuery = new CustomJTextField();
-		toSearchQuery.addKeyListener(new ListListener());
+		toSearchQuery.addKeyListener(new EnterKeyListener());
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
-		findRouteButton.setPreferredSize(new Dimension(95, 20));
 
 		ColoredJPanel buttonPanel = new ColoredJPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -135,22 +124,6 @@ public class MapWindow {
 		reverseButton.setToolTipText("Click to reverse from and to");
 		reverseButton.addActionListener(new ReverseActionListener());
 
-		final ColoredJToggleButton expandSearchButton = new ColoredJToggleButton("Expand Search");
-		expandSearchButton.setPreferredSize(new Dimension(95, 20));
-		expandSearchButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(expandSearchButton.isSelected()){
-					expandedSearch = new ExpandedSearch();
-					Point location = fromSearchQuery.getLocationOnScreen();
-					if(ScreenSize.dualScreenRight)
-						expandedSearch.setLocation(new Point((int)location.getX()-expandedSearch.getWidth()-5, ((int)location.getY())));
-					else
-						expandedSearch.setLocation(new Point((int)location.getX()+210, ((int)location.getY())));
-				} else if(!expandSearchButton.isSelected())
-					expandedSearch.dispose();
-			}
-		});
-		buttonPanel.add(expandSearchButton);
 
 		ColoredJComboBox vehicleBox = new ColoredJComboBox();
 		vehicleBox.setPreferredSize(new Dimension(120, 30));
@@ -171,9 +144,6 @@ public class MapWindow {
 		routeBox.setUI(ColoredArrowUI.createUI(routeBox));
 		routeBox.addActionListener(new RouteTypeActionListener());
 
-		listModel = new DefaultListModel();
-		searchList = new SearchList(listModel);
-
 		toolBar.add(reverseButton);
 		toolBar.add(fromHeader);
 		toolBar.add(fromSearchQuery);
@@ -184,13 +154,6 @@ public class MapWindow {
 		toolBar.add(routeBox);
 
 		ColoredJPanel flow = new ColoredJPanel();
-		flow.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(listWindow != null)
-					listWindow.dispose();
-			}
-		});
 		flow.add(toolBar);
 
 		return flow;
@@ -325,7 +288,7 @@ public class MapWindow {
 	 * If the user is in the search text field, then by pressing enter
 	 * is the same as clicking the find route button
 	 */
-	class ListListener implements KeyListener{
+	class EnterKeyListener implements KeyListener{
 
 		String query;
 
@@ -453,7 +416,7 @@ public class MapWindow {
 
 			String roadName = "";
 			if(edge != null)
-				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName() + " edgeID: "+ edge.getiD();
+				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
 			if (MainGui.coordinatesBoolean) 				
 				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", " + "Roadname: " + roadName);
 			else 
