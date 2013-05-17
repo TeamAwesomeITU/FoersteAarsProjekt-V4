@@ -166,7 +166,7 @@ public class DijkstraSP
 		case "Bike": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,21,22,23,3,31,32,33,41,42,43}));
 		setOfNonViableRoadTypes = new HashSet<String>(Arrays.asList(new String[]{"tf"})); break;
 
-		case "Car": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{8,11,28}));
+		case "Car": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{8,10,11,28}));
 		setOfNonViableRoadTypes = new HashSet<String>(Arrays.asList(new String[]{"tf", "n"})); break;
 
 		case "Walk": setOfNonViableEdges = new HashSet<Integer>(Arrays.asList(new Integer[]{1,2,3,4,21,22,23,24,31,32,33,34,41,42,43,44})); 

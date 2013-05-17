@@ -54,7 +54,7 @@ public class MapWindow {
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
-	private String VehicleType = "Bike", RouteType = "Fastest";
+	private String VehicleType = "Car", RouteType = "Fastest";
 	public static AddressSearch addressSearcherFrom = new AddressSearch();
 	public static AddressSearch addressSearcherTo = new AddressSearch();
 

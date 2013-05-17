@@ -93,6 +93,9 @@ public class MapPanel extends JPanel {
 			makeCoastLineForMap();
 	}
 
+	/**
+	 * Makes the coastline for the map.
+	 */
 	private void makeCoastLineForMap()
 	{
 		coastLineToDraw = CoastLineMaker.getCoastLineToDraw((int)mapWidth, (int)mapHeight, area);
@@ -100,7 +103,7 @@ public class MapPanel extends JPanel {
 
 	/**
 	 * Draws all the lines for the map. Also, draws the rectangle used by the user
-	 * to see where you are about to zoom.
+	 * to see where you are about to zoom, the route from Dijkstra's Algorithm, and highlights the to and from edges.
 	 * @param g The graphics object which is used.
 	 */
 	@SuppressWarnings("unchecked")
@@ -189,7 +192,11 @@ public class MapPanel extends JPanel {
 		} 
 	}
 	
-	public Color setHighLightFromColor(){
+	/**
+	 * 
+	 * @return the color depending on the chosen color theme, if coastlines are drawn for the start edge.
+	 */
+	private Color setHighLightFromColor(){
 		Color color = new Color(204,0,102);
 		if(!MainGui.coastlinesWanted || !MainGui.colorFollowTheme) 
 			color = Color.GREEN;
@@ -200,7 +207,11 @@ public class MapPanel extends JPanel {
 		return color;
 	}
 	
-	public Color setHighLightToColor(){
+	/**
+	 * 
+	 * @return the color depending on the chosen color theme, if coastlines are drawn for the destination edge.
+	 */
+	private Color setHighLightToColor(){
 		Color color = new Color(204,0,102);
 		if(!MainGui.coastlinesWanted || !MainGui.colorFollowTheme) 
 			color = Color.CYAN;
@@ -260,22 +271,39 @@ public class MapPanel extends JPanel {
 
 	}
 
+	/**
+	 * Sets the route to draw.
+	 * @param pathTo is the route.
+	 * @throws NegativeAreaSizeException
+	 * @throws AreaIsNotWithinDenmarkException
+	 * @throws InvalidAreaProportionsException
+	 */
 	public void setPathTo(Stack<Edge> pathTo) throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException {
 		this.pathTo = pathTo;
 		if (pathTo != null)
-			zoomToRouteArea();
+			repaintMap(zoomToRouteArea());
 	}
 	
+	/**
+	 * @return the route.
+	 */
 	public Stack<Edge> getPathTo() {
 		return pathTo;
 	}
-	
+	/**
+	 * Highlights the start edges in the chosen color.
+	 * @param edges the edges to highlight.
+	 */
 	public void setFromEdgesToHighlight(Edge[] edges)
 	{
 		fromEdgesToHighlight = edges;
 		repaintMap();
 	}
 	
+	/**
+	 * Highlights the destination edges in the chosen color.
+	 * @param edges the edges to highlight.
+	 */
 	public void setToEdgesToHighlight(Edge[] edges) {
 		toEdgesToHighlight = edges;
 		repaintMap();
@@ -313,7 +341,14 @@ public class MapPanel extends JPanel {
 		return null;
 	}
 	
-	private void zoomToRouteArea() throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException
+	/**
+	 * Zooms in on the route that is to be drawn.
+	 * @returns the area to draw.
+	 * @throws NegativeAreaSizeException
+	 * @throws AreaIsNotWithinDenmarkException
+	 * @throws InvalidAreaProportionsException
+	 */
+	private AreaToDraw zoomToRouteArea() throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException
 	{
 		double smallestX = 100000000, smallestY = 100000000;
 		double largestX = 0, largestY = 0;
@@ -353,7 +388,7 @@ public class MapPanel extends JPanel {
 		System.out.println("largestX: " + largestX);
 		System.out.println("largestY: " + largestY);
 		
-		repaintMap(new AreaToDraw(smallestX-widthToAdd, largestX+widthToAdd, smallestY-heightToAdd, largestY+heightToAdd, true));
+		return new AreaToDraw(smallestX-widthToAdd, largestX+widthToAdd, smallestY-heightToAdd, largestY+heightToAdd, true);
 			
 	}
 }
