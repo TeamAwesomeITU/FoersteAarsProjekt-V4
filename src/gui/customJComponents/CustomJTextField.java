@@ -1,10 +1,7 @@
 package gui.customJComponents;
 
-import gui.MapWindow;
 import gui.settingsAndPopUp.ColorTheme;
 
-import inputHandler.exceptions.MalformedAdressException;
-import inputHandler.exceptions.NoAddressFoundException;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -12,7 +9,6 @@ import java.awt.event.FocusListener;
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
-import mapCreationAndFunctions.MapPanel;
 
 /**
  * Our own extension of the JTextField

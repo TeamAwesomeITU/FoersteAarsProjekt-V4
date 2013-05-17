@@ -631,7 +631,7 @@ public class MapWindow {
 			ColoredJMenu exitMenu = new ColoredJMenu("x");
 			exitMenu.setForeground(Color.red);
 			exitMenu.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent e) {
+				public void mousePressed(MouseEvent e) {
 					directionsFrame.dispose();
 				}
 			});
