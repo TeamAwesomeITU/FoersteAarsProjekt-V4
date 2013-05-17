@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
 import inputHandler.AdressParser;
 import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.NoAddressFoundException;
 
 import org.junit.Test;
 
@@ -213,6 +214,9 @@ public class AdressParserExistingAdressTester {
 		} catch (MalformedAdressException e) {
 			testResult[0] = e.getMessage();	
 			fail();
+		} catch (NoAddressFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		finally {
 			AdressParserAllTests.testResults.add(testResult);
