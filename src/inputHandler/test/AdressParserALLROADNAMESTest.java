@@ -27,11 +27,14 @@ public class AdressParserALLROADNAMESTest {
 		Edge[] allEdges = DataHolding.getEdgeArray();
 		AddressSearch addressSearch;		
 		
-		for(Edge edge : allEdges)
+		for(Edge edgeOfAllEdges : allEdges)
 		{
 			String roadName = edge.getRoadName();
 			addressSearch = new AddressSearch();
 			addressSearch.searchForAdress("roadName");
+			
+			for(Edge edgeFound : addressSearch.getFoundEdges())
+				
 			
 		}
 		
