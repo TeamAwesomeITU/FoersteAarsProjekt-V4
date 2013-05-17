@@ -298,7 +298,7 @@ public class MapWindow {
 		getDirections();
 		setDirectionsEnabled();
 	}
-	
+
 	public void setDirectionsEnabled(){
 		if(directionEdges.size() == 0)
 			detailedDirectionsButton.setEnabled(false);
@@ -340,10 +340,6 @@ public class MapWindow {
 					}
 				}
 			}	
-
-			for(String string : directions)
-				System.out.println(string);
-
 			return directions.toArray(new String[directions.size()]);
 		}
 	}
@@ -416,8 +412,8 @@ public class MapWindow {
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
-			if (toSearchQuery.hasFocus() && toSearchQuery.getText().isEmpty() ||
-					fromSearchQuery.hasFocus() && fromSearchQuery.getText().isEmpty()) 
+			if (toSearchQuery.hasFocus() && toSearchQuery.getText().trim().isEmpty() ||
+					fromSearchQuery.hasFocus() && fromSearchQuery.getText().trim().isEmpty()) 
 			{
 				if (mapPanel.getPathTo() != null) {
 					try {
@@ -426,17 +422,19 @@ public class MapWindow {
 					} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
 						createWarning(e1.getMessage());
 					}
-					if(fromSearchQuery.getText().isEmpty()) 
+					if(fromSearchQuery.getText().trim().isEmpty()) 
 					{
 						mapPanel.setFromEdgesToHighlight(null);
+						addressSearcherFrom.clearResults();
 					}
-					
-					if(toSearchQuery.getText().isEmpty())
+
+					if(toSearchQuery.getText().trim().isEmpty())
 					{
 						mapPanel.setToEdgesToHighlight(null);
+						addressSearcherTo.clearResults();
 					}
 					mapPanel.repaintMap();
-					
+
 				}
 			}
 		}
@@ -589,15 +587,40 @@ public class MapWindow {
 
 		public void keyPressed(KeyEvent arg0) {
 			if(arg0.getKeyCode() == 10){
-				if(toSearchQuery.hasFocus()){
-					try {
-						addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
-						findRoute();
-					} catch (NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException | MalformedAdressException e) {
-						createWarning(e.getMessage());
+				if(toSearchQuery.hasFocus())
+				{
+					if(addressSearcherFrom.getFoundEdges().length > 0 && !toSearchQuery.getText().trim().isEmpty())
+					{
+						try {
+							System.out.println("HEJ1");
+							addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+							findRoute();
+						} catch (MalformedAdressException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+						}
+						catch (NoAddressFoundException e1) {
+							createWarning(e1.getMessage());
+						}
 					}
-				}else if(fromSearchQuery.hasFocus())
-					toSearchQuery.requestFocus();
+					else { 
+						fromSearchQuery.requestFocus();
+					}
+				}
+				if(fromSearchQuery.hasFocus()) 
+				{
+					if(addressSearcherTo.getFoundEdges().length > 0 && !fromSearchQuery.getText().trim().isEmpty())
+					{
+						try {
+							System.out.println("HEJ2");
+							addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+							findRoute();
+						} catch (MalformedAdressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+							System.out.println("fail!!");
+						}
+					}
+					else { 
+						toSearchQuery.requestFocus();
+					}
+				}
 			}
 		}
 		public void keyReleased(KeyEvent arg0) {}
@@ -701,7 +724,7 @@ public class MapWindow {
 					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
 				}
-			} catch (MalformedAdressException | NoAddressFoundException e1) {
+			} catch (NoAddressFoundException |MalformedAdressException e1) {
 			}
 
 		}
