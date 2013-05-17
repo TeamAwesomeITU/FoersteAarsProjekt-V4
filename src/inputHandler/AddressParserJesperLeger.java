@@ -11,6 +11,7 @@ import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.search.CitySearch;
 import mapCreationAndFunctions.search.EdgeSearch;
 
+@Deprecated
 public class AddressParserJesperLeger {
 
 	//The original input which contains everything
