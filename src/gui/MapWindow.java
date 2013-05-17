@@ -65,8 +65,7 @@ public class MapWindow {
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
-
-	private String VehicleType = "Car", RouteType = "Fastest";
+	private String VehicleType = "Bike", RouteType = "Fastest";
 	private static AddressSearch addressSearcherFrom = new AddressSearch();
 	private static AddressSearch addressSearcherTo = new AddressSearch();
 	private static ArrayList<Edge> directionEdges = new ArrayList<>();
@@ -167,7 +166,7 @@ public class MapWindow {
 		routeBox.addActionListener(new RouteTypeActionListener());
 
 		ColoredJButton detailedDirectionsButton = new ColoredJButton("Detailed Directions");
-		detailedDirectionsButton.addActionListener(new GetDirectionsListener());
+		detailedDirectionsButton.addActionListener(new GetDirectionsListener(detailedDirectionsButton));
 
 		ColoredJPanel directionsPanel = new ColoredJPanel();
 		directionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -600,23 +599,24 @@ public class MapWindow {
 	class GetDirectionsListener implements ActionListener{
 
 		private JTextArea directionsArea;
+		private JButton button;
+		private JFrame frame;
 
-		public GetDirectionsListener(){
+		public GetDirectionsListener(JButton button){
 			directionsArea = new JTextArea();
 			directionsArea.setEditable(false);
+			this.button = button;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			makeDirectionsFrame();
-			try {
-				fillDirections(getDirections());
-			} catch (NoAddressFoundException e) {
-				createWarning(e.getMessage());
-			}
+			ArrayList<String> testArrayList = new ArrayList<String>();
+			testArrayList.add("KøgeMuffi");
+			frame = makeDirectionsFrame();
+			fillDirections(testArrayList);
 		}
 
-		public void makeDirectionsFrame(){
+		public JFrame makeDirectionsFrame(){
 			final JFrame directionsFrame = new JFrame();
 			directionsFrame.setUndecorated(true);
 			directionsFrame.setPreferredSize(new Dimension(300, 300));
@@ -628,7 +628,7 @@ public class MapWindow {
 			ColoredJMenu exitMenu = new ColoredJMenu("x");
 			exitMenu.setForeground(Color.red);
 			exitMenu.addMouseListener(new MouseAdapter() {
-				public void mousePressed(MouseEvent e) {
+				public void mouseClicked(MouseEvent e) {
 					directionsFrame.dispose();
 				}
 			});
@@ -655,9 +655,11 @@ public class MapWindow {
 			directionsFrame.pack();
 			directionsFrame.setVisible(true);
 			directionsFrame.setLocationRelativeTo(null);
+
+			return directionsFrame;
 		}
 
-		public void fillDirections(String[] directions){
+		public void fillDirections(ArrayList<String> directions){
 			String outPut = "";
 			for(String line : directions)
 				outPut += line +"\n";
