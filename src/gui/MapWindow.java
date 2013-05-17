@@ -65,6 +65,7 @@ public class MapWindow {
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
+	private ColoredJButton detailedDirectionsButton;
 
 	private String VehicleType = "Car", RouteType = "Fastest";
 	private static AddressSearch addressSearcherFrom = new AddressSearch();
@@ -166,8 +167,9 @@ public class MapWindow {
 		routeBox.setUI(ColoredArrowUI.createUI(routeBox));
 		routeBox.addActionListener(new RouteTypeActionListener());
 
-		ColoredJButton detailedDirectionsButton = new ColoredJButton("Detailed Directions");
+		detailedDirectionsButton = new ColoredJButton("Detailed Directions");
 		detailedDirectionsButton.addActionListener(new GetDirectionsListener());
+		setDirectionsEnabled();
 
 		ColoredJPanel directionsPanel = new ColoredJPanel();
 		directionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -294,6 +296,14 @@ public class MapWindow {
 		mapPanel.repaintMap();
 
 		getDirections();
+		setDirectionsEnabled();
+	}
+	
+	public void setDirectionsEnabled(){
+		if(directionEdges.size() == 0)
+			detailedDirectionsButton.setEnabled(false);
+		else 
+			detailedDirectionsButton.setEnabled(true);
 	}
 
 	private void setDirections(Stack<Edge> edges)
@@ -365,7 +375,7 @@ public class MapWindow {
 				addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
 				mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
 			}
-			else if(toSearchQuery.hasFocus())
+			if(toSearchQuery.hasFocus())
 			{
 				addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 				mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
@@ -426,6 +436,7 @@ public class MapWindow {
 						mapPanel.setToEdgesToHighlight(null);
 					}
 					mapPanel.repaintMap();
+					
 				}
 			}
 		}
@@ -638,7 +649,7 @@ public class MapWindow {
 			ColoredJMenu exitMenu = new ColoredJMenu("x");
 			exitMenu.setForeground(Color.red);
 			exitMenu.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent e) {
+				public void mousePressed(MouseEvent e) {
 					directionsFrame.dispose();
 				}
 			});
@@ -685,7 +696,7 @@ public class MapWindow {
 				if(fromSearchQuery.getText().trim().length() != 0){
 					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
 					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
-				}else if(toSearchQuery.getText().trim().length() != 0){
+				}if(toSearchQuery.getText().trim().length() != 0){
 					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
 				}
