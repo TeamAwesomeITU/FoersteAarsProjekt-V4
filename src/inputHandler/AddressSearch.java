@@ -89,16 +89,4 @@ public class AddressSearch {
 	{
 		parsedInput = ap.parseAdress(input);
 	}
-	
-	public static void main( String[] args ) throws MalformedAdressException, NoAddressFoundException {
-		AddressSearch adressSearch = new AddressSearch();
-		adressSearch.searchForAdress("Vandelvej i Køge");
-		
-		for(Edge edge : adressSearch.getFoundEdges())
-			System.out.println(edge);
-	}
-	
-
-
-
 }
