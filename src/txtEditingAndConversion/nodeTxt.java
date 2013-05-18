@@ -26,7 +26,7 @@ public class nodeTxt {
 		try {				
 			BufferedReader reader = new BufferedReader(new FileReader("XML/kdv_unload_1.txt"));
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-				    new FileOutputStream("XML/testEdge.txt"), "UTF-8"));
+				    new FileOutputStream("resources/testEdge.txt"), "UTF-8"));
 			
 			//To skip the first line
 			reader.readLine();

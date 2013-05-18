@@ -112,5 +112,20 @@ public class AdressParserExistingAdressTester {
 		asserterCorrect(test, expectedResult);
 	}	
 	
+	public void asserterCorrect(String input, String[] expectedTestArray)
+	{
+		AdressParser adressParser = new AdressParser();
+		String[] testResult = new String[]{""};
+		try {
+			testResult = adressParser.parseAdress(input);
+			assertArrayEquals(expectedTestArray, testResult);
+
+		} catch (Exception e) {
+			testResult[0] = e.getMessage();	
+			System.out.println("EXCEPTION WITH THIS INPUT: " + input + " , EXCEPTION: " + e.getMessage());
+			fail();
+		}
+	}
+	
 
 }

@@ -35,7 +35,7 @@ public class DataHolding {
 	{
 		try {				
 			Edge[] edgeArray = new Edge[numberOfEdges];
-			File file = new File("XML/edge.txt");
+			File file = new File("resources/edge.txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
 			//To skip the first line
@@ -113,7 +113,7 @@ public class DataHolding {
 		try {
 			long startTime = System.currentTimeMillis();
 			Node[] nodeArray = new Node[numberOfNodes];
-			File file = new File("XML/kdv_node_unload.txt_modified.txt");
+			File file = new File("resources/kdv_node_unload.txt_modified.txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
 			//To skip the first line

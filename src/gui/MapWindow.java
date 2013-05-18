@@ -335,8 +335,6 @@ public class MapWindow {
 				//If the road does not contain a roadname, it is "a pathway"
 				currentRoadName = (edge.getRoadName().isEmpty()) ? "a pathway" : edge.getRoadName();
 
-				System.out.println("CURRENT ROAD NAME: " + currentRoadName + ", length: " + edge.getLength() );				
-
 				//
 				if(i+1 < directionEdges.size())
 				{

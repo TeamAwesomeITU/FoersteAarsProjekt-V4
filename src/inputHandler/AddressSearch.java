@@ -32,10 +32,7 @@ public class AddressSearch {
 		try {
 			postalNumber = Integer.parseInt(parsedInput[4]);
 		} catch (NumberFormatException e) {}
-		
-		for(String string : parsedInput)
-			System.out.println("STRING IN PARSED INPUT: " + string);
-		
+				
 		foundEdges = EdgeSearch.searchForRoads(parsedInput[0], roadNumber, parsedInput[2], postalNumber, parsedInput[5]);
 	}
 	
@@ -76,11 +73,9 @@ public class AddressSearch {
 		HashSet<Integer> relevantEdgeIDsRight = edgesToCheck[0].getPostalNumberRightCity().getCityRoadIDs();
 		
 		for(Edge edge : edgesToCheck)
-		{
-			System.out.println(edge.getPostalNumberLeft() + " " + edge.getPostalNumberRight());
 			if(!relevantEdgeIDsLeft.contains(edge.getiD()) && !relevantEdgeIDsRight.contains(edge.getiD()))		
 				return false;
-		}
+		
 		System.out.println("ALL ROADS CITIES MATCHES");
 		return true;
 	}

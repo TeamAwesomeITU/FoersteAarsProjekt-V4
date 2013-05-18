@@ -173,7 +173,7 @@ public class QuadTree {
 			AreaToDraw area = new AreaToDraw();	
 			QuadTree quadTree = new QuadTree(area);
 			
-			File file = new File("XML/kdv_node_unload.txt_modified.txt");			
+			File file = new File("resources/kdv_node_unload.txt_modified.txt");			
 			BufferedReader reader = new BufferedReader(new FileReader(file));
 			
 			//To skip the first line
