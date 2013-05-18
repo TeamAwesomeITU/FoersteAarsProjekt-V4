@@ -323,27 +323,56 @@ public class MapWindow {
 			directions.add("Going to: " + addressSearcherTo.getEdgeToNavigate().getRoadName() + ", " + addressSearcherTo.getEdgeToNavigate().getPostalNumberLeftCityName());
 			directions.add("");
 
-			int currentLength = 0;
+			double currentLength = 0;
+			double totalTravelLength = 0;
 			double totalTravelTime = 0;
+			String currentRoadName = "";
 
-			for(Edge edge : directionEdges)
+			for(int i = 0; i < directionEdges.size(); i++)
 			{
+				Edge edge = directionEdges.get(i);
 				totalTravelTime += edge.getDriveTime();
-				currentLength += edge.getLength();
-				if(!directions.get(directions.size()-1).contains(edge.getRoadName()))
+				currentLength += edge.getLength();	
+				totalTravelLength += edge.getLength();
+				//If the road does not contain a roadname, it is "a pathway"
+				currentRoadName = (edge.getRoadName().isEmpty()) ? "a pathway" : edge.getRoadName();
+
+				System.out.println("CURRENT ROAD NAME: " + currentRoadName + ", length: " + edge.getLength() );				
+
+				//
+				if(i+1 < directionEdges.size())
 				{
-					if(!edge.getRoadName().contains("i krydset"))
+					if(!currentRoadName.equals(directionEdges.get(i+1).getRoadName())) //If the next Edge has the same roadname as the current one							
 					{
-						if(edge.getRoadName().contains("Rundkørsel"))
-							currentLength = 10;
-						directions.add("Travel along " + edge.getRoadName() + " for " + currentLength + " meters");
-						currentLength = 0;
+						if(!edge.getRoadName().contains("i krydset"))
+						{
+							if(edge.getRoadName().contains("Rundkørsel"))
+								currentLength = 10;
+							directions.add("Travel along " + currentRoadName + " for " + String.format("%.1f", currentLength) + " meters");
+							currentLength = 0;
+						}						
 					}
 				}
-			}	
-			
-			directions.add(2, "Total travel time: " + String.format("%.1f", totalTravelTime) + " minutes");
+				//If it is the last Edge of the route
+				else {
+					currentLength = 10;
+					directions.add("Travel along " + currentRoadName + " for " + String.format("%.1f", currentLength) + " meters");
+
+				}
+			}
+
+			double bikeSpeedMetersPerSec = 15.0/3.6;
+			double walkSpeedMetersPerSec = 5.0/3.6;
+
+			if(VehicleType.equals("Bike"))
+				totalTravelTime = (totalTravelLength/bikeSpeedMetersPerSec)/60;
+			else if(VehicleType.equals("Walk")) 
+				totalTravelTime = (totalTravelLength/walkSpeedMetersPerSec)/60	;
+
+			directions.add(2, "Total travel distance: " + String.format("%.1f", totalTravelLength/1000) + " kilometers");
+			directions.add(3, "Total travel time: " + String.format("%.1f", totalTravelTime) + " minutes");
 			return directions.toArray(new String[directions.size()]);
+
 		}
 	}
 
@@ -420,10 +449,10 @@ public class MapWindow {
 			else {
 				if (showAddressTimer.isRunning())
 					showAddressTimer.restart(); 
-				
+
 				else 
 					showAddressTimer.start();
-				
+
 				if(repaintTimer.isRunning()) 
 					repaintTimer.restart();
 				else
@@ -445,7 +474,7 @@ public class MapWindow {
 				mapPanel.setToEdgesToHighlight(null);
 				addressSearcherTo.clearResults();
 				clearInputOnMap();
-				
+
 			}
 
 		}
@@ -483,19 +512,19 @@ public class MapWindow {
 			}
 			else 
 				if(fromSearchQuery.hasFocus()) 
-			{
-				if(addressSearcherTo.getFoundEdges().length > 0 && !fromSearchQuery.getText().trim().isEmpty())
 				{
-					try {
-						addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
-						findRoute();
-					} catch (MalformedAdressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+					if(addressSearcherTo.getFoundEdges().length > 0 && !fromSearchQuery.getText().trim().isEmpty())
+					{
+						try {
+							addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+							findRoute();
+						} catch (MalformedAdressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+						}
+					}
+					else { 
+						toSearchQuery.requestFocus();
 					}
 				}
-				else { 
-					toSearchQuery.requestFocus();
-				}
-			}
 		}
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -598,12 +627,16 @@ public class MapWindow {
 			ToolTipManager.sharedInstance().setDismissDelay(15000);  
 
 			String roadName = "";
+			String toolTipText = "";
 			if(edge != null)
-				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+			{
+				roadName = (edge.getRoadName().trim().isEmpty()) ? "A pathway" : edge.getRoadName();
+				toolTipText = roadName + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+			}
 			if (MainGui.coordinatesBoolean) 				
-				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", " + "Roadname: " + roadName);
+				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", " + "Roadname: " + toolTipText);
 			else 
-				mapPanel.setToolTipText(roadName);
+				mapPanel.setToolTipText(toolTipText);
 		}
 		/**
 		 * Saves the coordinates for the mouse when pressed. Is used to copy them to the clipboard.
