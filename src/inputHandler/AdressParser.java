@@ -272,15 +272,4 @@ public class AdressParser {
 	public String[] getAdressArray(){
 		return adressArray;
 	}
-
-	public static void main( String[] args ) throws MalformedAdressException, NoAddressFoundException {
-		AdressParser aParser = new AdressParser();
-		//aParser.parseAdress("Vandelvej 10, 4600 Køge");
-		aParser.parseAdress("Strandvejen 133");
-
-		for(String string : aParser.getAdressArray())
-			System.out.println(string);
-	}
-
-
 }

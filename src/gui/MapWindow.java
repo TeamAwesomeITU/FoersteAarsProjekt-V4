@@ -324,9 +324,11 @@ public class MapWindow {
 			directions.add("");
 
 			int currentLength = 0;
+			double totalTravelTime = 0;
 
 			for(Edge edge : directionEdges)
 			{
+				totalTravelTime += edge.getDriveTime();
 				currentLength += edge.getLength();
 				if(!directions.get(directions.size()-1).contains(edge.getRoadName()))
 				{
@@ -339,6 +341,8 @@ public class MapWindow {
 					}
 				}
 			}	
+			
+			directions.add(2, "Total travel time: " + String.format("%.1f", totalTravelTime) + " minutes");
 			return directions.toArray(new String[directions.size()]);
 		}
 	}
