@@ -2,13 +2,9 @@ package inputHandler.test;
 
 import static org.junit.Assert.*;
 import inputHandler.AddressSearch;
-import inputHandler.AdressParser;
 import inputHandler.exceptions.MalformedAdressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 

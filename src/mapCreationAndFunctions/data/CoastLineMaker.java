@@ -200,20 +200,4 @@ public class CoastLineMaker {
 		public LinkedList<double[]> getCoordsList()
 		{ return nodeList; }
 	}
-
-
-	public static void main(String[] args)
-	{
-		System.out.println("polygonSetSize: " + polygonSet.size());
-
-		long startTime = System.currentTimeMillis();
-		getCoastLineToDraw(200, 200, new AreaToDraw())[0].getBounds();
-		long endTime = System.currentTimeMillis();
-		System.out.println("Retrieving polygons to draw for the entire map of Denmark takes " + (endTime - startTime) + " milliseconds");
-
-		long startTime1 = System.currentTimeMillis();
-		getCoastLineToDraw(200, 200, new AreaToDraw())[0].getBounds();
-		long endTime1 = System.currentTimeMillis();
-		System.out.println("Retrieving polygons to draw for the entire map of Denmark takes " + (endTime1 - startTime1) + " milliseconds");		
-	}
 }

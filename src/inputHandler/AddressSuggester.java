@@ -111,24 +111,4 @@ public class AddressSuggester {
 
 		return possibleCitiesSet.toArray(new String[possibleCitiesSet.size()]);
 	}
-	
-	public static void main(String[] args) throws MalformedAdressException, NoAddressFoundException {
-		AddressSuggester as = new AddressSuggester();
-		as.enterCityName("Køge");
-		//as.enterRoadName("Vandelvej");
-		
-		System.out.println("----------------------------------");
-		
-		for(String string : as.getPossibleRoadNames())
-			System.out.println(string);
-		
-		for(String number : as.getPossibleRoadNumbers())
-			System.out.println(number);
-		
-		for(String letter : as.getPossibleRoadLetters())
-			System.out.println(letter);
-		
-		System.out.println("----------------------------------");
-	}
-
 }
