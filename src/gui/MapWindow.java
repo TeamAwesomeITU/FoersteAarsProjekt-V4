@@ -767,6 +767,7 @@ public class MapWindow {
 			ColoredJPanel panel = new ColoredJPanel();
 			panel.setLayout(new BorderLayout());
 			ColoredJScrollPane scrollPane = new ColoredJScrollPane(panel);
+			
 
 			JLabel label = new JLabel("Directions:");
 			label.setForeground(ColorTheme.TEXT_COLOR);
@@ -788,6 +789,7 @@ public class MapWindow {
 			for(String line : directions)
 				outPut += line +"\n";
 			directionsArea.setText(outPut);
+			directionsArea.setCaretPosition(0);
 		}
 
 	}
