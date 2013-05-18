@@ -1,10 +1,6 @@
 package inputHandler;
 
-import inputHandler.exceptions.MalformedAdressException;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-
 
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
@@ -12,6 +8,7 @@ import mapCreationAndFunctions.search.CitySearch;
 
 public class CompareAddress {
 
+	@SuppressWarnings("unused")
 	private static String[] testArray = new String[]{"følfodvej","266",null,null,"2300",null};
 	private String roadName = null;
 	private String city = null;	
@@ -20,15 +17,6 @@ public class CompareAddress {
 	private int number = -1;
 	private int relevanceCount = 0;
 	ArrayList<Integer> possibleAdress = new ArrayList<>();
-
-
-	public static void main(String[] args) {
-		long s = System.currentTimeMillis();
-		new CompareAddress(testArray);
-		long t = System.currentTimeMillis();
-		System.out.println("At finde en mulig adress tager " + (t-s));
-	}
-
 
 	public CompareAddress(String[] addressArray) {
 

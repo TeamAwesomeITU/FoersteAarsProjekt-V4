@@ -1,7 +1,6 @@
 package inputHandler.test;
 
 import static org.junit.Assert.*;
-import inputHandler.AddressParserJesperLeger;
 import inputHandler.AdressParser;
 import inputHandler.exceptions.MalformedAdressException;
 

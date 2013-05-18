@@ -129,28 +129,4 @@ public class CitySearch  {
 		
 	public static boolean doesCityNameMatchPostalNumber(String cityName, int postalNumber)
 	{ return City.getCityByCityName(cityName).getCityPostalNumbers().contains(postalNumber); }
-	
-	public static void main(String[] args) {
-		
-//		City[] foundCityList = searchForCityNameSuggestions("k");
-//		for(City city : foundCityList)
-//			System.out.println(city.getCityName());
-		
-//		System.out.println(searchForCityName("KØGE")[0].getCityName());
-//		
-		
-//		for(City city : searchForCityPostalNumberSuggestions(46))
-//				System.out.println(city.getCityName());
-		
-//		System.out.println("BREAK---------------");
-//		
-//		for(City city : searchForCityPostalNumberSuggestions(24))
-//			System.out.println(city.getCityName());
-//		
-//		System.out.println("BREAK---------------");
-//		
-//		for(City city : searchForCityName("København"))
-//			System.out.println(city.getCityName());
-		
-	}
 }

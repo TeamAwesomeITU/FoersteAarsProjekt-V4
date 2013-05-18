@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
 import inputHandler.AdressParser;
 import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.NoAddressFoundException;
 
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class AdressParserExpectedExceptionTester {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;	
 			fail(failed);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAdressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}
 		finally {
@@ -48,7 +49,7 @@ public class AdressParserExpectedExceptionTester {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;	
 			fail(failed);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAdressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
@@ -68,7 +69,7 @@ public class AdressParserExpectedExceptionTester {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;			
 			fail(failed);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAdressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
@@ -88,7 +89,7 @@ public class AdressParserExpectedExceptionTester {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;			
 			fail(failed);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAdressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
@@ -108,7 +109,7 @@ public class AdressParserExpectedExceptionTester {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;			
 			fail(failed);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAdressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
@@ -128,7 +129,7 @@ public class AdressParserExpectedExceptionTester {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;			
 			fail(failed);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAdressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
@@ -137,7 +138,7 @@ public class AdressParserExpectedExceptionTester {
 		}
 	}
 	
-	public void asserterException(String input, String[] expectedTestArray) throws MalformedAdressException
+	public void asserterException(String input, String[] expectedTestArray) throws MalformedAdressException, NoAddressFoundException
 	{
 		AdressParser adressParser = new AdressParser();
 		adressParser.parseAdress(input);

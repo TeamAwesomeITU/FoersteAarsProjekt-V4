@@ -48,10 +48,7 @@ public class AddressSearch {
 	{
 		if(foundEdges.length == 0)
 			throw new NoAddressFoundException("No address was found with this input");
-		
-		for(Edge edge : foundEdges)
-			System.out.println(edge.toStringNumberAndLetterInfo());
-		
+				
 		if(doesRoadNamesMatch(foundEdges) && doesRoadsCityMatch(foundEdges))
 			return foundEdges[0];
 		else {
@@ -92,16 +89,4 @@ public class AddressSearch {
 	{
 		parsedInput = ap.parseAdress(input);
 	}
-	
-	public static void main( String[] args ) throws MalformedAdressException, NoAddressFoundException {
-		AddressSearch adressSearch = new AddressSearch();
-		adressSearch.searchForAdress("Vandelvej i Køge");
-		
-		for(Edge edge : adressSearch.getFoundEdges())
-			System.out.println(edge);
-	}
-	
-
-
-
 }

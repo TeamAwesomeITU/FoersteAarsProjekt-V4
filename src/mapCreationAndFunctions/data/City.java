@@ -281,13 +281,4 @@ public class City {
 	public String toString() {
 		return this.cityName;
 	}	
-
-	public static void main(String[] args) {
-		createCities();
-		
-		for(int number : faultyPostalNumbers)
-			System.out.println(number);
-			
-		
-	}
 }

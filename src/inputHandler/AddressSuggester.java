@@ -1,6 +1,5 @@
 package inputHandler;
 
-import java.util.HashSet;
 import java.util.TreeSet;
 
 import inputHandler.exceptions.MalformedAdressException;
@@ -8,6 +7,7 @@ import inputHandler.exceptions.NoAddressFoundException;
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.search.EdgeSearch;
 
+@Deprecated
 public class AddressSuggester {
 
 	private Edge[] foundEdges = new Edge[0];
@@ -17,7 +17,7 @@ public class AddressSuggester {
 	private String enteredCityName = "";
 	private int enteredPostalNumber = -1;
 
-	public void AddressSuggester()
+	public AddressSuggester()
 	{ }
 
 	public Edge[] getFoundEdges() throws MalformedAdressException, NoAddressFoundException
@@ -111,24 +111,4 @@ public class AddressSuggester {
 
 		return possibleCitiesSet.toArray(new String[possibleCitiesSet.size()]);
 	}
-	
-	public static void main(String[] args) throws MalformedAdressException, NoAddressFoundException {
-		AddressSuggester as = new AddressSuggester();
-		as.enterCityName("Køge");
-		//as.enterRoadName("Vandelvej");
-		
-		System.out.println("----------------------------------");
-		
-		for(String string : as.getPossibleRoadNames())
-			System.out.println(string);
-		
-		for(String number : as.getPossibleRoadNumbers())
-			System.out.println(number);
-		
-		for(String letter : as.getPossibleRoadLetters())
-			System.out.println(letter);
-		
-		System.out.println("----------------------------------");
-	}
-
 }

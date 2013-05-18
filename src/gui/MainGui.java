@@ -347,7 +347,7 @@ public class MainGui {
 		exitMenu.setForeground(Color.red);
 		exitMenu.setVisible(undecoratedBoolean);
 		exitMenu.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				System.exit(0);
 			}
 		}); 
@@ -355,7 +355,7 @@ public class MainGui {
 		ColoredJMenu changeScreenSizeMenu = new ColoredJMenu("□");
 		changeScreenSizeMenu.setVisible(undecoratedBoolean);
 		changeScreenSizeMenu.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				if(ScreenSize.fullScreen)
 					ScreenSize.setMediumScreen();
 				else
@@ -368,7 +368,7 @@ public class MainGui {
 		minimizeMenu.setVisible(undecoratedBoolean);
 		minimizeMenu.addMouseListener(new MouseAdapter() {
 			@SuppressWarnings("static-access")
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				if(frame.getState() == frame.ICONIFIED)
 					frame.setState(frame.NORMAL);
 				else if(frame.getState() == frame.NORMAL)
