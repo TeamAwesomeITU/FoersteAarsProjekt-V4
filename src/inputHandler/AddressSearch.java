@@ -89,4 +89,7 @@ public class AddressSearch {
 	{
 		parsedInput = ap.parseAdress(input);
 	}
+	public void parseAddressForTest(String input) throws MalformedAdressException, NoAddressFoundException {
+		parseAddress(input);
+	}
 }
