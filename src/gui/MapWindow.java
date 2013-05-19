@@ -34,6 +34,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -118,18 +119,19 @@ public class MapWindow {
 		ColoredJPanel toolBar = new ColoredJPanel();
 		toolBar.setLayout(new GridLayout(9, 1, 0, 3));
 
+		TextFieldFocusListener textFieldFocusListener = new TextFieldFocusListener();
 		JLabel fromHeader = new JLabel("From");
 		fromHeader.setForeground(ColorTheme.TEXT_COLOR);
 		fromSearchQuery = new CustomJTextField();
 		fromSearchQuery.addKeyListener(new MapKeyListener());
-		fromSearchQuery.addFocusListener(new UpdateFocusListener());
+		fromSearchQuery.addFocusListener(textFieldFocusListener);
 		fromSearchQuery.setPreferredSize(new Dimension(200, 20));
 
 		JLabel toHeader = new JLabel("To");
 		toHeader.setForeground(ColorTheme.TEXT_COLOR);
 		toSearchQuery = new CustomJTextField();
 		toSearchQuery.addKeyListener(new MapKeyListener());
-		toSearchQuery.addFocusListener(new UpdateFocusListener());
+		toSearchQuery.addFocusListener(textFieldFocusListener);
 
 		ColoredJButton findRouteButton = new ColoredJButton("Find Route");
 		findRouteButton.addActionListener((new FindRouteActionListener()));
@@ -391,20 +393,27 @@ public class MapWindow {
 		fromSearchQuery.requestFocus();
 	}
 
-	public void highLightEdges(){
+	private void whichTextField() {
+		if(fromSearchQuery.hasFocus() && fromSearchQuery.getText().length() > 0)
+			highLightEdges(fromSearchQuery.getText().trim(), "from");
+		
+		if(toSearchQuery.hasFocus() && toSearchQuery.getText().length() > 0)
+			highLightEdges(toSearchQuery.getText().trim(), "to");
+	}
+	private void highLightEdges(String input, String field){
 		try {
-			if(fromSearchQuery.hasFocus())
+			if(field.equals("from"))
 			{
-				addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+				addressSearcherFrom.searchForAdress(input);
 				mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
 			}
-			if(toSearchQuery.hasFocus())
+			if(field.equals("to"))
 			{
-				addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+				addressSearcherTo.searchForAdress(input);
 				mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
 			}
 		}catch (MalformedAddressException | NoAddressFoundException e1) {
-			//				createWarning(e1.getMessage());
+			createWarning(e1.getMessage());
 		}
 	}
 
@@ -417,7 +426,7 @@ public class MapWindow {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			highLightEdges();
+			whichTextField();
 		}
 
 	}
@@ -492,6 +501,7 @@ public class MapWindow {
 			if(toSearchQuery.hasFocus())
 			{
 				try {
+					showAddressTimer.stop();
 					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 					if(addressSearcherFrom.getFoundEdges().length > 0 && !toSearchQuery.getText().trim().isEmpty())
 						findRoute();
@@ -504,7 +514,8 @@ public class MapWindow {
 			}
 			else 
 			{
-				try { 
+				try {
+					showAddressTimer.stop();
 					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
 					if(addressSearcherTo.getFoundEdges().length > 0 && !fromSearchQuery.getText().trim().isEmpty())
 						findRoute();
@@ -783,26 +794,49 @@ public class MapWindow {
 
 	}
 
-	private class UpdateFocusListener implements FocusListener{
+	private class TextFieldFocusListener implements FocusListener {
+		private boolean fromFocusHolder = false;
+		private boolean toFocusHolder = false;
 		public void focusGained(FocusEvent e) {
-
-		}
-		public void focusLost(FocusEvent e) {
-			try {
-				if(fromSearchQuery.getText().trim().length() != 0 && addressSearcherFrom.getFoundEdges().length == 0){
-					System.out.println("From has mistet fokus! " + addressSearcherFrom.getFoundEdges().length);
-					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
-					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
-
-				}if(toSearchQuery.getText().trim().length() != 0 && addressSearcherTo.getFoundEdges().length == 0){
-					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
-					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
-				}
-			} catch (NoAddressFoundException |MalformedAddressException e1) {
+			if (fromFocusHolder == false && e.getComponent() == fromSearchQuery) {
+				toField();
+				toFocusHolder = false;
 			}
-
+			if(toFocusHolder == false && e.getComponent() == toSearchQuery) {
+				fromField();
+				fromFocusHolder = false;
+			}
 		}
 
+		public void focusLost(FocusEvent e) {
+			
+		}
+		
+		private void fromField() {
+			System.out.println("FORM HAR GAINED FOCUS FROM: " + fromFocusHolder + " TO: " + toFocusHolder);
+			if(fromFocusHolder  == false) 
+			{
+				if(fromSearchQuery.getText().trim().length() > 0 && addressSearcherFrom.getFoundEdges().length == 0)
+				{
+					highLightEdges(fromSearchQuery.getText().trim(), "from");
+					showAddressTimer.stop();
+					toFocusHolder = true;
+				}
+			}
+		}
+		
+		private void toField() {
+			System.out.println("STÅR I TO og FROM: " + fromFocusHolder + " TO: " + toFocusHolder);
+			if (toFocusHolder == false) 
+			{
+				if(toSearchQuery.getText().trim().length() > 0 && addressSearcherTo.getFoundEdges().length == 0)
+				{
+					highLightEdges(toSearchQuery.getText().trim(), "to");
+					showAddressTimer.stop();
+					fromFocusHolder = true;	
+				}
+			}
+		}
 	}
 
 }
