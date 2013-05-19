@@ -4,7 +4,7 @@ import gui.customJComponents.*;
 import gui.settingsAndPopUp.*;
 
 import inputHandler.AddressSearch;
-import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import java.awt.BorderLayout;
@@ -279,7 +279,7 @@ public class MapWindow {
 
 	/**
 	 * NOT DONE
-	 * @throws MalformedAdressException 
+	 * @throws MalformedAddressException 
 	 * @throws NoAddressFoundException 
 	 * @throws NoRoutePossibleException 
 	 * @throws InvalidAreaProportionsException 
@@ -321,27 +321,53 @@ public class MapWindow {
 			directions.add("Going to: " + addressSearcherTo.getEdgeToNavigate().getRoadName() + ", " + addressSearcherTo.getEdgeToNavigate().getPostalNumberLeftCityName());
 			directions.add("");
 
-			int currentLength = 0;
+			double currentLength = 0;
+			double totalTravelLength = 0;
 			double totalTravelTime = 0;
+			String currentRoadName = "";
 
-			for(Edge edge : directionEdges)
+			for(int i = 0; i < directionEdges.size(); i++)
 			{
+				Edge edge = directionEdges.get(i);
 				totalTravelTime += edge.getDriveTime();
-				currentLength += edge.getLength();
-				if(!directions.get(directions.size()-1).contains(edge.getRoadName()))
+				currentLength += edge.getLength();	
+				totalTravelLength += edge.getLength();
+				//If the road does not contain a roadname, it is "a pathway"
+				currentRoadName = (edge.getRoadName().isEmpty()) ? "a pathway" : edge.getRoadName();
+
+				//
+				if(i+1 < directionEdges.size())
 				{
-					if(!edge.getRoadName().contains("i krydset"))
+					if(!currentRoadName.equals(directionEdges.get(i+1).getRoadName())) //If the next Edge has the same roadname as the current one							
 					{
-						if(edge.getRoadName().contains("Rundkørsel"))
-							currentLength = 10;
-						directions.add("Travel along " + edge.getRoadName() + " for " + currentLength + " meters");
-						currentLength = 0;
+						if(!edge.getRoadName().contains("i krydset"))
+						{
+							if(edge.getRoadName().contains("Rundkørsel"))
+								currentLength = 10;
+							directions.add("Travel along " + currentRoadName + " for " + String.format("%.1f", currentLength) + " meters");
+							currentLength = 0;
+						}						
 					}
 				}
-			}	
-			
-			directions.add(2, "Total travel time: " + String.format("%.1f", totalTravelTime) + " minutes");
+				//If it is the last Edge of the route
+				else {
+					directions.add("Travel along " + currentRoadName + " for " + String.format("%.1f", currentLength) + " meters");
+
+				}
+			}
+
+			double bikeSpeedMetersPerSec = 15.0/3.6;
+			double walkSpeedMetersPerSec = 5.0/3.6;
+
+			if(VehicleType.equals("Bike"))
+				totalTravelTime = (totalTravelLength/bikeSpeedMetersPerSec)/60;
+			else if(VehicleType.equals("Walk")) 
+				totalTravelTime = (totalTravelLength/walkSpeedMetersPerSec)/60	;
+
+			directions.add(2, "Total travel distance: " + String.format("%.1f", totalTravelLength/1000) + " kilometers");
+			directions.add(3, "Total travel time: " + String.format("%.1f", totalTravelTime) + " minutes");
 			return directions.toArray(new String[directions.size()]);
+
 		}
 	}
 
@@ -377,7 +403,7 @@ public class MapWindow {
 				addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 				mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
 			}
-		}catch (MalformedAdressException | NoAddressFoundException e1) {
+		}catch (MalformedAddressException | NoAddressFoundException e1) {
 			//				createWarning(e1.getMessage());
 		}
 	}
@@ -412,16 +438,17 @@ public class MapWindow {
 
 		@Override
 		public void keyPressed(KeyEvent arg) {
-			if(arg.getKeyCode() == 10)
+			if(arg.getKeyCode() == 10) {
 				EnterKeyPress();
+			}
 
 			else {
 				if (showAddressTimer.isRunning())
 					showAddressTimer.restart(); 
-				
+
 				else 
 					showAddressTimer.start();
-				
+
 				if(repaintTimer.isRunning()) 
 					repaintTimer.restart();
 				else
@@ -443,7 +470,7 @@ public class MapWindow {
 				mapPanel.setToEdgesToHighlight(null);
 				addressSearcherTo.clearResults();
 				clearInputOnMap();
-				
+
 			}
 
 		}
@@ -464,34 +491,27 @@ public class MapWindow {
 		public void EnterKeyPress() {
 			if(toSearchQuery.hasFocus())
 			{
-				if(addressSearcherFrom.getFoundEdges().length > 0 && !toSearchQuery.getText().trim().isEmpty())
-				{
-					try {
-						addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+				try {
+					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+					if(addressSearcherFrom.getFoundEdges().length > 0 && !toSearchQuery.getText().trim().isEmpty())
 						findRoute();
-					} catch (MalformedAdressException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+					else { 
+						fromSearchQuery.requestFocus();
 					}
-					catch (NoAddressFoundException e1) {
-						createWarning(e1.getMessage());
-					}
-				}
-				else { 
-					fromSearchQuery.requestFocus();
+				} catch (MalformedAddressException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException | NoAddressFoundException e) {
+					createWarning(e.getMessage());
 				}
 			}
 			else 
-				if(fromSearchQuery.hasFocus()) 
 			{
-				if(addressSearcherTo.getFoundEdges().length > 0 && !fromSearchQuery.getText().trim().isEmpty())
-				{
-					try {
-						addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+				try { 
+					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+					if(addressSearcherTo.getFoundEdges().length > 0 && !fromSearchQuery.getText().trim().isEmpty())
 						findRoute();
-					} catch (MalformedAdressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
-					}
-				}
-				else { 
-					toSearchQuery.requestFocus();
+					else  
+						toSearchQuery.requestFocus();
+				} catch (MalformedAddressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+					createWarning(e.getMessage());
 				}
 			}
 		}
@@ -596,12 +616,16 @@ public class MapWindow {
 			ToolTipManager.sharedInstance().setDismissDelay(15000);  
 
 			String roadName = "";
+			String toolTipText = "";
 			if(edge != null)
-				roadName = edge.getRoadName() + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+			{
+				roadName = (edge.getRoadName().trim().isEmpty()) ? "A pathway" : edge.getRoadName();
+				toolTipText = roadName + ", " + edge.getPostalNumberLeft() + " " + edge.getPostalNumberLeftCityName();
+			}
 			if (MainGui.coordinatesBoolean) 				
-				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", " + "Roadname: " + roadName);
+				mapPanel.setToolTipText("X: " +  xString +" Y: " + yString + ", " + "Roadname: " + toolTipText);
 			else 
-				mapPanel.setToolTipText(roadName);
+				mapPanel.setToolTipText(toolTipText);
 		}
 		/**
 		 * Saves the coordinates for the mouse when pressed. Is used to copy them to the clipboard.
@@ -642,7 +666,7 @@ public class MapWindow {
 				try {
 					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
 					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
-				} catch (MalformedAdressException | NoAddressFoundException e1) {
+				} catch (MalformedAddressException | NoAddressFoundException e1) {
 				}
 
 			}
@@ -654,7 +678,7 @@ public class MapWindow {
 				try {
 					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
-				} catch (MalformedAdressException | NoAddressFoundException e1) {
+				} catch (MalformedAddressException | NoAddressFoundException e1) {
 				}
 			}
 			else
@@ -733,6 +757,7 @@ public class MapWindow {
 			panel.setLayout(new BorderLayout());
 			ColoredJScrollPane scrollPane = new ColoredJScrollPane(panel);
 
+
 			JLabel label = new JLabel("Directions:");
 			label.setForeground(ColorTheme.TEXT_COLOR);
 
@@ -753,6 +778,7 @@ public class MapWindow {
 			for(String line : directions)
 				outPut += line +"\n";
 			directionsArea.setText(outPut);
+			directionsArea.setCaretPosition(0);
 		}
 
 	}
@@ -764,6 +790,7 @@ public class MapWindow {
 		public void focusLost(FocusEvent e) {
 			try {
 				if(fromSearchQuery.getText().trim().length() != 0 && addressSearcherFrom.getFoundEdges().length == 0){
+					System.out.println("From has mistet fokus! " + addressSearcherFrom.getFoundEdges().length);
 					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
 					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
 
@@ -771,7 +798,7 @@ public class MapWindow {
 					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
 				}
-			} catch (NoAddressFoundException |MalformedAdressException e1) {
+			} catch (NoAddressFoundException |MalformedAddressException e1) {
 			}
 
 		}
