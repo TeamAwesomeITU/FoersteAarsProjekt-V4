@@ -813,7 +813,6 @@ public class MapWindow {
 		}
 		
 		private void fromField() {
-			System.out.println("FORM HAR GAINED FOCUS FROM: " + fromFocusHolder + " TO: " + toFocusHolder);
 			if(fromFocusHolder  == false) 
 			{
 				if(fromSearchQuery.getText().trim().length() > 0 && addressSearcherFrom.getFoundEdges().length == 0)
@@ -826,7 +825,6 @@ public class MapWindow {
 		}
 		
 		private void toField() {
-			System.out.println("STÅR I TO og FROM: " + fromFocusHolder + " TO: " + toFocusHolder);
 			if (toFocusHolder == false) 
 			{
 				if(toSearchQuery.getText().trim().length() > 0 && addressSearcherTo.getFoundEdges().length == 0)
