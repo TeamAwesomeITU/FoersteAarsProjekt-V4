@@ -351,7 +351,6 @@ public class MapWindow {
 				}
 				//If it is the last Edge of the route
 				else {
-					currentLength = 10;
 					directions.add("Travel along " + currentRoadName + " for " + String.format("%.1f", currentLength) + " meters");
 
 				}
