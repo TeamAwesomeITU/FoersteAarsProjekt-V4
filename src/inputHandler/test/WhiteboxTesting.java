@@ -2,8 +2,9 @@ package inputHandler.test;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
-import inputHandler.AdressParser;
-import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.AddressParser;
+import inputHandler.exceptions.MalformedAddressException;
+import inputHandler.exceptions.NoAddressFoundException;
 
 import org.junit.Test;
 
@@ -22,18 +23,18 @@ public class WhiteboxTesting {
 	//Reason: contains an empty string
 	public void datasetA() {
 		String test = "";	
-		AdressParserAllTests.setupTest(test, expectedResultFail);
+		AddressParserAllTests.setupTest(test, expectedResultFail);
 
 		String[] testResult = new String[]{""};
 		try {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;	
 			fail(failed);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAddressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
-			AdressParserAllTests.testResults.add(testResult);
+			AddressParserAllTests.testResults.add(testResult);
 			assertArrayEquals(expectedResultFail, testResult);
 		}
 	}
@@ -42,18 +43,18 @@ public class WhiteboxTesting {
 	//Reason: contains bullshit
 	public void datasetB() {
 		String test = "Are you kidding me?";
-		AdressParserAllTests.setupTest(test, expectedResultFail);
+		AddressParserAllTests.setupTest(test, expectedResultFail);
 
 		String[] testResult = new String[]{""};
 		try {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;	
 			fail(failed);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAddressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}
 		finally {
-			AdressParserAllTests.testResults.add(testResult);
+			AddressParserAllTests.testResults.add(testResult);
 			assertArrayEquals(expectedResultFail, testResult);
 		}
 	}
@@ -61,26 +62,26 @@ public class WhiteboxTesting {
 	//Reason: contains Something with road name
 	public void datasetC() {
 		String test = "Rued Langgaards vej";
-		String[] expectedResult = new String[]{"Rued Langgaards vej", null, null, null, null, null};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		String[] expectedResult = new String[]{"Rued Langgaards vej", "", "", "", "", ""};
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
 	@Test
 	//Reason: contains Something without a road name
 	public void datasetD() {
-		String test = "København";
-		String[] expectedResult = new String[]{null, null, null, null, null, "København"};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		String test = "Kï¿½benhavn";
+		String[] expectedResult = new String[]{"", "", "", "", "", "Kï¿½benhavn"};
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
 	@Test
-	//Reason: contains Input that doesn’t match anything in the txt file
+	//Reason: contains Input that doesnï¿½t match anything in the txt file
 	public void datasetE() {
 		String test = "TeamAwesome";
-		String[] expectedResult = new String[]{null, null, null, null, null, "TeamAwesome"};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		String[] expectedResult = new String[]{"", "", "", "", "", "TeamAwesome"};
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
@@ -88,8 +89,8 @@ public class WhiteboxTesting {
 	//Reason: contains Something with a digit followed by a comma
 	public void datasetF() {
 		String test = "Rued Langgaards vej 7, 5.";
-		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", null, "5", null, null};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "", "5", "", ""};
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
@@ -97,8 +98,8 @@ public class WhiteboxTesting {
 	//Reason: contains Incomplete match
 	public void datasetG() {
 		String test = "Rued Langgaardsvej";
-		String[] expectedResult = new String[]{null, null, null, null, null, "Rued Langgaardsvej"};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		String[] expectedResult = new String[]{"", "", "", "", "", "Rued Langgaardsvej"};
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
@@ -106,8 +107,8 @@ public class WhiteboxTesting {
 	//Reason: contains Input with building letter
 	public void datasetH() {
 		String test = "Rued Langgaards vej 7A, 5. sal";
-		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "A", "5", null, null};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "A", "5", "", ""};
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
@@ -115,17 +116,17 @@ public class WhiteboxTesting {
 	//Reason: contains Input with a four digit number (zip code)
 	public void datasetI() {
 		String test = "Rued Langgaards vej 7A, 5. sal 2300";
-		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "A", "5", "2300", null};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "A", "5", "2300", ""};
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
 	@Test
 	//Reason: contains Input with a valid city
 	public void datasetJ() {
-		String test = "Rued Langgaards vej 7A, 5. sal 2300 København S";
-		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "A", "5", "2300", "København S"};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		String test = "Rued Langgaards vej 7A, 5. sal 2300 Kï¿½benhavn S";
+		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "A", "5", "2300", "Kï¿½benhavn S"};
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
@@ -134,42 +135,42 @@ public class WhiteboxTesting {
 	//correct match is stored first in the match-array
 	public void datasetK() {
 		String test = "A. E. Hansensvej";
-		String[] expectedResult = new String[]{"A. E. Hansensvej", null, null, null, null, null};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		String[] expectedResult = new String[]{"A. E. Hansensvej", "", "", "", "", ""};
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
 	@Test
 	//Reason: contains Input with more than one match in the text file, where the 
-	//correct match is stored second in the match-array. (“Rue”) is stored at the first index
+	//correct match is stored second in the match-array. (ï¿½Rueï¿½) is stored at the first index
 	public void datasetL() {
 		String test = "Rue de Louis";
-		String[] expectedResult = new String[]{"Rue de Louis", null, null, null, null, null};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		String[] expectedResult = new String[]{"Rue de Louis", "", "", "", "", ""};
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
 	public void asserterCorrect(String input, String[] expectedTestArray)
 	{
-		AdressParser adressParser = new AdressParser();
+		AddressParser addressParser = new AddressParser();
 		String[] testResult = new String[]{""};
 		try {
-			testResult = adressParser.parseAdress(input);
+			testResult = addressParser.parseAddress(input);
 			assertArrayEquals(expectedTestArray, testResult);
 
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAddressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 			fail();
 		}
 		finally {
-			AdressParserAllTests.testResults.add(testResult);
+			AddressParserAllTests.testResults.add(testResult);
 		}
 	}
 	
-	public void asserterException(String input, String[] expectedTestArray) throws MalformedAdressException
+	public void asserterException(String input, String[] expectedTestArray) throws MalformedAddressException, NoAddressFoundException
 	{
-		AdressParser adressParser = new AdressParser();
-		adressParser.parseAdress(input);
+		AddressParser addressParser = new AddressParser();
+		addressParser.parseAddress(input);
 	}
 
 }

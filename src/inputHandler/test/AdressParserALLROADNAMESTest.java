@@ -2,7 +2,7 @@ package inputHandler.test;
 
 import static org.junit.Assert.*;
 import inputHandler.AddressSearch;
-import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import org.junit.Test;
 
 
 /*
- * This test tests if AdressParser returns the correct roadname for every single road in the Edge[] containing all Edges in our program
+ * This test tests if AddressParser returns the correct roadname for every single road in the Edge[] containing all Edges in our program
  * If the test fails, an exception might be thrown by AddressSearch - this exception is caught, and it's message saved as a String in an ArrayList. This list is printed at the end of the test.
  */
 public class AdressParserALLROADNAMESTest {
@@ -23,7 +23,7 @@ public class AdressParserALLROADNAMESTest {
 	/**
 	 * 
 	 * @throws IOException
-	 * @throws MalformedAdressException
+	 * @throws MalformedAddressException
 	 * @throws NoAddressFoundException
 	 */
 	@Test

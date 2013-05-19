@@ -1,18 +1,18 @@
 package inputHandler.test;
 
 import static org.junit.Assert.*;
-import inputHandler.AdressParser;
+import inputHandler.AddressParser;
 
 import org.junit.Test;
 
-public class AdressParserSpecialCharHandlingTest {
+public class AddressParserSpecialCharHandlingTest {
 
 	@Test
 	//Reason: contains "Â"
 	public void nordicCharacterAATest() {
 		String test = "Âbrinksgatan";
 		String[] expectedResult = new String[]{"Âbrinksgatan", "", "", "", "", ""};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 	
@@ -22,7 +22,7 @@ public class AdressParserSpecialCharHandlingTest {
 	public void graveAccentTest() {
 		String test = "Broholms Allè";
 		String[] expectedResult = new String[]{"broholms allè", "", "", "", "", ""};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 	
@@ -31,7 +31,7 @@ public class AdressParserSpecialCharHandlingTest {
 	public void acuteAccentTest() {
 		String test = "Christian Greens Allé";
 		String[] expectedResult = new String[]{"broholms allè", "", "", "", "", ""};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 		
@@ -40,7 +40,7 @@ public class AdressParserSpecialCharHandlingTest {
 	public void circumFlexTest() {
 		String test = "Byahornsgrând";
 		String[] expectedResult = new String[]{"byahornsgrând", "", "", "", "", ""};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 	
@@ -49,7 +49,7 @@ public class AdressParserSpecialCharHandlingTest {
 	public void umlautTest() {
 		String test = "Citadellsvägen";
 		String[] expectedResult = new String[]{"Citadellsvägen", "", "", "", "", ""};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 	
@@ -58,7 +58,7 @@ public class AdressParserSpecialCharHandlingTest {
 	public void umlautTest3() {
 		String test = "Dückersgatan";
 		String[] expectedResult = new String[]{"dückersgatan", "", "", "", "", ""};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 	
@@ -67,7 +67,7 @@ public class AdressParserSpecialCharHandlingTest {
 	public void parenthesesAndDashTest() {
 		String test = "Feggesund(Mors)-Arup(Thy)";
 		String[] expectedResult = new String[]{"feggesund(mors)-arup(thy)", "", "", "", "", ""};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 		
@@ -76,16 +76,16 @@ public class AdressParserSpecialCharHandlingTest {
 	public void andSignTest() {
 		String test = "≈kerlund & Rausings v‰g";
 		String[] expectedResult = new String[]{"≈kerlund & rausings v‰g", "", "", "", "", ""};
-		AdressParserAllTests.setupTest(test, expectedResult);
+		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 	
 	public void asserterCorrect(String input, String[] expectedTestArray)
 	{
-		AdressParser adressParser = new AdressParser();
+		AddressParser addressParser = new AddressParser();
 		String[] testResult = new String[]{""};
 		try {
-			testResult = adressParser.parseAdress(input);
+			testResult = addressParser.parseAddress(input);
 			assertArrayEquals(expectedTestArray, testResult);
 
 		} catch (Exception e) {

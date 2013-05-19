@@ -8,8 +8,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ AdressParserExistingAdressTester.class, AdressParserExpectedExceptionTester.class})
-public class AdressParserAllTests {
+@SuiteClasses({ AddressParserExistingAddressTester.class, AddressParserExpectedExceptionTester.class})
+public class AddressParserAllTests {
 
 	static ArrayList<String> tests = new ArrayList<String>();
 	static ArrayList<String[]> expectedResults  = new ArrayList<String[]>();

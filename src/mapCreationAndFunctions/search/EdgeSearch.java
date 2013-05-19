@@ -1,6 +1,6 @@
 package mapCreationAndFunctions.search;
 
-import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import java.util.ArrayList;
@@ -71,10 +71,10 @@ public class EdgeSearch  {
 	 * @param postalNumber An optional postal number of the specific address - if no search on a postal number is wanted, enter -1 as the integer
 	 * @param cityName An optional String of the specific address' city name - if no search on a city name is wanted, enter an empty String as the letter parameter
 	 * @return All of the Edges that fits the search criterias.
-	 * @throws MalformedAdressException 
+	 * @throws MalformedAddressException 
 	 * @throws NoAddressFoundException 
 	 */
-	public static Edge[] searchForRoads(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAdressException, NoAddressFoundException
+	public static Edge[] searchForRoads(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAddressException, NoAddressFoundException
 	{
 		checkInput(roadName, roadNumber, letter, postalNumber, cityName);
 
@@ -156,10 +156,10 @@ public class EdgeSearch  {
 	 * @param postalNumber An optional postal number of the specific address - if no search on a postal number is wanted, enter -1 as the integer
 	 * @param cityName An optional String of the specific address' city name - if no search on a city name is wanted, enter an empty String as the letter parameter
 	 * @return All of the Edges that fits the search criterias.
-	 * @throws MalformedAdressException 
+	 * @throws MalformedAddressException 
 	 * @throws NoAddressFoundException 
 	 */
-	public static Edge[] searchForRoadSuggestions(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAdressException, NoAddressFoundException
+	public static Edge[] searchForRoadSuggestions(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAddressException, NoAddressFoundException
 	{
 		HashSet<Edge> possibleEdgesFromCity = new HashSet<>();
 
@@ -241,17 +241,17 @@ public class EdgeSearch  {
 
 	}
 
-	private static void checkInput(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws NoAddressFoundException, MalformedAdressException
+	private static void checkInput(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws NoAddressFoundException, MalformedAddressException
 	{
 		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && postalNumber == -1 && cityName.isEmpty())
 			throw new NoAddressFoundException("No address was found");
 		else if(roadNumber == -1 && !letter.isEmpty())
-			throw new MalformedAdressException("A road letter cannot be entered without having a road roadNumber");
+			throw new MalformedAddressException("A road letter cannot be entered without having a road roadNumber");
 		else if(roadNumber == 0 || postalNumber == 0)
-			throw new MalformedAdressException("A road's road number or postal number cannot be 0");
+			throw new MalformedAddressException("A road's road number or postal number cannot be 0");
 		else if(!cityName.isEmpty() && postalNumber != -1)
 			if(!CitySearch.doesCityNameMatchPostalNumber(cityName, postalNumber))
-				throw new MalformedAdressException("Postal number and city name does not match");
+				throw new MalformedAddressException("Postal number and city name does not match");
 	}
 
 	private static boolean isCityCorrectForEdge( Edge edge, int postalNumber, String cityName )

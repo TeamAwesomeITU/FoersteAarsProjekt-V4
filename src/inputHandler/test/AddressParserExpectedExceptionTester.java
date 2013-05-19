@@ -2,15 +2,15 @@ package inputHandler.test;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
-import inputHandler.AdressParser;
-import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.AddressParser;
+import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import org.junit.Test;
 
 
 
-public class AdressParserExpectedExceptionTester {
+public class AddressParserExpectedExceptionTester {
 
 	//The default message to use, when an exceptionExpectedTest fails
 	static final String failed = "Expected exception, but didn't throw any";
@@ -22,18 +22,18 @@ public class AdressParserExpectedExceptionTester {
 	//Reason: contains "?"
 	public void questionMarkTest() {
 		String test = "Are you kidding me?";
-		AdressParserAllTests.setupTest(test, expectedResultFail);
+		AddressParserAllTests.setupTest(test, expectedResultFail);
 
 		String[] testResult = new String[]{""};
 		try {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;	
 			fail(failed);
-		} catch (MalformedAdressException | NoAddressFoundException e) {
+		} catch (MalformedAddressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}
 		finally {
-			AdressParserAllTests.testResults.add(testResult);
+			AddressParserAllTests.testResults.add(testResult);
 			assertArrayEquals(expectedResultFail, testResult);
 		}
 	}
@@ -42,18 +42,18 @@ public class AdressParserExpectedExceptionTester {
 	//Reason: contains nothing
 	public void emptyInputTest() {
 		String test = "";	
-		AdressParserAllTests.setupTest(test, expectedResultFail);
+		AddressParserAllTests.setupTest(test, expectedResultFail);
 
 		String[] testResult = new String[]{""};
 		try {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;	
 			fail(failed);
-		} catch (MalformedAdressException | NoAddressFoundException e) {
+		} catch (MalformedAddressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
-			AdressParserAllTests.testResults.add(testResult);
+			AddressParserAllTests.testResults.add(testResult);
 			assertArrayEquals(expectedResultFail, testResult);
 		}
 	}
@@ -62,18 +62,18 @@ public class AdressParserExpectedExceptionTester {
 	//Reason: contains only a whitespace
 	public void whitespaceTest() {
 		String test = " ";	
-		AdressParserAllTests.setupTest(test, expectedResultFail);
+		AddressParserAllTests.setupTest(test, expectedResultFail);
 
 		String[] testResult = new String[]{""};
 		try {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;			
 			fail(failed);
-		} catch (MalformedAdressException | NoAddressFoundException e) {
+		} catch (MalformedAddressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
-			AdressParserAllTests.testResults.add(testResult);
+			AddressParserAllTests.testResults.add(testResult);
 			assertArrayEquals(expectedResultFail, testResult);
 		}
 	}
@@ -82,18 +82,18 @@ public class AdressParserExpectedExceptionTester {
 	//Reason: contains "$"
 	public void invalidCharactersTest() {
 		String test = "mad skil$$";	
-		AdressParserAllTests.setupTest(test, expectedResultFail);
+		AddressParserAllTests.setupTest(test, expectedResultFail);
 
 		String[] testResult = new String[]{""};
 		try {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;			
 			fail(failed);
-		} catch (MalformedAdressException | NoAddressFoundException e) {
+		} catch (MalformedAddressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
-			AdressParserAllTests.testResults.add(testResult);
+			AddressParserAllTests.testResults.add(testResult);
 			assertArrayEquals(expectedResultFail, testResult);
 		}
 	}
@@ -102,18 +102,18 @@ public class AdressParserExpectedExceptionTester {
 	//Reason: contains a lot of allowed input, with a whitespace in front
 	public void nonsensibleAllowedInputTest1() {
 		String test = " ....,,,,...,.,.,,  ";	
-		AdressParserAllTests.setupTest(test, expectedResultFail);
+		AddressParserAllTests.setupTest(test, expectedResultFail);
 
 		String[] testResult = new String[]{""};
 		try {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;			
 			fail(failed);
-		} catch (MalformedAdressException | NoAddressFoundException e) {
+		} catch (MalformedAddressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
-			AdressParserAllTests.testResults.add(testResult);
+			AddressParserAllTests.testResults.add(testResult);
 			assertArrayEquals(expectedResultFail, testResult);
 		}
 	}
@@ -122,26 +122,26 @@ public class AdressParserExpectedExceptionTester {
 	//Reason: contains a lot of allowed input, with whitespaces in the back
 	public void nonsensibleAllowedInputTest2() {
 		String test = ",,,...	";	
-		AdressParserAllTests.setupTest(test, expectedResultFail);
+		AddressParserAllTests.setupTest(test, expectedResultFail);
 
 		String[] testResult = new String[]{""};
 		try {
 			asserterException(test, expectedResultFail);
 			testResult[0] = failed;			
 			fail(failed);
-		} catch (MalformedAdressException | NoAddressFoundException e) {
+		} catch (MalformedAddressException | NoAddressFoundException e) {
 			testResult[0] = e.getMessage();	
 		}	
 		finally {
-			AdressParserAllTests.testResults.add(testResult);
+			AddressParserAllTests.testResults.add(testResult);
 			assertArrayEquals(expectedResultFail, testResult);
 		}
 	}
 	
-	public void asserterException(String input, String[] expectedTestArray) throws MalformedAdressException, NoAddressFoundException
+	public void asserterException(String input, String[] expectedTestArray) throws MalformedAddressException, NoAddressFoundException
 	{
-		AdressParser adressParser = new AdressParser();
-		adressParser.parseAdress(input);
+		AddressParser addressParser = new AddressParser();
+		addressParser.parseAddress(input);
 	}
 
 }

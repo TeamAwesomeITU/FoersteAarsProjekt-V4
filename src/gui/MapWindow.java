@@ -4,7 +4,7 @@ import gui.customJComponents.*;
 import gui.settingsAndPopUp.*;
 
 import inputHandler.AddressSearch;
-import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import java.awt.BorderLayout;
@@ -279,7 +279,7 @@ public class MapWindow {
 
 	/**
 	 * NOT DONE
-	 * @throws MalformedAdressException 
+	 * @throws MalformedAddressException 
 	 * @throws NoAddressFoundException 
 	 * @throws NoRoutePossibleException 
 	 * @throws InvalidAreaProportionsException 
@@ -403,7 +403,7 @@ public class MapWindow {
 				addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 				mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
 			}
-		}catch (MalformedAdressException | NoAddressFoundException e1) {
+		}catch (MalformedAddressException | NoAddressFoundException e1) {
 			//				createWarning(e1.getMessage());
 		}
 	}
@@ -495,7 +495,7 @@ public class MapWindow {
 					try {
 						addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 						findRoute();
-					} catch (MalformedAdressException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+					} catch (MalformedAddressException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 					}
 					catch (NoAddressFoundException e1) {
 						createWarning(e1.getMessage());
@@ -513,7 +513,7 @@ public class MapWindow {
 						try {
 							addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
 							findRoute();
-						} catch (MalformedAdressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+						} catch (MalformedAddressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
 						}
 					}
 					else { 
@@ -672,7 +672,7 @@ public class MapWindow {
 				try {
 					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
 					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
-				} catch (MalformedAdressException | NoAddressFoundException e1) {
+				} catch (MalformedAddressException | NoAddressFoundException e1) {
 				}
 
 			}
@@ -684,7 +684,7 @@ public class MapWindow {
 				try {
 					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
-				} catch (MalformedAdressException | NoAddressFoundException e1) {
+				} catch (MalformedAddressException | NoAddressFoundException e1) {
 				}
 			}
 			else
@@ -803,7 +803,7 @@ public class MapWindow {
 					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
 					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
 				}
-			} catch (NoAddressFoundException |MalformedAdressException e1) {
+			} catch (NoAddressFoundException |MalformedAddressException e1) {
 			}
 
 		}

@@ -1,7 +1,7 @@
 package inputHandler;
 
 
-import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import java.util.regex.Matcher;
@@ -19,9 +19,9 @@ import mapCreationAndFunctions.search.EdgeSearch;
  * this class. It is checked in the textfield containing all the
  * road names. If it finds a match it returns it as an array of strings.
  */
-public class AdressParser {
+public class AddressParser {
 
-	private	String[] adressArray = new String[]{"","","","","",""};
+	private	String[] addressArray = new String[]{"","","","","",""};
 	private	String pBuilding = "(\\b\\d{1,3}[A-ZÆØÅa-zæøå]?\\b )|" +
 			"\\b\\d{1,3}[^.]\\b}|" +
 			"(\\b\\d{1,3}[A-ZÆØÅa-zæøå,]?\\b|" +
@@ -39,7 +39,7 @@ public class AdressParser {
 	 * This is the constructor for the class. It makes a binary search of the road_names.txt
 	 * and then sorts it.
 	 */
-	public AdressParser()	{
+	public AddressParser()	{
 
 	}
 
@@ -49,22 +49,22 @@ public class AdressParser {
 	 * 	places. 
 	 * @param address Is a String that is supposed to be the entire address written on a single line. 
 	 * @return the array containing information regarding the address
-	 * @throws MalformedAdressException
+	 * @throws MalformedAddressException
 	 * @throws NoAddressFoundException 
 	 */
-	public String[] parseAdress(String address) throws MalformedAdressException, NoAddressFoundException {
+	public String[] parseAddress(String address) throws MalformedAddressException, NoAddressFoundException {
 		//Is the input valid?			
 		address = address.toLowerCase();
 		Matcher badInput = match(pBadInput, address);
 		if (badInput.find())
-			throw new MalformedAdressException("Illegal characters found in address");
+			throw new MalformedAddressException("Illegal characters found in address");
 		else if(address.trim().isEmpty() || address == null){								/* 1 */
 			throw new NoAddressFoundException("No address to find was given");
 		}
 
 		//TODO FIX DEN HER REGEX eller slet svinet
 		//		if(match("\\d|\\,|\\bi\\b", address).find() == false){											/* 2 */
-		//			adressArray[0] = address.trim();
+		//			addressArray[0] = address.trim();
 		//			System.out.println(address);
 		//		}
 
@@ -72,8 +72,8 @@ public class AdressParser {
 		{			
 			addressAfterDeletion = address;
 			findRoadName(address);
-			//Only checks for roadnumber, roadletter and floornumber, if a valid adress is found
-			if(!adressArray[0].isEmpty())												/* 2 */
+			//Only checks for roadnumber, roadletter and floornumber, if a valid address is found
+			if(!addressArray[0].isEmpty())												/* 2 */
 			{
 				findFloorNumber(addressAfterDeletion);
 				findRoadNumber(addressAfterDeletion);
@@ -83,7 +83,7 @@ public class AdressParser {
 			findCityName(addressAfterDeletion);
 		}
 
-		return adressArray;			     					
+		return addressArray;			     					
 	}
 
 	/** This method is a shortcut that saves lines when using a pattern in a matcher
@@ -155,7 +155,7 @@ public class AdressParser {
 		//		}
 
 		System.out.println("ROADNAME: " + foundRoadName);
-		adressArray[0] = foundRoadName;
+		addressArray[0] = foundRoadName;
 
 		if(!foundRoadName.isEmpty())
 		{
@@ -180,7 +180,7 @@ public class AdressParser {
 			if(tal.find()){																	/* 10 */				
 				addressAfterDeletion = addressAfterDeletion.replace(tal.group(), "");
 				System.out.println("Bygningstal: " + tal.group());
-				adressArray[1] = tal.group().trim();
+				addressArray[1] = tal.group().trim();
 			}
 		}
 	}
@@ -195,7 +195,7 @@ public class AdressParser {
 		if(buildingLetter.find()) {								   				   					/* 11 */
 			addressAfterDeletion = addressAfterDeletion.replace(buildingLetter.group(), "");
 			System.out.println("Bogstav: " + buildingLetter.group());
-			adressArray[2] = buildingLetter.group().trim(); 
+			addressArray[2] = buildingLetter.group().trim(); 
 		}				
 	}
 	/**	Finds the floor of the address using a scanner and places this in the array.
@@ -214,7 +214,7 @@ public class AdressParser {
 			Matcher tal = match(pTal, floorTemp);		
 			tal.find();																	
 			System.out.println(tal.group() + ". etage");
-			adressArray[3] = tal.group().trim();
+			addressArray[3] = tal.group().trim();
 
 
 		}
@@ -231,10 +231,10 @@ public class AdressParser {
 		if(postcode.find()) {																	/* 13 */
 			System.out.println("Postnummer: " + postcode.group());
 			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"").trim();
-			adressArray[4] = postcode.group().trim(); 
+			addressArray[4] = postcode.group().trim(); 
 
 			//If the string is not empty, even after the city was found, try finding the road name again
-			//			if(!addressAfterDeletion.isEmpty() && adressArray[0].isEmpty())
+			//			if(!addressAfterDeletion.isEmpty() && addressArray[0].isEmpty())
 			//				findRoadName(addressAfterDeletion);
 		}
 	}
@@ -246,7 +246,7 @@ public class AdressParser {
 	 * @param s	Address string
 	 */
 	private void findCityName(String s) {
-		String vejnavn = adressArray[0];
+		String vejnavn = addressArray[0];
 		System.out.println("LOOKING FOR CITYNAME IN THIS INPUT: " + s);
 		String cityString = s.replaceAll(vejnavn, "").
 				replaceAll(pPost, "").
@@ -259,17 +259,17 @@ public class AdressParser {
 			City[] possibleCities = CitySearch.searchForCityName(possibleCityName);
 			//If theres actually any roads with this name, take this as the name - otherwise, set it as an empty String
 			String actualCityName = (possibleCities.length > 0) ? possibleCities[0].getCityName().toLowerCase() : "";
-			adressArray[5] = actualCityName;
+			addressArray[5] = actualCityName;
 			System.out.println("Bynavn: " + actualCityName);	
 			addressAfterDeletion = cityString.replace(actualCityName,"").trim();
 
 			//If the string is not empty, even after the city was found, try finding the road name again
-			//			if(!addressAfterDeletion.isEmpty() && adressArray[0].isEmpty())
+			//			if(!addressAfterDeletion.isEmpty() && addressArray[0].isEmpty())
 			//				findRoadName(addressAfterDeletion);
 		}
 	}
 
-	public String[] getAdressArray(){
-		return adressArray;
+	public String[] getAddressArray(){
+		return addressArray;
 	}
 }
