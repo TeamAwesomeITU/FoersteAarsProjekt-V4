@@ -51,6 +51,9 @@ public class CitySearch  {
 	 */
 	public static City[] searchForCityName(String cityToFind)
 	{
+		if(cityToFind.trim().isEmpty())
+			return new City[0];
+		
 		cityToFind = cityToFind.toLowerCase();
 		ArrayList<Integer> listOfFoundCities = cityNameSearchTrie.get(cityToFind);
 
@@ -70,6 +73,7 @@ public class CitySearch  {
 	public static String searchForCityNameLongestPrefix(String cityToFind)
 	{
 		System.out.println("CITY TO FIND: " + cityToFind);
+				
 		cityToFind = cityToFind.toLowerCase();
 		String longestPrefix = cityNameSearchTrie.longestPrefixOf(cityToFind);
 		
@@ -83,6 +87,9 @@ public class CitySearch  {
 	 */
 	public static City[] searchForCityNameSuggestions(String cityToFind)
 	{
+		if(cityToFind.trim().isEmpty())
+			return new City[0];
+		
 		cityToFind = cityToFind.toLowerCase();
 		ArrayList<String> cityNames = cityNameSearchTrie.prefixMatch(cityToFind);
 		ArrayList<City> foundCityList = new ArrayList<>();

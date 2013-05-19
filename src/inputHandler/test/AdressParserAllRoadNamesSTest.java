@@ -18,7 +18,7 @@ import org.junit.Test;
  * This test tests if AddressParser returns the correct roadname for every single road in the Edge[] containing all Edges in our program
  * If the test fails, an exception might be thrown by AddressSearch - this exception is caught, and it's message saved as a String in an ArrayList. This list is printed at the end of the test.
  */
-public class AdressParserALLROADNAMESTest {
+public class AdressParserAllRoadNamesSTest {
 
 	/**
 	 * 
