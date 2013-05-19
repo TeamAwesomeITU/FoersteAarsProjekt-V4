@@ -3,16 +3,12 @@ package inputHandler.test;
 import static org.junit.Assert.*;
 
 import java.util.HashSet;
-import java.util.Iterator;
 
-import org.hamcrest.Matcher;
-import org.junit.matchers.JUnitMatchers;
 import inputHandler.AddressSearch;
-import inputHandler.AdressParser;
-import inputHandler.exceptions.MalformedAdressException;
+
+import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
-import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.Edge;
 
 import org.junit.Test;
@@ -39,7 +35,7 @@ public class AddressParserTest {
 	}
 	 */
 
-	public void addressParserTestNameNumberCity(String roadName, int roadNumber, int postalNumber, String cityName, String input) throws MalformedAdressException, NoAddressFoundException
+	public void addressParserTestNameNumberCity(String roadName, int roadNumber, int postalNumber, String cityName, String input) throws MalformedAddressException, NoAddressFoundException
 	{
 		HashSet<Integer> numbersOnEdge = new HashSet<>();
 		AddressSearch as = new AddressSearch();
@@ -76,7 +72,7 @@ public class AddressParserTest {
 
 		try {
 			addressParserTestNameNumberCity(roadName, roadNumber, postalNumber, cityName, input);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAddressException e) {
 			fail("Input contains invalid characters");
 		} catch (NoAddressFoundException e) {
 			// TODO Auto-generated catch block
@@ -94,7 +90,7 @@ public class AddressParserTest {
 
 		try {
 			addressParserTestNameNumberCity(roadName, roadNumber, postalNumber, cityName, input);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAddressException e) {
 			fail("Input contains invalid characters");
 		} catch (NoAddressFoundException e) {
 			// TODO Auto-generated catch block
@@ -113,7 +109,7 @@ public class AddressParserTest {
 
 		try {
 			addressParserTestNameNumberCity(roadName, roadNumber, postalNumber, cityName, input);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAddressException e) {
 			fail("Input contains invalid characters");
 		} catch (NoAddressFoundException e) {
 			// TODO Auto-generated catch block
@@ -130,7 +126,7 @@ public class AddressParserTest {
 
 		try {
 			addressParserTestNameNumberCity(roadName, roadNumber, postalNumber, cityName, input);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAddressException e) {
 			fail("Input contains invalid characters");
 		} catch (NoAddressFoundException e) {
 			// TODO Auto-generated catch block
@@ -147,7 +143,7 @@ public class AddressParserTest {
 
 		try {
 			addressParserTestNameNumberCity(roadName, roadNumber, postalNumber, cityName, input);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAddressException e) {
 			fail("Input contains invalid characters");
 		} catch (NoAddressFoundException e) {
 			// TODO Auto-generated catch block
@@ -163,7 +159,7 @@ public class AddressParserTest {
 		String input = "10 4600 Vandelvej Køge 133 Frederiksværk";
 		try {
 			addressParserTestNameNumberCity(roadName, roadNumber, postalNumber, cityName, input);
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAddressException e) {
 			fail("Input contains invalid characters");
 		} catch (NoAddressFoundException e) {
 			// TODO Auto-generated catch block
