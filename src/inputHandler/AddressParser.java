@@ -110,6 +110,9 @@ public class AddressParser {
 	private void findRoadName(String input)
 	{
 		System.out.println("INPUT TO FIND ROADNAME BY: " + input);
+		
+		if(input.trim().isEmpty())
+			return;
 
 		String[] splitInput = input.split("\\s+");
 		String possibleRoadName = "";
@@ -129,6 +132,7 @@ public class AddressParser {
 
 			System.out.println("totalInput: " + totalInput);
 
+			
 			possibleRoadName = EdgeSearch.searchForRoadNameLongestPrefix(totalInput);
 			System.out.println("MIGHT BE THIS ROAD: " + possibleRoadName);
 
@@ -270,6 +274,10 @@ public class AddressParser {
 	}
 
 	public String[] getAddressArray(){
+		
+		
+
+
 		return addressArray;
 	}
 }

@@ -41,6 +41,9 @@ public class EdgeSearch  {
 	 */
 	public static Edge[] searchForRoadName(String roadToFind)
 	{
+		if(roadToFind.trim().isEmpty())
+			return new Edge[0];
+		
 		roadToFind = roadToFind.toLowerCase();
 		ArrayList<Integer> listOfFoundEdges = edgeSearchTrie.get(roadToFind);
 

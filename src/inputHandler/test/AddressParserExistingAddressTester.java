@@ -3,9 +3,6 @@ package inputHandler.test;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
 import inputHandler.AddressParser;
-import inputHandler.exceptions.MalformedAddressException;
-import inputHandler.exceptions.NoAddressFoundException;
-
 import org.junit.Test;
 
 
@@ -106,8 +103,8 @@ public class AddressParserExistingAddressTester {
 	@Test
 	//Reason: roadname contains single letters not followed by dots
 	public void singleLettersNOTfollowedByDotsTest() {
-		String test = "A P Møller Kollegiet 10, 12., 2300 København S";
-		String[] expectedResult = new String[]{"a p møller kollegiet", "10", "", "12", "2300", "københavn s"};
+		String test = "A P Møller Kollegiet 10, 12., 2300 København";
+		String[] expectedResult = new String[]{"a p møller kollegiet", "10", "", "12", "2300", "københavn"};
 		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
