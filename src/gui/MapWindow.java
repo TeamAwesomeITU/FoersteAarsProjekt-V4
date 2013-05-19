@@ -438,8 +438,9 @@ public class MapWindow {
 
 		@Override
 		public void keyPressed(KeyEvent arg) {
-			if(arg.getKeyCode() == 10)
+			if(arg.getKeyCode() == 10) {
 				EnterKeyPress();
+			}
 
 			else {
 				if (showAddressTimer.isRunning())
@@ -490,36 +491,29 @@ public class MapWindow {
 		public void EnterKeyPress() {
 			if(toSearchQuery.hasFocus())
 			{
-				if(addressSearcherFrom.getFoundEdges().length > 0 && !toSearchQuery.getText().trim().isEmpty())
-				{
-					try {
-						addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+				try {
+					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+					if(addressSearcherFrom.getFoundEdges().length > 0 && !toSearchQuery.getText().trim().isEmpty())
 						findRoute();
-					} catch (MalformedAddressException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+					else { 
+						fromSearchQuery.requestFocus();
 					}
-					catch (NoAddressFoundException e1) {
-						createWarning(e1.getMessage());
-					}
-				}
-				else { 
-					fromSearchQuery.requestFocus();
+				} catch (MalformedAddressException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException | NoAddressFoundException e) {
+					createWarning(e.getMessage());
 				}
 			}
 			else 
-				if(fromSearchQuery.hasFocus()) 
-				{
+			{
+				try { 
+					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
 					if(addressSearcherTo.getFoundEdges().length > 0 && !fromSearchQuery.getText().trim().isEmpty())
-					{
-						try {
-							addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
-							findRoute();
-						} catch (MalformedAddressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
-						}
-					}
-					else { 
+						findRoute();
+					else  
 						toSearchQuery.requestFocus();
-					}
+				} catch (MalformedAddressException | NoAddressFoundException | NoRoutePossibleException | NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e) {
+					createWarning(e.getMessage());
 				}
+			}
 		}
 		@Override
 		public void keyTyped(KeyEvent e) {
@@ -762,7 +756,7 @@ public class MapWindow {
 			ColoredJPanel panel = new ColoredJPanel();
 			panel.setLayout(new BorderLayout());
 			ColoredJScrollPane scrollPane = new ColoredJScrollPane(panel);
-			
+
 
 			JLabel label = new JLabel("Directions:");
 			label.setForeground(ColorTheme.TEXT_COLOR);
@@ -796,6 +790,7 @@ public class MapWindow {
 		public void focusLost(FocusEvent e) {
 			try {
 				if(fromSearchQuery.getText().trim().length() != 0 && addressSearcherFrom.getFoundEdges().length == 0){
+					System.out.println("From has mistet fokus! " + addressSearcherFrom.getFoundEdges().length);
 					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
 					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
 
