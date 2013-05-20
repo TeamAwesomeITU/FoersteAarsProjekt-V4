@@ -59,7 +59,7 @@ import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
  */
 public class MapWindow {
 
-	private Timer showAddressTimer = new Timer(500, new TimerListener());
+	private Timer showAddressTimer = new Timer(3000, new TimerListener());
 	public static CustomJTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
