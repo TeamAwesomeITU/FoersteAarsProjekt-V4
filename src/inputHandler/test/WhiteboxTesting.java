@@ -30,13 +30,26 @@ public class WhiteboxTesting {
 	@Test
 	public void dataSetC(){
 		try {
-			actualInput[0] = "Nørregade";
-			expectedResult = addressParser.parseAddress("Nørregade");
+			actualInput[0] = "nørregade";
+			expectedResult = addressParser.parseAddress("nørregade");
 			assertArrayEquals(expectedResult, actualInput);
 		} catch (MalformedAddressException | NoAddressFoundException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void dataSetD(){
+		try {
+			actualInput = new String[]{"nørregade", "7", "", "5", "", "køge"};
+			expectedResult = addressParser.parseAddress("nørregade 7, 5. sal, køge");
+			assertArrayEquals(expectedResult, actualInput);
+		} catch (MalformedAddressException | NoAddressFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	
 	
 	@After
