@@ -1,21 +1,28 @@
 package inputHandler.test;
 
 import static org.junit.Assert.*;
-
 import java.util.HashSet;
-
 import inputHandler.AddressSearch;
-
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
-
 import mapCreationAndFunctions.data.Edge;
-
 import org.junit.Test;
 
 public class AddressSearchTest {
 
-	public void addressParserTestNameNumberCity(String roadName, int roadNumber, String letters, int postalNumber, String cityName, String input) throws MalformedAddressException, NoAddressFoundException
+
+	/**
+	 * Setup for the tests.
+	 * @param The road name you want to find.
+	 * @param The road number you want to find.
+	 * @param The letter you want to find.
+	 * @param The postal number you want to find.
+	 * @param The city you want to find.
+	 * @param The entire addresss written in a single line.
+	 * @throws MalformedAddressException
+	 * @throws NoAddressFoundException
+	 */
+	public  void addressParserTestNameNumberCity(String roadName, int roadNumber, String letters, int postalNumber, String cityName, String input) throws MalformedAddressException, NoAddressFoundException
 	{
 		HashSet<Integer> numbersOnEdge = new HashSet<>();
 		HashSet<String> lettersOnEdge = new HashSet<>();
@@ -45,7 +52,9 @@ public class AddressSearchTest {
 		assertEquals("Postalnumber does not equal postalNumber Right", postalNumber, as.getFoundEdges()[0].getPostalNumberRight());
 
 	}
+	
 	@Test
+	
 	public void testStandardInputStyle() {
 		String roadName = "Vandelvej";
 		int roadNumber = 10;
@@ -78,9 +87,11 @@ public class AddressSearchTest {
 		} catch (NoAddressFoundException e) {
 			fail("No address was found");
 		}
-
 	}
 	@Test
+	/**
+	 * 
+	 */
 	public void testComplicatedInputStyle() {
 		String roadName = "Skaffervej";
 		int roadNumber = 15;
@@ -131,8 +142,8 @@ public class AddressSearchTest {
 			fail("No address was found");
 		}
 	}
-	@Test
-	public void testShouldNeverHappenInputStyle() {
+	@Test (expected=MalformedAddressException.class)
+	public void testShouldNeverHappenInputStyle() throws MalformedAddressException {
 		String roadName = "Vandelvej";
 		int roadNumber = 10;
 		String letter = "";
@@ -141,8 +152,8 @@ public class AddressSearchTest {
 		String input = "10 4600 Vandelvej Køge 133 Frederiksværk";
 		try {
 			addressParserTestNameNumberCity(roadName, roadNumber, letter, postalNumber, cityName, input);
-		} catch (MalformedAddressException e) {
-			fail("Input contains invalid characters");
+			
+			
 		} catch (NoAddressFoundException e) {
 			fail("No address was found");
 		}
