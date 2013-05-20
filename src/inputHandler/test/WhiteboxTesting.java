@@ -163,8 +163,8 @@ public class WhiteboxTesting {
 	@Test
 	public void dataSetI(){
 		try {
-			expectedResult = new String[]{"nørregade", "7", "b", "5", "4600", "køge"};
-			actualInput = addressParser.parseAddress("nørregade 7b 5. sal 4600 køge");
+			expectedResult = new String[]{"nørregade", "7", "a", "5", "4600", "køge"};
+			actualInput = addressParser.parseAddress("nørregade 7a 5. sal 4600 køge");
 			assertArrayEquals(actualInput, expectedResult);
 		} catch (MalformedAddressException | NoAddressFoundException e) {
 			e.printStackTrace();

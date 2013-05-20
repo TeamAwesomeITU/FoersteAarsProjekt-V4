@@ -219,10 +219,6 @@ public class AddressParser {
 			System.out.println("Postnummer: " + postcode.group());
 			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"").trim();
 			addressArray[4] = postcode.group().trim(); 
-
-			//If the string is not empty, even after the city was found, try finding the road name again
-			//			if(!addressAfterDeletion.isEmpty() && addressArray[0].isEmpty())
-			//				findRoadName(addressAfterDeletion);
 		}
 	}
 	
@@ -272,11 +268,6 @@ public class AddressParser {
 		addressArray[5] = foundCityName;
 		addressAfterDeletion = addressAfterDeletion.replaceAll(foundCityName, "");
 
-		if(!foundCityName.isEmpty())
-		{
-			System.out.println("Address left BEFORE roadname was found: " + addressAfterDeletion);
-			addressAfterDeletion = addressAfterDeletion.replace(foundCityName,"").trim();
-		}
 		System.out.println("Address left AFTER roadname was found: " + addressAfterDeletion);
 	}
 
