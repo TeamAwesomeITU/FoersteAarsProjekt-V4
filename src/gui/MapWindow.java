@@ -59,14 +59,14 @@ import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
  */
 public class MapWindow {
 
-	private Timer showAddressTimer = new Timer(800, new TimerListener());
+	private Timer showAddressTimer = new Timer(500, new TimerListener());
 	public static CustomJTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
 	private MapPanel mapPanel;
 	private ColoredJButton detailedDirectionsButton;
 
-	private String VehicleType = "Car", RouteType = "Fastest";
+	private String VehicleType = "Car", RouteType = "Fastest", CurrentRouteVehicleType = "";
 	private static AddressSearch addressSearcherFrom = new AddressSearch();
 	private static AddressSearch addressSearcherTo = new AddressSearch();
 	private static ArrayList<Edge> directionEdges = new ArrayList<>();
@@ -290,6 +290,7 @@ public class MapWindow {
 	public void findRoute() throws NoAddressFoundException, NoRoutePossibleException, NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException{
 		DijkstraSP dip = new DijkstraSP(DataHolding.getGraph(), addressSearcherFrom.getEdgeToNavigate(), DataHolding.getEdgeArray(), VehicleType, RouteType);
 		setDirections((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
+		CurrentRouteVehicleType = VehicleType;
 		mapPanel.setPathTo((Stack<Edge>) dip.pathTo(addressSearcherTo.getEdgeToNavigate()));
 		mapPanel.repaintMap();
 
@@ -360,9 +361,9 @@ public class MapWindow {
 			double bikeSpeedMetersPerSec = 15.0/3.6;
 			double walkSpeedMetersPerSec = 5.0/3.6;
 
-			if(VehicleType.equals("Bike"))
+			if(CurrentRouteVehicleType.equals("Bike"))
 				totalTravelTime = (totalTravelLength/bikeSpeedMetersPerSec)/60;
-			else if(VehicleType.equals("Walk")) 
+			else if(CurrentRouteVehicleType.equals("Walk")) 
 				totalTravelTime = (totalTravelLength/walkSpeedMetersPerSec)/60	;
 
 			directions.add(2, "Total travel distance: " + String.format("%.1f", totalTravelLength/1000) + " kilometers");

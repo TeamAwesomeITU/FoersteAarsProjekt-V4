@@ -18,7 +18,7 @@ import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
  */
 public class MapMouseWheelZoom implements MouseWheelListener {
 
-	private Timer recalculateTimer = new Timer(50, new ZoomWheelActionListener());
+	private Timer recalculateTimer = new Timer(100, new ZoomWheelActionListener());
 	private double zoomWay = 0;
 	private MapPanel mp;
 	private double smallX, bigX, smallY, bigY;
