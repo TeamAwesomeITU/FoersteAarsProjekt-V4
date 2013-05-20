@@ -231,6 +231,11 @@ public class MapWindow {
 			return heightForMap(height);
 	}
 
+	/**
+	 * calculates the height of the map based on a temporaryheight
+	 * @param temporaryHeight
+	 * @return the new height or a recursion
+	 */
 	private double heightForMap(double temporaryHeight) {
 		double height = temporaryHeight*0.97 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight());
 		if(height < Math.round(MainGui.frame.getHeight()*0.968 - (southColoredJPanel.getHeight()+MainGui.frame.getJMenuBar().getHeight())))
@@ -279,7 +284,7 @@ public class MapWindow {
 	}
 
 	/**
-	 * NOT DONE
+	 * Finds the route between the two found edges
 	 * @throws MalformedAddressException 
 	 * @throws NoAddressFoundException 
 	 * @throws NoRoutePossibleException 
@@ -298,6 +303,9 @@ public class MapWindow {
 		setDirectionsEnabled();
 	}
 
+	/**
+	 * Sets whether or not the directions button is enabled or disabled
+	 */
 	public void setDirectionsEnabled(){
 		if(directionEdges.size() == 0)
 			detailedDirectionsButton.setEnabled(false);
@@ -305,6 +313,10 @@ public class MapWindow {
 			detailedDirectionsButton.setEnabled(true);
 	}
 
+	/**
+	 * sets the directions for the route
+	 * @param edges the edges for the direction
+	 */
 	private void setDirections(Stack<Edge> edges)
 	{
 		directionEdges.clear();
@@ -312,6 +324,11 @@ public class MapWindow {
 			directionEdges.add(edges.pop());
 	}
 
+	/**
+	 * Returns an array of strings containing the directions
+	 * @return the array of strings
+	 * @throws NoAddressFoundException
+	 */
 	public String[] getDirections() throws NoAddressFoundException
 	{
 		if(directionEdges.isEmpty())
@@ -386,6 +403,10 @@ public class MapWindow {
 		return MainGui.frame;
 	}
 
+	/**
+	 * Creates a warning depending on the exception caught
+	 * @param message the exception message
+	 */
 	@SuppressWarnings("static-access")
 	private void createWarning(String message)
 	{
@@ -393,6 +414,9 @@ public class MapWindow {
 		fromSearchQuery.requestFocus();
 	}
 
+	/**
+	 * Highlight edges depending on which textfield has focus
+	 */
 	private void whichTextField() {
 		if(fromSearchQuery.hasFocus() && fromSearchQuery.getText().length() > 0)
 			highLightEdges(fromSearchQuery.getText().trim(), "from");
@@ -400,6 +424,12 @@ public class MapWindow {
 		if(toSearchQuery.hasFocus() && toSearchQuery.getText().length() > 0)
 			highLightEdges(toSearchQuery.getText().trim(), "to");
 	}
+	
+	/**
+	 * Highlights the edges
+	 * @param input the address to highlight
+	 * @param field the field which has focus
+	 */
 	private void highLightEdges(String input, String field){
 		try {
 			if(field.equals("from"))
@@ -420,7 +450,6 @@ public class MapWindow {
 
 
 	//---------------------------------Listeners from here-----------------------------//
-
 
 	private class TimerListener implements ActionListener{
 
@@ -644,11 +673,6 @@ public class MapWindow {
 			}
 
 		}
-
-		public void mouseClicked(MouseEvent e) {}
-		public void mouseEntered(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}
-		public void mouseReleased(MouseEvent e) {}
 	}
 	/**
 	 * Flips the from and to address
@@ -712,6 +736,9 @@ public class MapWindow {
 
 	}
 
+	/**
+	 * Sets up the frame to hold the directions
+	 */
 	private class GetDirectionsListener implements ActionListener{
 
 		private JTextArea directionsArea;
@@ -731,6 +758,9 @@ public class MapWindow {
 			}
 		}
 
+		/**
+		 * Setup for the frame
+		 */
 		public void makeDirectionsFrame(){
 			final JFrame directionsFrame = new JFrame();
 			directionsFrame.setUndecorated(true);
@@ -773,6 +803,10 @@ public class MapWindow {
 			directionsFrame.setLocationRelativeTo(null);
 		}
 
+		/**
+		 * Fills the frame with directions
+		 * @param directions the array holding the strings
+		 */
 		public void fillDirections(String[] directions){
 			String outPut = "";
 			for(String line : directions)
@@ -783,6 +817,9 @@ public class MapWindow {
 
 	}
 
+	/**
+	 * Listens for which field has focus
+	 */
 	private class TextFieldFocusListener implements FocusListener {
 		private boolean fromFocusHolder = false;
 		private boolean toFocusHolder = false;

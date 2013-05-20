@@ -1,7 +1,6 @@
 package inputHandler.test;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.fail;
 import inputHandler.AddressParser;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
@@ -14,213 +13,198 @@ import org.junit.Test;
 public class WhiteboxTesting {
 	
 	private AddressParser addressParser;
-	private String[] expectedResult;
 	private String[] actualInput;
+	private String[] expectedResult;
 
+	
 	@Before
 	public void setUp(){
 		addressParser = new AddressParser();
-		expectedResult = new String[6];
-		actualInput = new String[]{"", "", "", "", "", ""};
+		actualInput = new String[6];
+		expectedResult= new String[]{"", "", "", "", "", ""};
 	}
 	
 	/**
-	 * 
+	 * Test to see if the parser throws the correct exception
+	 * @throws MalformedAddressException
+	 */
+	@Test (expected=MalformedAddressException.class)
+	public void dataSetA() throws MalformedAddressException{
+		try {
+			String test = "#?=%/=!><";
+			actualInput = addressParser.parseAddress(test);
+		} catch (NoAddressFoundException e) {
+			e.printStackTrace();
+			fail("Wrong exception was caught" + e.getClass());
+		}
+	}
+	
+	/**
+	 * Test to see if the parser throws the correct exception
+	 * @throws MalformedAddressException
+	 */
+	@Test (expected=MalformedAddressException.class)
+	public void dataSetA2() throws MalformedAddressException{
+		try {
+			String test = "Are you kidding me?";
+			actualInput = addressParser.parseAddress(test);
+		} catch (NoAddressFoundException e) {
+			e.printStackTrace();
+			fail("Wrong exception was caught" + e.getClass());
+		}
+	}
+	
+	/**
+	 * Test to see if the parser throws the correct exception
+	 * @throws NoAddressFoundException
+	 */
+	@Test (expected=NoAddressFoundException.class)
+	public void dataSetB() throws NoAddressFoundException{
+		try {
+			String test = "";
+			actualInput = addressParser.parseAddress(test);
+			assertArrayEquals(actualInput, expectedResult);
+		} catch (MalformedAddressException e) {
+			e.printStackTrace();
+			fail("Wrong exception was caught" + e.getClass());
+		}
+	}
+	
+	
+	/**
+	 * Test for only road name
 	 */
 	@Test
 	public void dataSetC(){
 		try {
-			actualInput[0] = "nørregade";
-			expectedResult = addressParser.parseAddress("nørregade");
-			assertArrayEquals(expectedResult, actualInput);
+			expectedResult[0] = "nørregade";
+			actualInput = addressParser.parseAddress("nørregade");
+			assertArrayEquals(actualInput, expectedResult);
 		} catch (MalformedAddressException | NoAddressFoundException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Test for road name, number, floor and city
+	 */
 	@Test
 	public void dataSetD(){
 		try {
-			actualInput = new String[]{"nørregade", "7", "", "5", "", "køge"};
-			expectedResult = addressParser.parseAddress("nørregade 7, 5. sal, køge");
-			assertArrayEquals(expectedResult, actualInput);
+			expectedResult = new String[]{"nørregade", "7", "", "5", "", "køge"};
+			actualInput = addressParser.parseAddress("nørregade 7, 5. sal, køge");
+			assertArrayEquals(actualInput, expectedResult);
 		} catch (MalformedAddressException | NoAddressFoundException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Test for road name, number, postal and city
+	 */
+	@Test
+	public void dataSetE(){
+		try {
+			expectedResult = new String[]{"nørregade", "7", "", "", "4600", "køge"};
+			actualInput = addressParser.parseAddress("nørregade7 4600 køge");
+			assertArrayEquals(actualInput, expectedResult);
+		} catch (MalformedAddressException | NoAddressFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
+	/**
+	 * Test for road name, number and floor
+	 */
+	@Test
+	public void dataSetF(){
+		try {
+			expectedResult = new String[]{"nørregade", "7", "", "5", "", ""};
+			actualInput = addressParser.parseAddress("nørregade 7 5.");
+			assertArrayEquals(actualInput, expectedResult);
+		} catch (MalformedAddressException | NoAddressFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
+	/**
+	 * Test for road name, number, letter and city
+	 */
+	@Test
+	public void dataSetG(){
+		try {
+			expectedResult = new String[]{"nørregade", "7", "a", "", "", "køge"};
+			actualInput = addressParser.parseAddress("nørregade 7a køge");
+			assertArrayEquals(actualInput, expectedResult);
+		} catch (MalformedAddressException | NoAddressFoundException e) {
+			e.printStackTrace();
+		}
+	}
 	
+	/**
+	 * Test for road name and city
+	 */
+	@Test
+	public void dataSetH(){
+		try {
+			expectedResult = new String[]{"nørregade", "", "", "", "", "køge"};
+			actualInput = addressParser.parseAddress("nørregade i køge");
+			assertArrayEquals(actualInput, expectedResult);
+		} catch (MalformedAddressException | NoAddressFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Test for road name, number, letter, floor, postal and city
+	 */
+	@Test
+	public void dataSetI(){
+		try {
+			expectedResult = new String[]{"nørregade", "7", "b", "5", "4600", "køge"};
+			actualInput = addressParser.parseAddress("nørregade 7b 5. sal 4600 køge");
+			assertArrayEquals(actualInput, expectedResult);
+		} catch (MalformedAddressException | NoAddressFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Test for only city
+	 */
+	@Test
+	public void dataSetJ(){
+		try {
+			expectedResult = new String[]{"", "", "", "", "", "køge"};
+			actualInput = addressParser.parseAddress("køge");
+			assertArrayEquals(actualInput, expectedResult);
+		} catch (MalformedAddressException | NoAddressFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Test for misspelled address
+	 */
+	@Test
+	public void dataSetK(){
+		try {
+			expectedResult = new String[]{"", "", "", "", "", ""};
+			actualInput = addressParser.parseAddress("nærregade i kæge");
+			assertArrayEquals(actualInput, expectedResult);
+		} catch (MalformedAddressException | NoAddressFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Tears down the setup. Makes sure all test has a new arrays and addressparsers.
+	 */
 	@After
 	public void tearDown(){
 		addressParser = null;
-		expectedResult = null;
 		actualInput = null;
+		expectedResult = null;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//	//The default message to use, when an exceptionExpectedTest fails
-//	static final String failed = "Expected exception, but didn't throw any";
-//	
-//	//The array to output, when an exceptionExpectedTest succeeds
-//	static final String[] expectedResultFail = new String[]{"MALFORMED ADRESS"};
-//	
-//	@Test
-//	//Reason: contains an empty string
-//	public void datasetA() {
-//		String test = "";	
-//
-//		String[] testResult = new String[]{""};
-//		try {
-//			asserterException(test, expectedResultFail);
-//			testResult[0] = failed;	
-//			fail(failed);
-//		} catch (MalformedAddressException | NoAddressFoundException e) {
-//			testResult[0] = e.getMessage();	
-//		}	
-//		finally {
-//			assertArrayEquals(expectedResultFail, testResult);
-//		}
-//	}
-//	
-//	@Test
-//	//Reason: contains bullshit
-//	public void datasetB() {
-//		String test = "Are you kidding me?";
-//		String[] testResult = new String[]{""};
-//		try {
-//			asserterException(test, expectedResultFail);
-//			testResult[0] = failed;	
-//			fail(failed);
-//		} catch (MalformedAddressException | NoAddressFoundException e) {
-//			testResult[0] = e.getMessage();	
-//		}
-//		finally {
-//			assertArrayEquals(expectedResultFail, testResult);
-//		}
-//	}
-//	@Test
-//	//Reason: contains Something with road name
-//	public void datasetC() {
-//		String test = "Rued Langgaards vej";
-//		String[] expectedResult = new String[]{"Rued Langgaards vej", "", "", "", "", ""};
-//		asserterCorrect(test, expectedResult);
-//	}
-//	
-//	@Test
-//	//Reason: contains Something without a road name
-//	public void datasetD() {
-//		String test = "K�benhavn";
-//		String[] expectedResult = new String[]{"", "", "", "", "", "K�benhavn"};
-//		asserterCorrect(test, expectedResult);
-//	}
-//	
-//	@Test
-//	//Reason: contains Input that doesn�t match anything in the txt file
-//	public void datasetE() {
-//		String test = "TeamAwesome";
-//		String[] expectedResult = new String[]{"", "", "", "", "", "TeamAwesome"};
-//		asserterCorrect(test, expectedResult);
-//	}
-//	
-//	@Test
-//	//Reason: contains Something with a digit followed by a comma
-//	public void datasetF() {
-//		String test = "Rued Langgaards vej 7, 5.";
-//		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "", "5", "", ""};
-//		asserterCorrect(test, expectedResult);
-//	}
-//	
-//	@Test
-//	//Reason: contains Incomplete match
-//	public void datasetG() {
-//		String test = "Rued Langgaardsvej";
-//		String[] expectedResult = new String[]{"", "", "", "", "", "Rued Langgaardsvej"};
-//		asserterCorrect(test, expectedResult);
-//	}
-//	
-//	@Test
-//	//Reason: contains Input with building letter
-//	public void datasetH() {
-//		String test = "Rued Langgaards vej 7A, 5. sal";
-//		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "A", "5", "", ""};
-//		asserterCorrect(test, expectedResult);
-//	}
-//	
-//	@Test
-//	//Reason: contains Input with a four digit number (zip code)
-//	public void datasetI() {
-//		String test = "Rued Langgaards vej 7A, 5. sal 2300";
-//		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "A", "5", "2300", ""};;
-//		asserterCorrect(test, expectedResult);
-//	}
-//	
-//	@Test
-//	//Reason: contains Input with a valid city
-//	public void datasetJ() {
-//		String test = "Rued Langgaards vej 7A, 5. sal 2300 K�benhavn S";
-//		String[] expectedResult = new String[]{"Rued Langgaards vej", "7", "A", "5", "2300", "K�benhavn S"};
-//		asserterCorrect(test, expectedResult);
-//	}
-//	
-//	@Test
-//	//Reason: contains Input with more than one match in the text file, where the 
-//	//correct match is stored first in the match-array
-//	public void datasetK() {
-//		String test = "A. E. Hansensvej";
-//		String[] expectedResult = new String[]{"A. E. Hansensvej", "", "", "", "", ""};
-//		asserterCorrect(test, expectedResult);
-//	}
-//	
-//	@Test
-//	//Reason: contains Input with more than one match in the text file, where the 
-//	//correct match is stored second in the match-array. (�Rue�) is stored at the first index
-//	public void datasetL() {
-//		String test = "Rue de Louis";
-//		String[] expectedResult = new String[]{"Rue de Louis", "", "", "", "", ""};
-//		asserterCorrect(test, expectedResult);
-//	}
-//	
-//	public void asserterCorrect(String input, String[] expectedTestArray)
-//	{
-//		AddressParser addressParser = new AddressParser();
-//		String[] testResult = new String[]{""};
-//		try {
-//			testResult = addressParser.parseAddress(input);
-//			assertArrayEquals(expectedTestArray, testResult);
-//
-//		} catch (MalformedAddressException | NoAddressFoundException e) {
-//			testResult[0] = e.getMessage();	
-//			fail();
-//		}
-//	}
-//	
-//	public void asserterException(String input, String[] expectedTestArray) throws MalformedAddressException, NoAddressFoundException
-//	{
-//		AddressParser addressParser = new AddressParser();
-//		addressParser.parseAddress(input);
-//	}
-
 }
