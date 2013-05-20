@@ -14,7 +14,7 @@ import mapCreationAndFunctions.search.CitySearch;
 
 /**
  * This class is implemented to be able to deal with many different cities with many different postal numbers.
- * Each individual City object contains the name of the city as a String, and a HashSet<Integer>, which holds all of the postal numbers that belongs to the city.
+ * Each individual City object contains the name of the city, all of the postal numbers that belongs to the city, ID's of all Edges in the city and an ID number.
  *
  */
 public class City {
@@ -29,19 +29,7 @@ public class City {
 	private static HashMap<Integer, City> cityHashMap = new HashMap<Integer, City>();
 
 	//An ArrayList of all Cities
-	private static ArrayList<City> allCitiesList = new ArrayList<City>();
-
-	//The City's name
-	private String cityName;
-
-	//A HashSet of all the postal numbers which belong to the city
-	private HashSet<Integer> postalNumbers = new HashSet<Integer>();
-	
-	//A HashSet of all Edge's ID's that lies within this city
-	private HashSet<Integer> cityRoadsSet = new HashSet<Integer>();
-
-	//The ID of the City
-	private int cityID;
+	private static ArrayList<City> allCitiesList = new ArrayList<City>();	
 
 	//The ID count of the cities;
 	private static int cityIDcount = 1;
@@ -55,6 +43,18 @@ public class City {
 
 	//TODO Fucking bad programming - this boolean only exists to ensure the creation of the other fields - FIX!
 	private static boolean initilalized = createCities();
+
+	//The City's name
+	private String cityName;
+
+	//A HashSet of all the postal numbers which belong to the city
+	private HashSet<Integer> postalNumbers = new HashSet<Integer>();
+	
+	//A HashSet of all Edge's ID's that lies within this city
+	private HashSet<Integer> cityRoadsSet = new HashSet<Integer>();
+
+	//The ID of the City
+	private int cityID;
 
 	
 	/**
@@ -70,7 +70,7 @@ public class City {
 	}
 
 	/**
-	 * Check if a City with the given name exists
+	 * Check if a City with a given name exists
 	 * @param cityName The name to check for
 	 * @return True if the city already exists
 	 */
@@ -111,18 +111,35 @@ public class City {
 	private void addPostalNumberToCity(Integer postalNumberToAdd)
 	{ postalNumbers.add(postalNumberToAdd); }
 	
+	/**
+	 * Adds an Edge ID to the city
+	 * @param edgeID The ID of the Edge
+	 */
 	private void addRoadToCity(int edgeID)
 	{ cityRoadsSet.add(edgeID); }
 	
+	/**
+	 * Adds an Edge ID to the city with the given postal number
+	 * @param postalNumber The postal number of the city, for which to add the Edge
+	 * @param edgeID The ID of the Edge
+	 */
 	public static void addRoadToRelevantCity(int postalNumber, int edgeID)
 	{
 		if(postalNumberExists(postalNumber))
 			getCityByPostalNumber(postalNumber).addRoadToCity(edgeID);
 	}
 	
+	/**
+	 * Gets the IDs of all the Edges, which belongs to this city
+	 * @return A HashSet<Integer> of the Edges
+	 */
 	public HashSet<Integer> getCityRoadIDs()
 	{ return cityRoadsSet; }
 	
+	/**
+	 * Gets all Edges which belongs to this city
+	 * @return All the Edges which belongs to this city
+	 */
 	public Edge[] getCityRoads()
 	{
 		HashSet<Integer> edgeIDsSet = getCityRoadIDs();
@@ -135,6 +152,11 @@ public class City {
 		return edges;		
 	}
 	
+	/**
+	 * Checks if this City contains an Edge with the given ID
+	 * @param edgeID The ID of the Edge
+	 * @return True, if this City contains the given Edge ID 
+	 */
 	public boolean containsRoad(int edgeID)
 	{ return cityRoadsSet.contains(edgeID); }
 
@@ -151,16 +173,19 @@ public class City {
 			return cityHashMap.get(postalNumber);
 	}
 	
+	/**
+	 * Checks if the given postal number actually exists
+	 * @param postalNumber The postal number to check
+	 * @return True, if the postal number exists
+	 */
 	public static boolean postalNumberExists(int postalNumber)
-	{
-//		for(int number : faultyPostalNumbers)
-//			if(postalNumber == number)
-//				return false;
-
-		return existingsPostalNumbers.contains(postalNumber);
-	}
+	{ return existingsPostalNumbers.contains(postalNumber);	}
 	
-	
+	/**
+	 * Checks if the given city name actually exists
+	 * @param cityName The city name to check
+	 * @return True, if the city name exists
+	 */
 	public static boolean cityNameExists(String cityName)
 	{ return CitySearch.searchForCityName(cityName).length > 0;	}
 	
@@ -196,6 +221,11 @@ public class City {
 		return null;
 	}
 
+	/**
+	 * Finds the City with the given ID
+	 * @param ID the wanted City's ID
+	 * @return the City with the corresponding ID - if no City could be found, null is returned
+	 */
 	public static City getCityByID(int ID)
 	{ return allCitiesList.get(ID-1); }
 
@@ -271,12 +301,17 @@ public class City {
 		}		
 	}
 
+	/**
+	 * Gets all existing Cities
+	 * @return all existing Cities
+	 */
 	public static ArrayList<City> getAllCities()
 	{
 		if(initilalized == false)
 			createCities();
 		return allCitiesList;
 	}
+	
 	@Override
 	public String toString() {
 		return this.cityName;

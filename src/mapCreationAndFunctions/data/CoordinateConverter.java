@@ -3,7 +3,7 @@ package mapCreationAndFunctions.data;
 import mapCreationAndFunctions.AreaToDraw;
 
 /**
- * This class can convert coordinates to/from UTM and Java pixels.
+ * This class converts coordinates to/from UTM Zone 32 and Java pixels.
  */
 public class CoordinateConverter {	
 	

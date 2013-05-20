@@ -13,11 +13,11 @@ import mapCreationAndFunctions.exceptions.InvalidAreaProportionsException;
 import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
 
 /**
- * Creates GeneralPaths to draw the coast line of Denmark
+ * Creates GeneralPaths for drawing the coast line of Denmark
  */
 public class CoastLineMaker {
 
-	//A HashSet of all of the coast line polygons in Denmark
+	//An ArrayList of all of the coast line polygons in Denmark
 	private static ArrayList<Polygon> polygonSet = createPolygonSet("resources/coast_polygon_orig.dat_convertedJCOORD.txt");
 
 	/**
@@ -95,9 +95,9 @@ public class CoastLineMaker {
 
 
 	/**
-	 * Creates a HashSet of Polygons from the specified .txt-file
+	 * Creates an ArrayList of Polygons from the specified .txt-file
 	 * @param 	filenameAndLocation The .txt-file from which to create the HashSet of Polygons from
-	 * @return	A HashSet of every Polygon found in the specified .txt-file
+	 * @return	An ArrayList containing every Polygon found in the specified .txt-file
 	 */
 	private static ArrayList<Polygon> createPolygonSet(String filenameAndLocation)
 	{
@@ -194,10 +194,10 @@ public class CoastLineMaker {
 			}	
 		}
 
-		public AreaToDraw getAreaToDraw()
+		private AreaToDraw getAreaToDraw()
 		{ return area; }		
 
-		public LinkedList<double[]> getCoordsList()
+		private LinkedList<double[]> getCoordsList()
 		{ return nodeList; }
 	}
 }

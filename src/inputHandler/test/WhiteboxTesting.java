@@ -8,9 +8,6 @@ import inputHandler.exceptions.NoAddressFoundException;
 
 import org.junit.Test;
 
-
-
-
 public class WhiteboxTesting {
 	
 	//The default message to use, when an exceptionExpectedTest fails
