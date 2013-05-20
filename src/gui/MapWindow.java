@@ -419,7 +419,8 @@ public class MapWindow {
 			if (toSearchQuery.hasFocus() && toSearchQuery.getText().isEmpty() ||
 					fromSearchQuery.hasFocus() && fromSearchQuery.getText().isEmpty()) 
 			{
-				if (mapPanel.getPathTo() != null) {
+				if (mapPanel.getPathTo() != null)
+				{
 					try {
 						mapPanel.setPathTo(null);
 						directionEdges = new ArrayList<>();
