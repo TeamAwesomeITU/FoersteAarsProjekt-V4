@@ -17,7 +17,7 @@ import mapCreationAndFunctions.data.Edge;
  */
 public class RefinedPOSTALNUMBERTxtCreator {
 
-	private static String postalFileName = "XML/postalNumbersAndCityNames_uneditedWithSwedish.txt";
+	private static String postalFileName = "resources/postalNumbersAndCityNames_uneditedWithSwedish.txt";
 
 	private static void createRefinedTXT()
 	{

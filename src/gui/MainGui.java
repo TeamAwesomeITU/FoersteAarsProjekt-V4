@@ -86,7 +86,7 @@ public class MainGui {
 	 * If it is a mac it sets the look and feel to crossplatform. 
 	 * Starts the program with the loading screen.
 	 */
-	private MainGui(){
+	public MainGui(){
 		setMacLookAndFeel();
 		makeFrameAndContentPane();
 		contentPane.add(makeFooter(), BorderLayout.SOUTH);

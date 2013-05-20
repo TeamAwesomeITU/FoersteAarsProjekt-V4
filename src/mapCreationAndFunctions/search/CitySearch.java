@@ -51,6 +51,9 @@ public class CitySearch  {
 	 */
 	public static City[] searchForCityName(String cityToFind)
 	{
+		if(cityToFind.trim().isEmpty())
+			return new City[0];
+		
 		cityToFind = cityToFind.toLowerCase();
 		ArrayList<Integer> listOfFoundCities = cityNameSearchTrie.get(cityToFind);
 
@@ -70,6 +73,7 @@ public class CitySearch  {
 	public static String searchForCityNameLongestPrefix(String cityToFind)
 	{
 		System.out.println("CITY TO FIND: " + cityToFind);
+				
 		cityToFind = cityToFind.toLowerCase();
 		String longestPrefix = cityNameSearchTrie.longestPrefixOf(cityToFind);
 		
@@ -83,6 +87,9 @@ public class CitySearch  {
 	 */
 	public static City[] searchForCityNameSuggestions(String cityToFind)
 	{
+		if(cityToFind.trim().isEmpty())
+			return new City[0];
+		
 		cityToFind = cityToFind.toLowerCase();
 		ArrayList<String> cityNames = cityNameSearchTrie.prefixMatch(cityToFind);
 		ArrayList<City> foundCityList = new ArrayList<>();
@@ -129,28 +136,4 @@ public class CitySearch  {
 		
 	public static boolean doesCityNameMatchPostalNumber(String cityName, int postalNumber)
 	{ return City.getCityByCityName(cityName).getCityPostalNumbers().contains(postalNumber); }
-	
-	public static void main(String[] args) {
-		
-//		City[] foundCityList = searchForCityNameSuggestions("k");
-//		for(City city : foundCityList)
-//			System.out.println(city.getCityName());
-		
-//		System.out.println(searchForCityName("KØGE")[0].getCityName());
-//		
-		
-//		for(City city : searchForCityPostalNumberSuggestions(46))
-//				System.out.println(city.getCityName());
-		
-//		System.out.println("BREAK---------------");
-//		
-//		for(City city : searchForCityPostalNumberSuggestions(24))
-//			System.out.println(city.getCityName());
-//		
-//		System.out.println("BREAK---------------");
-//		
-//		for(City city : searchForCityName("København"))
-//			System.out.println(city.getCityName());
-		
-	}
 }

@@ -1,7 +1,8 @@
 package mapCreationAndFunctions.test;
 
 import static org.junit.Assert.*;
-import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.MalformedAddressException;
+import inputHandler.exceptions.NoAddressFoundException;
 
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.search.EdgeSearch;
@@ -23,7 +24,7 @@ public class EdgeSearchRoadNameAndNumberLetter {
 				assertEquals(edge.getRoadName(), edgeToFind);
 			}
 			
-		} catch (MalformedAdressException e) {
+		} catch (MalformedAddressException | NoAddressFoundException e) {
 			fail();
 			e.printStackTrace();
 		}

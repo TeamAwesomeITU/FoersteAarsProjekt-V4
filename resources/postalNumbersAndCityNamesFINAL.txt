@@ -1,0 +1,2046 @@
+0900 København C
+1000 København K
+1050 København K
+1051 København K
+1052 København K
+1053 København K
+1054 København K
+1055 København K
+1055 København K
+1056 København K
+1057 København K
+1058 København K
+1059 København K
+1060 København K
+1061 København K
+1062 København K
+1063 København K
+1064 København K
+1065 København K
+1066 København K
+1067 København K
+1068 København K
+1069 København K
+1070 København K
+1071 København K
+1072 København K
+1073 København K
+1074 København K
+1100 København K
+1101 København K
+1102 København K
+1103 København K
+1104 København K
+1105 København K
+1106 København K
+1107 København K
+1110 København K
+1111 København K
+1112 København K
+1113 København K
+1114 København K
+1115 København K
+1116 København K
+1117 København K
+1118 København K
+1119 København K
+1120 København K
+1121 København K
+1122 København K
+1123 København K
+1124 København K
+1125 København K
+1126 København K
+1127 København K
+1128 København K
+1129 København K
+1130 København K
+1131 København K
+1140 København K
+1148 København K
+1150 København K
+1151 København K
+1152 København K
+1153 København K
+1154 København K
+1155 København K
+1156 København K
+1157 København K
+1158 København K
+1159 København K
+1160 København K
+1161 København K
+1162 København K
+1163 København K
+1164 København K
+1165 København K
+1165 København K
+1166 København K
+1167 København K
+1168 København K
+1169 København K
+1170 København K
+1171 København K
+1172 København K
+1173 København K
+1174 København K
+1175 København K
+1200 København K
+1201 København K
+1202 København K
+1203 København K
+1204 København K
+1205 København K
+1206 København K
+1207 København K
+1208 København K
+1209 København K
+1210 København K
+1211 København K
+1212 København K
+1213 København K
+1214 København K
+1215 København K
+1216 København K
+1217 København K
+1218 København K
+1218 København K
+1218 København K
+1218 København K
+1218 København K
+1218 København K
+1219 København K
+1220 København K
+1221 København K
+1240 København K
+1250 København K
+1251 København K
+1252 København K
+1253 København K
+1254 København K
+1255 København K
+1256 København K
+1257 København K
+1258 København K
+1259 København K
+1259 København K
+1260 København K
+1261 København K
+1263 København K
+1263 København K
+1264 København K
+1265 København K
+1266 København K
+1267 København K
+1268 København K
+1270 København K
+1271 København K
+1300 København K
+1301 København K
+1302 København K
+1303 København K
+1304 København K
+1306 København K
+1307 København K
+1307 København K
+1308 København K
+1309 København K
+1310 København K
+1311 København K
+1312 København K
+1313 København K
+1314 København K
+1315 København K
+1316 København K
+1317 København K
+1318 København K
+1319 København K
+1320 København K
+1321 København K
+1322 København K
+1323 København K
+1324 København K
+1325 København K
+1326 København K
+1327 København K
+1328 København K
+1329 København K
+1349 København K
+1350 København K
+1352 København K
+1353 København K
+1354 København K
+1355 København K
+1356 København K
+1357 København K
+1358 København K
+1359 København K
+1359 København K
+1360 København K
+1361 København K
+1361 København K
+1362 København K
+1363 København K
+1364 København K
+1365 København K
+1366 København K
+1367 København K
+1368 København K
+1369 København K
+1370 København K
+1371 København K
+1400 København K
+1400 København K
+1401 København K
+1402 København K
+1402 København K
+1402 København K
+1402 København K
+1402 København K
+1403 København K
+1404 København K
+1406 København K
+1407 København K
+1408 København K
+1409 København K
+1410 København K
+1411 København K
+1411 København K
+1412 København K
+1413 København K
+1414 København K
+1415 København K
+1416 København K
+1417 København K
+1418 København K
+1419 København K
+1420 København K
+1421 København K
+1422 København K
+1423 København K
+1424 København K
+1425 København K
+1426 København K
+1427 København K
+1428 København K
+1429 København K
+1430 København K
+1431 København K
+1432 København K
+1432 København K
+1432 København K
+1433 København K
+1433 København K
+1433 København K
+1433 København K
+1433 København K
+1433 København K
+1433 København K
+1434 København K
+1435 København K
+1436 København K
+1436 København K
+1436 København K
+1436 København K
+1436 København K
+1436 København K
+1436 København K
+1437 København K
+1437 København K
+1437 København K
+1437 København K
+1437 København K
+1437 København K
+1437 København K
+1437 København K
+1437 København K
+1437 København K
+1437 København K
+1437 København K
+1438 København K
+1438 København K
+1438 København K
+1438 København K
+1438 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1439 København K
+1450 København K
+1451 København K
+1452 København K
+1453 København K
+1454 København K
+1455 København K
+1456 København K
+1457 København K
+1458 København K
+1459 København K
+1460 København K
+1461 København K
+1462 København K
+1463 København K
+1464 København K
+1465 København K
+1466 København K
+1467 København K
+1468 København K
+1470 København K
+1471 København K
+1472 København K
+1473 København K
+1500 København V
+1506 København V
+1550 København V
+1550 København V
+1551 København V
+1552 København V
+1553 København V
+1553 København V
+1554 København V
+1555 København V
+1556 København V
+1557 København V
+1558 København V
+1559 København V
+1560 København V
+1561 København V
+1561 København V
+1562 København V
+1563 København V
+1564 København V
+1566 København V
+1567 København V
+1568 København V
+1569 København V
+1570 København V
+1570 København V
+1571 København V
+1572 København V
+1573 København V
+1574 København V
+1575 København V
+1576 København V
+1577 København V
+1577 København V
+1577 København V
+1599 København V
+1600 København V
+1601 København V
+1602 København V
+1603 København V
+1604 København V
+1605 København V
+1606 København V
+1608 København V
+1609 København V
+1610 København V
+1611 København V
+1612 København V
+1613 København V
+1614 København V
+1615 København V
+1616 København V
+1617 København V
+1618 København V
+1619 København V
+1620 København V
+1620 København V
+1621 København V
+1622 København V
+1623 København V
+1624 København V
+1631 København V
+1632 København V
+1633 København V
+1634 København V
+1635 København V
+1650 København V
+1651 København V
+1652 København V
+1653 København V
+1654 København V
+1655 København V
+1656 København V
+1657 København V
+1658 København V
+1659 København V
+1660 København V
+1660 København V
+1661 København V
+1662 København V
+1663 København V
+1664 København V
+1665 København V
+1666 København V
+1667 København V
+1668 København V
+1669 København V
+1670 København V
+1671 København V
+1671 København V
+1672 København V
+1673 København V
+1674 København V
+1675 København V
+1676 København V
+1677 København V
+1700 København V
+1701 København V
+1702 København V
+1703 København V
+1704 København V
+1705 København V
+1706 København V
+1707 København V
+1708 København V
+1709 København V
+1710 København V
+1711 København V
+1711 København V
+1712 København V
+1713 København V
+1714 København V
+1715 København V
+1716 København V
+1717 København V
+1718 København V
+1719 København V
+1720 København V
+1721 København V
+1722 København V
+1723 København V
+1724 København V
+1725 København V
+1726 København V
+1727 København V
+1728 København V
+1729 København V
+1730 København V
+1731 København V
+1732 København V
+1733 København V
+1734 København V
+1735 København V
+1736 København V
+1737 København V
+1738 København V
+1739 København V
+1749 København V
+1750 København V
+1751 København V
+1752 København V
+1753 København V
+1754 København V
+1755 København V
+1756 København V
+1757 København V
+1758 København V
+1759 København V
+1760 København V
+1761 København V
+1762 København V
+1763 København V
+1764 København V
+1765 København V
+1766 København V
+1770 København V
+1771 København V
+1772 København V
+1773 København V
+1774 København V
+1775 København V
+1777 København V
+1785 København V
+1786 København V
+1790 København V
+1800 Frederiksberg C
+1801 Frederiksberg C
+1802 Frederiksberg C
+1803 Frederiksberg C
+1804 Frederiksberg C
+1805 Frederiksberg C
+1806 Frederiksberg C
+1807 Frederiksberg C
+1808 Frederiksberg C
+1809 Frederiksberg C
+1810 Frederiksberg C
+1811 Frederiksberg C
+1812 Frederiksberg C
+1813 Frederiksberg C
+1814 Frederiksberg C
+1815 Frederiksberg C
+1816 Frederiksberg C
+1817 Frederiksberg C
+1818 Frederiksberg C
+1819 Frederiksberg C
+1820 Frederiksberg C
+1822 Frederiksberg C
+1823 Frederiksberg C
+1824 Frederiksberg C
+1825 Frederiksberg C
+1826 Frederiksberg C
+1827 Frederiksberg C
+1828 Frederiksberg C
+1829 Frederiksberg C
+1850 Frederiksberg C
+1851 Frederiksberg C
+1852 Frederiksberg C
+1853 Frederiksberg C
+1854 Frederiksberg C
+1855 Frederiksberg C
+1856 Frederiksberg C
+1857 Frederiksberg C
+1860 Frederiksberg C
+1861 Frederiksberg C
+1862 Frederiksberg C
+1863 Frederiksberg C
+1864 Frederiksberg C
+1865 Frederiksberg C
+1866 Frederiksberg C
+1867 Frederiksberg C
+1868 Frederiksberg C
+1870 Frederiksberg C
+1871 Frederiksberg C
+1872 Frederiksberg C
+1873 Frederiksberg C
+1874 Frederiksberg C
+1875 Frederiksberg C
+1876 Frederiksberg C
+1877 Frederiksberg C
+1878 Frederiksberg C
+1879 Frederiksberg C
+1900 Frederiksberg C
+1901 Frederiksberg C
+1902 Frederiksberg C
+1903 Frederiksberg C
+1904 Frederiksberg C
+1905 Frederiksberg C
+1906 Frederiksberg C
+1908 Frederiksberg C
+1909 Frederiksberg C
+1910 Frederiksberg C
+1911 Frederiksberg C
+1912 Frederiksberg C
+1913 Frederiksberg C
+1914 Frederiksberg C
+1915 Frederiksberg C
+1916 Frederiksberg C
+1917 Frederiksberg C
+1920 Frederiksberg C
+1922 Frederiksberg C
+1923 Frederiksberg C
+1924 Frederiksberg C
+1925 Frederiksberg C
+1926 Frederiksberg C
+1927 Frederiksberg C
+1928 Frederiksberg C
+1950 Frederiksberg C
+1951 Frederiksberg C
+1952 Frederiksberg C
+1953 Frederiksberg C
+1954 Frederiksberg C
+1955 Frederiksberg C
+1956 Frederiksberg C
+1957 Frederiksberg C
+1958 Frederiksberg C
+1959 Frederiksberg C
+1960 Frederiksberg C
+1961 Frederiksberg C
+1962 Frederiksberg C
+1963 Frederiksberg C
+1964 Frederiksberg C
+1965 Frederiksberg C
+1966 Frederiksberg C
+1967 Frederiksberg C
+1970 Frederiksberg C
+1971 Frederiksberg C
+1972 Frederiksberg C
+1973 Frederiksberg C
+1974 Frederiksberg C
+2000 Frederiksberg
+2100 København Ø
+2200 København N
+2300 København S
+2400 København NV
+2450 København SV
+2500 Valby
+2600 Glostrup
+2605 Brøndby
+2610 Rødovre
+2620 Albertslund
+2625 Vallensbæk
+2630 Taastrup
+2635 Ishøj
+2640 Hedehusene
+2650 Hvidovre
+2660 Brøndby Strand
+2665 Vallensbæk Strand
+2670 Greve
+2680 Solrød Strand
+2690 Karlslunde
+2700 Brønshøj
+2720 Vanløse
+2730 Herlev
+2740 Skovlunde
+2750 Ballerup
+2760 Måløv
+2765 Smørum
+2770 Kastrup
+2791 Dragør
+2800 Kongens Lyngby
+2820 Gentofte
+2830 Virum
+2840 Holte
+2850 Nærum
+2860 Søborg
+2880 Bagsværd
+2900 Hellerup
+2920 Charlottenlund
+2930 Klampenborg
+2942 Skodsborg
+2950 Vedbæk
+2960 Rungsted Kyst
+2970 Hørsholm
+2980 Kokkedal
+2990 Nivå
+3000 Helsingør
+3050 Humlebæk
+3060 Espergærde
+3070 Snekkersten
+3080 Tikøb
+3100 Hornbæk
+3120 Dronningmølle
+3140 Ålsgårde
+3150 Hellebæk
+3200 Helsinge
+3210 Vejby
+3220 Tisvildeleje
+3230 Græsted
+3250 Gilleleje
+3300 Frederiksværk
+3310 Ølsted
+3320 Skævinge
+3330 Gørløse
+3360 Liseleje
+3370 Melby
+3390 Hundested
+3400 Hillerød
+3450 Allerød
+3460 Birkerød
+3480 Fredensborg
+3490 Kvistgård
+3500 Værløse
+3520 Farum
+3540 Lynge
+3550 Slangerup
+3600 Frederikssund
+3630 Jægerspris
+3650 Ølstykke
+3660 Stenløse
+3670 Veksø Sjælland
+3700 Rønne
+3720 Aakirkeby
+3730 Nexø
+3740 Svaneke
+3751 Østermarie
+3760 Gudhjem
+3770 Allinge
+3782 Klemensker
+3790 Hasle
+4000 Roskilde
+4040 Jyllinge
+4050 Skibby
+4060 Kirke Såby
+4070 Kirke Hyllinge
+4100 Ringsted
+4130 Viby Sjælland
+4140 Borup
+4160 Herlufmagle
+4171 Glumsø
+4173 Fjenneslev
+4174 Jystrup Midtsj
+4180 Sorø
+4190 Munke Bjergby
+4200 Slagelse
+4220 Korsør
+4230 Skælskør
+4241 Vemmelev
+4242 Boeslunde
+4243 Rude
+4250 Fuglebjerg
+4261 Dalmose
+4262 Sandved
+4270 Høng
+4281 Gørlev
+4291 Ruds Vedby
+4293 Dianalund
+4295 Stenlille
+4296 Nyrup
+4300 Holbæk
+4320 Lejre
+4330 Hvalsø
+4340 Tølløse
+4350 Ugerløse
+4360 Kirke Eskilstrup
+4370 Store Merløse
+4390 Vipperød
+4400 Kalundborg
+4420 Regstrup
+4440 Mørkøv
+4450 Jyderup
+4460 Snertinge
+4470 Svebølle
+4480 Store Fuglede
+4490 Jerslev Sjælland
+4500 Nykøbing Sj
+4520 Svinninge
+4532 Gislinge
+4534 Hørve
+4540 Fårevejle
+4550 Asnæs
+4560 Vig
+4571 Grevinge
+4572 Nørre Asmindrup
+4573 Højby
+4581 Rørvig
+4583 Sjællands Odde
+4591 Føllenslev
+4592 Sejerø
+4593 Eskebjerg
+4600 Køge
+4621 Gadstrup
+4622 Havdrup
+4623 Lille Skensved
+4632 Bjæverskov
+4640 Faxe
+4652 Hårlev
+4653 Karise
+4654 Faxe Ladeplads
+4660 Store Heddinge
+4671 Strøby
+4672 Klippinge
+4673 Rødvig Stevns
+4681 Herfølge
+4682 Tureby
+4683 Rønnede
+4684 Holmegaard
+4690 Haslev
+4700 Næstved
+4720 Præstø
+4733 Tappernøje
+4735 Mern
+4736 Karrebæksminde
+4750 Lundby
+4760 Vordingborg
+4771 Kalvehave
+4772 Langebæk
+4773 Stensved
+4780 Stege
+4791 Borre
+4792 Askeby
+4793 Bogø By
+4800 Nykøbing F
+4840 Nørre Alslev
+4850 Stubbekøbing
+4862 Guldborg
+4863 Eskilstrup
+4871 Horbelev
+4872 Idestrup
+4873 Væggerløse
+4874 Gedser
+4880 Nysted
+4891 Toreby L
+4892 Kettinge
+4894 Øster Ulslev
+4895 Errindlev
+4900 Nakskov
+4912 Harpelunde
+4913 Horslunde
+4920 Søllested
+4930 Maribo
+4941 Bandholm
+4943 Torrig L
+4944 Fejø
+4951 Nørreballe
+4952 Stokkemarke
+4953 Vesterborg
+4960 Holeby
+4970 Rødby
+4983 Dannemare
+4990 Sakskøbing
+5000 Odense C
+5200 Odense V
+5210 Odense NV
+5220 Odense SØ
+5230 Odense M
+5240 Odense NØ
+5250 Odense SV
+5260 Odense S
+5270 Odense N
+5290 Marslev
+5300 Kerteminde
+5320 Agedrup
+5330 Munkebo
+5350 Rynkeby
+5370 Mesinge
+5380 Dalby
+5390 Martofte
+5400 Bogense
+5450 Otterup
+5462 Morud
+5463 Harndrup
+5464 Brenderup Fyn
+5466 Asperup
+5471 Søndersø
+5474 Veflinge
+5485 Skamby
+5491 Blommenslyst
+5492 Vissenbjerg
+5500 Middelfart
+5540 Ullerslev
+5550 Langeskov
+5560 Aarup
+5580 Nørre Aaby
+5591 Gelsted
+5592 Ejby
+5600 Faaborg
+5610 Assens
+5620 Glamsbjerg
+5631 Ebberup
+5642 Millinge
+5672 Broby
+5683 Haarby
+5690 Tommerup
+5700 Svendborg
+5750 Ringe
+5762 Vester Skerninge
+5771 Stenstrup
+5772 Kværndrup
+5792 Årslev
+5800 Nyborg
+5853 Ørbæk
+5854 Gislev
+5856 Ryslinge
+5863 Ferritslev Fyn
+5871 Frørup
+5874 Hesselager
+5881 Skårup Fyn
+5882 Vejstrup
+5883 Oure
+5884 Gudme
+5892 Gudbjerg Sydfyn
+5900 Rudkøbing
+5932 Humble
+5935 Bagenkop
+5953 Tranekær
+5960 Marstal
+5970 Ærøskøbing
+5985 Søby Ærø
+6000 Kolding
+6040 Egtved
+6051 Almind
+6052 Viuf
+6064 Jordrup
+6070 Christiansfeld
+6091 Bjert
+6092 Sønder Stenderup
+6093 Sjølund
+6094 Hejls
+6100 Haderslev
+6200 Aabenraa
+6230 Rødekro
+6240 Løgumkloster
+6261 Bredebro
+6270 Tønder
+6280 Højer
+6300 Gråsten
+6310 Broager
+6320 Egernsund
+6330 Padborg
+6340 Kruså
+6360 Tinglev
+6372 Bylderup-Bov
+6392 Bolderslev
+6400 Sønderborg
+6430 Nordborg
+6440 Augustenborg
+6470 Sydals
+6500 Vojens
+6510 Gram
+6520 Toftlund
+6534 Agerskov
+6535 Branderup J
+6541 Bevtoft
+6560 Sommersted
+6580 Vamdrup
+6600 Vejen
+6621 Gesten
+6622 Bække
+6623 Vorbasse
+6630 Rødding
+6640 Lunderskov
+6650 Brørup
+6660 Lintrup
+6670 Holsted
+6682 Hovborg
+6683 Føvling
+6690 Gørding
+6700 Esbjerg
+6705 Esbjerg Ø
+6710 Esbjerg V
+6715 Esbjerg N
+6720 Fanø
+6731 Tjæreborg
+6740 Bramming
+6752 Glejbjerg
+6753 Agerbæk
+6760 Ribe
+6771 Gredstedbro
+6780 Skærbæk
+6792 Rømø
+6800 Varde
+6818 Årre
+6823 Ansager
+6830 Nørre Nebel
+6840 Oksbøl
+6851 Janderup Vestj
+6852 Billum
+6853 Vejers Strand
+6854 Henne
+6855 Outrup
+6857 Blåvand
+6862 Tistrup
+6870 Ølgod
+6880 Tarm
+6893 Hemmet
+6900 Skjern
+6920 Videbæk
+6933 Kibæk
+6940 Lem St
+6950 Ringkøbing
+6960 Hvide Sande
+6971 Spjald
+6973 Ørnhøj
+6980 Tim
+6990 Ulfborg
+7000 Fredericia
+7080 Børkop
+7100 Vejle
+7120 Vejle Øst
+7130 Juelsminde
+7140 Stouby
+7150 Barrit
+7160 Tørring
+7171 Uldum
+7173 Vonge
+7182 Bredsten
+7183 Randbøl
+7184 Vandel
+7190 Billund
+7200 Grindsted
+7250 Hejnsvig
+7260 Sønder Omme
+7270 Stakroge
+7280 Sønder Felding
+7300 Jelling
+7321 Gadbjerg
+7323 Give
+7330 Brande
+7361 Ejstrupholm
+7362 Hampen
+7400 Herning
+7430 Ikast
+7441 Bording
+7442 Engesvang
+7451 Sunds
+7470 Karup J
+7480 Vildbjerg
+7490 Aulum
+7500 Holstebro
+7540 Haderup
+7550 Sørvad
+7560 Hjerm
+7570 Vemb
+7600 Struer
+7620 Lemvig
+7650 Bøvlingbjerg
+7660 Bækmarksbro
+7673 Harboøre
+7680 Thyborøn
+7700 Thisted
+7730 Hanstholm
+7741 Frøstrup
+7742 Vesløs
+7752 Snedsted
+7755 Bedsted Thy
+7760 Hurup Thy
+7770 Vestervig
+7790 Thyholm
+7800 Skive
+7830 Vinderup
+7840 Højslev
+7850 Stoholm Jyll
+7860 Spøttrup
+7870 Roslev
+7884 Fur
+7900 Nykøbing M
+7950 Erslev
+7960 Karby
+7970 Redsted M
+7980 Vils
+7990 Øster Assels
+8000 Aarhus C
+8200 Aarhus N
+8210 Aarhus V
+8220 Brabrand
+8230 Åbyhøj
+8240 Risskov
+8245 Risskov Ø
+8250 Egå
+8260 Viby J
+8270 Højbjerg
+8300 Odder
+8305 Samsø
+8310 Tranbjerg J
+8320 Mårslet
+8330 Beder
+8340 Malling
+8350 Hundslund
+8355 Solbjerg
+8361 Hasselager
+8362 Hørning
+8370 Hadsten
+8380 Trige
+8381 Tilst
+8382 Hinnerup
+8400 Ebeltoft
+8410 Rønde
+8420 Knebel
+8444 Balle
+8450 Hammel
+8462 Harlev J
+8464 Galten
+8471 Sabro
+8472 Sporup
+8500 Grenaa
+8520 Lystrup
+8530 Hjortshøj
+8541 Skødstrup
+8543 Hornslet
+8544 Mørke
+8550 Ryomgård
+8560 Kolind
+8570 Trustrup
+8581 Nimtofte
+8585 Glesborg
+8586 Ørum Djurs
+8592 Anholt
+8600 Silkeborg
+8620 Kjellerup
+8632 Lemming
+8641 Sorring
+8643 Ans By
+8653 Them
+8654 Bryrup
+8660 Skanderborg
+8670 Låsby
+8680 Ry
+8700 Horsens
+8721 Daugård
+8722 Hedensted
+8723 Løsning
+8732 Hovedgård
+8740 Brædstrup
+8751 Gedved
+8752 Østbirk
+8762 Flemming
+8763 Rask Mølle
+8765 Klovborg
+8766 Nørre Snede
+8781 Stenderup
+8783 Hornsyld
+8800 Viborg
+8830 Tjele
+8831 Løgstrup
+8832 Skals
+8840 Rødkærsbro
+8850 Bjerringbro
+8860 Ulstrup
+8870 Langå
+8881 Thorsø
+8882 Fårvang
+8883 Gjern
+8900 Randers C
+8950 Ørsted
+8961 Allingåbro
+8963 Auning
+8970 Havndal
+8981 Spentrup
+8983 Gjerlev J
+8990 Fårup
+9000 Aalborg
+9200 Aalborg SV
+9210 Aalborg SØ
+9220 Aalborg Øst
+9230 Svenstrup J
+9240 Nibe
+9260 Gistrup
+9270 Klarup
+9280 Storvorde
+9293 Kongerslev
+9300 Sæby
+9310 Vodskov
+9320 Hjallerup
+9330 Dronninglund
+9340 Asaa
+9352 Dybvad
+9362 Gandrup
+9370 Hals
+9380 Vestbjerg
+9381 Sulsted
+9382 Tylstrup
+9400 Nørresundby
+9430 Vadum
+9440 Aabybro
+9460 Brovst
+9480 Løkken
+9490 Pandrup
+9492 Blokhus
+9493 Saltum
+9500 Hobro
+9510 Arden
+9520 Skørping
+9530 Støvring
+9541 Suldrup
+9550 Mariager
+9560 Hadsund
+9574 Bælum
+9575 Terndrup
+9600 Aars
+9610 Nørager
+9620 Aalestrup
+9631 Gedsted
+9632 Møldrup
+9640 Farsø
+9670 Løgstør
+9681 Ranum
+9690 Fjerritslev
+9700 Brønderslev
+9740 Jerslev J
+9750 Østervrå
+9760 Vrå
+9800 Hjørring
+9830 Tårs
+9850 Hirtshals
+9870 Sindal
+9881 Bindslev
+9900 Frederikshavn
+9940 Læsø
+9970 Strandby
+9981 Jerup
+9982 Ålbæk
+9990 Skagen
+900 Vágur
+26024 Röstånga
+26831 Svalöv
+26832 Svalöv
+26833 Svalöv
+26834 Svalöv
+24531 Staffanstorp
+24532 Staffanstorp
+24533 Staffanstorp
+24534 Staffanstorp
+24535 Staffanstorp
+24537 Staffanstorp
+24538 Staffanstorp
+24541 Staffanstorp
+24542 Staffanstorp
+24543 Staffanstorp
+24544 Staffanstorp
+24545 Staffanstorp
+24562 Hjärup
+24563 Hjärup
+24564 Hjärup
+24565 Hjärup
+24592 Staffanstorp
+23251 Åkarp
+23252 Åkarp
+23253 Åkarp
+23254 Åkarp
+23531 Vellinge
+23532 Vellinge
+23533 Vellinge
+23534 Vellinge
+23535 Vellinge
+23536 Vellinge
+23537 Vellinge
+23538 Vellinge
+23541 Vellinge
+23594 Vellinge
+23599 Vellinge
+28060 Broby
+28063 Sibbhult
+28931 Knislinge
+28932 Knislinge
+28933 Knislinge
+28950 Hanaskog
+28631 Örkelljunga
+28632 Örkelljunga
+28633 Örkelljunga
+28634 Örkelljunga
+28635 Örkelljunga
+28636 Örkelljunga
+28637 Örkelljunga
+28672 Åsljunga
+28691 Örkelljunga
+28692 Örkelljunga
+28695 Eket
+26050 Billesholm
+26731 Bjuv
+26732 Bjuv
+26733 Bjuv
+26734 Bjuv
+26735 Bjuv
+26736 Bjuv
+26737 Bjuv
+26738 Bjuv
+26739 Bjuv
+26740 Bjuv
+26790 Bjuv
+24430 Kävlinge
+24431 Kävlinge
+24432 Kävlinge
+24433 Kävlinge
+24436 Kävlinge
+24438 Kävlinge
+24439 Kävlinge
+24441 Kävlinge
+24460 Furulund
+24462 Furulund
+24463 Furulund
+24465 Furulund
+24466 Furulund
+24471 Dösjebro
+24630 Löddeköpinge
+24631 Löddeköpinge
+24632 Löddeköpinge
+24633 Löddeköpinge
+24634 Löddeköpinge
+24635 Löddeköpinge
+24636 Löddeköpinge
+24642 Löddeköpinge
+24643 Löddeköpinge
+24657 Barsebäck
+23431 Lomma
+23432 Lomma
+23433 Lomma
+23434 Lomma
+23435 Lomma
+23436 Lomma
+23437 Lomma
+23438 Lomma
+23441 Lomma
+23442 Lomma
+23443 Lomma
+23731 Bjärred
+23732 Bjärred
+23733 Bjärred
+23734 Bjärred
+23735 Bjärred
+23736 Bjärred
+23737 Bjärred
+23741 Bjärred
+23791 Bjärred
+23331 Svedala
+23332 Svedala
+23333 Svedala
+23334 Svedala
+23335 Svedala
+23336 Svedala
+23337 Svedala
+23338 Svedala
+23339 Svedala
+23341 Svedala
+23342 Svedala
+23351 Svedala
+23391 Svedala
+23392 Svedala
+23393 Svedala
+23394 Svedala
+27431 Skurup
+27432 Skurup
+27433 Skurup
+27434 Skurup
+27435 Skurup
+27436 Skurup
+27437 Skurup
+27450 Skivarp
+27456 Abbekås
+27460 Rydsgård
+27461 Rydsgård
+27375 Lövestad
+27530 Sjöbo
+27531 Sjöbo
+27532 Sjöbo
+27533 Sjöbo
+27534 Sjöbo
+27535 Sjöbo
+27536 Sjöbo
+27537 Sjöbo
+27538 Sjöbo
+27539 Sjöbo
+27591 Sjöbo
+27595 Sjöbo
+24230 Hörby
+24231 Hörby
+24232 Hörby
+24233 Hörby
+24234 Hörby
+24235 Hörby
+24292 Hörby
+24293 Hörby
+24295 Hörby
+27033 Vollsjö
+24330 Höör
+24331 Höör
+24332 Höör
+24333 Höör
+24334 Höör
+24335 Höör
+24336 Höör
+24391 Höör
+24393 Höör
+24394 Höör
+27031 Äsperöd
+27330 Tomelilla
+27331 Tomelilla
+27332 Tomelilla
+27333 Tomelilla
+27334 Tomelilla
+27335 Tomelilla
+27336 Tomelilla
+27392 Tomelilla
+27393 Tomelilla
+27397 Tomelilla
+27750 Brösarp
+29531 Bromölla
+29532 Bromölla
+29534 Bromölla
+29535 Bromölla
+29536 Bromölla
+29537 Bromölla
+29538 Bromölla
+29539 Bromölla
+29572 Gualöv
+29573 Nymölla
+29574 Näsum
+29591 Bromölla
+28064 Glimåkra
+28070 Lönsboda
+28072 Killeberg
+28331 Osby
+28332 Osby
+28333 Osby
+28334 Osby
+28335 Osby
+28336 Osby
+28341 Osby
+28342 Osby
+28343 Osby
+28344 Osby
+28345 Osby
+28350 Osby
+28391 Osby
+28431 Perstorp
+28432 Perstorp
+28433 Perstorp
+28434 Perstorp
+28435 Perstorp
+28436 Perstorp
+28437 Perstorp
+28438 Perstorp
+28491 Perstorp
+26023 Kågeröd
+26070 Ljungbyhed
+26431 Klippan
+26432 Klippan
+26433 Klippan
+26434 Klippan
+26435 Klippan
+26436 Klippan
+26437 Klippan
+26438 Klippan
+26439 Klippan
+26471 Östra Ljungby
+26491 Klippan
+26494 Klippan
+26060 Kvidinge
+26061 Hyllinge
+26531 Åstorp
+26532 Åstorp
+26533 Åstorp
+26534 Åstorp
+26535 Åstorp
+26536 Åstorp
+26537 Åstorp
+26538 Åstorp
+26539 Åstorp
+26590 Åstorp
+26093 Torekov
+26931 Båstad
+26932 Båstad
+26933 Båstad
+26934 Båstad
+26935 Båstad
+26936 Båstad
+26937 Båstad
+26938 Båstad
+26939 Båstad
+26940 Båstad
+26962 Grevie
+26996 Båstad
+24010 Dalby
+24013 Genarp
+24014 Veberöd
+24731 Södra Sandby
+24732 Södra Sandby
+24733 Södra Sandby
+24734 Södra Sandby
+24735 Södra Sandby
+24736 Södra Sandby
+26021 Billeberga
+26131 Landskrona
+26132 Landskrona
+26133 Landskrona
+26134 Landskrona
+26135 Landskrona
+26136 Landskrona
+26137 Landskrona
+26138 Landskrona
+26139 Landskrona
+26140 Landskrona
+26141 Landskrona
+26142 Landskrona
+26143 Landskrona
+26144 Landskrona
+26145 Landskrona
+26146 Landskrona
+26151 Landskrona
+26152 Landskrona
+26153 Landskrona
+26161 Landskrona
+26162 Glumslöv
+26163 Glumslöv
+26165 Landskrona
+26171 Landskrona
+26175 Asmundtorp
+26176 Asmundtorp
+26191 Landskrona
+26192 Landskrona
+26193 Landskrona
+26194 Landskrona
+25220 Helsingborg
+25221 Helsingborg
+25222 Helsingborg
+25223 Helsingborg
+25224 Helsingborg
+25225 Helsingborg
+25226 Helsingborg
+25227 Helsingborg
+25228 Helsingborg
+25229 Helsingborg
+25230 Helsingborg
+25231 Helsingborg
+25232 Helsingborg
+25234 Helsingborg
+25244 Helsingborg
+25245 Helsingborg
+25246 Helsingborg
+25247 Helsingborg
+25248 Helsingborg
+25249 Helsingborg
+25250 Helsingborg
+25251 Helsingborg
+25252 Helsingborg
+25263 Helsingborg
+25267 Helsingborg
+25268 Helsingborg
+25275 Helsingborg
+25276 Helsingborg
+25277 Helsingborg
+25278 Helsingborg
+25284 Helsingborg
+25361 Helsingborg
+25362 Helsingborg
+25368 Helsingborg
+25373 Gantofta
+25374 Helsingborg
+25433 Helsingborg
+25435 Helsingborg
+25436 Helsingborg
+25437 Helsingborg
+25438 Helsingborg
+25439 Helsingborg
+25440 Helsingborg
+25441 Helsingborg
+25442 Helsingborg
+25443 Helsingborg
+25444 Helsingborg
+25451 Helsingborg
+25452 Helsingborg
+25453 Helsingborg
+25454 Helsingborg
+25455 Helsingborg
+25456 Helsingborg
+25457 Helsingborg
+25458 Helsingborg
+25460 Helsingborg
+25461 Helsingborg
+25462 Helsingborg
+25464 Helsingborg
+25465 Helsingborg
+25466 Helsingborg
+25467 Helsingborg
+25468 Helsingborg
+25591 Helsingborg
+25592 Helsingborg
+25655 Helsingborg
+25656 Helsingborg
+25658 Helsingborg
+25659 Helsingborg
+25661 Helsingborg
+25663 Helsingborg
+25664 Helsingborg
+25665 Helsingborg
+25666 Helsingborg
+25667 Helsingborg
+25669 Helsingborg
+25730 Rydebäck
+25731 Rydebäck
+25732 Rydebäck
+25733 Rydebäck
+26022 Tågarp
+26030 Vallåkra
+26033 Påarp
+26034 Mörarp
+26035 Ödåkra
+26038 Kattarp
+26051 Ekeby
+26040 Viken
+26042 Mölle
+26043 Arild
+26331 Höganäs
+26332 Höganäs
+26333 Höganäs
+26334 Höganäs
+26336 Höganäs
+26337 Höganäs
+26338 Höganäs
+26339 Höganäs
+26351 Höganäs
+26357 Höganäs
+26358 Höganäs
+26371 Jonstorp
+26391 Höganäs
+26392 Jonstorp
+26393 Höganäs
+24030 Marieholm
+24032 Flyinge
+24033 Löberöd
+24035 Harlösa
+24036 Stehag
+24130 Eslöv
+24131 Eslöv
+24132 Eslöv
+24133 Eslöv
+24134 Eslöv
+24135 Eslöv
+24136 Eslöv
+24137 Eslöv
+24138 Eslöv
+24139 Eslöv
+24191 Eslöv
+24193 Eslöv
+24195 Billinge
+24196 Stockamöllan
+26020 Teckomatorp
+27021 Glemmingebro
+27022 Köpingebro
+27035 Blentarp
+27131 Ystad
+27132 Ystad
+27133 Ystad
+27134 Ystad
+27135 Ystad
+27136 Ystad
+27137 Ystad
+27138 Ystad
+27139 Ystad
+27140 Ystad
+27141 Ystad
+27142 Ystad
+27143 Ystad
+27144 Ystad
+27145 Ystad
+27150 Ystad
+27151 Ystad
+27152 Ystad
+27153 Ystad
+27154 Ystad
+27160 Ystad
+27195 Ystad
+27196 Ystad
+27198 Ystad
+27199 Ystad
+27640 Löderup
+23132 Trelleborg
+23133 Trelleborg
+23134 Trelleborg
+23136 Trelleborg
+23138 Trelleborg
+23142 Trelleborg
+23143 Trelleborg
+23144 Trelleborg
+23145 Trelleborg
+23151 Trelleborg
+23152 Trelleborg
+23153 Trelleborg
+23154 Trelleborg
+23155 Trelleborg
+23156 Trelleborg
+23161 Trelleborg
+23162 Trelleborg
+23163 Trelleborg
+23164 Trelleborg
+23165 Trelleborg
+23166 Trelleborg
+23168 Trelleborg
+23170 Anderslöv
+23175 Beddingestrand
+23176 Beddingestrand
+23178 Smygehamn
+23179 Smygehamn
+23192 Trelleborg
+23193 Trelleborg
+23195 Trelleborg
+23197 Klagstorp
+29010 Tollarp
+29011 Linderöd
+29034 Fjälkinge
+29037 Arkelstorp
+29131 Kristianstad
+29132 Kristianstad
+29133 Kristianstad
+29134 Kristianstad
+29135 Kristianstad
+29136 Kristianstad
+29139 Kristianstad
+29141 Kristianstad
+29142 Kristianstad
+29143 Kristianstad
+29144 Kristianstad
+29145 Kristianstad
+29146 Kristianstad
+29147 Kristianstad
+29150 Kristianstad
+29151 Kristianstad
+29153 Kristianstad
+29154 Kristianstad
+29162 Kristianstad
+29163 Kristianstad
+29165 Kristianstad
+29166 Kristianstad
+29173 Önnestad
+29175 Färlöv
+29176 Rinkaby
+29177 Gärds Köpinge
+29191 Kristianstad
+29192 Kristianstad
+29193 Önnestad
+29194 Kristianstad
+29195 Färlöv
+29197 Gärds Köpinge
+29594 Näsum
+29631 Åhus
+29632 Åhus
+29633 Åhus
+29634 Åhus
+29635 Åhus
+29637 Åhus
+29638 Åhus
+29672 Yngsjö
+29691 Åhus
+29692 Yngsjö
+29731 Degeberga
+29732 Degeberga
+29772 Everöd
+29791 Vittskövle
+29792 Everöd
+29793 Huaröd
+29794 Degeberga
+29796 Östra Sönnarslöv
+27231 Simrishamn
+27232 Simrishamn
+27233 Simrishamn
+27234 Simrishamn
+27235 Simrishamn
+27236 Simrishamn
+27237 Simrishamn
+27238 Brantevik
+27239 Simrishamn
+27261 Gärsnäs
+27291 Simrishamn
+27294 Simrishamn
+27398 Smedstorp
+27630 Borrby
+27650 Hammenhög
+27660 Skillinge
+27730 Kivik
+27731 Kivik
+27736 Vitaby
+27740 Sankt Olof
+29795 Degeberga
+26039 Hasslarp
+26083 Vejbystrand
+26091 Förslöv
+26231 Ängelholm
+26232 Ängelholm
+26233 Ängelholm
+26234 Ängelholm
+26235 Ängelholm
+26241 Ängelholm
+26242 Ängelholm
+26243 Ängelholm
+26244 Ängelholm
+26251 Ängelholm
+26252 Ängelholm
+26253 Ängelholm
+26254 Ängelholm
+26257 Ängelholm
+26261 Ängelholm
+26262 Ängelholm
+26263 Ängelholm
+26265 Ängelholm
+26270 Strövelstorp
+26271 Ängelholm
+26272 Ängelholm
+26273 Ängelholm
+26292 Ängelholm
+26293 Ängelholm
+26631 Munka-Ljungby
+26632 Munka-Ljungby
+26633 Munka-Ljungby
+26675 Hjärnarp
+26692 Munka-Ljungby
+26697 Hjärnarp
+28010 Sösdala
+28020 Bjärnum
+28022 Vittsjö
+28023 Hästveda
+28131 Hässleholm
+28132 Hässleholm
+28133 Hässleholm
+28135 Hässleholm
+28136 Hässleholm
+28137 Hässleholm
+28138 Hässleholm
+28139 Hässleholm
+28140 Hässleholm
+28141 Hässleholm
+28142 Hässleholm
+28143 Hässleholm
+28144 Stoby
+28147 Hässleholm
+28148 Hässleholm
+28149 Hässleholm
+28150 Hässleholm
+28151 Hässleholm
+28152 Hässleholm
+28231 Tyringe
+28232 Tyringe
+28233 Tyringe
+28234 Tyringe
+28235 Tyringe
+28831 Vinslöv
+28832 Vinslöv
+28833 Vinslöv
+28834 Vinslöv
+21118 Malmö
+21119 Malmö
+21120 Malmö
+21121 Malmö
+21122 Malmö
+21124 Malmö
+21125 Malmö
+21126 Malmö
+21127 Malmö
+21128 Malmö
+21129 Malmö
+21130 Malmö
+21132 Malmö
+21133 Malmö
+21134 Malmö
+21135 Malmö
+21136 Malmö
+21137 Malmö
+21138 Malmö
+21139 Malmö
+21140 Malmö
+21141 Malmö
+21142 Malmö
+21143 Malmö
+21144 Malmö
+21145 Malmö
+21146 Malmö
+21147 Malmö
+21148 Malmö
+21149 Malmö
+21150 Malmö
+21152 Malmö
+21153 Malmö
+21154 Malmö
+21155 Malmö
+21156 Malmö
+21157 Malmö
+21158 Malmö
+21159 Malmö
+21160 Malmö
+21211 Malmö
+21212 Malmö
+21213 Malmö
+21214 Malmö
+21215 Malmö
+21216 Malmö
+21217 Malmö
+21218 Malmö
+21219 Malmö
+21220 Malmö
+21221 Malmö
+21222 Malmö
+21223 Malmö
+21224 Malmö
+21225 Malmö
+21226 Malmö
+21227 Malmö
+21228 Malmö
+21229 Malmö
+21230 Malmö
+21231 Malmö
+21232 Malmö
+21233 Malmö
+21234 Malmö
+21235 Malmö
+21236 Malmö
+21237 Malmö
+21238 Malmö
+21239 Malmö
+21241 Malmö
+21242 Malmö
+21243 Malmö
+21291 Malmö
+21361 Malmö
+21362 Malmö
+21363 Malmö
+21364 Malmö
+21365 Malmö
+21366 Malmö
+21367 Malmö
+21368 Malmö
+21370 Malmö
+21371 Malmö
+21372 Malmö
+21373 Malmö
+21374 Malmö
+21375 Malmö
+21376 Malmö
+21377 Malmö
+21420 Malmö
+21421 Malmö
+21422 Malmö
+21423 Malmö
+21424 Malmö
+21425 Malmö
+21426 Malmö
+21427 Malmö
+21428 Malmö
+21429 Malmö
+21430 Malmö
+21431 Malmö
+21432 Malmö
+21434 Malmö
+21435 Malmö
+21436 Malmö
+21438 Malmö
+21439 Malmö
+21440 Malmö
+21441 Malmö
+21442 Malmö
+21443 Malmö
+21444 Malmö
+21445 Malmö
+21446 Malmö
+21447 Malmö
+21448 Malmö
+21449 Malmö
+21450 Malmö
+21454 Malmö
+21455 Malmö
+21456 Malmö
+21457 Malmö
+21458 Malmö
+21459 Malmö
+21463 Malmö
+21466 Malmö
+21467 Malmö
+21526 Malmö
+21527 Malmö
+21550 Malmö
+21551 Malmö
+21552 Malmö
+21553 Malmö
+21558 Malmö
+21559 Malmö
+21560 Malmö
+21561 Malmö
+21562 Malmö
+21563 Malmö
+21564 Malmö
+21565 Malmö
+21566 Malmö
+21567 Malmö
+21568 Malmö
+21569 Malmö
+21570 Malmö
+21571 Malmö
+21573 Malmö
+21574 Malmö
+21578 Malmö
+21579 Malmö
+21580 Malmö
+21581 Malmö
+21582 Malmö
+21583 Malmö
+21584 Malmö
+21585 Malmö
+21619 Malmö
+21620 Malmö
+21621 Malmö
+21623 Malmö
+21624 Malmö
+21625 Malmö
+21741 Malmö
+21742 Malmö
+21743 Malmö
+21744 Malmö
+21745 Malmö
+21746 Malmö
+21747 Malmö
+21748 Malmö
+21749 Malmö
+21751 Malmö
+21752 Malmö
+21753 Malmö
+21754 Malmö
+21755 Malmö
+21756 Malmö
+21757 Malmö
+21758 Malmö
+21759 Malmö
+21761 Malmö
+21762 Malmö
+21763 Malmö
+21764 Malmö
+21765 Malmö
+21766 Malmö
+21767 Malmö
+21771 Malmö
+21772 Malmö
+21773 Malmö
+21774 Malmö
+21775 Malmö
+22220 Lund
+22221 Lund
+22222 Lund
+22223 Lund
+22224 Lund
+22225 Lund
+22226 Lund
+22227 Lund
+22228 Lund
+22229 Lund
+22237 Lund
+22240 Lund
+22241 Lund
+22270 Lund
+22350 Lund
+22351 Lund
+22352 Lund
+22353 Lund
+22354 Lund
+22355 Lund
+22359 Lund
+22361 Lund
+22362 Lund
+22363 Lund
+22456 Lund
+22457 Lund
+22458 Lund
+22460 Lund
+22464 Lund
+22465 Lund
+22466 Lund
+22467 Lund
+22468 Lund
+22471 Lund
+22472 Lund
+22473 Lund
+22474 Lund
+22475 Lund
+22476 Lund
+22477 Lund
+22478 Lund
+22592 Lund
+22594 Lund
+22639 Lund
+22642 Lund
+22643 Lund
+22646 Lund
+22647 Lund
+22649 Lund
+22650 Lund
+22651 Lund
+22652 Lund
+22653 Lund
+22654 Lund
+22655 Lund
+22657 Lund
+22660 Lund
+22730 Lund
+22731 Lund
+22732 Lund
+22733 Lund
+22734 Lund
+22735 Lund
+22736 Lund
+22738 Lund
+22761 Lund
+22762 Lund
+22763 Lund
+22764 Lund
+23040 Bara
+23041 Klågerup
+23042 Tygelsjö
+23044 Bunkeflostrand
+23053 Alnarp

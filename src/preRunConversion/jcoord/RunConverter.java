@@ -1,11 +1,8 @@
 package preRunConversion.jcoord;
 
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 
 public class RunConverter {
@@ -37,6 +34,7 @@ public class RunConverter {
 		return list;
 	}
 
+	@SuppressWarnings("unused")
 	private static ArrayList<String> convertFileWithBiggerThanDelimiters(String filenameAndLocation) throws NumberFormatException, IOException
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(filenameAndLocation));
@@ -80,35 +78,5 @@ public class RunConverter {
 		reader.close();
 
 		return list;
-	}
-
-	public static void main(String[] args) throws NumberFormatException, IOException
-	{
-		//String file = "resources/denmark_coastline_fullres_shore_waaaaay_to_largeOfAnArea_shore.xyz";
-		//String file = "resources/denmark_coastline_fullres_shore.xyz";
-		//String file = "resources/osm_modified.txt";
-		//ArrayList<String> list = convertFileWithSpaceAsTheOnlyDelimiter(file);		
-
-		//String file = "resources/coasts_polygon.txt";
-		String file = "resources/coast_polygon_orig.dat";
-		ArrayList<String> list = convertFileWithBiggerThanDelimiters(file);
-
-
-		for(String string : list)
-			System.out.println(string);
-
-		FileOutputStream m_fos = new FileOutputStream(file + "_convertedJCOORDWAAAAYToBig.txt");
-		Writer out = new OutputStreamWriter(m_fos, "UTF-8");
-		//To get the new line, i.e. "enter", so that a new line will be created with each String
-		String newLineSeperator = System.getProperty("line.separator");
-
-		for(String string : list)
-		{
-			string += newLineSeperator;
-			out.write(string);
-		}
-
-		out.close();	
-
 	}
 }

@@ -4,23 +4,23 @@ import java.util.HashSet;
 
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.search.EdgeSearch;
-import inputHandler.exceptions.MalformedAdressException;
+import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 public class AddressSearch {
 	
-	private AdressParser ap;
+	private AddressParser ap;
 	private String[] parsedInput;
 	private Edge[] foundEdges = new Edge[0];
 	
 	public AddressSearch()
 	{
-		ap = new AdressParser();		
+		ap = new AddressParser();		
 	}
 		
-	public void searchForAdress(String input) throws MalformedAdressException, NoAddressFoundException
+	public void searchForAdress(String input) throws MalformedAddressException, NoAddressFoundException
 	{
-		ap = new AdressParser();
+		ap = new AddressParser();
 		parseAddress(input);
 		int roadNumber = -1;
 		int postalNumber = -1;
@@ -32,10 +32,7 @@ public class AddressSearch {
 		try {
 			postalNumber = Integer.parseInt(parsedInput[4]);
 		} catch (NumberFormatException e) {}
-		
-		for(String string : parsedInput)
-			System.out.println("STRING IN PARSED INPUT: " + string);
-		
+				
 		foundEdges = EdgeSearch.searchForRoads(parsedInput[0], roadNumber, parsedInput[2], postalNumber, parsedInput[5]);
 	}
 	
@@ -48,10 +45,7 @@ public class AddressSearch {
 	{
 		if(foundEdges.length == 0)
 			throw new NoAddressFoundException("No address was found with this input");
-		
-		for(Edge edge : foundEdges)
-			System.out.println(edge.toStringNumberAndLetterInfo());
-		
+				
 		if(doesRoadNamesMatch(foundEdges) && doesRoadsCityMatch(foundEdges))
 			return foundEdges[0];
 		else {
@@ -79,29 +73,15 @@ public class AddressSearch {
 		HashSet<Integer> relevantEdgeIDsRight = edgesToCheck[0].getPostalNumberRightCity().getCityRoadIDs();
 		
 		for(Edge edge : edgesToCheck)
-		{
-			System.out.println(edge.getPostalNumberLeft() + " " + edge.getPostalNumberRight());
 			if(!relevantEdgeIDsLeft.contains(edge.getiD()) && !relevantEdgeIDsRight.contains(edge.getiD()))		
 				return false;
-		}
+		
 		System.out.println("ALL ROADS CITIES MATCHES");
 		return true;
 	}
 	
-	private void parseAddress(String input) throws MalformedAdressException, NoAddressFoundException
+	private void parseAddress(String input) throws MalformedAddressException, NoAddressFoundException
 	{
-		parsedInput = ap.parseAdress(input);
+		parsedInput = ap.parseAddress(input);
 	}
-	
-	public static void main( String[] args ) throws MalformedAdressException, NoAddressFoundException {
-		AddressSearch adressSearch = new AddressSearch();
-		adressSearch.searchForAdress("Vandelvej i Køge");
-		
-		for(Edge edge : adressSearch.getFoundEdges())
-			System.out.println(edge);
-	}
-	
-
-
-
 }

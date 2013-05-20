@@ -35,7 +35,7 @@ public class DataHolding {
 	{
 		try {				
 			Edge[] edgeArray = new Edge[numberOfEdges];
-			File file = new File("XML/edge.txt");
+			File file = new File("resources/edge.txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
 			//To skip the first line
@@ -59,8 +59,8 @@ public class DataHolding {
 				length = Double.parseDouble(lineParts[2]);
 				edgeID = Integer.parseInt(lineParts[3]);
 				roadType = Integer.parseInt(lineParts[4]);
-				//If the roadName is 0, make it an empty string instead
-				roadName = (lineParts[5].equals("0") ? "" : lineParts[5]);
+				//If the roadName is 0, make it an empty string instead and ALL amounts of whitespaces between words will be replaces with a single whitespace
+				roadName = (lineParts[5].equals("0") ? "" : lineParts[5].replaceAll("\\s+", " "));
 				fromLeftNumber = Integer.parseInt(lineParts[6]);
 				toLeftNumber = Integer.parseInt(lineParts[7]);
 				fromRightNumber = Integer.parseInt(lineParts[8]);
@@ -113,7 +113,7 @@ public class DataHolding {
 		try {
 			long startTime = System.currentTimeMillis();
 			Node[] nodeArray = new Node[numberOfNodes];
-			File file = new File("XML/kdv_node_unload.txt_modified.txt");
+			File file = new File("resources/kdv_node_unload.txt_modified.txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
 			//To skip the first line

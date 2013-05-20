@@ -23,7 +23,7 @@ public class City {
 	private static String[] majorCities = new String[]{"København","Frederiksberg","Aalborg","Aarhus","Esbjerg","Randers"};
 
 	//The path to the file from which to create Cities
-	private static String cityFileName = "XML/postalNumbersAndCityNamesFINAL.txt";
+	private static String cityFileName = "resources/postalNumbersAndCityNamesFINAL.txt";
 
 	//A HashMap where the postal number is the key, and the corresponding City is the value
 	private static HashMap<Integer, City> cityHashMap = new HashMap<Integer, City>();
@@ -281,13 +281,4 @@ public class City {
 	public String toString() {
 		return this.cityName;
 	}	
-
-	public static void main(String[] args) {
-		createCities();
-		
-		for(int number : faultyPostalNumbers)
-			System.out.println(number);
-			
-		
-	}
 }

@@ -60,11 +60,13 @@ public class ArrayListVSHashSet {
 		}		
 	}
 
+	@SuppressWarnings("unused")
 	private void iterateThroughEntireSet() {
 		for(int number : set)
 			doNothing();		
 	}
 
+	@SuppressWarnings("unused")
 	private void iterateThroughEntireList() {
 		for(int number : list)
 			doNothing();			

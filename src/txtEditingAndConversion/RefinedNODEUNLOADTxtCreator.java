@@ -11,8 +11,8 @@ import java.util.Iterator;
 
 public class RefinedNODEUNLOADTxtCreator {
 
-	private static String nodeFileName = "XML/kdv_node_unload.txt";
-	private static String edgeFileName = "XML/kdv_unload.txt";
+	private static String nodeFileName = "resources/kdv_node_unload.txt";
+	private static String edgeFileName = "resources/kdv_unload.txt";
 
 	private static void createRefinedTXT()
 	{
