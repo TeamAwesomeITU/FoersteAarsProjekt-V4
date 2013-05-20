@@ -1,6 +1,5 @@
 package inputHandler;
 
-
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
@@ -12,10 +11,9 @@ import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.search.CitySearch;
 import mapCreationAndFunctions.search.EdgeSearch;
 
-
 /**
  * This class is responsible to handle all the input from the user. 
- * When an address is entered into the gui, it is parsed through
+ * When an address is entered into the GUI, it is parsed through
  * this class. It is checked in the textfield containing all the
  * road names. If it finds a match it returns it as an array of strings.
  */
@@ -99,9 +97,6 @@ public class AddressParser {
 
 	/** This method is used for finding the road name. This is done by searching through the txt file containing all roadnames in Denmark.
 	 * The method splits the input string and the road name up. Both are split up at whitespaces and each are put in different arrays.
-	 * Then every entry in the road name array is held up against the input array, and if all entries in the road name array are matched in the input array,
-	 * The road name array's entries are then made a string again, and saved in a tmpStorage array. This is because, sometimes some road names consists in different length,
-	 * for instance A. E. Hansensvej and Hansensvej. In the end, the longest string in tmpStorage must be the road name that the user gave as input.
 	 * The longest string is then saved in the address array.
 	 * 
 	 * @param input Address string
@@ -274,10 +269,6 @@ public class AddressParser {
 	}
 
 	public String[] getAddressArray(){
-		
-		
-
-
 		return addressArray;
 	}
 }

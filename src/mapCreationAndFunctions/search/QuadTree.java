@@ -25,7 +25,7 @@ public class QuadTree {
 
 	//An array of the contained Nodes
 	private Node[] nodeArray = new Node[QUADTREE_CAPACITY];
-	
+
 	//Number of nodes in the QuadTree
 	private int numberOfQuadTreeNodes;
 
@@ -37,7 +37,7 @@ public class QuadTree {
 	private QuadTree northEastNode;
 	private QuadTree southWestNode;
 	private QuadTree southEastNode;
-	
+
 	/**
 	 * Creates a QuadTree with the specified area
 	 * @param area The area for which the QuadTree should be constructed
@@ -89,7 +89,7 @@ public class QuadTree {
 	 * @throws InvalidAreaProportionsException
 	 */
 	private void subdivide() throws NegativeAreaSizeException, AreaIsNotWithinDenmarkException, InvalidAreaProportionsException {
-	
+
 		double midPointX = area.getWidth()/2 + area.getSmallestX();
 		double midPointY = area.getHeight()/2 + area.getSmallestY();
 
@@ -134,7 +134,7 @@ public class QuadTree {
 
 		return foundNodeSet;
 	}
-	
+
 	/**
 	 * Finds the ID's of all Nodes which are contained within a specified area.
 	 * @param area The area to search for Nodes.
@@ -165,29 +165,32 @@ public class QuadTree {
 
 		return foundNodeSet;
 	}	
-	
-	private static QuadTree makeQuadTreeAndNodeMapFromTXT()
+
+	/**
+	 * Creates a QuadTree from a .txt data file
+	 * @return a QuadTree, created from a .txt data file
+	 */
+	private static QuadTree makeQuadTreeFromTXT()
 	{
 
 		try {				
 			long s = System.currentTimeMillis();
 			AreaToDraw area = new AreaToDraw();	
 			QuadTree quadTree = new QuadTree(area);
-			
+
 			File file = new File("resources/kdv_node_unload.txt_modified.txt");			
 			BufferedReader reader = new BufferedReader(new FileReader(file));
-			
+
 			//To skip the first line
 			reader.readLine();
-			
+
 			String line;
-			
+
 			while((line = reader.readLine()) != null)
 			{
 				String[] lineParts = line.split("\\,");
-				//Integer KDV = Integer.parseInt(lineParts[0]);
 				Double[] coords = new Double[]{Double.parseDouble(lineParts[1]), Double.parseDouble(lineParts[2])};	
-				
+
 				//Edge ID's is pulled out
 				String[] edgeIDsAsStrings = lineParts[3].split("\\s+");
 				int[] edgeIDs = new int[edgeIDsAsStrings.length];				
@@ -196,19 +199,17 @@ public class QuadTree {
 				}			
 				quadTree.insert(new Node(Integer.parseInt(lineParts[0]), coords[0], coords[1], edgeIDs));
 			}
-				
+
 			reader.close();
 			long t = System.currentTimeMillis();
 			System.out.println("Creation of Quadtree takes" + (t-s));
-			//noget her giver synk issues - fordi QuadTree stadig k�rer og laver nodemap, imens nodemaps initializer tjekker om den er null, hvilket den er men ikke m� v�re
-			//FindRelevantEdges.initializeNodeCoordinatesMap(nodeMap);
 			return quadTree;	
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Finds all of the Nodes which are contained within a specified area.
 	 * @param area The area to search for Nodes.
@@ -218,7 +219,7 @@ public class QuadTree {
 	{
 		return qTree.search(area);
 	}
-	
+
 	/**
 	 * Finds the ID's of all Nodes which are contained within a specified area.
 	 * @param area The area to search for Nodes.
@@ -228,7 +229,7 @@ public class QuadTree {
 	{
 		return getEntireQuadTree().searchForNodeIDs(area);
 	}
-		
+
 	/**
 	 * Returns the entire static QuadTree
 	 * @return The entire static QuadTree
@@ -238,13 +239,15 @@ public class QuadTree {
 		initializeQuadTree();
 		return qTree;
 	}
-	
+
+	/**
+	 * Makes sure that the QuadTree has been initialized - prevents a null pointer exception.
+	 */
 	private static void initializeQuadTree()
 	{
 		if(qTree == null)
-			qTree = makeQuadTreeAndNodeMapFromTXT();
-			//qTree = makeQuadTreeFromXML();
-		else
-			return;
+			qTree = makeQuadTreeFromTXT();
+
+		return;
 	}
 }

@@ -11,7 +11,7 @@ import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.data.Node;
 
 /**
- * Locates the Edges that has a least one point that lies within the AreaToDraw
+ * Locates the Edges that has a least one point that lies within the AreaToDraw	
  */
 public class FindRelevantEdges {
 

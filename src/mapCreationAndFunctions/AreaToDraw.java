@@ -6,11 +6,11 @@ import mapCreationAndFunctions.exceptions.InvalidAreaProportionsException;
 import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
 
 /**
- * The area of the map to draw
+ * An area of the map to draw
  */
 public class AreaToDraw {
 
-	//The corner coordinates of the entire map - has been artificially been expanded in order to have some empty space around the map
+	//The corner coordinates of the entire map - has been artificially expanded in order to have some empty space around the map
 	private final static double entireMapSmallestX = 438000; // 442254.35659;
 	private final static double entireMapLargestX = 905000; // 892658.21706;
 	private final static double entireMapSmallestY = 6047000; // 6049914.43018;

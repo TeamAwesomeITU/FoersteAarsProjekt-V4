@@ -331,7 +331,7 @@ public class Edge {
 	}
 
 	/**
-	 * Returns a graphic Line2D representation of the Edge
+	 * Returns a graphic Line2D representation of the Edge, in Java pixel coordinates
 	 * @param coordconverter The CoordConverter with which the coordinates should be converted to UTM Zone 32 with.
 	 * @return A Line2D representation of the Edge
 	 */
@@ -345,6 +345,10 @@ public class Edge {
 				coordconverter.UTMToPixelCoordY(toNode.getYCoord()));
 	}
 
+	/**
+	 * Returns an unconverted graphic Line2D representation of the Edge
+	 * @return an unconverted graphic Line2D representation of the Edge
+	 */
 	private Line2D getLine2DUnconverted()
 	{
 		Node fromNode = DataHolding.getNode(getFromNode());
@@ -354,18 +358,13 @@ public class Edge {
 
 
 	/**
-	 * 
-	 * @param rectangle2d
-	 * @return
+	 * Checks if the Edge intersects with the given rectangle.
+	 * @param rectangle2d The rectangle to check
+	 * @return True, if the Edge intersects with the given rectangle.
 	 */
 	public boolean intersects(Rectangle2D rectangle2d)
 	{
 		return getLine2DUnconverted().intersects(rectangle2d);
-	}
-
-	public int getAdressNumberAtPoint(double xCoord, double yCoord)
-	{		
-		return 0;
 	}
 
 	@Override
