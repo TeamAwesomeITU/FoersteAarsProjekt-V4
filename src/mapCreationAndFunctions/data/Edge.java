@@ -8,6 +8,10 @@ import java.util.Arrays;
 
 import mapCreationAndFunctions.RoadType;
 
+/**
+ * Represents an Edge, i.e. a segment of road. The object contains all relevant information on this road segment.
+ *
+ */
 public class Edge {
 
 	//The ID of the Node from which the Edge goes from
@@ -100,9 +104,9 @@ public class Edge {
 	 * @param highWayTurnoff The ID of the highway turnoff
 	 * @param driveTime The time it takes to pass the road, in minutes
 	 * @param oneWay tf = one way in the direction To-From, ft = one way in the direction From-To,	n = No driving allowed,	<blank> = No restrictions
-	 * @param tjekID //TODO wtf goes here?
-	 * @param fromTurn //TODO wtf goes here?
-	 * @param toTurn //TODO wtf goes here?
+	 * @param tjekID Not used in this version
+	 * @param fromTurn Not used in this version
+	 * @param toTurn Not used in this version
 	 */
 	public Edge(int fromNode, int toNode, double length, int iD, int roadType, String roadName, int fromLeftNumber,
 			int toLeftNumber, int fromRightNumber, int toRightNumber, String fromLeftLetter, String toLeftLetter, String fromRightLetter,
@@ -328,7 +332,7 @@ public class Edge {
 
 	/**
 	 * Returns a graphic Line2D representation of the Edge
-	 * @param coordconverter The CoordConverter with which the coordinates should be converted
+	 * @param coordconverter The CoordConverter with which the coordinates should be converted to UTM Zone 32 with.
 	 * @return A Line2D representation of the Edge
 	 */
 	public Line2D getLine2DToDraw(CoordinateConverter coordconverter)
@@ -349,7 +353,11 @@ public class Edge {
 	}
 
 
-	//TODO lad vær med at lave en line2d for hver Edge - lav i stedet en intersectmetode i edge?
+	/**
+	 * 
+	 * @param rectangle2d
+	 * @return
+	 */
 	public boolean intersects(Rectangle2D rectangle2d)
 	{
 		return getLine2DUnconverted().intersects(rectangle2d);
@@ -358,32 +366,6 @@ public class Edge {
 	public int getAdressNumberAtPoint(double xCoord, double yCoord)
 	{		
 		return 0;
-	}
-
-	@SuppressWarnings("unused")
-	private Point2D getIntersectionPoint(Line2D lineA, Line2D lineB) {
-
-		double x1 = lineA.getX1();
-		double y1 = lineA.getY1();
-		double x2 = lineA.getX2();
-		double y2 = lineA.getY2();
-
-		double x3 = lineB.getX1();
-		double y3 = lineB.getY2();
-		double x4 = lineB.getX2();
-		double y4 = lineB.getY2();
-
-		Point2D p = null;
-
-		double d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-		if (d != 0) {
-			double xi = ((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d;
-			double yi = ((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d;
-
-			p = new Point2D.Double(xi, yi);
-
-		}
-		return p;
 	}
 
 	@Override
@@ -408,11 +390,11 @@ public class Edge {
 		}
 		return this.roadName + " " + unevenNumber + evenNumber + postAndCity;
 	}
-
-	public String toStringRoadName() {	
-		return this.roadName;
-	}
-
+	
+	/**
+	 * Calculates an array of all possible numbers on a road. For example, if the road's left side's interval are (9-15) and the right side interval is (10-16), this method returns [9, 10, 11, 12, 13, 14, 15, 16].
+	 * @return all possible numbers on a road
+	 */
 	public Integer[] containedNumbers() {
 		ArrayList<Integer> numbers = new ArrayList<>();
 		int fL = this.fromLeftNumber, tL = this.toLeftNumber;
@@ -470,6 +452,10 @@ public class Edge {
 		return sortedArray; 
 	}
 
+	/**
+	 * Calculates an array of all possible letters on a road. For example, if the road's left side's interval are (A-E) and the right side interval is (A-), this method returns [A-B-C-D-E].
+	 * @return all possible letters on a road
+	 */
 	public String[] containedLetters(){
 		ArrayList<String> letters = new ArrayList<>();
 		char fromLeft = 0, toLeft = 0, fromRight = 0, toRight = 0;
@@ -506,6 +492,10 @@ public class Edge {
 		return sortedLetters;
 	}
 
+	/**
+	 * Gets a String-representation of the Edge, consisting of the road name and all letters and numbers on the road.
+	 * @return Gets a String-representation of the Edge, consisting of the road name and all letters and numbers on the road.
+	 */
 	public String toStringNumberAndLetterInfo()
 	{
 		return this.getRoadName() + ": " + "fromNumberLeft: " + this.getFromLeftNumber() + ", toNumberLeft: " + this.getToLeftNumber() + ", fromNumberRight: " +

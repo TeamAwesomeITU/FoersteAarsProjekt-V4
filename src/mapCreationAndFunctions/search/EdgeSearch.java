@@ -12,7 +12,7 @@ import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 
 /**
- * Enables searching for Edges by road name, or by road name and postal roadNumber
+ * Enables searching for Edges with many different combinations of parameters.
  */
 public class EdgeSearch  {
 
@@ -26,9 +26,9 @@ public class EdgeSearch  {
 	{
 		TernarySearchTrie tst = new TernarySearchTrie();
 
-		//Excludes Edges with no name
+		
 		for(Edge edge : DataHolding.getEdgeArray())
-			if(!edge.getRoadName().isEmpty())
+			if(!edge.getRoadName().isEmpty()) //Excludes Edges with no name
 				tst.put(edge.getRoadName().toLowerCase(), edge.getiD());
 
 		return tst;

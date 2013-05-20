@@ -5,15 +5,12 @@ import static org.junit.Assert.fail;
 import inputHandler.AddressParser;
 import org.junit.Test;
 
-
-
 public class AddressParserExistingAddressTester {
 	@Test
 	//Reason: contains only roadname
 	public void onlyRoadNameTest() {
 		String test = "Korsvejs Allé";
 		String[] expectedResult = new String[]{"korsvejs allé", "", "", "", "", ""};
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 
@@ -22,7 +19,6 @@ public class AddressParserExistingAddressTester {
 	public void roadNameAndNumberTest() {
 		String test = "Korsvejs Allé 17";
 		String[] expectedResult = new String[]{"korsvejs allé", "17", "", "", "", ""};
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 
@@ -31,7 +27,6 @@ public class AddressParserExistingAddressTester {
 	public void numberAndLetterTest() {
 		String test = "Korsvejs Allé 17B";
 		String[] expectedResult = new String[]{"korsvejs allé", "17", "b", "", "", ""};
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 
@@ -40,7 +35,6 @@ public class AddressParserExistingAddressTester {
 	public void letterAndStoryTest() {
 		String test = "Korsvejs Allé 17B 5.";
 		String[] expectedResult = new String[]{"korsvejs allé", "17", "b", "5", "", ""};
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 
@@ -49,7 +43,6 @@ public class AddressParserExistingAddressTester {
 	public void storyAndPostalCodeTest() {
 		String test = "Korsvejs Allé 17B 5. 5500";
 		String[] expectedResult = new String[]{"korsvejs allé", "17", "b", "5", "5500", ""};
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}
 
@@ -58,7 +51,6 @@ public class AddressParserExistingAddressTester {
 	public void fullArrayTest() {
 		String test = "Korsvejs Allé 17B 5. 5500 Middelfart";
 		String[] expectedResult = new String[]{"korsvejs allé", "17", "b", "5", "5500", "middelfart"};
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 	
@@ -67,7 +59,6 @@ public class AddressParserExistingAddressTester {
 	public void inputSeperatedByAnITest() {
 		String test = "Griffenfeldsgade i København";
 		String[] expectedResult = new String[]{"griffenfeldsgade", "", "", "", "", "københavn"};
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 
@@ -77,7 +68,6 @@ public class AddressParserExistingAddressTester {
 	public void roadNameWithNumberAndSeperatedByAnITest() {
 		String test = "10. Februar Vej i Tarm";
 		String[] expectedResult = new String[]{"10. februar vej", "", "", "", "", "tarm"};
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 	
@@ -86,8 +76,6 @@ public class AddressParserExistingAddressTester {
 	public void roadNameWithNumberAndStory() {
 		String test = "10. Februar Vej 7, 5.";
 		String[] expectedResult = new String[]{"10. februar vej", "7", "", "5", "", ""};
-
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 	
@@ -96,7 +84,6 @@ public class AddressParserExistingAddressTester {
 	public void singleLettersFollowedByDotsTest() {
 		String test = "Kong Chr.D. X s Bro 7, 5., 2300 København S";
 		String[] expectedResult = new String[]{"kong chr.d. x s bro", "7", "", "5", "2300", "københavn"};
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 
@@ -105,7 +92,6 @@ public class AddressParserExistingAddressTester {
 	public void singleLettersNOTfollowedByDotsTest() {
 		String test = "A P Møller Kollegiet 10, 12., 2300 København";
 		String[] expectedResult = new String[]{"a p møller kollegiet", "10", "", "12", "2300", "københavn"};
-		AddressParserAllTests.setupTest(test, expectedResult);
 		asserterCorrect(test, expectedResult);
 	}	
 	

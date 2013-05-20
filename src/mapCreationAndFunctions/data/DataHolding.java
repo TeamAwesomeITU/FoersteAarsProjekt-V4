@@ -6,10 +6,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import mapCreationAndFunctions.search.QuadTree;
 import navigation.EdgeWeightedDigraph;
 
-@SuppressWarnings("unused")
+/**
+ * This class holds the primary data of the program. 
+ *
+ */
 public class DataHolding {
 
 	private static int numberOfNodes = 675902;
@@ -24,12 +26,9 @@ public class DataHolding {
 	This is made at startup so the program can access it at will. */
 	private static Edge[] allEdgesByIDArray = makeEdgeArrayFromTXT();
 
-	//At some point, the nodeArray and QuadTree should be created in parallel, as they use the same resource-file in the same way - will decrease startup time
-	private static QuadTree qTree;
-
 	/**
-	 * This method creates an array of Edge-objects. Edge ID's equals the index of the array. 
-	 * @return
+	 * Creates an array of Edge-objects. Edge ID's equals the index of the array. 
+	 * @return An array of all Edges found in the .txt file
 	 */
 	private static Edge[] makeEdgeArrayFromTXT()
 	{
@@ -97,7 +96,6 @@ public class DataHolding {
 			System.out.println("Creation of EdgeArray took " + (endTime-startTime));
 
 			reader.close();		
-			System.out.println(edgeArray.length);
 			
 			return edgeArray;
 
@@ -108,6 +106,10 @@ public class DataHolding {
 	}
 
 
+	/**
+	 * Creates an array of Node-objects. Node ID's equals the index of the array. 
+	 * @return An array of all Node found in the .txt file
+	 */
 	private static Node[] makeNodeArrayFromTXT()
 	{
 		try {
@@ -155,39 +157,51 @@ public class DataHolding {
 	}
 
 	/**
-	 * Gets a HashMap of all of the entire map's Nodes - the Node ID is the key, the value is the Node
-	 * @return A HashMap of all of the maps Nodes and their coordinates - the Node ID is the key, the values are x-/y- coordinates
+	 * Gets an array of all of the entire map's Nodes.
+	 * @return An array of all existing Nodes.
 	 */
 	public static Node[] getNodeArray(){return nodeArray;}
 
 	/**
-	 * Gets a HashSet of all of the entire map's Edges
-	 * @return A HashSet of all of the maps Edges 
+	 * Gets an array of all of the entire map's Edges.
+	 * @return An array of all existing Edges.
 	 */
 	public static Edge[] getEdgeArray(){return allEdgesByIDArray;}
 
 	/**
-	 * 
+	 * Gets the Node with the given ID
 	 * @param nodeID The ID of the Node
 	 * @return The Node with the input ID
 	 */
 	public static Node getNode(int nodeID){ return nodeArray[nodeID-1]; }
 
 	/**
-	 * 
+	 * Gets the Edge with the given ID
 	 * @param edgeID The ID of the Edge
 	 * @return The Edge with the input ID
 	 */
 	public static Edge getEdge(int edgeID){ return allEdgesByIDArray[edgeID-1]; }
 
+	/**
+	 * Gets the EdgeWeightedDigraph of the map
+	 * @return the EdgeWeightedDigraph of the map
+	 */
 	public static EdgeWeightedDigraph getGraph() {
 		return graph;
 	}
-
+	
+	/**
+	 * Gets the number of existing Edges
+	 * @return the number of existing Edges
+	 */
 	public static int getNumberOfEdges() {
 		return numberOfEdges;
 	}
 
+	/**
+	 * Gets the number of existing Nodes
+	 * @return the number of existing Nodes
+	 */
 	public static int getNumberOfNodes() {
 		return numberOfNodes;
 	}

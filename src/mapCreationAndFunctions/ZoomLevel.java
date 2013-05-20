@@ -2,7 +2,7 @@ package mapCreationAndFunctions;
 
 import java.util.HashSet;
 
-/*
+/**
  * Holds seven different levels of zoom, which indicate which type of roads to draw. 
  * The roadtypes are determined from the percentage of the entire map, which the specified area fills.
  * Returns a String to use in a getRelevantRoadTypes search through an XML-file.
