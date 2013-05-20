@@ -10,7 +10,10 @@ import mapCreationAndFunctions.data.City;
  */
 public class CitySearch  {
 
+	//A TernarySearchTrie of all City names
 	private static TernarySearchTrie cityNameSearchTrie = createCityNameSearchTrie();
+	
+	//A TernarySearchTrie of all City postal numbers
 	private static TernarySearchTrie cityPostalNumberSearchTrie = createCityPostalNumberSearchTrie();
 
 	/**
@@ -134,6 +137,12 @@ public class CitySearch  {
 		return foundCityList.toArray(new City[foundCityList.size()]);
 	}
 		
+	/**
+	 * Checks if the City name matches the postal number
+	 * @param cityName The name of the City to check
+	 * @param postalNumber The postal number of the City
+	 * @return True, if the City name matches the postal number
+	 */
 	public static boolean doesCityNameMatchPostalNumber(String cityName, int postalNumber)
 	{ return City.getCityByCityName(cityName).getCityPostalNumbers().contains(postalNumber); }
 }

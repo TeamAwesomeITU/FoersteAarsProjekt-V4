@@ -105,13 +105,6 @@ public class TernarySearchTrie
 		collect(currentNode.right, prefix, list);
 	}
 
-	public ArrayList<String> wildcardMatch(String pattern) {
-		pattern = pattern.toLowerCase();
-		ArrayList<String> list = new ArrayList<String>();
-		collect(root, "", 0, pattern, list);
-		return list;
-	}
-
 	public void collect(TrieNode currentNode, String prefix, int i, String pattern, ArrayList<String> list) {
 		if (currentNode == null) return;
 		char character = pattern.charAt(i);

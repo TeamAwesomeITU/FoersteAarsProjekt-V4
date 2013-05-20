@@ -127,13 +127,6 @@ public class EdgeSearch  {
 			matchCityRight = isCityCorrectForEdge(edge, postalNumber, cityName);
 			matchCityLeft = isCityCorrectForEdge(edge, postalNumber, cityName);
 
-			//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-			//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
-			//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-			//				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
-			//				System.out.println("matchCityRight: " + matchCityRight);
-			//				System.out.println("matchCityLeft: " + matchCityLeft);
-
 			if(betweenRoadNumbersRight && betweenRoadLettersRight)
 			{
 				if(matchCityRight || matchCityLeft)
@@ -159,8 +152,8 @@ public class EdgeSearch  {
 	 * @param postalNumber An optional postal number of the specific address - if no search on a postal number is wanted, enter -1 as the integer
 	 * @param cityName An optional String of the specific address' city name - if no search on a city name is wanted, enter an empty String as the letter parameter
 	 * @return All of the Edges that fits the search criterias.
-	 * @throws MalformedAddressException 
-	 * @throws NoAddressFoundException 
+	 * @throws MalformedAddressException If the input contains invalid characters
+	 * @throws NoAddressFoundException If no address could be found with the given input
 	 */
 	public static Edge[] searchForRoadSuggestions(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAddressException, NoAddressFoundException
 	{
@@ -219,13 +212,6 @@ public class EdgeSearch  {
 				else
 					matchCity = true;
 
-				//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-				//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
-				//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-				//				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
-				//				System.out.println("matchCityRight: " + matchCityRight);
-				//				System.out.println("matchCityLeft: " + matchCityLeft);
-
 				if(betweenRoadNumbersRight && betweenRoadLettersRight)
 				{
 					if(matchCity)
@@ -244,6 +230,16 @@ public class EdgeSearch  {
 
 	}
 
+	/**
+	 * Checks the input - if the input is invalid, an exception is thrown
+	 * @param roadName The name of the road
+	 * @param roadNumber An optional number of the specific address - if no search on a number is wanted, enter -1 as the integer
+	 * @param letter An optional letter of the specific address - if no search on a letter is wanted, enter an empty String as the letter parameter
+	 * @param postalNumber An optional postal number of the specific address - if no search on a postal number is wanted, enter -1 as the integer
+	 * @param cityName An optional String of the specific address' city name - if no search on a city name is wanted, enter an empty String as the letter parameter
+	 * @throws MalformedAddressException If the input contains invalid characters
+	 * @throws NoAddressFoundException If no address could be found with the given input
+	 */
 	private static void checkInput(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws NoAddressFoundException, MalformedAddressException
 	{
 		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && postalNumber == -1 && cityName.isEmpty())
@@ -257,6 +253,13 @@ public class EdgeSearch  {
 				throw new MalformedAddressException("Postal number and city name does not match");
 	}
 
+	/**
+	 * Checks 
+	 * @param edge
+	 * @param postalNumber
+	 * @param cityName
+	 * @return
+	 */
 	private static boolean isCityCorrectForEdge( Edge edge, int postalNumber, String cityName )
 	{ 
 		//If the search should not include cities

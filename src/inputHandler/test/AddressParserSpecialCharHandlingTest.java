@@ -6,29 +6,20 @@ import inputHandler.AddressParser;
 import org.junit.Test;
 
 public class AddressParserSpecialCharHandlingTest {
-
-	@Test
-	//Reason: contains "Â"
-	public void nordicCharacterAATest() {
-		String test = "Âbrinksgatan";
-		String[] expectedResult = new String[]{"âbrinksgatan", "", "", "", "", ""};
-		asserterCorrect(test, expectedResult);
-	}	
-	
-	
-	@Test
-	//Reason: contains "è"
-	public void graveAccentTest() {
-		String test = "Broholms Allè";
-		String[] expectedResult = new String[]{"broholms allè", "", "", "", "", ""};
-		asserterCorrect(test, expectedResult);
-	}	
 	
 	@Test
 	//Reason: contains "é"
+	public void graveAccentTest() {
+		String test = "Broholms Allé";
+		String[] expectedResult = new String[]{"broholms allé", "", "", "", "", ""};
+		asserterCorrect(test, expectedResult);
+	}	
+	
+	@Test
+	//Reason: contains "è"
 	public void acuteAccentTest() {
-		String test = "Christian Greens Allé";
-		String[] expectedResult = new String[]{"christian greens allé", "", "", "", "", ""};
+		String test = "Elver Allè";
+		String[] expectedResult = new String[]{"elver allè", "", "", "", "", ""};
 		asserterCorrect(test, expectedResult);
 	}	
 		
