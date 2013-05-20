@@ -60,7 +60,6 @@ import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
 public class MapWindow {
 
 	private Timer showAddressTimer = new Timer(800, new TimerListener());
-	private Timer repaintTimer = new Timer(300, new RepaintActionListener());
 	public static CustomJTextField toSearchQuery, fromSearchQuery;
 	private ColoredJPanel centerColoredJPanel, westColoredJPanel = makeToolBar(), 
 			eastColoredJPanel = makeEastJPanel(), southColoredJPanel = MainGui.makeFooter();
@@ -431,14 +430,6 @@ public class MapWindow {
 
 	}
 
-	private class RepaintActionListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			mapPanel.repaintMap();
-		}
-
-	}
 
 	/**
 	 * Resets the timer. If the user lingers it paints the edge inputted.
@@ -448,7 +439,7 @@ public class MapWindow {
 		@Override
 		public void keyPressed(KeyEvent arg) {
 			if(arg.getKeyCode() == 10) {
-				EnterKeyPress();
+				enterKeyPress();
 			}
 
 			else {
@@ -457,11 +448,6 @@ public class MapWindow {
 
 				else 
 					showAddressTimer.start();
-
-				if(repaintTimer.isRunning()) 
-					repaintTimer.restart();
-				else
-					repaintTimer.start();
 			}
 
 		}
@@ -497,12 +483,13 @@ public class MapWindow {
 		/**
 		 * If something is written in both fields, it'll try to make a path, otherwise focus shifts to the other field.
 		 */
-		public void EnterKeyPress() {
+		public void enterKeyPress() {
 			if(toSearchQuery.hasFocus())
 			{
 				try {
 					showAddressTimer.stop();
 					addressSearcherTo.searchForAdress(toSearchQuery.getText().trim());
+					mapPanel.setToEdgesToHighlight(addressSearcherTo.getFoundEdges());
 					if(addressSearcherFrom.getFoundEdges().length > 0 && !toSearchQuery.getText().trim().isEmpty())
 						findRoute();
 					else { 
@@ -517,6 +504,7 @@ public class MapWindow {
 				try {
 					showAddressTimer.stop();
 					addressSearcherFrom.searchForAdress(fromSearchQuery.getText().trim());
+					mapPanel.setFromEdgesToHighlight(addressSearcherFrom.getFoundEdges());
 					if(addressSearcherTo.getFoundEdges().length > 0 && !fromSearchQuery.getText().trim().isEmpty())
 						findRoute();
 					else  
