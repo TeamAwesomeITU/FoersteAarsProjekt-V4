@@ -17,6 +17,7 @@ import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
  */
 public class QuadTree {
 
+	//The QuadTree, which contains all QuadTree's of the entire software
 	private static QuadTree qTree;	
 
 	//The maximum amount of Nodes, that each QuadTree can hold
@@ -245,16 +246,5 @@ public class QuadTree {
 			//qTree = makeQuadTreeFromXML();
 		else
 			return;
-	}
-	
-	public static class QuadTreeCreation implements Runnable {
-		
-		public QuadTreeCreation()
-		{	}
-		
-		public void run() 
-		{
-			initializeQuadTree();
-		}		
 	}
 }

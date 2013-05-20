@@ -11,20 +11,4 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ AddressParserExistingAddressTester.class, AddressParserExpectedExceptionTester.class})
 public class AddressParserAllTests {
 
-	static ArrayList<String> tests = new ArrayList<String>();
-	static ArrayList<String[]> expectedResults  = new ArrayList<String[]>();
-	static ArrayList<String[]> testResults = new ArrayList<String[]>();
-	
-	
-	public static void setupTest(String input, String[] expectedResultFail)
-	{
-		tests.add(input);
-		expectedResults.add(expectedResultFail);		
-	}
-	
-	@AfterClass
-	public static void save()
-	{
-		SaveTestResults.saveResults(tests, expectedResults, testResults, "testresults.txt");
-	}
 }
