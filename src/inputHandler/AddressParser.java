@@ -56,9 +56,9 @@ public class AddressParser {
 		//Is the input valid?			
 		address = address.toLowerCase();
 		Matcher badInput = match(pBadInput, address);
-		if (badInput.find())
+		if (badInput.find())	/* 1 */
 			throw new MalformedAddressException("Illegal characters found in address");
-		else if(address.trim().isEmpty() || address == null){								/* 1 */
+		else if(address.trim().isEmpty() || address == null){								
 			throw new NoAddressFoundException("No address to find was given");
 		}
 
