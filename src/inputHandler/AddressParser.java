@@ -56,31 +56,23 @@ public class AddressParser {
 		//Is the input valid?			
 		address = address.toLowerCase();
 		Matcher badInput = match(pBadInput, address);
-		if (badInput.find())
+		if (badInput.find())																					/* 1 */
 			throw new MalformedAddressException("Illegal characters found in address");
-		else if(address.trim().isEmpty() || address == null){								/* 1 */
+		else if(address.trim().isEmpty() || address == null){													/* 2 */								
 			throw new NoAddressFoundException("No address to find was given");
 		}
 
-		//TODO FIX DEN HER REGEX eller slet svinet
-		//		if(match("\\d|\\,|\\bi\\b", address).find() == false){											/* 2 */
-		//			addressArray[0] = address.trim();
-		//			System.out.println(address);
-		//		}
-
-		//		else
 		{			
 			addressAfterDeletion = address;
 			findRoadName(address);
-			//Only checks for roadnumber, roadletter and floornumber, if a valid address is found
-			if(!addressArray[0].isEmpty())												/* 2 */
+			findCityName(addressAfterDeletion);
+			findPostCode(addressAfterDeletion);
+			if(!addressArray[0].isEmpty())																		/* 3 */
 			{
 				findFloorNumber(addressAfterDeletion);
 				findRoadNumber(addressAfterDeletion);
 				findRoadLetter(addressAfterDeletion);				
 			}
-			findPostCode(addressAfterDeletion);
-			findCityName(addressAfterDeletion);
 		}
 
 		return addressArray;			     					
@@ -111,7 +103,7 @@ public class AddressParser {
 	{
 		System.out.println("INPUT TO FIND ROADNAME BY: " + input);
 		
-		if(input.trim().isEmpty())
+		if(input.trim().isEmpty())																			/* 4 */																		
 			return;
 
 		String[] splitInput = input.split("\\s+");
@@ -136,11 +128,11 @@ public class AddressParser {
 			possibleRoadName = EdgeSearch.searchForRoadNameLongestPrefix(totalInput);
 			System.out.println("MIGHT BE THIS ROAD: " + possibleRoadName);
 
-			if(!possibleRoadName.isEmpty())
+			if(!possibleRoadName.isEmpty())																	/* 5 */					
 			{
 				Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
 
-				if(possibleEdges.length != 0 && possibleRoadName.length() > foundRoadName.length())
+				if(possibleEdges.length != 0 && possibleRoadName.length() > foundRoadName.length())			/* 6 */
 				{
 					foundRoadName = possibleRoadName;
 				}			
@@ -149,19 +141,10 @@ public class AddressParser {
 			wantedLength--;
 		}
 
-		//		String actualRoadName = "";
-		//		if(!possibleRoadName.isEmpty())
-		//		{
-		//			Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
-		//			System.out.println("NUMBER OF FOUNDS EDGES" + possibleEdges.length);
-		//			//If theres actually any roads with this name, take this as the name - otherwise, set it as an empty String
-		//			actualRoadName = (possibleEdges.length > 0) ? possibleEdges[0].getRoadName().toLowerCase() : "";
-		//		}
-
 		System.out.println("ROADNAME: " + foundRoadName);
 		addressArray[0] = foundRoadName;
 
-		if(!foundRoadName.isEmpty())
+		if(!foundRoadName.isEmpty())																		/* 7 */
 		{
 			System.out.println("Address left BEFORE roadname was found: " + addressAfterDeletion);
 			addressAfterDeletion = addressAfterDeletion.replace(foundRoadName,"").trim();
@@ -175,13 +158,13 @@ public class AddressParser {
 	 */
 	private void findRoadNumber(String s) {
 		Matcher buildingNr = match(pBuilding, s);
-		if(buildingNr.find()) {																/* 9 */
+		if(buildingNr.find()) {																				/* 8 */
 			//NumberLetter gemmer bygningsnummeret et eventuelt bogstav. 
 			numberLetter = buildingNr.group();
 			Matcher tal = match(pTal, numberLetter);
 
 			//Finder tallet i numberLetter og gemmer det p� index 1 i arrayet.
-			if(tal.find()){																	/* 10 */				
+			if(tal.find()){																					/* 9 */				
 				addressAfterDeletion = addressAfterDeletion.replace(tal.group(), "");
 				System.out.println("Bygningstal: " + tal.group());
 				addressArray[1] = tal.group().trim();
@@ -196,7 +179,7 @@ public class AddressParser {
 	private void findRoadLetter(String s) {
 		//Benytter numberLetter og finder bogstavet som den gemmer p� index 2 i arrayet.
 		Matcher buildingLetter = match(pLetter, numberLetter);	
-		if(buildingLetter.find()) {								   				   					/* 11 */
+		if(buildingLetter.find()) {								   				   							/* 10 */
 			addressAfterDeletion = addressAfterDeletion.replace(buildingLetter.group(), "");
 			System.out.println("Bogstav: " + buildingLetter.group());
 			addressArray[2] = buildingLetter.group().trim(); 
@@ -211,8 +194,8 @@ public class AddressParser {
 		String floorTemp = "";
 
 		Matcher floor = match(pFloor, s);			
-		if(floor.find()) {																		/* 12 */
-			floorTemp = floor.group();
+		if(floor.find()) {																					/* 11 */
+			floorTemp = floor.group();	
 			match(pTal, floorTemp);
 			addressAfterDeletion = addressAfterDeletion.replace(floorTemp, "");
 			Matcher tal = match(pTal, floorTemp);		
@@ -232,47 +215,63 @@ public class AddressParser {
 	private void findPostCode(String s) {
 		// Bruger pattern pPost til at finde postnummeret og gemme det på index 4 i arrayet.
 		Matcher postcode = match(pPost, s);	
-		if(postcode.find()) {																	/* 13 */
+		if(postcode.find()) {																				/* 12 */
 			System.out.println("Postnummer: " + postcode.group());
 			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"").trim();
 			addressArray[4] = postcode.group().trim(); 
-
-			//If the string is not empty, even after the city was found, try finding the road name again
-			//			if(!addressAfterDeletion.isEmpty() && addressArray[0].isEmpty())
-			//				findRoadName(addressAfterDeletion);
 		}
 	}
-	/**	Finds the name of the city by applying the patterns used to find the 
-	 * 	previous parts of the address. After applying them, and some additional 
-	 * 	patterns it replaces them with whitespace. Then the extra whitespace
-	 * 	is removed and whatever remains will be the name of the city.  
-	 * 
-	 * @param s	Address string
-	 */
-	private void findCityName(String s) {
-		String vejnavn = addressArray[0];
-		System.out.println("LOOKING FOR CITYNAME IN THIS INPUT: " + s);
-		String cityString = s.replaceAll(vejnavn, "").
-				replaceAll(pPost, "").
-				replaceAll(pBuilding, "").
-				replaceAll(pFloor, "").
-				replaceAll(pDelimiters, "").trim();
+	
+	private void findCityName(String input)
+	{
+		System.out.println("INPUT TO FIND ROADNAME BY: " + input);
 
-		if(!cityString.isEmpty()) {													/* 14 */
-			String possibleCityName = CitySearch.searchForCityNameLongestPrefix(cityString);
-			City[] possibleCities = CitySearch.searchForCityName(possibleCityName);
-			//If theres actually any roads with this name, take this as the name - otherwise, set it as an empty String
-			String actualCityName = (possibleCities.length > 0) ? possibleCities[0].getCityName().toLowerCase() : "";
-			addressArray[5] = actualCityName;
-			System.out.println("Bynavn: " + actualCityName);	
-			addressAfterDeletion = cityString.replace(actualCityName,"").trim();
+		if(input.trim().isEmpty())																			/* 13 */
+			return;
 
-			//If the string is not empty, even after the city was found, try finding the road name again
-			//			if(!addressAfterDeletion.isEmpty() && addressArray[0].isEmpty())
-			//				findRoadName(addressAfterDeletion);
+		String[] splitInput = input.split("\\s+");
+		String possibleCityName = "";
+		String foundCityName = "";
+		String totalInput = "";
+		int i = 0;
+		boolean isResultFound = false;
+		int wantedLength = splitInput.length;
+
+		while(!isResultFound && i < splitInput.length && wantedLength >= 0)
+		{		
+			totalInput = "";
+			for (int j = splitInput.length-wantedLength; j < splitInput.length; j++) 
+				totalInput += splitInput[j].toLowerCase() + " ";
+
+			totalInput = totalInput.trim();		
+
+			System.out.println("totalInput: " + totalInput);
+
+
+			possibleCityName = CitySearch.searchForCityNameLongestPrefix(totalInput);
+			System.out.println("MIGHT BE THIS CITY: " + possibleCityName);
+
+			if(!possibleCityName.isEmpty())																	/* 14 */
+			{
+				City[] possibleCities = CitySearch.searchForCityName(possibleCityName);
+
+				if(possibleCities.length != 0 && possibleCityName.length() > foundCityName.length())		/* 15 */
+				{
+					foundCityName = possibleCityName;
+				}			
+			}
+			i++;
+			wantedLength--;
 		}
+
+		System.out.println("CITYNAME: " + foundCityName);
+		addressArray[5] = foundCityName;
+		addressAfterDeletion = addressAfterDeletion.replaceAll(foundCityName, "");
+
+		System.out.println("Address left AFTER roadname was found: " + addressAfterDeletion);
 	}
 
+	
 	public String[] getAddressArray(){
 		
 		
