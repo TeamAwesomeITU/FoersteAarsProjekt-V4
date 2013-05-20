@@ -30,7 +30,7 @@ public class AddressParser {
 	private	String pFloor = "(\\b\\d{1,2}\\.)";	
 	private	String pPost = "(\\b\\d{4,5})"; 			
 	private	String pLetter = "[A-ZÆØÅa-zæøå]";
-	private String pBadInput =  "[^A-ZÆØÅÄÖa-zæøåéèöäüâ0-9,\\-.´:¨)/(& ]{1,100}";
+	private String pBadInput =  "[^A-ZÆØÅÂÄÖa-zæøåéèöäüâ0-9,\\-.´:¨)/(& ]{1,100}";
 	private String pDelimiters = "sal|etage|plan|th|tv|\\,|\\.|\\bi\\b|\\bpå\\b";
 	private	String numberLetter = ""; // Gemmer vejnummeret med tal og bogstav.
 	private String addressAfterDeletion = "";
