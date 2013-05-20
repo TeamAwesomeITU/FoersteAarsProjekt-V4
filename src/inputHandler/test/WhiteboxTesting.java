@@ -9,7 +9,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
+/**
+ * This class is our whitebox testing. The data sets can be found in our appendix.
+ */
 public class WhiteboxTesting {
 	
 	private AddressParser addressParser;
