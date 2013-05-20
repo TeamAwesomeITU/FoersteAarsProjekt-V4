@@ -24,7 +24,6 @@ public class AddressSearchTest {
 
 		Edge[] foundEdges = as.getFoundEdges();
 
-		
 		for(Integer numbers: as.getFoundEdges()[0].containedNumbers()) 
 		{
 			numbersOnEdge.add(numbers);
@@ -32,10 +31,7 @@ public class AddressSearchTest {
 		for(String letter : as.getFoundEdges()[0].containedLetters())
 		{
 			lettersOnEdge.add(letter);
-		}
-		
-
-		
+		}	
 		assertEquals(1, foundEdges.length);
 		assertEquals(roadName, as.getFoundEdges()[0].getRoadName());
 		if(!lettersOnEdge.isEmpty()) 	
@@ -49,7 +45,6 @@ public class AddressSearchTest {
 		assertEquals("Postalnumber does not equal postalNumber Right", postalNumber, as.getFoundEdges()[0].getPostalNumberRight());
 
 	}
-
 	@Test
 	public void testStandardInputStyle() {
 		String roadName = "Vandelvej";
@@ -67,7 +62,6 @@ public class AddressSearchTest {
 			fail("No address was found");
 		}
 	}
-
 	@Test
 	public void testMixedInputStyle() {
 		String roadName = "Strandvejen";
@@ -86,7 +80,6 @@ public class AddressSearchTest {
 		}
 
 	}
-
 	@Test
 	public void testComplicatedInputStyle() {
 		String roadName = "Skaffervej";
