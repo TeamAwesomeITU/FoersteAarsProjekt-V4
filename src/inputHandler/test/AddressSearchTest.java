@@ -46,10 +46,8 @@ public class AddressSearchTest {
 		assertTrue(lettersOnEdge.contains(letters));
 		}
 		assertTrue(numbersOnEdge.contains(roadNumber));
-		assertEquals("Cityname does not equal postalNumber left", cityName, as.getFoundEdges()[0].getPostalNumberLeftCityName());
-		assertEquals("Cityname does not equal postalNumber Right", cityName, as.getFoundEdges()[0].getPostalNumberRightCityName());
-		assertEquals("Postalnumber does not equal postalNumber left", postalNumber, as.getFoundEdges()[0].getPostalNumberLeft());
-		assertEquals("Postalnumber does not equal postalNumber Right", postalNumber, as.getFoundEdges()[0].getPostalNumberRight());
+		assertTrue(cityName, as.getFoundEdges()[0].getPostalNumberLeftCityName().equals(cityName) || as.getFoundEdges()[0].getPostalNumberRightCityName().equals(cityName));
+		assertTrue(as.getFoundEdges()[0].getPostalNumberLeft() == postalNumber || as.getFoundEdges()[0].getPostalNumberRight() == postalNumber);
 
 	}
 	
