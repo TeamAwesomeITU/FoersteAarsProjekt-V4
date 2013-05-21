@@ -17,9 +17,15 @@ import javax.swing.JPanel;
 
 import gui.MapWindow;
 
+/**
+ * This is our last line of defense agains mean exceptions. 
+ * If everything else fails this frame is shown.
+ */
 public class Zoidberg {
 
-
+	/**
+	 * Sets up the fram with zoidberg and a okay button.
+	 */
 	public static void badInputMessages(){
 		final JFrame zoidbergFrame = new JFrame("Malformed Address");
 

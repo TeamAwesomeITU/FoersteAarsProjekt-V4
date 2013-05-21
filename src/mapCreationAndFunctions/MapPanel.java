@@ -76,6 +76,10 @@ public class MapPanel extends JPanel {
 
 	}
 
+	/**
+	 * A get method for the mapMouseZoomAndPan
+	 * @return mapMouseZoomAndPan
+	 */
 	public MapMouseZoomAndPan getMapMouseZoomAndPan(){
 		return mapMouseZoomAndPan;
 	}
@@ -366,7 +370,6 @@ public class MapPanel extends JPanel {
 			foundToY = nodeTo.getYCoord();
 			
 			if(foundFromY < smallestY || foundToY < smallestY)
-				System.out.println(smallestY);
 			
 			smallestX = (foundFromX < smallestX) ? foundFromX : smallestX;
 			largestX = (foundFromX > largestX) ? foundFromX : largestX;
@@ -382,11 +385,6 @@ public class MapPanel extends JPanel {
 		
 		double heightToAdd = (largestY-smallestY)/50;
 		double widthToAdd = (largestX-smallestX)/50;
-		
-		System.out.println("smallestX: " + smallestX);
-		System.out.println("smallestY: " + smallestY);
-		System.out.println("largestX: " + largestX);
-		System.out.println("largestY: " + largestY);
 		
 		return new AreaToDraw(smallestX-widthToAdd, largestX+widthToAdd, smallestY-heightToAdd, largestY+heightToAdd, true);
 			

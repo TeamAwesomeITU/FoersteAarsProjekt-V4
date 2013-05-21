@@ -79,7 +79,6 @@ public class AddressParserExpectedExceptionTester {
 
 		try {
 			asserterException(test);
-			fail("No exception was caught with this input: " + test);
 		} catch (MalformedAddressException e) {
 			fail("Wrong exception was caught: " + e.getClass());
 		}
@@ -92,7 +91,6 @@ public class AddressParserExpectedExceptionTester {
 
 		try {
 			asserterException(test);
-			fail("No exception was caught with this input: " + test);
 		} catch (MalformedAddressException e) {
 			fail("Wrong exception was caught: " + e.getClass());
 		}

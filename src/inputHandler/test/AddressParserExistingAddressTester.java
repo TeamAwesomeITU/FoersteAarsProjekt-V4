@@ -3,6 +3,7 @@ package inputHandler.test;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
 import inputHandler.AddressParser;
+
 import org.junit.Test;
 
 public class AddressParserExistingAddressTester {
@@ -82,7 +83,7 @@ public class AddressParserExistingAddressTester {
 	@Test
 	//Reason: roadname contains single letters followed by dots
 	public void singleLettersFollowedByDotsTest() {
-		String test = "Kong Chr.D. X s Bro 7, 5., 2300 København S";
+		String test = "Kong Chr.D. X s Bro 7, 5., 2300 København";
 		String[] expectedResult = new String[]{"kong chr.d. x s bro", "7", "", "5", "2300", "københavn"};
 		asserterCorrect(test, expectedResult);
 	}	

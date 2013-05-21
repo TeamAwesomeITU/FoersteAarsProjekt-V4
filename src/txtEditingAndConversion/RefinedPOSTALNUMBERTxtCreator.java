@@ -19,13 +19,19 @@ public class RefinedPOSTALNUMBERTxtCreator {
 
 	private static String postalFileName = "resources/postalNumbersAndCityNames_uneditedWithSwedish.txt";
 
+	/**
+	 * Reads the original file, filters the irrelevant postal numbers, and writes the relevant ones to a new file.
+	 */
 	private static void createRefinedTXT()
 	{
 		HashSet<Integer> existingPostalNumbers = getExistingPostalNumbers();
 		writeNewTXT(existingPostalNumbers);
 	}
 
-
+	/**
+	 * Obtains postal numbers from every Edge in our data.
+	 * @return all of the postal numbers, which the Edges refers to.
+	 */
 	private static HashSet<Integer> getExistingPostalNumbers()
 	{
 
@@ -41,6 +47,10 @@ public class RefinedPOSTALNUMBERTxtCreator {
 		return existingPostalNumbers;
 	}
 
+	/**
+	 * Reads the original data file and writes a new file with only the existing postal numbers.
+	 * @param existingPostalNumbers
+	 */
 	private static void writeNewTXT(HashSet<Integer> existingPostalNumbers)
 	{
 		try {

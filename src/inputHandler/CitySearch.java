@@ -1,16 +1,20 @@
-package mapCreationAndFunctions.search;
+package inputHandler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import mapCreationAndFunctions.data.City;
+import mapCreationAndFunctions.data.TernarySearchTrie;
 
 /**
  * Enables searching for Cities by name 
  */
 public class CitySearch  {
 
+	//A TernarySearchTrie of all City names
 	private static TernarySearchTrie cityNameSearchTrie = createCityNameSearchTrie();
+	
+	//A TernarySearchTrie of all City postal numbers
 	private static TernarySearchTrie cityPostalNumberSearchTrie = createCityPostalNumberSearchTrie();
 
 	/**
@@ -71,9 +75,7 @@ public class CitySearch  {
 	 * @return The City name with the longest prefix match for the given input
 	 */
 	public static String searchForCityNameLongestPrefix(String cityToFind)
-	{
-		System.out.println("CITY TO FIND: " + cityToFind);
-				
+	{			
 		cityToFind = cityToFind.toLowerCase();
 		String longestPrefix = cityNameSearchTrie.longestPrefixOf(cityToFind);
 		
@@ -134,6 +136,12 @@ public class CitySearch  {
 		return foundCityList.toArray(new City[foundCityList.size()]);
 	}
 		
+	/**
+	 * Checks if the City name matches the postal number
+	 * @param cityName The name of the City to check
+	 * @param postalNumber The postal number of the City
+	 * @return True, if the City name matches the postal number
+	 */
 	public static boolean doesCityNameMatchPostalNumber(String cityName, int postalNumber)
 	{ return City.getCityByCityName(cityName).getCityPostalNumbers().contains(postalNumber); }
 }

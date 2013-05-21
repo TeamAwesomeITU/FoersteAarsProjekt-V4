@@ -1,7 +1,7 @@
 package inputHandler.exceptions;
 
 /**
- * This exception is thrown when a user attempts enters bad input
+ * This exception is thrown when a user enters something, which cannot be interpreted as an address.
  */
 @SuppressWarnings("serial")
 public class MalformedAddressException extends Exception {

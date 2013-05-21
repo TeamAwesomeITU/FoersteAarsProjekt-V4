@@ -34,7 +34,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -451,6 +450,9 @@ public class MapWindow {
 
 	//---------------------------------Listeners from here-----------------------------//
 
+	/**
+	 * When the timer runs out, highlights the appropiate edges depending on which textfield has focus
+	 */
 	private class TimerListener implements ActionListener{
 
 		@Override
@@ -481,6 +483,9 @@ public class MapWindow {
 			}
 
 		}
+		/**
+		 * removes the highlighted edges if the field is empty when the key is released
+		 */
 		@Override
 		public void keyReleased(KeyEvent e) {
 			if(fromSearchQuery.hasFocus() && fromSearchQuery.getText().trim().isEmpty()) 
@@ -500,6 +505,9 @@ public class MapWindow {
 
 		}
 
+		/**
+		 * Clears the input on the map, so it is ready to be filled again.
+		 */
 		private void clearInputOnMap() {
 			if (mapPanel.getPathTo() != null) {
 				try {
@@ -679,6 +687,9 @@ public class MapWindow {
 	 */
 	private class ReverseActionListener implements ActionListener{
 
+		/**
+		 * Flips the addresses and the highlighted edges
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String tempFrom = fromSearchQuery.getText().trim();
@@ -743,11 +754,17 @@ public class MapWindow {
 
 		private JTextArea directionsArea;
 
+		/**
+		 * initializes the textarea with the directions
+		 */
 		public GetDirectionsListener(){
 			directionsArea = new JTextArea();
 			directionsArea.setEditable(false);
 		}
 
+		/**
+		 * When click it fills the directions into the text area
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			makeDirectionsFrame();
@@ -823,6 +840,9 @@ public class MapWindow {
 	private class TextFieldFocusListener implements FocusListener {
 		private boolean fromFocusHolder = false;
 		private boolean toFocusHolder = false;
+		/**
+		 * Makes sure the map finds the edges when the field gains focus
+		 */
 		public void focusGained(FocusEvent e) {
 			if (fromFocusHolder == false && e.getComponent() == fromSearchQuery) {
 				toField();
@@ -838,6 +858,9 @@ public class MapWindow {
 			
 		}
 		
+		/**
+		 * Finds the edge from the from field
+		 */
 		private void fromField() {
 			if(fromFocusHolder  == false) 
 			{
@@ -850,6 +873,9 @@ public class MapWindow {
 			}
 		}
 		
+		/**
+		 * Finds the edges from the to field.
+		 */
 		private void toField() {
 			if (toFocusHolder == false) 
 			{

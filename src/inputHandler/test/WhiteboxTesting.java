@@ -1,6 +1,7 @@
 package inputHandler.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.fail;
 import inputHandler.AddressParser;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
@@ -19,6 +20,9 @@ public class WhiteboxTesting {
 	private String[] expectedResult;
 
 	
+	/**
+	 * initializes the arrays and address parser before all tests
+	 */
 	@Before
 	public void setUp(){
 		addressParser = new AddressParser();
@@ -146,7 +150,7 @@ public class WhiteboxTesting {
 	/**
 	 * Test for road name and city
 	 */
-	@Test
+	@Test //(expected=NoAddressFoundException.class)
 	public void dataSetH(){
 		try {
 			expectedResult = new String[]{"nørregade", "", "", "", "", "køge"};

@@ -160,7 +160,6 @@ public enum RoadType {
 	@SuppressWarnings("unchecked")
 	public static HashSet<Integer> getRoadTypesRelevantToZoomLevel(int numberOfWantedCategories)
 	{
-		//WHAT THE FUCK - MIND.EQUALS(BLOWN) == TRUE
 		HashSet<Integer> relevantRoadTypeSet = new HashSet<Integer>();
 		relevantRoadTypeSet = (HashSet<Integer>) category6.clone();
 
@@ -191,13 +190,5 @@ public enum RoadType {
 		//If coastline or mistake
 		else
 			return 7;
-	}
-	/**
-	 * Main method use to test. 
-	 * @param args Well
-	 */
-	public static void main(String[] args)
-	{
-		System.out.println(RoadType.getStroke(1));
 	}
 }

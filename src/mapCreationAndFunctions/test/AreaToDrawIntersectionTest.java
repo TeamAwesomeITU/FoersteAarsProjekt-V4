@@ -10,8 +10,14 @@ import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
 
 import org.junit.Test;
 
+/**
+ * Testclass for the AreaToDraw Intersection method.
+ */
 public class AreaToDrawIntersectionTest {
 
+	/**
+	 * Tests if the Area is fully inside another Area.
+	 */
 	@Test
 	public void testAreaIsFullyInsideOtherArea() {
 		try {
@@ -26,6 +32,9 @@ public class AreaToDrawIntersectionTest {
 		}
 	}
 	
+	/**
+	 * Tests if the area is partly inside another area.
+	 */
 	@Test
 	public void testAreaIsPartlyInsideOtherArea() {
 		try {
@@ -39,7 +48,10 @@ public class AreaToDrawIntersectionTest {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * Tests if the area is not inside another area.
+	 */
 	@Test
 	public void testAreaIsNotInsideOtherArea() {
 		try {

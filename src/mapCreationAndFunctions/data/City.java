@@ -1,5 +1,7 @@
 package mapCreationAndFunctions.data;
 
+import inputHandler.CitySearch;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +12,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import mapCreationAndFunctions.search.CitySearch;
 
 /**
  * This class is implemented to be able to deal with many different cities with many different postal numbers.
@@ -236,7 +237,6 @@ public class City {
 	private static boolean createCities()
 	{
 		try {			
-			long s = System.currentTimeMillis();
 			File file = new File(cityFileName);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
@@ -291,8 +291,6 @@ public class City {
 			}
 
 			reader.close();		
-			long t = System.currentTimeMillis();
-			System.out.println("Creation of CitySomeThingJesper took " + (t-s));
 			return true;
 
 		} catch (IOException e) {
@@ -312,6 +310,9 @@ public class City {
 		return allCitiesList;
 	}
 	
+	/**
+	 * Returns the name of the city
+	 */
 	@Override
 	public String toString() {
 		return this.cityName;

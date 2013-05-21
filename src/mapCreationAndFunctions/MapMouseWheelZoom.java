@@ -25,11 +25,18 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 	private Point mouseLocation;
 	private AreaToDraw currentArea, newArea;
 
+	/**
+	 * Initialies the MapMouseWheelZoom
+	 * @param mp the mappanel for the zoom
+	 */
 	public MapMouseWheelZoom(MapPanel mp) {
 		recalculateTimer.setRepeats(false);
 		this.mp = mp;
 
 	}
+	/**
+	 * Restarts the timer if the user scrolls before it zooms.
+	 */
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		if (recalculateTimer.isRunning()) {
 			recalculateTimer.restart();
@@ -71,7 +78,6 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 				try {		
 					newArea = new AreaToDraw(smallX, bigX, smallY, bigY, true);
 				} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
-					System.out.println(e1.getClass() + ": " + e1.getMessage());
 					newArea = currentArea;
 				}
 				mp.repaintMap(newArea);
@@ -121,19 +127,15 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 			smallY = coordConverter.pixelToUTMCoordY((int)yCoord) + (zoomY*15);
 			bigY = coordConverter.pixelToUTMCoordY((int)yCoord) - (zoomY*15);
 			if(bigX > currentArea.getLargestXOfEntireMap()) {
-				System.out.println("bigX");
 				bigX = currentArea.getLargestXOfEntireMap();
 			}
 			if(smallX < currentArea.getSmallestXOfEntireMap()) {
-				System.out.println("smallX");
 				smallX = currentArea.getSmallestXOfEntireMap();
 			}
 			if(bigY > currentArea.getLargestYOfEntireMap()) {
-				System.out.println("bigY");
 				bigY = currentArea.getLargestYOfEntireMap();
 			}
 			if(smallY < currentArea.getSmallestYOfEntireMap()) {
-				System.out.println("smallY");
 				smallY = currentArea.getSmallestYOfEntireMap();
 			}
 		}	

@@ -1,6 +1,6 @@
 package inputHandler.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import inputHandler.AddressSearch;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
@@ -15,7 +15,8 @@ import org.junit.Test;
 
 /**
  * This test tests if AddressParser returns the correct roadname for every single road in the Edge[] containing all Edges in our program
- * If the test fails, an exception might be thrown by AddressSearch - this exception is caught, and it's message saved as a String in an ArrayList. This list is printed at the end of the test.
+ * The test fails if an exception is thrown, or no Edges are found with the given name.
+ *  If an exception thrown by AddressSearch - this exception is caught, and it's message saved as a String in an ArrayList. This list is printed at the end of the test.
  */
 public class AdressParserAllRoadNamesTest {
 
@@ -56,8 +57,8 @@ public class AdressParserAllRoadNamesTest {
 
 		}
 		
-		for(String exception : mistakesCaught)
-			System.out.println(exception);		
+		for(String mistake : mistakesCaught)
+			System.out.println(mistake);		
 		
 		assertEquals("Number of mistakes caught", 0, mistakesCaught.size());
 	}

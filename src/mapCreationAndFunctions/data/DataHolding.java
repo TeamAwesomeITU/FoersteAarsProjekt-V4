@@ -48,7 +48,6 @@ public class DataHolding {
 			String roadName, oneWay, fromLeftLetter, toLeftLetter, fromRightLetter, toRightLetter;
 
 
-			long startTime = System.currentTimeMillis();
 			while((line = reader.readLine()) != null)
 			{
 				String[] lineParts = line.split(("\\;"));
@@ -92,8 +91,6 @@ public class DataHolding {
 						postalNumberLeft, postalNumberRight, highWayTurnoff, driveTime, oneWay, tjekID, fromTurn, toTurn);
 
 			}
-			long endTime = System.currentTimeMillis();
-			System.out.println("Creation of EdgeArray took " + (endTime-startTime));
 
 			reader.close();		
 			
@@ -113,7 +110,6 @@ public class DataHolding {
 	private static Node[] makeNodeArrayFromTXT()
 	{
 		try {
-			long startTime = System.currentTimeMillis();
 			Node[] nodeArray = new Node[numberOfNodes];
 			File file = new File("resources/kdv_node_unload.txt_modified.txt");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
@@ -146,8 +142,6 @@ public class DataHolding {
 			}
 
 			reader.close();		
-			long endTime = System.currentTimeMillis();
-			System.out.println("Creation of nodeArray took " +(endTime-startTime));
 			return nodeArray;
 
 		} catch (IOException e) {

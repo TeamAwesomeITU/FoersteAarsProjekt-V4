@@ -3,7 +3,6 @@ package inputHandler;
 import java.util.HashSet;
 
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.search.EdgeSearch;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
@@ -12,16 +11,18 @@ public class AddressSearch {
 	private AddressParser ap;
 	private String[] parsedInput;
 	private Edge[] foundEdges = new Edge[0];
-	
-	public AddressSearch()
-	{
-		ap = new AddressParser();		
-	}
-		
+
+	/**
+	 * Calls the addressParser which returns an array with the address. It then tries to find
+	 * a specific edge. If not multiple edges are stored in foundEdge[]
+	 * @param input The address String which is sent to the addressParser.
+	 * @throws MalformedAddressException
+	 * @throws NoAddressFoundException
+	 */
 	public void searchForAdress(String input) throws MalformedAddressException, NoAddressFoundException
 	{
 		ap = new AddressParser();
-		parseAddress(input);
+		parsedInput = ap.parseAddress(input);
 		int roadNumber = -1;
 		int postalNumber = -1;
 		
@@ -36,11 +37,18 @@ public class AddressSearch {
 		foundEdges = EdgeSearch.searchForRoads(parsedInput[0], roadNumber, parsedInput[2], postalNumber, parsedInput[5]);
 	}
 	
+	/**
+	 * @return foundEdges[]
+	 */
 	public Edge[] getFoundEdges()
 	{
 		return foundEdges;
 	}
-	
+	/**
+	 * This method tries to find a specific edge from the edges gather in searchForAddress
+	 * @return A single edge that matches input
+	 * @throws NoAddressFoundException
+	 */
 	public Edge getEdgeToNavigate() throws NoAddressFoundException
 	{
 		if(foundEdges.length == 0)
@@ -53,7 +61,9 @@ public class AddressSearch {
 		}
 			
 	}
-	
+	/**
+	 * Resets foundEdges array.
+	 */
 	public void clearResults()
 	{ foundEdges = new Edge[0];	}
 	
@@ -63,10 +73,13 @@ public class AddressSearch {
 		for (int i = 1; i < edgesToCheck.length; i++) 
 			if(!name.equalsIgnoreCase(edgesToCheck[i].getRoadName()))
 				return false;
-		System.out.println("ALL ROADNAMES MATCHES");
 		return true;
 	}
-	
+	/**
+	 * Checks if all found edges has the same city.
+	 * @param edgesToCheck An array of possible edge matches. 
+	 * @return true if that have the same city. False if not.
+	 */
 	private boolean doesRoadsCityMatch(Edge[] edgesToCheck)
 	{
 		HashSet<Integer> relevantEdgeIDsLeft = edgesToCheck[0].getPostalNumberLeftCity().getCityRoadIDs();
@@ -76,12 +89,6 @@ public class AddressSearch {
 			if(!relevantEdgeIDsLeft.contains(edge.getiD()) && !relevantEdgeIDsRight.contains(edge.getiD()))		
 				return false;
 		
-		System.out.println("ALL ROADS CITIES MATCHES");
 		return true;
-	}
-	
-	private void parseAddress(String input) throws MalformedAddressException, NoAddressFoundException
-	{
-		parsedInput = ap.parseAddress(input);
 	}
 }

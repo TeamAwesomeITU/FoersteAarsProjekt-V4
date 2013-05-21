@@ -1,14 +1,17 @@
 package mapCreationAndFunctions.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import inputHandler.EdgeSearch;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
-
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.search.EdgeSearch;
 
 import org.junit.Test;
 
+/**
+ * Testclass for EdgeSearch with road name, number & letter.
+ */
 public class EdgeSearchRoadNameAndNumberLetter {
 	
 	public void testRoadNameAndNumber(String edgeToFind, int roadNumber, String letter, int expectedFinds, int postalNumber)
@@ -30,6 +33,9 @@ public class EdgeSearchRoadNameAndNumberLetter {
 		}
 	}
 	
+	/**
+	 * Test for a raod with one occurence, number and no letter.
+	 */
 	@Test
 	public void testRoadnameOnlyOneOccurenceNoLetter()
 	{
@@ -43,6 +49,9 @@ public class EdgeSearchRoadNameAndNumberLetter {
 		testRoadNameAndNumber(edgeToFind, roadNumber, letter, expectedFinds, postalNumber);
 	}
 	
+	/**
+	 * Test for a road with on letter in To and From interval.
+	 */
 	@Test
 	public void testRoadnameOnlyOneLetterInToFromInterval()
 	{
@@ -56,6 +65,9 @@ public class EdgeSearchRoadNameAndNumberLetter {
 		testRoadNameAndNumber(edgeToFind, roadNumber, letter, expectedFinds, postalNumber);
 	}
 	
+	/**
+	 * Test roadname with two different letter in To and From interval.
+	 */
 	@Test
 	public void testRoadnameTwoDifferentLettersInToFromInterval()
 	{
@@ -71,6 +83,9 @@ public class EdgeSearchRoadNameAndNumberLetter {
 		testRoadNameAndNumber(edgeToFind, roadNumber, letter, expectedFinds, postalNumber);
 	}
 
+	/**
+	 * Test for road, two same letters in To and From interval.
+	 */
 	@Test
 	public void testRoadnameTwoSameLettersInToFromInterval()
 	{
@@ -86,6 +101,9 @@ public class EdgeSearchRoadNameAndNumberLetter {
 		testRoadNameAndNumber(edgeToFind, roadNumber, letter, expectedFinds, postalNumber);
 	}
 	
+	/**
+	 * Test for road, two same numbers in To and From interval.
+	 */
 	@Test
 	public void testRoadnameTwoSameNumbersInToFromInterval()
 	{
