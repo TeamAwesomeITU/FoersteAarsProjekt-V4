@@ -21,6 +21,7 @@ public class RunConverter {
 	 * @throws NumberFormatException Is thrown, if a coordinate could not be recognized as a double value
 	 * @throws IOException
 	 */
+	@SuppressWarnings("unused")
 	private static ArrayList<String> convertFileWithSpaceAsTheOnlyDelimiter(String filenameAndLocation) throws NumberFormatException, IOException
 	{
 		BufferedReader reader = new BufferedReader(new FileReader(filenameAndLocation));
