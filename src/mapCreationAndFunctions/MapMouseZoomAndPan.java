@@ -231,16 +231,13 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 		double endYCoord = coordConverter.pixelToUTMCoordY((int) endY);
 
 		try {
-			System.out.println("Relation-calculation: startXCoord: " + startXCoord + ", endXCoord: " + endXCoord + ", startYCoord: " + startYCoord + ", endYCoord: " + endYCoord);	
 			area = new AreaToDraw(startXCoord, endXCoord, startYCoord, endYCoord, true);	
-			System.out.println("W/H of zoomed area: " + area.getWidth()/area.getHeight());
 			rect = null;
 			mp.repaintMap(area);
 		}
 
 		catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
 			JOptionPane.showMessageDialog(mp, "The selected area is not within the map, please try again.");
-			System.out.println("ERROR: " + e1.getMessage());					
 			rect = null;
 			mp.repaint();
 		}
@@ -256,26 +253,21 @@ public class MapMouseZoomAndPan extends MouseAdapter {
 			startY = coordConverter.pixelToUTMCoordY((int)p.getY()) + (zoomY*25);
 			endY = coordConverter.pixelToUTMCoordY((int)p.getY()) - (zoomY*25);
 			if(endX > AreaToDraw.getLargestXOfEntireMap()) {
-				System.out.println("endX");
 				endX = AreaToDraw.getLargestXOfEntireMap();
 			}
 			if(startX < AreaToDraw.getSmallestXOfEntireMap()) {
-				System.out.println("startX");
 				startX = AreaToDraw.getSmallestXOfEntireMap();
 			}
 			if(endY > AreaToDraw.getLargestYOfEntireMap()) {
-				System.out.println("endY");
 				endY = AreaToDraw.getLargestYOfEntireMap();
 			}
 			if(startY < AreaToDraw.getSmallestYOfEntireMap()) {
-				System.out.println("startY");
 				startY = AreaToDraw.getSmallestYOfEntireMap();
 			}
 			
 			try {
 				newArea = new AreaToDraw(startX, endX, startY, endY, true);
   		} catch (NegativeAreaSizeException | AreaIsNotWithinDenmarkException | InvalidAreaProportionsException e1) {
-  			System.out.println(e1.getClass() + ": " + e1.getMessage());
   			newArea = currentArea;
 		}
 		mp.repaintMap(newArea);

@@ -49,10 +49,8 @@ public class DijkstraSP
 			distTo[s] = 0.0;
 
 			pq.insert(s, 0.0);
-			System.out.println("Starting relaxation");
 			while (!pq.isEmpty())
 				prepareForRelax(pq.delMin());
-			System.out.println("Relaxation done");
 		}
 		else 
 		{
@@ -129,7 +127,6 @@ public class DijkstraSP
 				if (!hasPathTo(n)) { 
 					throw new NoRoutePossibleException("No route is possible between these roads");
 				}
-				System.out.println("Finding route!");
 				Stack<Edge> path = new Stack<Edge>();
 				for (Edge e = edgeArray[edgeTo[n]-1]; e != null; e = edgeArray[edgeTo[n]-1]) {
 					if (n+1 == e.getFromNode())
@@ -140,7 +137,6 @@ public class DijkstraSP
 					if (n == s) 
 					{
 						path.push(e);
-						System.out.println("Succes! Route found.");
 						break;
 					}
 					path.push(e);

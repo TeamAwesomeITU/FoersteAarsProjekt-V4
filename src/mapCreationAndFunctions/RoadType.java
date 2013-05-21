@@ -192,12 +192,4 @@ public enum RoadType {
 		else
 			return 7;
 	}
-	/**
-	 * Main method use to test. 
-	 * @param args Well
-	 */
-	public static void main(String[] args)
-	{
-		System.out.println(RoadType.getStroke(1));
-	}
 }

@@ -58,10 +58,7 @@ public class AddressParser {
 	 * This method attempts to isolate the road name. 
 	 * @param The entire address on a single line.
 	 */
-	private void findRoadName(String address)
-	{
-		System.out.println("INPUT TO FIND ROADNAME BY: " + address);
-
+	private void findRoadName(String address){
 		if(address.trim().isEmpty())																			/* 4 */																		
 			return;
 
@@ -199,7 +196,6 @@ public class AddressParser {
 		if(addressAfterDeletion.split("\\s*").length==2){
 			addressArray[2] = addressAfterDeletion.split("\\s*")[1].toLowerCase().trim();
 		}
-		System.out.println(addressArray[2] + " " + addressArray[2].length());
 	}
 
 	/** 

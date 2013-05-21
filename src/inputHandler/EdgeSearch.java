@@ -26,7 +26,7 @@ public class EdgeSearch  {
 	{
 		TernarySearchTrie tst = new TernarySearchTrie();
 
-		
+
 		for(Edge edge : DataHolding.getEdgeArray())
 			if(!edge.getRoadName().isEmpty()) //Excludes Edges with no name
 				tst.put(edge.getRoadName().toLowerCase(), edge.getiD());
@@ -43,7 +43,7 @@ public class EdgeSearch  {
 	{
 		if(roadToFind.trim().isEmpty())
 			return new Edge[0];
-		
+
 		roadToFind = roadToFind.toLowerCase();
 		ArrayList<Integer> listOfFoundEdges = edgeSearchTrie.get(roadToFind);
 
@@ -83,23 +83,19 @@ public class EdgeSearch  {
 
 		//If postal number or city name are the only things that should be searched for
 		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && (postalNumber != -1 || !cityName.isEmpty()))
-		{
-			System.out.println("CITY IS THE ONLY THING TO SEARCH");
-			
+		{			
 			//If city does not exist, return no roads
 			if(postalNumber != -1 && !City.postalNumberExists(postalNumber))
 				return new Edge[0];
-			
+
 			else if(postalNumber != -1 && City.postalNumberExists(postalNumber))
 			{
-				System.out.println("SEARCHING FOR POSTAL NUMBER");
 				return City.getCityByPostalNumber(postalNumber).getCityRoads();		
 			}
 
 
 			else if(!cityName.isEmpty())
 			{
-				System.out.println("SEARCHING FOR CITY NAME");
 				City city = City.getCityByCityName(cityName);
 				if(city != null)
 					return city.getCityRoads();
@@ -225,8 +221,7 @@ public class EdgeSearch  {
 
 		//Checks if the roadNumber is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
 		if(toLeftNumber != 0 && (toLeftNumber % 2) != (roadNumber % 2) || (fromLeftNumber != 0 && (fromLeftNumber % 2) != (roadNumber % 2)))
-			return false; //System.out.println("roadNumber was not equal to this sides evenness");
-		//		System.out.println(edge.getFromLeftNumber() + "<= " + roadNumber + ", " + edge.getToLeftNumber() + ">=" +  roadNumber);
+			return false; 
 		return (fromLeftNumber <= roadNumber && toLeftNumber >= roadNumber );
 	}
 
@@ -241,8 +236,7 @@ public class EdgeSearch  {
 
 		//Checks if the roadNumber is even or uneven, and if this matches the "evenness" of the numbers of this side of the road
 		if(toRightNumber != 0 && (toRightNumber % 2) != (roadNumber % 2) || (fromRightNumber != 0 && (fromRightNumber % 2) != (roadNumber % 2)))
-			return false; // System.out.println("roadNumber was not equal to this sides evenness");
-		//		System.out.println(fromRightNumber + "<= " + roadNumber + ", " + toRightNumber + ">=" +  roadNumber);
+			return false; 
 		return (fromRightNumber <= roadNumber && toRightNumber >= roadNumber );
 	}
 
@@ -256,7 +250,6 @@ public class EdgeSearch  {
 		if(letter.length() > 1)
 			return false;
 
-		//System.out.println("Noget med road letter left side");
 		String fromLetter = edge.getFromLeftLetter().toLowerCase();
 		String toLetter = edge.getToLeftLetter().toLowerCase();
 		char letterChar = letter.charAt(0);	
@@ -288,7 +281,6 @@ public class EdgeSearch  {
 		if(letter.length() > 1)
 			return false;
 
-		//		System.out.println("Noget med road letter right side");
 		String fromLetter = edge.getFromRightLetter().toLowerCase();
 		String toLetter = edge.getToRightLetter().toLowerCase();
 		char letterChar = letter.charAt(0);	

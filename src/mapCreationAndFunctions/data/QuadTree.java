@@ -173,7 +173,6 @@ public class QuadTree {
 	{
 
 		try {				
-			long s = System.currentTimeMillis();
 			AreaToDraw area = new AreaToDraw();	
 			QuadTree quadTree = new QuadTree(area);
 
@@ -200,8 +199,6 @@ public class QuadTree {
 			}
 
 			reader.close();
-			long t = System.currentTimeMillis();
-			System.out.println("Creation of Quadtree takes" + (t-s));
 			return quadTree;	
 		} catch (IOException e) {
 			e.printStackTrace();

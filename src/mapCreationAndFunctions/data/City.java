@@ -237,7 +237,6 @@ public class City {
 	private static boolean createCities()
 	{
 		try {			
-			long s = System.currentTimeMillis();
 			File file = new File(cityFileName);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 
@@ -292,8 +291,6 @@ public class City {
 			}
 
 			reader.close();		
-			long t = System.currentTimeMillis();
-			System.out.println("Creation of CitySomeThingJesper took " + (t-s));
 			return true;
 
 		} catch (IOException e) {

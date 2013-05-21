@@ -73,7 +73,6 @@ public class AddressSearch {
 		for (int i = 1; i < edgesToCheck.length; i++) 
 			if(!name.equalsIgnoreCase(edgesToCheck[i].getRoadName()))
 				return false;
-		System.out.println("ALL ROADNAMES MATCHES");
 		return true;
 	}
 	/**
@@ -90,7 +89,6 @@ public class AddressSearch {
 			if(!relevantEdgeIDsLeft.contains(edge.getiD()) && !relevantEdgeIDsRight.contains(edge.getiD()))		
 				return false;
 		
-		System.out.println("ALL ROADS CITIES MATCHES");
 		return true;
 	}
 }

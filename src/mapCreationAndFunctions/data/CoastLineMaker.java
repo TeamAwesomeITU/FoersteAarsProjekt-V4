@@ -106,7 +106,6 @@ public class CoastLineMaker {
 
 
 		try {
-			long startTime = System.currentTimeMillis();
 			BufferedReader reader = new BufferedReader(new FileReader(filenameAndLocation));
 
 			String line = "";
@@ -142,8 +141,6 @@ public class CoastLineMaker {
 
 			reader.close();
 
-			long endTime = System.currentTimeMillis();
-			System.out.println("At create polygonSet tager " + (endTime - startTime) + " milliseconds");
 
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
