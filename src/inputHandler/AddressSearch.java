@@ -3,7 +3,6 @@ package inputHandler;
 import java.util.HashSet;
 
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.search.EdgeSearch;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 

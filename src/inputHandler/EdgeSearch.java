@@ -1,15 +1,15 @@
-package mapCreationAndFunctions.search;
+package inputHandler;
 
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 
 import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
+import mapCreationAndFunctions.data.TernarySearchTrie;
 
 /**
  * Enables searching for Edges with many different combinations of parameters.
