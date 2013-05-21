@@ -8,8 +8,6 @@ import java.util.regex.Pattern;
 
 import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.search.CitySearch;
-import mapCreationAndFunctions.search.EdgeSearch;
 
 /**
  * This class is responsible to handle all the input from the user. 

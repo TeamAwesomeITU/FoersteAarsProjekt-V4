@@ -6,10 +6,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Stack;
 
+import mapCreationAndFunctions.data.Edge;
 import navigation.data.SWPriorityQueue;
 import navigation.exceptions.NoRoutePossibleException;
-
-import mapCreationAndFunctions.data.Edge;
 
 /**
  * DijsktraSP finds the best route between two points with certain parameters as weights for how a road is deemed the best.

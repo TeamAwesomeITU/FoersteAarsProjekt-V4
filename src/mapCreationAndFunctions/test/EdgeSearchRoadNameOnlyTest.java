@@ -1,11 +1,12 @@
 package mapCreationAndFunctions.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import inputHandler.EdgeSearch;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
-
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.search.EdgeSearch;
 
 import org.junit.Test;
 

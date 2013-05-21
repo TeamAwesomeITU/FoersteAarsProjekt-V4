@@ -1,11 +1,16 @@
 package inputHandler.test;
 
-import static org.junit.Assert.*;
-import java.util.HashSet;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import inputHandler.AddressSearch;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
+
+import java.util.HashSet;
+
 import mapCreationAndFunctions.data.Edge;
+
 import org.junit.Test;
 
 public class AddressSearchTest {

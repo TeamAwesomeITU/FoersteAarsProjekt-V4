@@ -1,8 +1,14 @@
 package gui;
 
-import gui.customJComponents.*;
-import gui.settingsAndPopUp.*;
-
+import gui.customJComponents.ColoredArrowUI;
+import gui.customJComponents.ColoredJButton;
+import gui.customJComponents.ColoredJComboBox;
+import gui.customJComponents.ColoredJMenu;
+import gui.customJComponents.ColoredJMenuBar;
+import gui.customJComponents.ColoredJPanel;
+import gui.customJComponents.ColoredJScrollPane;
+import gui.customJComponents.CustomJTextField;
+import gui.settingsAndPopUp.ColorTheme;
 import inputHandler.AddressSearch;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
@@ -23,7 +29,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Stack;
-import javax.swing.Timer;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -34,15 +39,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
-
-
-import navigation.DijkstraSP;
-import navigation.exceptions.NoRoutePossibleException;
 
 import mapCreationAndFunctions.AreaToDraw;
 import mapCreationAndFunctions.MapMouseWheelZoom;
@@ -54,6 +55,8 @@ import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.exceptions.AreaIsNotWithinDenmarkException;
 import mapCreationAndFunctions.exceptions.InvalidAreaProportionsException;
 import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
+import navigation.DijkstraSP;
+import navigation.exceptions.NoRoutePossibleException;
 /**
  * This class holds the window with the map of denmark.
  */

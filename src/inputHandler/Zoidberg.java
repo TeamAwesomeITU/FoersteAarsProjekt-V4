@@ -1,5 +1,7 @@
 package inputHandler;
 
+import gui.MapWindow;
+
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -14,8 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import gui.MapWindow;
 
 public class Zoidberg {
 

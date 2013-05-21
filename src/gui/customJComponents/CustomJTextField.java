@@ -2,7 +2,6 @@ package gui.customJComponents;
 
 import gui.settingsAndPopUp.ColorTheme;
 
-
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 

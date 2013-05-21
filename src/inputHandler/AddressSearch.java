@@ -1,11 +1,11 @@
 package inputHandler;
 
+import inputHandler.exceptions.MalformedAddressException;
+import inputHandler.exceptions.NoAddressFoundException;
+
 import java.util.HashSet;
 
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.search.EdgeSearch;
-import inputHandler.exceptions.MalformedAddressException;
-import inputHandler.exceptions.NoAddressFoundException;
 
 /**
  * Enables searching for adresses with a single String

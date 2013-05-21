@@ -1,9 +1,10 @@
-package mapCreationAndFunctions.search;
+package inputHandler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import mapCreationAndFunctions.data.City;
+import mapCreationAndFunctions.data.TernarySearchTrie;
 
 /**
  * Enables searching for Cities by name 

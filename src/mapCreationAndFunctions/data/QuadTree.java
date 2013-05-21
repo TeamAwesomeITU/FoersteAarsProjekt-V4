@@ -1,4 +1,4 @@
-package mapCreationAndFunctions.search;
+package mapCreationAndFunctions.data;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import mapCreationAndFunctions.AreaToDraw;
-import mapCreationAndFunctions.data.Node;
 import mapCreationAndFunctions.exceptions.AreaIsNotWithinDenmarkException;
 import mapCreationAndFunctions.exceptions.InvalidAreaProportionsException;
 import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;

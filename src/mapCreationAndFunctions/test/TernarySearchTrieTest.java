@@ -1,9 +1,11 @@
 package mapCreationAndFunctions.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 
-import mapCreationAndFunctions.search.TernarySearchTrie;
-import static org.junit.Assert.*;
+import mapCreationAndFunctions.data.TernarySearchTrie;
 
 import org.junit.After;
 import org.junit.Before;

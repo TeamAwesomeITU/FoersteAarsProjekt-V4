@@ -1,6 +1,6 @@
 package inputHandler.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import inputHandler.AddressSearch;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;

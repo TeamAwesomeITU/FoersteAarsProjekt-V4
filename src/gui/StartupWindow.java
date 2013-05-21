@@ -1,7 +1,8 @@
 package gui;
 
 
-import gui.customJComponents.*;
+import gui.customJComponents.ColoredJPanel;
+import gui.customJComponents.ColoredJProgressBar;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -12,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import mapCreationAndFunctions.data.DataHolding;
-import mapCreationAndFunctions.search.QuadTree;
+import mapCreationAndFunctions.data.QuadTree;
 
 /**
  * This class makes the first window the user sees. It is

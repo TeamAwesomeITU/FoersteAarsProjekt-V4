@@ -1,4 +1,4 @@
-package mapCreationAndFunctions.search;
+package mapCreationAndFunctions.data;
 
 import java.util.ArrayList;
 

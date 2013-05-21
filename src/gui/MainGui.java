@@ -1,7 +1,14 @@
 package gui;
 
-import gui.customJComponents.*;
-import gui.settingsAndPopUp.*;
+import gui.customJComponents.ColoredArrowUI;
+import gui.customJComponents.ColoredJButton;
+import gui.customJComponents.ColoredJCheckBox;
+import gui.customJComponents.ColoredJComboBox;
+import gui.customJComponents.ColoredJMenu;
+import gui.customJComponents.ColoredJMenuItem;
+import gui.customJComponents.ColoredJPanel;
+import gui.settingsAndPopUp.ColorTheme;
+import gui.settingsAndPopUp.ScreenSize;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

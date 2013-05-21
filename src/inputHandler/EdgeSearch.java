@@ -1,4 +1,4 @@
-package mapCreationAndFunctions.search;
+package inputHandler;
 
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
@@ -10,6 +10,7 @@ import java.util.HashSet;
 import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
+import mapCreationAndFunctions.data.TernarySearchTrie;
 
 /**
  * Enables searching for Edges with many different combinations of parameters.
@@ -25,7 +26,6 @@ public class EdgeSearch  {
 	private static TernarySearchTrie createEdgeSearchTrie()
 	{
 		TernarySearchTrie tst = new TernarySearchTrie();
-
 		
 		for(Edge edge : DataHolding.getEdgeArray())
 			if(!edge.getRoadName().isEmpty()) //Excludes Edges with no name
