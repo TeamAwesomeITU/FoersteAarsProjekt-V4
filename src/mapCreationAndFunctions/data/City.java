@@ -310,6 +310,9 @@ public class City {
 		return allCitiesList;
 	}
 	
+	/**
+	 * Returns the name of the city
+	 */
 	@Override
 	public String toString() {
 		return this.cityName;
