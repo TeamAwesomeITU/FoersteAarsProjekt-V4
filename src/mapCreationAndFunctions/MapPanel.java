@@ -76,6 +76,10 @@ public class MapPanel extends JPanel {
 
 	}
 
+	/**
+	 * A get method
+	 * @return
+	 */
 	public MapMouseZoomAndPan getMapMouseZoomAndPan(){
 		return mapMouseZoomAndPan;
 	}
