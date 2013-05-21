@@ -1,4 +1,4 @@
-package mapCreationAndFunctions.search;
+package mapCreationAndFunctions.data;
 
 import java.util.ArrayList;
 
@@ -21,10 +21,12 @@ public class TernarySearchTrie
 	public int size()
 	{ return N;	}
 
-	public boolean contains(String key)
-	{ return get(key) != null; }
+	public boolean contains(String key) {
+	key = key.toLowerCase();
+	return get(key) != null; }
 
 	public ArrayList<Integer> get(String key) {
+		key = key.toLowerCase();
 		if (key == null) throw new NullPointerException();
 		if (key.trim().isEmpty()) throw new IllegalArgumentException("Key cannot be empty");
 		TrieNode currentNode = get(root, key, 0);
@@ -45,6 +47,7 @@ public class TernarySearchTrie
 	}
 
 	public void put(String s, int val) {
+		s = s.toLowerCase();
 		if (!contains(s)) N++;
 		root = put(root, s, val, 0);
 	}
@@ -103,13 +106,6 @@ public class TernarySearchTrie
 		if (currentNode.val != null) list.add(prefix + currentNode.character);
 		collect(currentNode.mid, prefix + currentNode.character, list);
 		collect(currentNode.right, prefix, list);
-	}
-
-	public ArrayList<String> wildcardMatch(String pattern) {
-		pattern = pattern.toLowerCase();
-		ArrayList<String> list = new ArrayList<String>();
-		collect(root, "", 0, pattern, list);
-		return list;
 	}
 
 	public void collect(TrieNode currentNode, String prefix, int i, String pattern, ArrayList<String> list) {

@@ -1,6 +1,7 @@
 package inputHandler.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.fail;
 import inputHandler.AddressParser;
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
@@ -9,7 +10,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
+/**
+ * This class is our whitebox testing. The data sets can be found in our appendix.
+ */
 public class WhiteboxTesting {
 	
 	private AddressParser addressParser;
@@ -161,8 +164,8 @@ public class WhiteboxTesting {
 	@Test
 	public void dataSetI(){
 		try {
-			expectedResult = new String[]{"nørregade", "7", "b", "5", "4600", "køge"};
-			actualInput = addressParser.parseAddress("nørregade 7b 5. sal 4600 køge");
+			expectedResult = new String[]{"nørregade", "7", "a", "5", "4600", "køge"};
+			actualInput = addressParser.parseAddress("nørregade 7a 5. sal 4600 køge");
 			assertArrayEquals(actualInput, expectedResult);
 		} catch (MalformedAddressException | NoAddressFoundException e) {
 			e.printStackTrace();

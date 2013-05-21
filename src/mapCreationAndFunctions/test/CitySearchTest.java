@@ -1,9 +1,8 @@
 package mapCreationAndFunctions.test;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
+import inputHandler.CitySearch;
 import mapCreationAndFunctions.data.City;
-import mapCreationAndFunctions.search.CitySearch;
 
 import org.junit.Test;
 

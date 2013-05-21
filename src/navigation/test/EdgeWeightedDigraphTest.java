@@ -1,6 +1,6 @@
 package navigation.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import mapCreationAndFunctions.data.DataHolding;
 import navigation.EdgeWeightedDigraph;
 import navigation.data.Bag;

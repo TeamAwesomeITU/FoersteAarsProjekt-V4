@@ -1,6 +1,5 @@
 package inputHandler;
 
-
 import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
@@ -9,13 +8,10 @@ import java.util.regex.Pattern;
 
 import mapCreationAndFunctions.data.City;
 import mapCreationAndFunctions.data.Edge;
-import mapCreationAndFunctions.search.CitySearch;
-import mapCreationAndFunctions.search.EdgeSearch;
-
 
 /**
  * This class is responsible to handle all the input from the user. 
- * When an address is entered into the gui, it is parsed through
+ * When an address is entered into the GUI, it is parsed through
  * this class. It is checked in the textfield containing all the
  * road names. If it finds a match it returns it as an array of strings.
  */
@@ -31,7 +27,6 @@ public class AddressParser {
 	private	String pPost = "(\\b\\d{4,5})"; 			
 	private	String pLetter = "[A-ZÆØÅa-zæøå]";
 	private String pBadInput =  "[^A-ZÆØÅÂÄÖa-zæøåéèöäüâ0-9,\\-.´:¨)/(& ]{1,100}";
-	private String pDelimiters = "sal|etage|plan|th|tv|\\,|\\.|\\bi\\b|\\bpå\\b";
 	private	String numberLetter = ""; // Gemmer vejnummeret med tal og bogstav.
 	private String addressAfterDeletion = "";
 
@@ -91,9 +86,6 @@ public class AddressParser {
 
 	/** This method is used for finding the road name. This is done by searching through the txt file containing all roadnames in Denmark.
 	 * The method splits the input string and the road name up. Both are split up at whitespaces and each are put in different arrays.
-	 * Then every entry in the road name array is held up against the input array, and if all entries in the road name array are matched in the input array,
-	 * The road name array's entries are then made a string again, and saved in a tmpStorage array. This is because, sometimes some road names consists in different length,
-	 * for instance A. E. Hansensvej and Hansensvej. In the end, the longest string in tmpStorage must be the road name that the user gave as input.
 	 * The longest string is then saved in the address array.
 	 * 
 	 * @param input Address string
@@ -219,10 +211,6 @@ public class AddressParser {
 			System.out.println("Postnummer: " + postcode.group());
 			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"").trim();
 			addressArray[4] = postcode.group().trim(); 
-
-			//If the string is not empty, even after the city was found, try finding the road name again
-			//			if(!addressAfterDeletion.isEmpty() && addressArray[0].isEmpty())
-			//				findRoadName(addressAfterDeletion);
 		}
 	}
 	
@@ -272,20 +260,11 @@ public class AddressParser {
 		addressArray[5] = foundCityName;
 		addressAfterDeletion = addressAfterDeletion.replaceAll(foundCityName, "");
 
-		if(!foundCityName.isEmpty())
-		{
-			System.out.println("Address left BEFORE roadname was found: " + addressAfterDeletion);
-			addressAfterDeletion = addressAfterDeletion.replace(foundCityName,"").trim();
-		}
 		System.out.println("Address left AFTER roadname was found: " + addressAfterDeletion);
 	}
 
 	
 	public String[] getAddressArray(){
-		
-		
-
-
 		return addressArray;
 	}
 }

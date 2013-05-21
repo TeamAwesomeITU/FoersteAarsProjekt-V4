@@ -1,5 +1,7 @@
 package mapCreationAndFunctions.data;
 
+import inputHandler.CitySearch;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +12,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import mapCreationAndFunctions.search.CitySearch;
 
 /**
  * This class is implemented to be able to deal with many different cities with many different postal numbers.
