@@ -25,11 +25,18 @@ public class MapMouseWheelZoom implements MouseWheelListener {
 	private Point mouseLocation;
 	private AreaToDraw currentArea, newArea;
 
+	/**
+	 * Initialies the MapMouseWheelZoom
+	 * @param mp the mappanel for the zoom
+	 */
 	public MapMouseWheelZoom(MapPanel mp) {
 		recalculateTimer.setRepeats(false);
 		this.mp = mp;
 
 	}
+	/**
+	 * Restarts the timer if the user scrolls before it zooms.
+	 */
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		if (recalculateTimer.isRunning()) {
 			recalculateTimer.restart();

@@ -160,7 +160,6 @@ public enum RoadType {
 	@SuppressWarnings("unchecked")
 	public static HashSet<Integer> getRoadTypesRelevantToZoomLevel(int numberOfWantedCategories)
 	{
-		//WHAT THE FUCK - MIND.EQUALS(BLOWN) == TRUE
 		HashSet<Integer> relevantRoadTypeSet = new HashSet<Integer>();
 		relevantRoadTypeSet = (HashSet<Integer>) category6.clone();
 
