@@ -43,11 +43,11 @@ public class AddressParser {
 		findRoadName(address);
 		findCityName(addressAfterDeletion);
 		findPostCode(addressAfterDeletion);
-		if(!addressArray[0].isEmpty())																		/* 3 */
+		if(!addressArray[0].isEmpty())																			/* 3 */
 		{
 			findFloorNumber(addressAfterDeletion);
 			findRoadNumber(addressAfterDeletion);
-			if(!addressArray[1].isEmpty()){
+			if(!addressArray[1].isEmpty()){																		/* 4 */
 				findLetter(addressAfterDeletion);
 			}
 		}
@@ -59,7 +59,7 @@ public class AddressParser {
 	 * @param The entire address on a single line.
 	 */
 	private void findRoadName(String address){
-		if(address.trim().isEmpty())																			/* 4 */																		
+		if(address.trim().isEmpty())																			/* 5 */																		
 			return;
 
 		String[] splitInput = address.split("\\s+");
@@ -78,11 +78,11 @@ public class AddressParser {
 
 			totalInput = totalInput.trim();		
 			possibleRoadName = EdgeSearch.searchForRoadNameLongestPrefix(totalInput);
-			if(!possibleRoadName.isEmpty())																	/* 5 */					
+			if(!possibleRoadName.isEmpty())																		/* 6 */					
 			{
 				Edge[] possibleEdges = EdgeSearch.searchForRoadName(possibleRoadName);
 
-				if(possibleEdges.length != 0 && possibleRoadName.length() > foundRoadName.length())			/* 6 */
+				if(possibleEdges.length != 0 && possibleRoadName.length() > foundRoadName.length())				/* 7 */
 				{
 					foundRoadName = possibleRoadName;
 				}			
@@ -91,7 +91,7 @@ public class AddressParser {
 			wantedLength--;
 		}
 		addressArray[0] = foundRoadName;
-		if(!foundRoadName.isEmpty())																		/* 7 */
+		if(!foundRoadName.isEmpty())																			/* 8 */
 		{
 			addressAfterDeletion = addressAfterDeletion.replace(foundRoadName,"").trim();
 		}
@@ -103,7 +103,7 @@ public class AddressParser {
 	 */
 	private void findRoadNumber(String address) {
 		Matcher eventualNumber = match(pNumber, address);
-		if(eventualNumber.find()) 
+		if(eventualNumber.find()) 																				/* 9 */
 		{																					
 			addressAfterDeletion = addressAfterDeletion.replace(eventualNumber.group(), "");
 			addressArray[1] = eventualNumber.group().trim();
@@ -118,8 +118,8 @@ public class AddressParser {
 	private void findFloorNumber(String address) {
 		String floorTemp = "";
 		Matcher floor = match(pFloor, address);			
-		if(floor.find()) 
-		{																					/* 11 */
+		if(floor.find()) 																						/* 10 */
+		{																					
 			floorTemp = floor.group();	
 			match(pNumber, floorTemp);
 			addressAfterDeletion = addressAfterDeletion.replace(floorTemp, "");
@@ -135,8 +135,8 @@ public class AddressParser {
 	 */
 	private void findPostCode(String address) {
 		Matcher postcode = match(pPost, address);	
-		if(postcode.find()) 
-		{																				/* 12 */
+		if(postcode.find()) 																					/* 11 */
+		{																				
 			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"").trim();
 			addressArray[4] = postcode.group().trim(); 
 		}
@@ -148,7 +148,7 @@ public class AddressParser {
 	 */
 	private void findCityName(String address)
 	{
-		if(address.trim().isEmpty())																			/* 13 */
+		if(address.trim().isEmpty())																			/* 12 */
 			return;
 
 		String[] splitInput = address.split("\\s+");
@@ -167,11 +167,11 @@ public class AddressParser {
 
 			totalInput = totalInput.trim();		
 			possibleCityName = CitySearch.searchForCityNameLongestPrefix(totalInput);
-			if(!possibleCityName.isEmpty())																	/* 14 */
+			if(!possibleCityName.isEmpty())																		/* 13 */
 			{
 				City[] possibleCities = CitySearch.searchForCityName(possibleCityName);
 
-				if(possibleCities.length != 0 && possibleCityName.length() > foundCityName.length())		/* 15 */
+				if(possibleCities.length != 0 && possibleCityName.length() > foundCityName.length())			/* 14 */
 				{
 					foundCityName = possibleCityName;
 				}			
@@ -189,13 +189,14 @@ public class AddressParser {
 	 */
 	private void findLetter(String address) {
 		addressAfterDeletion = addressAfterDeletion.replaceAll(",", "").trim().replaceAll("sal", "").trim();
-		if(addressAfterDeletion.contains("i") && addressAfterDeletion.split("\\s*").length>2)
+		if(addressAfterDeletion.contains("i") && addressAfterDeletion.split("\\s*").length>2)					/* 15 */
 		{
 			addressAfterDeletion = addressAfterDeletion.replaceAll("i", "");
 		}
-		if(addressAfterDeletion.split("\\s*").length==2){
+		if(addressAfterDeletion.split("\\s*").length==2){														/* 16 */
 			addressArray[2] = addressAfterDeletion.split("\\s*")[1].toLowerCase().trim();
-		}
+		}else
+			addressArray[2] = "";
 	}
 
 	/** 
