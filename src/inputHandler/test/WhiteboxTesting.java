@@ -20,6 +20,9 @@ public class WhiteboxTesting {
 	private String[] expectedResult;
 
 	
+	/**
+	 * initializes the arrays and address parser before all tests
+	 */
 	@Before
 	public void setUp(){
 		addressParser = new AddressParser();

@@ -6,9 +6,16 @@ import mapCreationAndFunctions.data.City;
 
 import org.junit.Test;
 
+/**
+ * Testclass for the citySearch class.
+ */
 public class CitySearchTest {
 
-
+	/**
+	 * Test for the CitySearch class.
+	 * @param cityToFind The city to find
+	 * @param expectedFinds The expected find.
+	 */
 	public void testCitySearch(String cityToFind, int expectedFinds)
 	{
 		City[] cities = CitySearch.searchForCityName(cityToFind);
@@ -23,6 +30,9 @@ public class CitySearchTest {
 		assertEquals(expectedFinds, cities.length);
 	}
 	
+	/**
+	 * Test for the citySearch.
+	 */
 	@Test
 	public void testKoebenhavn()
 	{
@@ -35,6 +45,9 @@ public class CitySearchTest {
 		testCitySearchSuggestions(cityToFind, expectedSuggestions);
 	}
 	
+	/**
+	 * Test for the citySearch.
+	 */
 	@Test
 	public void testKoebenhavnNV()
 	{

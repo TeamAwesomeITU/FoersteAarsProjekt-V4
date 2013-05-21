@@ -10,8 +10,16 @@ import mapCreationAndFunctions.data.Edge;
 
 import org.junit.Test;
 
+/**
+ * Test for search for road name only.
+ */
 public class EdgeSearchRoadNameOnlyTest {
 	
+	/**
+	 * Test for number of found road names.
+	 * @param edgeToFind The edge to find.
+	 * @param expectedFinds The expected find.
+	 */
 	public void testNumberOfFoundRoadNames(String edgeToFind, int expectedFinds)
 	{		
 		Edge[] edgesFound = EdgeSearch.searchForRoadName(edgeToFind);
@@ -22,6 +30,11 @@ public class EdgeSearchRoadNameOnlyTest {
 			assertEquals(edge.getRoadName().toLowerCase(), edgeToFind.toLowerCase());
 	}
 	
+	/**
+	 * Test for number of found road names suggestions.
+	 * @param edgeToFind The edge to find.
+	 * @param expectedFinds The expected finds.
+	 */
 	public void testNumberOfFoundRoadNamesSuggestions(String edgeToFind, int expectedFinds)
 	{		
 		Edge[] edgesFound;
@@ -39,6 +52,9 @@ public class EdgeSearchRoadNameOnlyTest {
 
 	}
 	
+	/**
+	 * Test for road name with no whitespaces and a number.
+	 */
 	@Test
 	public void testRoadnameNoWhitespacesNumber()
 	{
@@ -48,6 +64,9 @@ public class EdgeSearchRoadNameOnlyTest {
 		testNumberOfFoundRoadNames(edgeToFind, expectedFinds);
 	}
 	
+	/**
+	 * Test for road name with no whitespace and a number suggestions.
+	 */
 	@Test
 	public void testRoadnameNoWhitespacesNumberSuggestions()
 	{
@@ -57,6 +76,9 @@ public class EdgeSearchRoadNameOnlyTest {
 		testNumberOfFoundRoadNamesSuggestions(edgeToFind, expectedFinds);
 	}
 	
+	/**
+	 * Test for road name with no whitespcae and a number, in lowercase.
+	 */
 	@Test
 	public void testRoadNameNoWhitespaceNumberLowerCase()
 	{
@@ -66,6 +88,9 @@ public class EdgeSearchRoadNameOnlyTest {
 		testNumberOfFoundRoadNames(edgeToFind, expectedFinds);
 	}
 	
+	/**
+	 * Test for road name with no whitespace and a number, in lowercase suggestions.
+	 */
 	@Test
 	public void testRoadNameNoWhitespaceNumberLowerCaseSuggestions()
 	{
@@ -75,6 +100,9 @@ public class EdgeSearchRoadNameOnlyTest {
 		testNumberOfFoundRoadNamesSuggestions(edgeToFind, expectedFinds);
 	}
 	
+	/**
+	 * Test for road name with single whitespace and a number.
+	 */
 	@Test
 	public void testRoadNameSingleWhitespaceNumber()
 	{
@@ -84,6 +112,9 @@ public class EdgeSearchRoadNameOnlyTest {
 		testNumberOfFoundRoadNames(edgeToFind, expectedFinds);
 	}
 	
+	/**
+	 * Test for road name with single whitespace and a number, in lowercase. 
+	 */
 	@Test
 	public void testRoadNameSingleWhitespaceNumberLowerCase()
 	{
@@ -93,18 +124,27 @@ public class EdgeSearchRoadNameOnlyTest {
 		testNumberOfFoundRoadNames(edgeToFind, expectedFinds);
 	}
 	
+	/**
+	 * Test for a road name as whitespace and a number.
+	 */
 	@Test(expected=IllegalArgumentException.class)
 	public void testWhiteSpaceAsRoadnameNumber()
 	{
 		testNumberOfFoundRoadNames(" ", 10000);
 	}
 	
+	/**
+	 * Test for empty road name and a number.
+	 */
 	@Test(expected=IllegalArgumentException.class)
 	public void testEmptyRoadnameNumber()
 	{
 		testNumberOfFoundRoadNames("", 10000);
 	}
 	
+	/**
+	 * Test for suggestions for Nø.
+	 */
 	public void testSuggestions1()
 	{
 		String edgeToFind = "Nø";
@@ -113,6 +153,9 @@ public class EdgeSearchRoadNameOnlyTest {
 		testNumberOfFoundRoadNamesSuggestions(edgeToFind, expectedFinds);
 	}
 	
+	/**
+	 * Test for suggestions for B.
+	 */
 	public void testSuggestions2()
 	{
 		String edgeToFind = "B";

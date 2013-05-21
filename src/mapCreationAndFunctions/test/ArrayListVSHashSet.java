@@ -3,6 +3,10 @@ package mapCreationAndFunctions.test;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * Tests whether ArrayList or HashSets are fastest. 
+ *
+ */
 public class ArrayListVSHashSet {
 	
 	private ArrayList<Integer> list;
@@ -10,6 +14,9 @@ public class ArrayListVSHashSet {
 	private int numberOfTestNumbers = 800000;
 	private int numberOfContainsNumbers = 50000;
 	
+	/**
+	 * Constructor to run the test.
+	 */
 	public ArrayListVSHashSet()
 	{
 				
@@ -48,30 +55,45 @@ public class ArrayListVSHashSet {
 		
 	}
 	
+	/**
+	 * Contains for HashSet.
+	 */
 	private void containSet() {
 		for (int i = 0; i < numberOfContainsNumbers; i++) {
 			set.contains(numberOfContainsNumbers-i);
 		}		
 	}
 
+	/**
+	 * Contains for ArrayList.
+	 */
 	private void containList() {
 		for (int i = 0; i < numberOfContainsNumbers; i++) {
 			list.contains(numberOfContainsNumbers-i);
 		}		
 	}
 
+	/**
+	 * Iterates through the entire HashSet.
+	 */
 	@SuppressWarnings("unused")
 	private void iterateThroughEntireSet() {
 		for(int number : set)
 			doNothing();		
 	}
 
+	/**
+	 * Iterates through the entire ArrayList.
+	 */
 	@SuppressWarnings("unused")
 	private void iterateThroughEntireList() {
 		for(int number : list)
 			doNothing();			
 	}
 
+	/**
+	 * Creates an ArrayList.
+	 */
 	private void createArrayList()
 	{
 		list = new ArrayList<>();
@@ -81,6 +103,9 @@ public class ArrayListVSHashSet {
 		
 	}
 	
+	/**
+	 * Creates a HashSet.
+	 */
 	private void createHashSet()
 	{
 		set = new HashSet<Integer>();
@@ -88,11 +113,18 @@ public class ArrayListVSHashSet {
 			set.add(i);
 	}
 	
+	/**
+	 * Does nothing.
+	 */
 	private void doNothing()
 	{
 		
 	}
 	
+	/**
+	 * Mainmethod to run.
+	 * @param args
+	 */
 	public static void main( String[] args ) {
 		new ArrayListVSHashSet();
 	}
