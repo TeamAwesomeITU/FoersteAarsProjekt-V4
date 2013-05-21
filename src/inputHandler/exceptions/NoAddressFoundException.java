@@ -1,7 +1,7 @@
 package inputHandler.exceptions;
 
 /**
- * This exception is thrown when no addresses are found
+ * This exception is thrown when no addresses could be found
  */
 @SuppressWarnings("serial")
 public class NoAddressFoundException extends Exception {

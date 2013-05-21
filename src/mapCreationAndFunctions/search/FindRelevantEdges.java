@@ -9,9 +9,10 @@ import mapCreationAndFunctions.ZoomLevel;
 import mapCreationAndFunctions.data.DataHolding;
 import mapCreationAndFunctions.data.Edge;
 import mapCreationAndFunctions.data.Node;
+import mapCreationAndFunctions.data.QuadTree;
 
 /**
- * Locates the Edges that has a least one point that lies within the AreaToDraw
+ * Locates the Edges that has a least one point that lies within the AreaToDraw	
  */
 public class FindRelevantEdges {
 
