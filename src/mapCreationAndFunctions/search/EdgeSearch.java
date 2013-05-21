@@ -127,13 +127,6 @@ public class EdgeSearch  {
 			matchCityRight = isCityCorrectForEdge(edge, postalNumber, cityName);
 			matchCityLeft = isCityCorrectForEdge(edge, postalNumber, cityName);
 
-			//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-			//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
-			//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-			//				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
-			//				System.out.println("matchCityRight: " + matchCityRight);
-			//				System.out.println("matchCityLeft: " + matchCityLeft);
-
 			if(betweenRoadNumbersRight && betweenRoadLettersRight)
 			{
 				if(matchCityRight || matchCityLeft)
@@ -162,88 +155,6 @@ public class EdgeSearch  {
 	 * @throws MalformedAddressException 
 	 * @throws NoAddressFoundException 
 	 */
-	public static Edge[] searchForRoadSuggestions(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAddressException, NoAddressFoundException
-	{
-		HashSet<Edge> possibleEdgesFromCity = new HashSet<>();
-
-		//If the search should include city name or postal number
-		if(postalNumber != -1 || !cityName.isEmpty())
-		{
-			System.out.println("Searching for city something");
-			if(postalNumber != -1)
-			{
-				System.out.println("SEARCHING FOR POSTAL NUMBER");
-				City[] possibleCities = CitySearch.searchForCityPostalNumberSuggestions(postalNumber);
-				for(City city : possibleCities)
-					possibleEdgesFromCity.addAll(Arrays.asList(city.getCityRoads()));	
-			}
-
-
-			else if(!cityName.isEmpty())
-			{
-				System.out.println("SEARCHING FOR CITY NAME");
-				City[] possibleCities = CitySearch.searchForCityNameSuggestions(cityName);
-				for(City city : possibleCities)
-					possibleEdgesFromCity.addAll(Arrays.asList(city.getCityRoads()));
-			}
-			
-			//If postal number or city name are the only things that should be searched for
-			if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty())
-				return possibleEdgesFromCity.toArray(new Edge[possibleEdgesFromCity.size()]);				
-		}
-		
-		System.out.println("Number of possible edges from cities is: " + possibleEdgesFromCity.size());
-
-		roadName = roadName.toLowerCase();
-		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
-		ArrayList<String> possibleEdgesFromRoadName = edgeSearchTrie.prefixMatch(roadName);
-
-		boolean betweenRoadNumbersRight;
-		boolean betweenRoadNumbersLeft; 
-		boolean betweenRoadLettersRight;
-		boolean betweenRoadLettersLeft;
-		boolean matchCity = false;
-
-		for(String edgeName : possibleEdgesFromRoadName)
-		{
-			Edge[] edges = searchForRoadName(edgeName);
-			for(Edge edge : edges)
-			{				
-				betweenRoadNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, roadNumber);
-				betweenRoadNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, roadNumber);
-				betweenRoadLettersRight = isRoadLetterWithinRightSideOfEdge(edge, letter);
-				betweenRoadLettersLeft = isRoadLetterWithinLeftSideOfEdge(edge, letter);
-
-				if(!possibleEdgesFromCity.isEmpty() && (postalNumber != -1 || !cityName.isEmpty()))
-					matchCity = isCitySuggestionsCorrectForEdge(edge, possibleEdgesFromCity);
-				else
-					matchCity = true;
-
-				//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-				//				System.out.println("betweenRoadNumbersLeft: " + betweenRoadNumbersLeft);
-				//				System.out.println("betweenRoadLettersRight: " + betweenRoadLettersRight);
-				//				System.out.println("betweenRoadLettersLeft: " + betweenRoadLettersLeft);
-				//				System.out.println("matchCityRight: " + matchCityRight);
-				//				System.out.println("matchCityLeft: " + matchCityLeft);
-
-				if(betweenRoadNumbersRight && betweenRoadLettersRight)
-				{
-					if(matchCity)
-						foundEdges.add(edge);
-				}
-
-				else if (betweenRoadNumbersLeft && betweenRoadLettersLeft)
-				{
-					if(matchCity)
-						foundEdges.add(edge);
-				}
-			}
-		}
-
-		return foundEdges.toArray(new Edge[foundEdges.size()]);
-
-	}
-
 	private static void checkInput(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws NoAddressFoundException, MalformedAddressException
 	{
 		if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty() && postalNumber == -1 && cityName.isEmpty())
