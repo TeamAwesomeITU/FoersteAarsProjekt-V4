@@ -183,8 +183,6 @@ public class EdgeSearch  {
 		}
 	}
 
-	private static boolean isCitySuggestionsCorrectForEdge(Edge edge, HashSet<Edge> possibleEdgesFromCity)
-	{ return possibleEdgesFromCity.contains(edge);	}
 
 	/**
 	 * Returns the Edges with a given road name, inside a specified city.

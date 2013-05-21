@@ -40,7 +40,6 @@ public class AddressParser {
 		else if(address.trim().isEmpty() || address == null)													/* 2 */								
 			throw new NoAddressFoundException("No address to find was given");
 
-
 		findRoadName(address);
 		findCityName(addressAfterDeletion);
 		findPostCode(addressAfterDeletion);
@@ -53,17 +52,6 @@ public class AddressParser {
 			}
 		}
 		return addressArray;			     					
-	}
-
-	/** This method is a shortcut that saves lines when using a pattern in a matcher
-	 * 
-	 * @param pattern Is a string that can either be a literal word or a regex pattern. 	
-	 * @param A string the pattern should be applied to.
-	 * @return A matcher containing the parameters. 
-	 */
-	private Matcher match(String pattern, String subjectString) {
-		Matcher matcher = Pattern.compile(pattern).matcher(subjectString);
-		return matcher;
 	}
 
 	/**
@@ -118,7 +106,8 @@ public class AddressParser {
 	 */
 	private void findRoadNumber(String address) {
 		Matcher eventualNumber = match(pNumber, address);
-		if(eventualNumber.find()) {																					
+		if(eventualNumber.find()) 
+		{																					
 			addressAfterDeletion = addressAfterDeletion.replace(eventualNumber.group(), "");
 			addressArray[1] = eventualNumber.group().trim();
 		}
@@ -132,7 +121,8 @@ public class AddressParser {
 	private void findFloorNumber(String address) {
 		String floorTemp = "";
 		Matcher floor = match(pFloor, address);			
-		if(floor.find()) {																					/* 11 */
+		if(floor.find()) 
+		{																					/* 11 */
 			floorTemp = floor.group();	
 			match(pNumber, floorTemp);
 			addressAfterDeletion = addressAfterDeletion.replace(floorTemp, "");
@@ -148,7 +138,8 @@ public class AddressParser {
 	 */
 	private void findPostCode(String address) {
 		Matcher postcode = match(pPost, address);	
-		if(postcode.find()) {																				/* 12 */
+		if(postcode.find()) 
+		{																				/* 12 */
 			addressAfterDeletion = addressAfterDeletion.replace(postcode.group(),"").trim();
 			addressArray[4] = postcode.group().trim(); 
 		}
@@ -160,8 +151,6 @@ public class AddressParser {
 	 */
 	private void findCityName(String address)
 	{
-		System.out.println("INPUT TO FIND ROADNAME BY: " + address);
-
 		if(address.trim().isEmpty())																			/* 13 */
 			return;
 
@@ -198,12 +187,13 @@ public class AddressParser {
 	}
 
 	/**
-	 * Isolates the letter is present. 
+	 * Isolates the letter if it is present. 
 	 * @param A string containing what is left of the original string.
 	 */
 	private void findLetter(String address) {
 		addressAfterDeletion = addressAfterDeletion.replaceAll(",", "").trim().replaceAll("sal", "").trim();
-		if(addressAfterDeletion.contains("i") && addressAfterDeletion.split("\\s*").length>2){
+		if(addressAfterDeletion.contains("i") && addressAfterDeletion.split("\\s*").length>2)
+		{
 			addressAfterDeletion = addressAfterDeletion.replaceAll("i", "");
 		}
 		if(addressAfterDeletion.split("\\s*").length==2){
@@ -212,7 +202,16 @@ public class AddressParser {
 		System.out.println(addressArray[2] + " " + addressArray[2].length());
 	}
 
-	public String[] getAddressArray(){
-		return addressArray;
+	/** 
+	 * This method is a shortcut that saves lines when using a pattern in a matcher
+	 * @param pattern Is a string that can either be a literal word or a regex pattern. 	
+	 * @param A string the pattern should be applied to.
+	 * @return A matcher containing the parameters. 
+	 */
+	private Matcher match(String pattern, String subjectString) {
+		Matcher matcher = Pattern.compile(pattern).matcher(subjectString);
+		return matcher;
 	}
+
+	public String[] getAddressArray() {return addressArray;}
 }
