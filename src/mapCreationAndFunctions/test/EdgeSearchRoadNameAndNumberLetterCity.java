@@ -9,7 +9,9 @@ import mapCreationAndFunctions.data.Edge;
 
 import org.junit.Test;
 
-//TODO Lav egentlig test med bynavne og postnumre!!!
+/**
+ * Test for EdgeSearch with road name, number, letter and City.
+ */
 public class EdgeSearchRoadNameAndNumberLetterCity {
 	
 	public void testRoadNameNumberCity(String edgeToFind, int roadNumber, String letter, int expectedFinds, int postalNumber, String cityName)
@@ -31,6 +33,9 @@ public class EdgeSearchRoadNameAndNumberLetterCity {
 		}
 	}
 	
+	/**
+	 * Test for a road with one occurence, postal number and no letter.
+	 */
 	@Test
 	public void testRoadnameOnlyOneOccurenceNoLetter()
 	{
@@ -45,6 +50,9 @@ public class EdgeSearchRoadNameAndNumberLetterCity {
 		testRoadNameNumberCity(edgeToFind, roadNumber, letter, expectedFinds, postalNumber, cityName);
 	}
 	
+	/**
+	 * Test for roand with one letter, postal number in To and From interval.
+	 */
 	@Test
 	public void testRoadnameOnlyOneLetterInToFromInterval()
 	{
@@ -59,6 +67,9 @@ public class EdgeSearchRoadNameAndNumberLetterCity {
 		testRoadNameNumberCity(edgeToFind, roadNumber, letter, expectedFinds, postalNumber, cityName);
 	}
 	
+	/**
+	 * Test for a road with two different letters in To and From Interval. 
+	 */
 	@Test
 	public void testRoadnameTwoDifferentLettersInToFromInterval()
 	{
@@ -75,6 +86,9 @@ public class EdgeSearchRoadNameAndNumberLetterCity {
 		testRoadNameNumberCity(edgeToFind, roadNumber, letter, expectedFinds, postalNumber, cityName);
 	}
 
+	/**
+	 * Test for road name with two same letters in To and From interval.
+	 */
 	@Test
 	public void testRoadnameTwoSameLettersInToFromInterval()
 	{
@@ -91,6 +105,9 @@ public class EdgeSearchRoadNameAndNumberLetterCity {
 		testRoadNameNumberCity(edgeToFind, roadNumber, letter, expectedFinds, postalNumber, cityName);
 	}
 	
+	/**
+	 * Test for road name with two same numbers in To and From interval.
+	 */
 	@Test
 	public void testRoadnameTwoSameNumbersInToFromInterval()
 	{

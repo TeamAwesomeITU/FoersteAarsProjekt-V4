@@ -4,7 +4,6 @@ import inputHandler.exceptions.MalformedAddressException;
 import inputHandler.exceptions.NoAddressFoundException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 
 import mapCreationAndFunctions.data.City;
@@ -26,6 +25,7 @@ public class EdgeSearch  {
 	private static TernarySearchTrie createEdgeSearchTrie()
 	{
 		TernarySearchTrie tst = new TernarySearchTrie();
+
 		
 		for(Edge edge : DataHolding.getEdgeArray())
 			if(!edge.getRoadName().isEmpty()) //Excludes Edges with no name
@@ -152,93 +152,8 @@ public class EdgeSearch  {
 	 * @param postalNumber An optional postal number of the specific address - if no search on a postal number is wanted, enter -1 as the integer
 	 * @param cityName An optional String of the specific address' city name - if no search on a city name is wanted, enter an empty String as the letter parameter
 	 * @return All of the Edges that fits the search criterias.
-	 * @throws MalformedAddressException If the input contains invalid characters
-	 * @throws NoAddressFoundException If no address could be found with the given input
-	 */
-	public static Edge[] searchForRoadSuggestions(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws MalformedAddressException, NoAddressFoundException
-	{
-		HashSet<Edge> possibleEdgesFromCity = new HashSet<>();
-
-		//If the search should include city name or postal number
-		if(postalNumber != -1 || !cityName.isEmpty())
-		{
-			System.out.println("Searching for city something");
-			if(postalNumber != -1)
-			{
-				System.out.println("SEARCHING FOR POSTAL NUMBER");
-				City[] possibleCities = CitySearch.searchForCityPostalNumberSuggestions(postalNumber);
-				for(City city : possibleCities)
-					possibleEdgesFromCity.addAll(Arrays.asList(city.getCityRoads()));	
-			}
-
-
-			else if(!cityName.isEmpty())
-			{
-				System.out.println("SEARCHING FOR CITY NAME");
-				City[] possibleCities = CitySearch.searchForCityNameSuggestions(cityName);
-				for(City city : possibleCities)
-					possibleEdgesFromCity.addAll(Arrays.asList(city.getCityRoads()));
-			}
-			
-			//If postal number or city name are the only things that should be searched for
-			if(roadName.isEmpty() && roadNumber == -1 && letter.isEmpty())
-				return possibleEdgesFromCity.toArray(new Edge[possibleEdgesFromCity.size()]);				
-		}
-		
-		System.out.println("Number of possible edges from cities is: " + possibleEdgesFromCity.size());
-
-		roadName = roadName.toLowerCase();
-		ArrayList<Edge> foundEdges = new ArrayList<Edge>();
-		ArrayList<String> possibleEdgesFromRoadName = edgeSearchTrie.prefixMatch(roadName);
-
-		boolean betweenRoadNumbersRight;
-		boolean betweenRoadNumbersLeft; 
-		boolean betweenRoadLettersRight;
-		boolean betweenRoadLettersLeft;
-		boolean matchCity = false;
-
-		for(String edgeName : possibleEdgesFromRoadName)
-		{
-			Edge[] edges = searchForRoadName(edgeName);
-			for(Edge edge : edges)
-			{				
-				betweenRoadNumbersRight = isRoadNumberWithinRightSideOfEdge(edge, roadNumber);
-				betweenRoadNumbersLeft = isRoadNumberWithinLeftSideOfEdge(edge, roadNumber);
-				betweenRoadLettersRight = isRoadLetterWithinRightSideOfEdge(edge, letter);
-				betweenRoadLettersLeft = isRoadLetterWithinLeftSideOfEdge(edge, letter);
-
-				if(!possibleEdgesFromCity.isEmpty() && (postalNumber != -1 || !cityName.isEmpty()))
-					matchCity = isCitySuggestionsCorrectForEdge(edge, possibleEdgesFromCity);
-				else
-					matchCity = true;
-
-				if(betweenRoadNumbersRight && betweenRoadLettersRight)
-				{
-					if(matchCity)
-						foundEdges.add(edge);
-				}
-
-				else if (betweenRoadNumbersLeft && betweenRoadLettersLeft)
-				{
-					if(matchCity)
-						foundEdges.add(edge);
-				}
-			}
-		}
-
-		return foundEdges.toArray(new Edge[foundEdges.size()]);
-
-	}
-
-	/**
-	 * Checks the input - if the input is invalid, an exception is thrown
-	 * @param roadName The name of the road
-	 * @param roadNumber An optional number of the specific address - if no search on a number is wanted, enter -1 as the integer
-	 * @param letter An optional letter of the specific address - if no search on a letter is wanted, enter an empty String as the letter parameter
-	 * @param postalNumber An optional postal number of the specific address - if no search on a postal number is wanted, enter -1 as the integer
-	 * @param cityName An optional String of the specific address' city name - if no search on a city name is wanted, enter an empty String as the letter parameter
-	 * @throws MalformedAddressException If the input contains invalid characters
-	 * @throws NoAddressFoundException If no address could be found with the given input
+	 * @throws MalformedAddressException 
+	 * @throws NoAddressFoundException 
 	 */
 	private static void checkInput(String roadName, int roadNumber, String letter, int postalNumber, String cityName) throws NoAddressFoundException, MalformedAddressException
 	{
@@ -253,13 +168,6 @@ public class EdgeSearch  {
 				throw new MalformedAddressException("Postal number and city name does not match");
 	}
 
-	/**
-	 * Checks if the given City actually contains the given Edge. 
-	 * @param edge The Edge, which the City should contain
-	 * @param postalNumber The postal number of the city - if no postal number is given, -1 should be given as the parameter
-	 * @param cityName The city name of the city - if no city name is given, an empty String should be given as the parameter.
-	 * @return True if the given City actually contains the given Edge
-	 */
 	private static boolean isCityCorrectForEdge( Edge edge, int postalNumber, String cityName )
 	{ 
 		//If the search should not include cities
@@ -275,14 +183,6 @@ public class EdgeSearch  {
 		}
 	}
 
-	/**
-	 * Checks if any of the suggested Cities actually contains the given Edge. 
-	 * @param edge The Edge, which the City should contain
-	 * @param possibleEdgesFromCity All of the Edges to check.
-	 * @return
-	 */
-	private static boolean isCitySuggestionsCorrectForEdge(Edge edge, HashSet<Edge> possibleEdgesFromCity)
-	{ return possibleEdgesFromCity.contains(edge);	}
 
 	/**
 	 * Returns the Edges with a given road name, inside a specified city.
@@ -307,11 +207,13 @@ public class EdgeSearch  {
 	}	
 
 	/**
-	 * Checks if the given road number is actually possible with the given Edge, on the Edge's left side.
-	 * @param edge The Edge to check
+	 * Searches for Edges with a specific roadname, roadNumber and an optional letter. If no search on a letter is wanted, enter an empty String as the letter parameter,
+	 * @param roadName The name of the road
 	 * @param roadNumber The roadNumber of the specific address
-	 * @return True, if the given road number is actually possible with the given Edge, on the Edge's left side.
+	 * @param letter An optional letter of the specific address - if no search on a letter is wanted, enter an empty String as the letter parameter,
+	 * @return All of the Edges that fits the search criterias.
 	 */
+
 	private static boolean isRoadNumberWithinLeftSideOfEdge(Edge edge, int roadNumber)
 	{ 
 		//If the search should not include road number
@@ -328,12 +230,6 @@ public class EdgeSearch  {
 		return (fromLeftNumber <= roadNumber && toLeftNumber >= roadNumber );
 	}
 
-	/**
-	 * Checks if the given road number is actually possible with the given Edge, on the Edge's right side.
-	 * @param edge The Edge to check
-	 * @param roadNumber The roadNumber of the specific address
-	 * @return True, if the given road number is actually possible with the given Edge, on the Edge's right side.
-	 */
 	private static boolean isRoadNumberWithinRightSideOfEdge(Edge edge, int roadNumber)
 	{	
 		//If the search should not include road number
@@ -350,12 +246,6 @@ public class EdgeSearch  {
 		return (fromRightNumber <= roadNumber && toRightNumber >= roadNumber );
 	}
 
-	/**
-	 * Checks if the given road letter is actually possible with the given Edge, on the Edge's left side.
-	 * @param edge The Edge to check
-	 * @param letter The letter of the specific address
-	 * @return True, if the given road letter is actually possible with the given Edge, on the Edge's left side.
-	 */
 	private static boolean isRoadLetterWithinLeftSideOfEdge(Edge edge, String letter)
 	{
 		//If the search should not include letters
@@ -388,12 +278,6 @@ public class EdgeSearch  {
 		}
 	}
 
-	/**
-	 * Checks if the given road letter is actually possible with the given Edge, on the Edge's right side.
-	 * @param edge The Edge to check
-	 * @param letter The letter of the specific address
-	 * @return True, if the given road letter is actually possible with the given Edge, on the Edge's right side.
-	 */
 	private static boolean isRoadLetterWithinRightSideOfEdge(Edge edge, String letter)
 	{
 		//If the search should not include letters

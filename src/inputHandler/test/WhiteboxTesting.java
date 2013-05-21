@@ -150,7 +150,7 @@ public class WhiteboxTesting {
 	/**
 	 * Test for road name and city
 	 */
-	@Test
+	@Test //(expected=NoAddressFoundException.class)
 	public void dataSetH(){
 		try {
 			expectedResult = new String[]{"nørregade", "", "", "", "", "køge"};

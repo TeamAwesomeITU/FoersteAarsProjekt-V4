@@ -1,40 +1,28 @@
 package inputHandler;
 
-import inputHandler.exceptions.MalformedAddressException;
-import inputHandler.exceptions.NoAddressFoundException;
-
 import java.util.HashSet;
 
 import mapCreationAndFunctions.data.Edge;
+import inputHandler.exceptions.MalformedAddressException;
+import inputHandler.exceptions.NoAddressFoundException;
 
-/**
- * Enables searching for adresses with a single String
- *
- */
 public class AddressSearch {
 	
-	//The AddressParser, which transforms the String into a String[] of roadname, number etc.
 	private AddressParser ap;
-	//The input recieved from the AddressParser
 	private String[] parsedInput;
-	//The Edges, that corresponds with the transformed input
 	private Edge[] foundEdges = new Edge[0];
-	
-	public AddressSearch()
-	{
-		ap = new AddressParser();		
-	}
-		
+
 	/**
-	 * Finds all the Edges that corresponds with the given input and saves them in an array.
-	 * @param input
+	 * Calls the addressParser which returns an array with the address. It then tries to find
+	 * a specific edge. If not multiple edges are stored in foundEdge[]
+	 * @param input The address String which is sent to the addressParser.
 	 * @throws MalformedAddressException
 	 * @throws NoAddressFoundException
 	 */
 	public void searchForAdress(String input) throws MalformedAddressException, NoAddressFoundException
 	{
 		ap = new AddressParser();
-		parseAddress(input);
+		parsedInput = ap.parseAddress(input);
 		int roadNumber = -1;
 		int postalNumber = -1;
 		
@@ -50,18 +38,16 @@ public class AddressSearch {
 	}
 	
 	/**
-	 * Gets all of the found Edges
-	 * @return all of the found Edges
+	 * @return foundEdges[]
 	 */
 	public Edge[] getFoundEdges()
 	{
 		return foundEdges;
 	}
-	
 	/**
-	 * Gets a single Edge to use for navigation - if the search for Edges have found different Edges in different cities, an exception is thrown.
-	 * @return The first of the found Edges
-	 * @throws NoAddressFoundException Is thrown if the search for Edges have found different Edges in different cities
+	 * This method tries to find a specific edge from the edges gather in searchForAddress
+	 * @return A single edge that matches input
+	 * @throws NoAddressFoundException
 	 */
 	public Edge getEdgeToNavigate() throws NoAddressFoundException
 	{
@@ -75,18 +61,12 @@ public class AddressSearch {
 		}
 			
 	}
-	
 	/**
-	 * Clears the search for Edges
+	 * Resets foundEdges array.
 	 */
 	public void clearResults()
 	{ foundEdges = new Edge[0];	}
 	
-	/**
-	 * Checks if all given Edges have the same road name
-	 * @param edgesToCheck The Edges to check
-	 * @return True, if all given Edges have the same road name
-	 */
 	private boolean doesRoadNamesMatch(Edge[] edgesToCheck)
 	{
 		String name = edgesToCheck[0].getRoadName();
@@ -96,11 +76,10 @@ public class AddressSearch {
 		System.out.println("ALL ROADNAMES MATCHES");
 		return true;
 	}
-	
 	/**
-	 * Checks if all given Edges lie within the same City
-	 * @param edgesToCheck The Edges to check
-	 * @return True, if all given Edges lie within the same City
+	 * Checks if all found edges has the same city.
+	 * @param edgesToCheck An array of possible edge matches. 
+	 * @return true if that have the same city. False if not.
 	 */
 	private boolean doesRoadsCityMatch(Edge[] edgesToCheck)
 	{
@@ -113,16 +92,5 @@ public class AddressSearch {
 		
 		System.out.println("ALL ROADS CITIES MATCHES");
 		return true;
-	}
-	
-	/**
-	 * Parses the input with the AddressParser
-	 * @param input The input to parse
-	 * @throws MalformedAddressException Is thrown if the input contains invalid characters.
-	 * @throws NoAddressFoundException Is thrown if no address could be found with the given input.
-	 */
-	private void parseAddress(String input) throws MalformedAddressException, NoAddressFoundException
-	{
-		parsedInput = ap.parseAddress(input);
 	}
 }

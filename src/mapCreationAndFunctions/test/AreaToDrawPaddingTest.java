@@ -9,8 +9,14 @@ import mapCreationAndFunctions.exceptions.NegativeAreaSizeException;
 
 import org.junit.Test;
 
+/**
+ * Testclass for the AreaToDraw Padding method.
+ */
 public class AreaToDrawPaddingTest {
 
+	/**
+	 * Tests the AreaToDraw Padding,
+	 */
 	@Test
 	public void testAreaToDrawPadding1() {
 		double xMin = 438000;
@@ -56,6 +62,9 @@ public class AreaToDrawPaddingTest {
 		
 	}
 
+	/**
+	 * Tests for AreaToDraw Padding method.
+	 */
 	@Test
 	public void testAreaToDrawPadding2() {
 		double xMin = 438000;
